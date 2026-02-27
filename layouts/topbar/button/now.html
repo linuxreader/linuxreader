@@ -1,0 +1,15 @@
+{{- $onempty := cond (isset . "onempty") .onempty "show" }}
+{{- $onwidths := cond (isset . "onwidths") .onwidths "show" }}
+{{- $onwidthm := cond (isset . "onwidthm") .onwidthm "show" }}
+{{- $onwidthl := cond (isset . "onwidthl") .onwidthl "show" }}
+{{- partial "topbar/func/button.html" (dict
+	"page" .
+	"class" "topbar-button-now"
+	"title" "Now"
+	"href" "/now/"
+	"onempty" $onempty
+	"onwidths" $onwidths
+	"onwidthm" $onwidthm
+	"onwidthl" $onwidthl
+	"hint" (printf "%s" (T "What I am doing now!"))
+)}}

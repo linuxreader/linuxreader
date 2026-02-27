@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="description" content="Building an Ansible lab with Ansible using Ansible and Libvirt">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Building an Ansible lab with Ansible :: Linux Documentation Site">
+    <meta name="twitter:description" content="Building an Ansible lab with Ansible using Ansible and Libvirt">
+    <meta property="og:url" content="https://linuxreader.com/ansible/building-an-ansible-lab-with-ansible/">
+    <meta property="og:site_name" content="Linux Documentation Site">
+    <meta property="og:title" content="Building an Ansible lab with Ansible :: Linux Documentation Site">
+    <meta property="og:description" content="Building an Ansible lab with Ansible using Ansible and Libvirt">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Ansible">
+    <meta itemprop="name" content="Building an Ansible lab with Ansible :: Linux Documentation Site">
+    <meta itemprop="description" content="Building an Ansible lab with Ansible using Ansible and Libvirt">
+    <meta itemprop="wordCount" content="1516">
+    <title>Building an Ansible lab with Ansible :: Linux Documentation Site</title>
+    <link href="/ansible/building-an-ansible-lab-with-ansible/index.md" rel="alternate" type="text/markdown" title="Building an Ansible lab with Ansible :: Linux Documentation Site">
+    <link href="/images/favicon.svg?1772206888" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1772206888" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1772206888" defer></script>
+    <script src="/js/search-lunr.min.js?1772206888" defer></script>
+    <script src="/js/search.min.js?1772206888" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1772206888";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1772206888" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1772206888" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1772206888" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1772206888" rel="stylesheet">
+    <link href="/css/theme.min.css?1772206888" rel="stylesheet">
+    <link href="/css/format-html.min.css?1772206888" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = `.min`;
+      window.relearn.path='\/ansible\/building-an-ansible-lab-with-ansible\/';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='https:\/\/linuxreader.com';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/ansible/building-an-ansible-lab-with-ansible/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#creating-the-role">Creating the role</a></li>
+        <li><a href="#define-variables">Define variables</a></li>
+        <li><a href="#defining-a-vm-template">Defining a VM template</a></li>
+      </ul>
+    </li>
+    <li><a href="#define-tasks-for-the-role-to-perform">Define tasks for the role to perform</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/ansible/"><span itemprop="name">Ansible</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">Building an Ansible lab with Ansible</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/ansible/building-an-ansible-lab-with-ansible/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/ansible/boot-process/" title="Boot Process (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/ansible/common-modules-with-examples/" title="Common modules with examples (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable ansible" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="building-an-ansible-lab-with-ansible">Building an Ansible lab with Ansible</h1>
+
+<p>When I started studying for RHCE, the study guide had me manually set up virtual machines for the Ansible lab environment. I thought.. Why not start my automation journey right, and automate them using Vagrant.</p>
+<p>I use Libvirt to manage KVM/QEMU Virtual Machines and the Virt-Manager app to set them up. I figured I could use Vagrant to automatically build this lab from a file. And I got part of the way. I ended up with this Vagrant file:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Vagrant.configure<span style="color:#ff7b72;font-weight:bold">(</span><span style="color:#a5d6ff">&#34;2&#34;</span><span style="color:#ff7b72;font-weight:bold">)</span> <span style="color:#ff7b72">do</span> |config|
+</span></span><span style="display:flex;"><span>  config.vm.box <span style="color:#ff7b72;font-weight:bold">=</span> <span style="color:#a5d6ff">&#34;almalinux/9&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  config.vm.provider :libvirt <span style="color:#ff7b72">do</span> |libvirt|
+</span></span><span style="display:flex;"><span>    libvirt.uri <span style="color:#ff7b72;font-weight:bold">=</span> <span style="color:#a5d6ff">&#34;qemu:///system&#34;</span>
+</span></span><span style="display:flex;"><span>    libvirt.cpus <span style="color:#ff7b72;font-weight:bold">=</span> <span style="color:#a5d6ff">2</span>
+</span></span><span style="display:flex;"><span>    libvirt.memory <span style="color:#ff7b72;font-weight:bold">=</span> <span style="color:#a5d6ff">2048</span>
+</span></span><span style="display:flex;"><span>  end
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   config.vm.define <span style="color:#a5d6ff">&#34;control&#34;</span> <span style="color:#ff7b72">do</span> |control|
+</span></span><span style="display:flex;"><span>    control.vm.network <span style="color:#a5d6ff">&#34;private_network&#34;</span>, ip: <span style="color:#a5d6ff">&#34;192.168.124.200&#34;</span>
+</span></span><span style="display:flex;"><span>    control.vm.hostname <span style="color:#ff7b72;font-weight:bold">=</span> <span style="color:#a5d6ff">&#34;control.example.com&#34;</span>
+</span></span><span style="display:flex;"><span>  end
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  config.vm.define <span style="color:#a5d6ff">&#34;ansible1&#34;</span> <span style="color:#ff7b72">do</span> |ansible1|
+</span></span><span style="display:flex;"><span>    ansible1.vm.network <span style="color:#a5d6ff">&#34;private_network&#34;</span>, ip: <span style="color:#a5d6ff">&#34;192.168.124.201&#34;</span>
+</span></span><span style="display:flex;"><span>    ansible1.vm.hostname <span style="color:#ff7b72;font-weight:bold">=</span> <span style="color:#a5d6ff">&#34;ansible1.example.com&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  end
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  config.vm.define <span style="color:#a5d6ff">&#34;ansible2&#34;</span> <span style="color:#ff7b72">do</span> |ansible2|
+</span></span><span style="display:flex;"><span>    ansible2.vm.network <span style="color:#a5d6ff">&#34;private_network&#34;</span>, ip: <span style="color:#a5d6ff">&#34;192.168.124.202&#34;</span>
+</span></span><span style="display:flex;"><span>    ansible2.vm.hostname <span style="color:#ff7b72;font-weight:bold">=</span> <span style="color:#a5d6ff">&#34;ansible2.example.com&#34;</span>
+</span></span><span style="display:flex;"><span>  end
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>end</span></span></code></pre></div>
+<p>I could run this Vagrant file and Build and destroy the lab in seconds. But there was a problem. The Libvirt plugin, or Vagrant itself, I&rsquo;m not sure which, kept me from doing a couple important things.</p>
+<p>First, I could not specify the initial disk creation size. I could add additional disks of varying sizes but, if I wanted to change the size of the first disk, I would have to go back in after the fact and expand it manually&hellip;</p>
+<p>Second, the Libvirt plugin networking settings were a bit confusing. When you add the private network option as seen in the Vagrant file, it would add this as a secondary connection, and route everything through a different public connection.</p>
+<p>Now I couldn&rsquo;t get the VMs to run using the public connection for whatever reason, and it seems the only workaround was to make DHCP reservations for the guests Mac addresses which gave me even more problems to solve. But I won&rsquo;t go there..</p>
+<p>So why not get my feet wet and learn how to deploy VMs with Ansible? This way, I would get the granularity and control that Ansible gives me, some extra practice with Ansible, and not having to use software that has just enough abstraction to get in the way.</p>
+<p>The guide I followed to set this up can be found on Redhat&rsquo;s blog <a href="https://www.redhat.com/en/blog/build-VM-fast-ansible" rel="external" target="_blank">here.</a> And it was pretty easy to set up all things considered.</p>
+<p>I&rsquo;ll rehash the steps here:</p>
+<ol>
+<li>Download a cloud image</li>
+<li>Customize the image</li>
+<li>Install and start a VM</li>
+<li>Access the VM</li>
+</ol>
+<h3 id="creating-the-role">Creating the role<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Move to roles directory
+<code>cd roles</code></p>
+<p>Initialize the role
+<code>ansible-galaxy role init kvm_provision</code></p>
+<p>Switch into the role directory
+<code>cd kvm_provision/</code></p>
+<p>Remove unused directories
+<code>rm -r files handlers vars</code></p>
+<h3 id="define-variables">Define variables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Add default variables to main.yml
+<code>cd defaults/ &amp;&amp; vim main.yml</code></p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># defaults file for kvm_provision</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">base_image_name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">AlmaLinux-9-GenericCloud-9.5-20241120.x86_64.qcow2</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">base_image_url</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">https://repo.almalinux.org/almalinux/9/cloud/x86_64/images/{{ base_image_name }}</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">base_image_sha</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">abddf01589d46c841f718cec239392924a03b34c4fe84929af5d543c50e37e37</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">libvirt_pool_dir</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;/var/lib/libvirt/images&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">vm_name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">f34-dev</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">vm_vcpus</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">2</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">vm_ram_mb</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">2048</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">vm_net</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">default</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">vm_root_pass</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">test123</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">cleanup_tmp</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">no</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">ssh_key</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/root/.ssh/id_rsa.pub</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># Added option to configure ip address</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">ip_addr</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">192.168.124.250</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">gw_addr</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">192.168.124.1</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># Added option to configure disk size</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">vm_disksize</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">20</span></span></span></code></pre></div>
+<h3 id="defining-a-vm-template">Defining a VM template<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>The community.libvirt.virt module is used to provision a KVM VM. This module uses a VM definition in XML format with libvirt syntax. You can dump a VM definition of a current VM and then convert it to a template from there. Or you can just use this:</p>
+<p><code>cd templates/ &amp;&amp; vim vm-template.xml.j2</code></p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#7ee787">&lt;domain</span> type=<span style="color:#a5d6ff">&#39;kvm&#39;</span><span style="color:#7ee787">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#7ee787">&lt;name&gt;</span>{{ vm_name }}<span style="color:#7ee787">&lt;/name&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#7ee787">&lt;memory</span> unit=<span style="color:#a5d6ff">&#39;MiB&#39;</span><span style="color:#7ee787">&gt;</span>{{ vm_ram_mb }}<span style="color:#7ee787">&lt;/memory&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#7ee787">&lt;vcpu</span> placement=<span style="color:#a5d6ff">&#39;static&#39;</span><span style="color:#7ee787">&gt;</span>{{ vm_vcpus }}<span style="color:#7ee787">&lt;/vcpu&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#7ee787">&lt;os&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;type</span> arch=<span style="color:#a5d6ff">&#39;x86_64&#39;</span> machine=<span style="color:#a5d6ff">&#39;pc-q35-5.2&#39;</span><span style="color:#7ee787">&gt;</span>hvm<span style="color:#7ee787">&lt;/type&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;boot</span> dev=<span style="color:#a5d6ff">&#39;hd&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#7ee787">&lt;/os&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#7ee787">&lt;cpu</span> mode=<span style="color:#a5d6ff">&#39;host-model&#39;</span> check=<span style="color:#a5d6ff">&#39;none&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#7ee787">&lt;devices&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;emulator&gt;</span>/usr/bin/qemu-system-x86_64<span style="color:#7ee787">&lt;/emulator&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;disk</span> type=<span style="color:#a5d6ff">&#39;file&#39;</span> device=<span style="color:#a5d6ff">&#39;disk&#39;</span><span style="color:#7ee787">&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;driver</span> name=<span style="color:#a5d6ff">&#39;qemu&#39;</span> type=<span style="color:#a5d6ff">&#39;qcow2&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;source</span> file=<span style="color:#a5d6ff">&#39;{{ libvirt_pool_dir }}/{{ vm_name }}.qcow2&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;target</span> dev=<span style="color:#a5d6ff">&#39;vda&#39;</span> bus=<span style="color:#a5d6ff">&#39;virtio&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;address</span> type=<span style="color:#a5d6ff">&#39;pci&#39;</span> domain=<span style="color:#a5d6ff">&#39;0x0000&#39;</span> bus=<span style="color:#a5d6ff">&#39;0x05&#39;</span> slot=<span style="color:#a5d6ff">&#39;0x00&#39;</span> function=<span style="color:#a5d6ff">&#39;0x0&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#8b949e;font-style:italic">&lt;!-- Added: Specify the disk size using a variable --&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;size</span> unit=<span style="color:#a5d6ff">&#39;GiB&#39;</span><span style="color:#7ee787">&gt;</span>{{ disk_size }}<span style="color:#7ee787">&lt;/size&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;/disk&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;interface</span> type=<span style="color:#a5d6ff">&#39;network&#39;</span><span style="color:#7ee787">&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;source</span> network=<span style="color:#a5d6ff">&#39;{{ vm_net }}&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;model</span> type=<span style="color:#a5d6ff">&#39;virtio&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;address</span> type=<span style="color:#a5d6ff">&#39;pci&#39;</span> domain=<span style="color:#a5d6ff">&#39;0x0000&#39;</span> bus=<span style="color:#a5d6ff">&#39;0x01&#39;</span> slot=<span style="color:#a5d6ff">&#39;0x00&#39;</span> function=<span style="color:#a5d6ff">&#39;0x0&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;/interface&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;channel</span> type=<span style="color:#a5d6ff">&#39;unix&#39;</span><span style="color:#7ee787">&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;target</span> type=<span style="color:#a5d6ff">&#39;virtio&#39;</span> name=<span style="color:#a5d6ff">&#39;org.qemu.guest_agent.0&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;address</span> type=<span style="color:#a5d6ff">&#39;virtio-serial&#39;</span> controller=<span style="color:#a5d6ff">&#39;0&#39;</span> bus=<span style="color:#a5d6ff">&#39;0&#39;</span> port=<span style="color:#a5d6ff">&#39;1&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;/channel&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;channel</span> type=<span style="color:#a5d6ff">&#39;spicevmc&#39;</span><span style="color:#7ee787">&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;target</span> type=<span style="color:#a5d6ff">&#39;virtio&#39;</span> name=<span style="color:#a5d6ff">&#39;com.redhat.spice.0&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;address</span> type=<span style="color:#a5d6ff">&#39;virtio-serial&#39;</span> controller=<span style="color:#a5d6ff">&#39;0&#39;</span> bus=<span style="color:#a5d6ff">&#39;0&#39;</span> port=<span style="color:#a5d6ff">&#39;2&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;/channel&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;input</span> type=<span style="color:#a5d6ff">&#39;tablet&#39;</span> bus=<span style="color:#a5d6ff">&#39;usb&#39;</span><span style="color:#7ee787">&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;address</span> type=<span style="color:#a5d6ff">&#39;usb&#39;</span> bus=<span style="color:#a5d6ff">&#39;0&#39;</span> port=<span style="color:#a5d6ff">&#39;1&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;/input&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;input</span> type=<span style="color:#a5d6ff">&#39;mouse&#39;</span> bus=<span style="color:#a5d6ff">&#39;ps2&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;input</span> type=<span style="color:#a5d6ff">&#39;keyboard&#39;</span> bus=<span style="color:#a5d6ff">&#39;ps2&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;graphics</span> type=<span style="color:#a5d6ff">&#39;spice&#39;</span> autoport=<span style="color:#a5d6ff">&#39;yes&#39;</span><span style="color:#7ee787">&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;listen</span> type=<span style="color:#a5d6ff">&#39;address&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;image</span> compression=<span style="color:#a5d6ff">&#39;off&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;/graphics&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;video&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;model</span> type=<span style="color:#a5d6ff">&#39;qxl&#39;</span> ram=<span style="color:#a5d6ff">&#39;65536&#39;</span> vram=<span style="color:#a5d6ff">&#39;65536&#39;</span> vgamem=<span style="color:#a5d6ff">&#39;16384&#39;</span> heads=<span style="color:#a5d6ff">&#39;1&#39;</span> primary=<span style="color:#a5d6ff">&#39;yes&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;address</span> type=<span style="color:#a5d6ff">&#39;pci&#39;</span> domain=<span style="color:#a5d6ff">&#39;0x0000&#39;</span> bus=<span style="color:#a5d6ff">&#39;0x00&#39;</span> slot=<span style="color:#a5d6ff">&#39;0x01&#39;</span> function=<span style="color:#a5d6ff">&#39;0x0&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;/video&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;memballoon</span> model=<span style="color:#a5d6ff">&#39;virtio&#39;</span><span style="color:#7ee787">&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;address</span> type=<span style="color:#a5d6ff">&#39;pci&#39;</span> domain=<span style="color:#a5d6ff">&#39;0x0000&#39;</span> bus=<span style="color:#a5d6ff">&#39;0x06&#39;</span> slot=<span style="color:#a5d6ff">&#39;0x00&#39;</span> function=<span style="color:#a5d6ff">&#39;0x0&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;/memballoon&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;rng</span> model=<span style="color:#a5d6ff">&#39;virtio&#39;</span><span style="color:#7ee787">&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;backend</span> model=<span style="color:#a5d6ff">&#39;random&#39;</span><span style="color:#7ee787">&gt;</span>/dev/urandom<span style="color:#7ee787">&lt;/backend&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#7ee787">&lt;address</span> type=<span style="color:#a5d6ff">&#39;pci&#39;</span> domain=<span style="color:#a5d6ff">&#39;0x0000&#39;</span> bus=<span style="color:#a5d6ff">&#39;0x07&#39;</span> slot=<span style="color:#a5d6ff">&#39;0x00&#39;</span> function=<span style="color:#a5d6ff">&#39;0x0&#39;</span><span style="color:#7ee787">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#7ee787">&lt;/rng&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#7ee787">&lt;/devices&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#7ee787">&lt;/domain&gt;</span></span></span></code></pre></div>
+<p>The template uses some of the variables from earlier. This allows flexibility to changes things by just changing the variables.</p>
+<h2 id="define-tasks-for-the-role-to-perform">Define tasks for the role to perform<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p><code>cd ../tasks/ &amp;&amp; vim main.yml</code></p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># tasks file for kvm_provision</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># ensure the required package dependencies `guestfs-tools` and `python3-libvirt` are installed. This role requires these packages to connect to `libvirt` and to customize the virtual image in a later step. These package names work on Fedora Linux. If you&#39;re using RHEL 8 or CentOS, use `libguestfs-tools` instead of `guestfs-tools`. For other distributions, adjust accordingly.</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Ensure requirements in place</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">package</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#a5d6ff">guestfs-tools</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#a5d6ff">python3-libvirt</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">present</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">yes</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># obtain a list of existing VMs so that you don&#39;t overwrite an existing VM on accident. uses the `virt` module from the collection `community.libvirt`, which interacts with a running instance of KVM with `libvirt`. It obtains the list of VMs by specifying the parameter `command: list_vms` and saves the results in a variable `existing_vms`. `changed_when: no` for this task to ensure that it&#39;s not marked as changed in the playbook results. This task doesn&#39;t make any change in the machine; it only checks the existing VMs. This is a good practice when developing Ansible automation to prevent false reports of changes.</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Get VMs list</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">community.libvirt.virt</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">command</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">list_vms</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">register</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">existing_vms</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">changed_when</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">no</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#execute only when the VM name the user provides doesn&#39;t exist. And uses the module `get_url` to download the base cloud image into the `/tmp` directory</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Create VM if not exists</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">block</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Download base image</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">get_url</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">url</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ base_image_url }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">dest</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;/tmp/{{ base_image_name }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">checksum</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;sha256:{{ base_image_sha }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># copy the file to libvirt&#39;s pool directory so we don&#39;t edit the original, which can be used to provision other VMS later</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Copy base image to libvirt directory</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">copy</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">dest</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ libvirt_pool_dir }}/{{ vm_name }}.qcow2&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">src</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;/tmp/{{ base_image_name }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">force</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">no</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">remote_src</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">yes</span><span style="color:#6e7681"> 
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">mode</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">0660</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">register</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">copy_results</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># Resize the VM disk</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Resize VM disk</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">command</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">qemu-img resize &#34;{{ libvirt_pool_dir }}/{{ vm_name }}.qcow2&#34; &#34;{{ disk_size }}G&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">when</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">copy_results is changed</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># uses command module to run virt-customize to customize the image</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Configure the image</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">command</span>:<span style="color:#6e7681"> </span>|<span style="color:#a5d6ff">
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">      virt-customize -a {{ libvirt_pool_dir }}/{{ vm_name }}.qcow2 \
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">      --hostname {{ vm_name }} \
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">      --root-password password:{{ vm_root_pass }} \
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">      --ssh-inject &#39;root:file:{{ ssh_key }}&#39; \
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">      --uninstall cloud-init --selinux-relabel</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># Added option to configure an IP address</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>--<span style="color:#a5d6ff">firstboot-command &#34;nmcli c m eth0 con-name eth0 ip4 {{ ip_addr }}/24 gw4 {{ gw_addr }} ipv4.method manual &amp;&amp; nmcli c d eth0 &amp;&amp; nmcli c u eth0&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">when</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">copy_results is changed</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Define vm</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">community.libvirt.virt</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">command</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">define</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">xml</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ lookup(&#39;template&#39;, &#39;vm-template.xml.j2&#39;) }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">when</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;vm_name not in existing_vms.list_vms&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Ensure VM is started</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">community.libvirt.virt</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ vm_name }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">running</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">register</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">vm_start_results</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">until</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;vm_start_results is success&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">retries</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">15</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">delay</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">2</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Ensure temporary file is deleted</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">file</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">path</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;/tmp/{{ base_image_name }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">absent</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">when</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">cleanup_tmp | bool</span></span></span></code></pre></div>
+<p>Changed my user to own the libvirt directory:
+<code>chown -R david:david /var/lib/libvirt/images</code></p>
+<p>Create playbook <code>kvm_provision.yaml</code></p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Deploys VM based on cloud image</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">localhost</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">gather_facts</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">yes</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">yes</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">vars</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">pool_dir</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;/var/lib/libvirt/images&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">vm</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">control</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">vcpus</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">2</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">ram_mb</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">2048</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">cleanup</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">no</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">net</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">default</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">ssh_pub_key</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;/home/davidt/.ssh/id_ed25519.pub&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">disksize</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">20</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">tasks</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">KVM Provision role</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">include_role</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">kvm_provision</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">vars</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">libvirt_pool_dir</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ pool_dir }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">vm_name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ vm }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">vm_vcpus</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ vcpus }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">vm_ram_mb</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ ram_mb }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">vm_net</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ net }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">cleanup_tmp</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ cleanup }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">ssh_key</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ ssh_pub_key }}&#34;</span></span></span></code></pre></div>
+<p>Add the libvirt collection
+<code>ansible-galaxy collection install community.libvirt</code></p>
+<p>Create a VM with a new name
+<code>ansible-playbook -K kvm_provision.yaml -e vm=ansible1</code></p>
+<p>&ndash;run-command &rsquo;nmcli c a type Ethernet ifname eth0 con-name eth0 ip4 192.168.124.200 gw4 192.168.124.1'</p>
+<p>parted /dev/vda resizepargit t 4 100%
+Warning: Partition /dev/vda4 is being used. Are you sure you want to continue?
+Yes/No? y                                                              <br>
+Information: You may need to update /etc/fstab.</p>
+<p>lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+vda    252:0    0   20G  0 disk
+├─vda2 252:2    0  200M  0 part /boot/efi
+├─vda3 252:3    0    1G  0 part /boot
+└─vda4 252:4    0  8.8G  0 part /</p>
+<p>variables
+{{ ansible_user }}
+{{ ansible_password }}
+{{ gw_addr }}
+{{ ip_addr }}</p>
+<p>; useradd -m -p {{ ansible_user }} ; chage -d 0 {{ ansible_user }} ; cat {{ ansible_password }} &gt; passwd {{ ansible_user }} &ndash;stdin&quot; \</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>  - name: Configure the image
+    command: |
+      virt-customize -a {{ libvirt_pool_dir }}/{{ vm_name }}.qcow2 \
+      --hostname {{ vm_name }} \
+      --root-password password:{{ vm_root_pass }} \
+      --uninstall cloud-init --selinux-relabel \
+      --firstboot-command &#34;nmcli c m eth0 con-name eth0 ip4 \
+                           {{ ip_addr }}/24 gw4 {{ gw_addr }} \
+                           ipv4.method manual &amp;&amp; nmcli c d eth0 \
+                           &amp;&amp; nmcli c u eth0 &amp;&amp; adduser \
+                           {{ ansible_user }} &amp;&amp; echo \
+                           &#34;{{ ansible_password }}&#34; | passwd \
+                           --stdin {{ ansible_user }}&#34;
+    when: copy_results is changed
+
+  - name: Add ssh keys
+    command: |
+      virt-customize -a {{ libvirt_pool_dir }}/{{ vm_name }}.qcow2 \
+      --ssh-inject &#39;{{ ansible_user }}:file:{{ ssh_key }}&#39;</code></pre></div>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="parent " data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606" checked><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ad-hoc-ansible-commands/"><a class="padding" href="/ansible/ad-hoc-ansible-commands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-documentation/"><a class="padding" href="/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-facts/"><a class="padding" href="/ansible/ansible-facts/">Ansible Facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-galaxy-roles/"><a class="padding" href="/ansible/ansible-galaxy-roles/">Ansible Galaxy Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-inventory/"><a class="padding" href="/ansible/ansible-inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-playbooks/"><a class="padding" href="/ansible/ansible-playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-ansible-roles/"><a class="padding" href="/ansible/using-ansible-roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-inventory-command/"><a class="padding" href="/ansible/ansible-inventory-command/">Ansible-inventory command<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible.cfg/"><a class="padding" href="/ansible/ansible.cfg/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="active " data-nav-id="/ansible/building-an-ansible-lab-with-ansible/"><a class="padding" href="/ansible/building-an-ansible-lab-with-ansible/">Building an Ansible lab with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/common-modules-with-examples/"><a class="padding" href="/ansible/common-modules-with-examples/">Common modules with examples<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/discovering-storage-related-facts/"><a class="padding" href="/ansible/discovering-storage-related-facts/">Discovering storage related facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/dynamic-inventory/"><a class="padding" href="/ansible/dynamic-inventory/">Dynamic Inventory<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/execution-environments/"><a class="padding" href="/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/host-name-patterns/"><a class="padding" href="/ansible/host-name-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/including-and-importing-files/"><a class="padding" href="/ansible/including-and-importing-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2-templates/"><a class="padding" href="/ansible/jinja2-templates/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-ansible-errors-and-logs/"><a class="padding" href="/ansible/managing-ansible-errors-and-logs/">Managing Ansible Errors and Logs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-packages/"><a class="padding" href="/ansible/managing-packages/">Managing Packages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-partitions-and-lvm/"><a class="padding" href="/ansible/managing-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-services/"><a class="padding" href="/ansible/managing-services/">Managing Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/networking-with-ansible/"><a class="padding" href="/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/nfs-setup/"><a class="padding" href="/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimizing-ansible-processing/"><a class="padding" href="/ansible/optimizing-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/repositories-and-subscriptions/"><a class="padding" href="/ansible/repositories-and-subscriptions/">Repositories and subscriptions<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux-file-properties/"><a class="padding" href="/ansible/selinux-file-properties/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/setting-up-an-ansible-lab/"><a class="padding" href="/ansible/setting-up-an-ansible-lab/">Setting up an Ansible Lab<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/troubleshooting-common-scenarios/"><a class="padding" href="/ansible/troubleshooting-common-scenarios/">Troubleshooting Common Scenarios<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/users-and-groups/"><a class="padding" href="/ansible/users-and-groups/">Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-loops-and-items/"><a class="padding" href="/ansible/using-loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-modules-for-troubleshooting-and-testing/"><a class="padding" href="/ansible/using-modules-for-troubleshooting-and-testing/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-multiple-inventories/"><a class="padding" href="/ansible/using-multiple-inventories/">Using Multiple Inventories<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-rhel-system-roles/"><a class="padding" href="/ansible/using-rhel-system-roles/">Using RHEL System roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-tags/"><a class="padding" href="/ansible/using-tags/">Using Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-when-to-run-tasks-conditionally/"><a class="padding" href="/ansible/using-when-to-run-tasks-conditionally/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Variables<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/boot/"><input type="checkbox" id="R-section-a53bfb333437907a8d5bdc636d15c75d" aria-controls="R-subsections-a53bfb333437907a8d5bdc636d15c75d"><label for="R-section-a53bfb333437907a8d5bdc636d15c75d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Boot</span></label><a class="padding default-animation" href="/boot/"><i class="fa-solid fa-hourglass-start"></i> Boot<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-a53bfb333437907a8d5bdc636d15c75d" class="collapsible-menu">
+            <li class="" data-nav-id="/boot/boot-process-grub2-and-kernel/"><a class="padding" href="/boot/boot-process-grub2-and-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/boot/system-initialization-message-logging-and-system-tuning/"><a class="padding" href="/boot/system-initialization-message-logging-and-system-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5"><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="" data-nav-id="/containers/containers-1/"><a class="padding" href="/containers/containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/learning-touch-typing/"><a class="padding" href="/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/files/"><input type="checkbox" id="R-section-31e56884d732922d4a0e407592968056" aria-controls="R-subsections-31e56884d732922d4a0e407592968056"><label for="R-section-31e56884d732922d4a0e407592968056"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Files</span></label><a class="padding default-animation" href="/files/"><i class="fa-solid fa-copy"></i> Files<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-31e56884d732922d4a0e407592968056" class="collapsible-menu">
+            <li class="" data-nav-id="/files/advanced-file-management/"><a class="padding" href="/files/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/files/file-management/"><a class="padding" href="/files/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-synchronization/"><a class="padding" href="/networking/dns-and-time-synchronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/resources-for-passing-ccna/"><a class="padding" href="/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/"><i class="fa-solid fa-box-open"></i> Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
+            <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
+            <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/local-file-systems-and-swap/"><a class="padding" href="/storage/local-file-systems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/network-file-system-nfs/"><a class="padding" href="/storage/network-file-system-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/partitioning-mbr-and-gpt/"><a class="padding" href="/storage/partitioning-mbr-and-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/remove-a-filesystem-from-a-partition/"><a class="padding" href="/storage/remove-a-filesystem-from-a-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/system/"><input type="checkbox" id="R-section-0ea554b019cc5a3e6337c45b68b3a647" aria-controls="R-subsections-0ea554b019cc5a3e6337c45b68b3a647"><label for="R-section-0ea554b019cc5a3e6337c45b68b3a647"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/system/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-0ea554b019cc5a3e6337c45b68b3a647" class="collapsible-menu">
+            <li class="" data-nav-id="/system/installation/"><a class="padding" href="/system/installation/">Installation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/system/interaction/"><a class="padding" href="/system/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/system/process-and-task-scheduling/"><a class="padding" href="/system/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-vagrant-on-linux/"><a class="padding" href="/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-man-pages/"><a class="padding" href="/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users and Groups</span></label><a class="padding default-animation" href="/users-and-groups/"><i class="fa-solid fa-users"></i> Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
+            <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/virtualization/"><input type="checkbox" id="R-section-da8ee4406de37987b502b79e5b0a9d1c" aria-controls="R-subsections-da8ee4406de37987b502b79e5b0a9d1c"><label for="R-section-da8ee4406de37987b502b79e5b0a9d1c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualization</span></label><a class="padding default-animation" href="/virtualization/"><i class="fa-solid fa-microchip"></i> Virtualization<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-da8ee4406de37987b502b79e5b0a9d1c" class="collapsible-menu">
+            <li class="" data-nav-id="/virtualization/rhcsa-vagrant-lab-setup/"><a class="padding" href="/virtualization/rhcsa-vagrant-lab-setup/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1772206888" defer></script>
+    <script src="/js/theme.min.js?1772206888" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

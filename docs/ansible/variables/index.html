@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="description" content="All about Ansible variables">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Variables :: Linux Documentation Site">
+    <meta name="twitter:description" content="All about Ansible variables">
+    <meta property="og:url" content="https://linuxreader.com/ansible/variables/">
+    <meta property="og:site_name" content="Linux Documentation Site">
+    <meta property="og:title" content="Variables :: Linux Documentation Site">
+    <meta property="og:description" content="All about Ansible variables">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Ansible">
+    <meta itemprop="name" content="Variables :: Linux Documentation Site">
+    <meta itemprop="description" content="All about Ansible variables">
+    <meta itemprop="wordCount" content="1614">
+    <title>Variables :: Linux Documentation Site</title>
+    <link href="/ansible/variables/index.md" rel="alternate" type="text/markdown" title="Variables :: Linux Documentation Site">
+    <link href="/images/favicon.svg?1772206888" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1772206888" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1772206888" defer></script>
+    <script src="/js/search-lunr.min.js?1772206888" defer></script>
+    <script src="/js/search.min.js?1772206888" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1772206888";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1772206888" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1772206888" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1772206888" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1772206888" rel="stylesheet">
+    <link href="/css/theme.min.css?1772206888" rel="stylesheet">
+    <link href="/css/format-html.min.css?1772206888" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = `.min`;
+      window.relearn.path='\/ansible\/variables\/';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='https:\/\/linuxreader.com';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/ansible/variables/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#variables">Variables</a></li>
+        <li><a href="#working-with-variables">Working with Variables</a></li>
+        <li><a href="#lab-using-host-and-host-group-variables">LAB: Using Host and Host Group Variables</a></li>
+        <li><a href="#capturing-command-output-using-register">Capturing Command Output Using register</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/ansible/"><span itemprop="name">Ansible</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">Variables</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/ansible/variables/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/ansible/using-when-to-run-tasks-conditionally/" title="Using when to Run Tasks Conditionally (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/bash/" title="Bash (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable ansible" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="variables">Variables</h1>
+
+<p>Using and working with variables</p>
+<ul>
+<li>Capture command output using register</li>
+</ul>
+<h3 id="variables">Variables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Three types of variables:</p>
+<ul>
+<li>Fact</li>
+<li>Variable</li>
+<li>Magic Variable</li>
+</ul>
+<p><strong>Variables</strong> make Ansible really flexible. Especially when used in combination with conditionals. These are defined at the discretion of the user.:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">create a user using a variable</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">ansible1</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">vars</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">users</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">lisa &lt;-- defaults value for this play</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">tasks</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">create a user {{ users }} on host {{ ansible_hostname }} &lt;-- ansible fact variable</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">user</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ users }}&#34;</span><span style="color:#6e7681"> </span><span style="color:#a5d6ff">&lt;-- If value starts with variable, the whole line must have double quotes</span></span></span></code></pre></div>
+<h3 id="working-with-variables">Working with Variables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Variables can be used to refer to a wide range of dynamic data, such as names of files, services, packages, users, URLs to specific servers, etc.</li>
+</ul>
+<h4 id="defining-variables">Defining Variables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>To define a variable</p>
+<ul>
+<li>key: value structure in a vars section in the play header.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>    ---
+    - name: using variables
+      hosts: ansible1
+      vars: &lt;-------------
+        ftp_package: vsftpd &lt;------------
+      tasks:
+      - name: install package
+        yum:
+          name: &#34;{{ ftp_package }}&#34; &lt;------------
+          state: latest</code></pre></div>
+<ul>
+<li>As the variable is the first item in the value, its name must be placed between double curly brackets as well as double quotes.</li>
+</ul>
+<p>Variable equirements:</p>
+<p>• Must start with a letter.
+• Case sensitive.
+• Can contain only letters, numbers, and underscores.</p>
+<h4 id="using-include-files">Using Include Files<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<ul>
+<li>It is common to define variables in include files. Specific host and host group variables can be used as include files</li>
+<li>it&rsquo;s also possible to include an arbitrary file as a variable file, using the <strong>vars_files:</strong> statement.</li>
+<li>The <strong>vars_files:</strong> parameter can have a single value or a list providing multiple values. If a list is used, each item needs to start with a dash</li>
+<li>When you include variables from files, it&rsquo;s a good idea to work with a separate directory that contains all variables because that makes it easier to manage as your projects grow bigger.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>    ---
+    - name: using a variable include file
+      hosts: ansible1
+      vars_files: vars/common &lt;--------------
+      tasks:
+      - name: install package
+        yum:
+          name: &#34;{{ my_package }}&#34; &lt;------------
+          state: latest</code></pre></div>
+<p><strong>vars/common</strong></p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>    my_package: nmap
+    my_ftp_service: vsftpd
+    my_file_service: smb</code></pre></div>
+<ul>
+<li>If variables are defined in individual playbooks, they are spread all over, and it may be difficult to get an overview of all variables that are used on a site.</li>
+</ul>
+<h4 id="managing-host-and-group-variables">Managing Host and Group Variables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p><strong>host_vars</strong> and <strong>group_vars</strong></p>
+<ul>
+<li>set variables for specific hosts or specific host groups.</li>
+<li>In older versions of Ansible, it was common to set host variables and group variables in inventory, but this practice is now deprecated.</li>
+</ul>
+<p><strong>host_vars</strong></p>
+<ul>
+<li>Must create a subdirectory with the name <strong>host_vars</strong> within the Ansible project directory.</li>
+<li>In this directory, create a file that matches the inventory name of the host to which the variables should be applied.</li>
+<li>So the variables for host ansible1 are defined in <strong>host_vars/ansible1</strong>.</li>
+</ul>
+<p><strong>group_vars</strong></p>
+<ul>
+<li>Must create a directory with the name <strong>group_vars</strong>.</li>
+<li>In this directory, a file with the name of the host group is created, and in this file all variables are defined.</li>
+<li>ie: <strong>group_vars/webservers</strong></li>
+</ul>
+<p>If no variables are defined at the command prompt, it will use the variable set for the play. You can also define the variables with the <code>-e</code> flag when running the playbook:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>ansible@control base<span style="color:#ff7b72;font-weight:bold">]</span>$ ansible-playbook variable-pb.yaml -e <span style="color:#79c0ff">users</span><span style="color:#ff7b72;font-weight:bold">=</span>john
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PLAY <span style="color:#ff7b72;font-weight:bold">[</span>create a user using a variable<span style="color:#ff7b72;font-weight:bold">]</span> ************************************************************************************************************************
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>TASK <span style="color:#ff7b72;font-weight:bold">[</span>Gathering Facts<span style="color:#ff7b72;font-weight:bold">]</span> ***************************************************************************************************************************************
+</span></span><span style="display:flex;"><span>ok: <span style="color:#ff7b72;font-weight:bold">[</span>ansible1<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>TASK <span style="color:#ff7b72;font-weight:bold">[</span>create a user john on host ansible1<span style="color:#ff7b72;font-weight:bold">]</span> *******************************************************************************************************************
+</span></span><span style="display:flex;"><span>changed: <span style="color:#ff7b72;font-weight:bold">[</span>ansible1<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PLAY RECAP ***************************************************************************************************************************************************
+</span></span><span style="display:flex;"><span>ansible1                   : <span style="color:#79c0ff">ok</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">2</span>    <span style="color:#79c0ff">changed</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">1</span>    <span style="color:#79c0ff">unreachable</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span>    <span style="color:#79c0ff">failed</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span>    <span style="color:#79c0ff">skipped</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span>    <span style="color:#79c0ff">rescued</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span>    <span style="color:#79c0ff">ignored</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span>   </span></span></code></pre></div>
+<h3 id="lab-using-host-and-host-group-variables">LAB: Using Host and Host Group Variables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>1. Create a project directory in your home directory. Type <strong>mkdir ~/chapter6</strong> to create the chapter6 project directory, and use <strong>cd ~/chapter6</strong> to go into this directory.</p>
+<p>2. Type <strong>cp ../ansible.cfg .</strong> to copy the ansible.cfg file that you used before. No further modifications to this file are required.</p>
+<p>3. Type <strong>vim inventory</strong> to create a file with the name inventory, and ensure it has the following contents:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code class="language-pre1" data-lang="pre1">[webservers]
+ansible1
+
+[dbservers]
+ansible2</code></pre></div>
+<p>4. Create the file webservers.yaml, containing the following contents. Notice that nothing is really changed by running this playbook. It just uses the debug module to show the current value of the variables.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code class="language-pre1" data-lang="pre1">---
+- name: configure web services
+  hosts: webservers
+  tasks:
+  - name: this is the {{ web_package }} package
+    debug:
+      msg: &#34;Installing {{ web_package }}&#34;
+  - name: this is the {{ web_service }} service
+    debug:
+      msg: &#34;Starting the {{ web_service }}&#34;</code></pre></div>
+<p>5. Create the file group_vars/webservers with the following contents:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code class="language-pre1" data-lang="pre1">web_package: httpd
+web_service: httpd</code></pre></div>
+<p>6. Run the playbook with some verbosity to verify it is working by using <code>ansible-playbook -vv webservers.yaml</code></p>
+<h4 id="using-multivalued-variables">Using Multivalued Variables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Two types of multivalued variables:</p>
+<p><strong>array</strong> (list)</p>
+<ul>
+<li>key that can have multiple items as its value.</li>
+<li>Each item in a list starts with a dash (-).</li>
+<li>Individual items in a list can be addressed using the index number (starting at zero), as in {{ users[1] }} (which would print the key-value pairs that are set for user lisa)</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>    users:
+      - linda:
+        username: linda
+        homedir: /home/linda
+        shell: /bin/bash
+      - lisa:
+        username: lisa
+        homedir: /home/lisa
+        shell: /bin/bash
+      - anna:
+        username: anna
+        homedir: /home/anna
+        shell: /bin/bash</code></pre></div>
+<p><strong>dictionary</strong> (hash)</p>
+<ul>
+<li>Unordered collection of items, a collection of key-value pairs.</li>
+<li>In Python, a dictionary is defined as my_dict = { key1: &lsquo;car&rsquo;, key2:&lsquo;bike&rsquo; }.</li>
+<li>Because it is based on Python, Ansible lets users use dictionaries as an alternative notation to arrays</li>
+<li>not as common in use as arrays.</li>
+<li>Items in values in a dictionary are not started with a dash.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>    users:
+      linda:
+        username: linda
+        homedir: /home/linda
+        shell: /bin/bash
+      lisa:
+        username: lisa
+        homedir: /home/lisa
+        shell: /bin/bash
+      anna:
+        username: anna
+        homedir: /home/anna
+        shell: /bin/bash</code></pre></div>
+<p>Addressing Specific Keys in a Dictionary Multivalued Variable:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>    ---
+    - name: show dictionary also known as hash
+      hosts: ansible1
+      vars_files:
+      - vars/users-dictionary
+      tasks:
+      - name: print dictionary values
+        debug:
+          msg: &#34;User {{ users.linda.username }} has homedirectory {{ users.linda.homedir }} and shell {{ users.linda.shell }}&#34;</code></pre></div>
+<p>Using the Square Brackets Notation to Address Multivalued Variables (recommended method)</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>    ---
+    - name: show dictionary also known as hash
+      hosts: ansible1
+      vars_files:
+        - vars/users-dictionary
+      tasks:
+        - name: print dictionary values
+          debug:
+            msg: &#34;User {{ users[’linda’][’username’] }} has homedirectory {{ users[’linda’][’homedir’] }} and shell {{ users[’linda’][’shell’]  }}&#34;</code></pre></div>
+<p><strong>Magic Variables</strong></p>
+<ul>
+<li>Variables that are set automatically by Ansible to reflect an Ansible internal state.</li>
+<li>There are about 30 magic variables</li>
+<li>Common Magic Variables</li>
+</ul>
+<p><a href="#R-image-7a6aab7a9af11b626755099457706c32" class="lightbox-link"><img alt="Image" class="lazy lightbox figure-image" loading="lazy" src="/Images/06tab05.jpg" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-7a6aab7a9af11b626755099457706c32"><img alt="Image" class="lazy lightbox lightbox-image" loading="lazy" src="/Images/06tab05.jpg"></a></p>
+<ul>
+<li>you cannot use their name for anything else.</li>
+<li>If you try to set a magic variable to another value anyway, it always resets to the default internal value.</li>
+</ul>
+<p>Debug module can be used to show the current values assigned to the hostvars magic variable.</p>
+<ul>
+<li>Shows many settings that you can change by modifying the ansible.cfg configuration file.</li>
+<li>If local facts are defined on the host, you will see them also.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>    [ansible@control ~]$ ansible localhost -m debug -a &#39;var=hostvars[&#34;ansible1&#34;]&#39;
+    localhost | SUCCESS =&gt; {
+        &#34;hostvars[\&#34;ansible1\&#34;]&#34;: {
+            &#34;ansible_check_mode&#34;: false,
+            &#34;ansible_diff_mode&#34;: false,
+            &#34;ansible_facts&#34;: {},
+            &#34;ansible_forks&#34;: 5,
+            &#34;ansible_inventory_sources&#34;: [
+                &#34;/home/ansible/inventory&#34;
+            ],
+            &#34;ansible_playbook_python&#34;: &#34;/usr/bin/python3.6&#34;,
+            &#34;ansible_verbosity&#34;: 0,
+            &#34;ansible_version&#34;: {
+                &#34;full&#34;: &#34;2.9.5&#34;,
+                &#34;major&#34;: 2,
+                &#34;minor&#34;: 9,
+                &#34;revision&#34;: 5,
+                &#34;string&#34;: &#34;2.9.5&#34;
+            },
+            &#34;group_names&#34;: [
+                &#34;ungrouped&#34;
+            ],
+            &#34;groups&#34;: {
+                &#34;all&#34;: [
+                    &#34;ansible1&#34;,
+                    &#34;ansible2&#34;
+                ],
+                &#34;ungrouped&#34;: [
+                    &#34;ansible1&#34;,
+                    &#34;ansible2&#34;
+                ]
+            },
+            &#34;inventory_dir&#34;: &#34;/home/ansible&#34;,
+            &#34;inventory_file&#34;: &#34;/home/ansible/inventory&#34;,
+            &#34;inventory_hostname&#34;: &#34;ansible1&#34;,
+            &#34;inventory_hostname_short&#34;: &#34;ansible1&#34;,
+            &#34;omit&#34;: &#34;__omit_place_holder__38849508966537e44da5c665d4a784c3bc0060de&#34;,
+            &#34;playbook_dir&#34;: &#34;/home/ansible&#34;
+        }
+    }</code></pre></div>
+<h4 id="variable-precedence">Variable Precedence<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<ul>
+<li>Avoid using variables with the same names that are defined at different levels.</li>
+<li>If a variable with the same name is defined at different levels, the most specific variable always wins.</li>
+<li>Variables that are defined while running the <strong>playbook</strong> command using the <strong>-e key=value</strong> command-line argument have the highest precedence.</li>
+<li>After variables that are passed as command-line options, playbook variables are considered.</li>
+<li>Next are variables that are defined for inventory hosts or host groups.</li>
+<li>Consult the Ansible documentation item &ldquo;Variable precedence&rdquo; for more details and an overview of the 22 different levels where variables can be set and how precedence works for them.</li>
+</ul>
+<p>1. Variables passed on the command line
+2. Variables defined in or included from a playbook
+3. Inventory variables</p>
+<h3 id="capturing-command-output-using-register">Capturing Command Output Using register<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>The result of commands can also be used as a variable byusing the <strong>register</strong> parameter in a task.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>    ---
+    - name: test register
+      hosts: ansible1
+      tasks:
+      - shell: cat /etc/passwd
+        register: passwd_contents
+      - debug:
+          var: &#34;passwd_contents&#34;</code></pre></div>
+<p>The <code>cat /etc/passwd</code> command is executed by the shell module. Notice that in this playbook no names are used for tasks. Using names for tasks is
+not mandatory; it&rsquo;s just recommended in more complex playbooks because this convention makes identification of the tasks easier. The entire contents of the command are next stored in the variable <strong>passwd_contents</strong>.</p>
+<p>This variable contains the output of the command, stored in different keys. <a href="/ansible/variables/#ch06.xhtml#tab6_7">Table 6-7</a> provides an overview of the most
+useful keys, and <a href="/ansible/variables/#ch06.xhtml#list6_19">Listing 6-19</a> shows the partial result of the <code>ansible-playbook listing618.yaml</code> command.</p>
+<p>Keys Used with <strong>register</strong>
+cmd</p>
+<ul>
+<li>Command that was used
+rc</li>
+<li>Return code of the command
+stderr</li>
+<li>Error messages
+stderr_lines</li>
+<li>Errors line by line
+stdout</li>
+<li>command output
+stdout_line</li>
+<li>Command output line by line</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>    [ansible@control ~]$ ansible-playbook listing618.yaml
+    
+    PLAY [test register] *******************************************************************
+    
+    TASK [Gathering Facts] *****************************************************************
+    ok: [ansible2]
+    ok: [ansible1]
+    
+    TASK [shell] ***************************************************************************
+    changed: [ansible2]
+    changed: [ansible1]
+    
+    TASK [debug] ***************************************************************************
+    ok: [ansible1] =&gt; {
+        &#34;passwd_contents&#34;: {
+            &#34;changed&#34;: true,
+            &#34;cmd&#34;: &#34;cat /etc/passwd&#34;,
+            &#34;delta&#34;: &#34;0:00:00.004149&#34;,
+            &#34;end&#34;: &#34;2020-04-02 02:28:10.692306&#34;,
+            &#34;failed&#34;: false,
+            &#34;rc&#34;: 0,
+            &#34;start&#34;: &#34;2020-04-02 02:28:10.688157&#34;,
+            &#34;stderr&#34;: &#34;&#34;,
+            &#34;stderr_lines&#34;: [],
+            &#34;stdout&#34;: &#34;root:x:0:0:root:/root:/bin/bash\nbin:x:1:1:bin:/bin:/sbin/nologin\ndaemon:x:2:2:daemon:/sbin:/sbin/nologin\nadm:x:3:4:adm:/var/adm:/sbin/nologin\nlp:x:4:7:lp:/var/spool/lpd:/sbin/nologin\nsync:x:5:0:sync:/sbin:/bin/sync\nshutdown:x:6:0:shutdown:/sbin:/sbin/shutdown\nhalt:x:7:0:halt:/sbin:/sbin/halt\nansible:x:1000:1000:ansible:/home/ansible:/bin/bash\napache:x:48:48:Apache:/usr/share/httpd:/sbin/nologin\nlinda:x:1002:1002::/home/linda:/bin/bash\nlisa:x:1003:1003::/home/lisa:/bin/bash&#34;,
+            &#34;stdout_lines&#34;: [
+                &#34;root:x:0:0:root:/root:/bin/bash&#34;,
+                &#34;bin:x:1:1:bin:/bin:/sbin/nologin&#34;,
+                &#34;daemon:x:2:2:daemon:/sbin:/sbin/nologin&#34;,
+                &#34;adm:x:3:4:adm:/var/adm:/sbin/nologin&#34;,
+                &#34;lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin&#34;,
+                &#34;sync:x:5:0:sync:/sbin:/bin/sync&#34;,
+                &#34;shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown&#34;,
+                &#34;halt:x:7:0:halt:/sbin:/sbin/halt&#34;,
+                &#34;ansible:x:1000:1000:ansible:/home/ansible:/bin/bash&#34;,
+                &#34;apache:x:48:48:Apache:/usr/share/httpd:/sbin/nologin&#34;,
+                &#34;linda:x:1002:1002::/home/linda:/bin/bash&#34;,
+                &#34;lisa:x:1003:1003::/home/lisa:/bin/bash&#34;
+            ]
+        }
+    }</code></pre></div>
+<p>Ensure that a task runs only if a command produces a specific result by using <strong>register</strong> with conditionals.</p>
+<p><strong>register</strong> shows the values that are returned by specific tasks. Tasks have common return values, but modules may have specific
+return values. That means you cannot assume, based on the result of an example using a specific module, that the return values you see are
+available for all modules. Consult the module documentation for more information about specific return values.</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="parent " data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606" checked><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ad-hoc-ansible-commands/"><a class="padding" href="/ansible/ad-hoc-ansible-commands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-documentation/"><a class="padding" href="/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-facts/"><a class="padding" href="/ansible/ansible-facts/">Ansible Facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-galaxy-roles/"><a class="padding" href="/ansible/ansible-galaxy-roles/">Ansible Galaxy Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-inventory/"><a class="padding" href="/ansible/ansible-inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-playbooks/"><a class="padding" href="/ansible/ansible-playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-ansible-roles/"><a class="padding" href="/ansible/using-ansible-roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-inventory-command/"><a class="padding" href="/ansible/ansible-inventory-command/">Ansible-inventory command<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible.cfg/"><a class="padding" href="/ansible/ansible.cfg/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/building-an-ansible-lab-with-ansible/"><a class="padding" href="/ansible/building-an-ansible-lab-with-ansible/">Building an Ansible lab with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/common-modules-with-examples/"><a class="padding" href="/ansible/common-modules-with-examples/">Common modules with examples<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/discovering-storage-related-facts/"><a class="padding" href="/ansible/discovering-storage-related-facts/">Discovering storage related facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/dynamic-inventory/"><a class="padding" href="/ansible/dynamic-inventory/">Dynamic Inventory<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/execution-environments/"><a class="padding" href="/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/host-name-patterns/"><a class="padding" href="/ansible/host-name-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/including-and-importing-files/"><a class="padding" href="/ansible/including-and-importing-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2-templates/"><a class="padding" href="/ansible/jinja2-templates/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-ansible-errors-and-logs/"><a class="padding" href="/ansible/managing-ansible-errors-and-logs/">Managing Ansible Errors and Logs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-packages/"><a class="padding" href="/ansible/managing-packages/">Managing Packages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-partitions-and-lvm/"><a class="padding" href="/ansible/managing-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-services/"><a class="padding" href="/ansible/managing-services/">Managing Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/networking-with-ansible/"><a class="padding" href="/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/nfs-setup/"><a class="padding" href="/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimizing-ansible-processing/"><a class="padding" href="/ansible/optimizing-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/repositories-and-subscriptions/"><a class="padding" href="/ansible/repositories-and-subscriptions/">Repositories and subscriptions<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux-file-properties/"><a class="padding" href="/ansible/selinux-file-properties/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/setting-up-an-ansible-lab/"><a class="padding" href="/ansible/setting-up-an-ansible-lab/">Setting up an Ansible Lab<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/troubleshooting-common-scenarios/"><a class="padding" href="/ansible/troubleshooting-common-scenarios/">Troubleshooting Common Scenarios<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/users-and-groups/"><a class="padding" href="/ansible/users-and-groups/">Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-loops-and-items/"><a class="padding" href="/ansible/using-loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-modules-for-troubleshooting-and-testing/"><a class="padding" href="/ansible/using-modules-for-troubleshooting-and-testing/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-multiple-inventories/"><a class="padding" href="/ansible/using-multiple-inventories/">Using Multiple Inventories<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-rhel-system-roles/"><a class="padding" href="/ansible/using-rhel-system-roles/">Using RHEL System roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-tags/"><a class="padding" href="/ansible/using-tags/">Using Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-when-to-run-tasks-conditionally/"><a class="padding" href="/ansible/using-when-to-run-tasks-conditionally/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="active " data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Variables<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/boot/"><input type="checkbox" id="R-section-a53bfb333437907a8d5bdc636d15c75d" aria-controls="R-subsections-a53bfb333437907a8d5bdc636d15c75d"><label for="R-section-a53bfb333437907a8d5bdc636d15c75d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Boot</span></label><a class="padding default-animation" href="/boot/"><i class="fa-solid fa-hourglass-start"></i> Boot<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-a53bfb333437907a8d5bdc636d15c75d" class="collapsible-menu">
+            <li class="" data-nav-id="/boot/boot-process-grub2-and-kernel/"><a class="padding" href="/boot/boot-process-grub2-and-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/boot/system-initialization-message-logging-and-system-tuning/"><a class="padding" href="/boot/system-initialization-message-logging-and-system-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5"><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="" data-nav-id="/containers/containers-1/"><a class="padding" href="/containers/containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/learning-touch-typing/"><a class="padding" href="/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/files/"><input type="checkbox" id="R-section-31e56884d732922d4a0e407592968056" aria-controls="R-subsections-31e56884d732922d4a0e407592968056"><label for="R-section-31e56884d732922d4a0e407592968056"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Files</span></label><a class="padding default-animation" href="/files/"><i class="fa-solid fa-copy"></i> Files<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-31e56884d732922d4a0e407592968056" class="collapsible-menu">
+            <li class="" data-nav-id="/files/advanced-file-management/"><a class="padding" href="/files/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/files/file-management/"><a class="padding" href="/files/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-synchronization/"><a class="padding" href="/networking/dns-and-time-synchronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/resources-for-passing-ccna/"><a class="padding" href="/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/"><i class="fa-solid fa-box-open"></i> Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
+            <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
+            <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/local-file-systems-and-swap/"><a class="padding" href="/storage/local-file-systems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/network-file-system-nfs/"><a class="padding" href="/storage/network-file-system-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/partitioning-mbr-and-gpt/"><a class="padding" href="/storage/partitioning-mbr-and-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/remove-a-filesystem-from-a-partition/"><a class="padding" href="/storage/remove-a-filesystem-from-a-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/system/"><input type="checkbox" id="R-section-0ea554b019cc5a3e6337c45b68b3a647" aria-controls="R-subsections-0ea554b019cc5a3e6337c45b68b3a647"><label for="R-section-0ea554b019cc5a3e6337c45b68b3a647"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/system/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-0ea554b019cc5a3e6337c45b68b3a647" class="collapsible-menu">
+            <li class="" data-nav-id="/system/installation/"><a class="padding" href="/system/installation/">Installation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/system/interaction/"><a class="padding" href="/system/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/system/process-and-task-scheduling/"><a class="padding" href="/system/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-vagrant-on-linux/"><a class="padding" href="/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-man-pages/"><a class="padding" href="/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users and Groups</span></label><a class="padding default-animation" href="/users-and-groups/"><i class="fa-solid fa-users"></i> Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
+            <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/virtualization/"><input type="checkbox" id="R-section-da8ee4406de37987b502b79e5b0a9d1c" aria-controls="R-subsections-da8ee4406de37987b502b79e5b0a9d1c"><label for="R-section-da8ee4406de37987b502b79e5b0a9d1c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualization</span></label><a class="padding default-animation" href="/virtualization/"><i class="fa-solid fa-microchip"></i> Virtualization<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-da8ee4406de37987b502b79e5b0a9d1c" class="collapsible-menu">
+            <li class="" data-nav-id="/virtualization/rhcsa-vagrant-lab-setup/"><a class="padding" href="/virtualization/rhcsa-vagrant-lab-setup/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1772206888" defer></script>
+    <script src="/js/theme.min.js?1772206888" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

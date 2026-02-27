@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="description" content="Using Modules for Troubleshooting and Testing">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Using Modules for Troubleshooting and Testing :: Linux Documentation Site">
+    <meta name="twitter:description" content="Using Modules for Troubleshooting and Testing">
+    <meta property="og:url" content="https://linuxreader.com/ansible/using-modules-for-troubleshooting-and-testing/">
+    <meta property="og:site_name" content="Linux Documentation Site">
+    <meta property="og:title" content="Using Modules for Troubleshooting and Testing :: Linux Documentation Site">
+    <meta property="og:description" content="Using Modules for Troubleshooting and Testing">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Ansible">
+    <meta itemprop="name" content="Using Modules for Troubleshooting and Testing :: Linux Documentation Site">
+    <meta itemprop="description" content="Using Modules for Troubleshooting and Testing">
+    <meta itemprop="wordCount" content="1967">
+    <title>Using Modules for Troubleshooting and Testing :: Linux Documentation Site</title>
+    <link href="/ansible/using-modules-for-troubleshooting-and-testing/index.md" rel="alternate" type="text/markdown" title="Using Modules for Troubleshooting and Testing :: Linux Documentation Site">
+    <link href="/images/favicon.svg?1772206888" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1772206888" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1772206888" defer></script>
+    <script src="/js/search-lunr.min.js?1772206888" defer></script>
+    <script src="/js/search.min.js?1772206888" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1772206888";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1772206888" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1772206888" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1772206888" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1772206888" rel="stylesheet">
+    <link href="/css/theme.min.css?1772206888" rel="stylesheet">
+    <link href="/css/format-html.min.css?1772206888" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = `.min`;
+      window.relearn.path='\/ansible\/using-modules-for-troubleshooting-and-testing\/';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='https:\/\/linuxreader.com';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/ansible/using-modules-for-troubleshooting-and-testing/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#using-modules-for-troubleshooting-and-testing">Using Modules for Troubleshooting and Testing</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/ansible/"><span itemprop="name">Ansible</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">Using Modules for Troubleshooting and Testing</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/ansible/using-modules-for-troubleshooting-and-testing/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/ansible/using-loops-and-items/" title="Using Loops and Items (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/ansible/using-multiple-inventories/" title="Using Multiple Inventories (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable ansible" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="using-modules-for-troubleshooting-and-testing">Using Modules for Troubleshooting and Testing</h1>
+
+<h3 id="using-modules-for-troubleshooting-and-testing">Using Modules for Troubleshooting and Testing<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>While working with playbooks, you may use different modules for
+troubleshooting. The debug module was used in previous chapters and is
+particularly useful for analyzing variable behavior. Some other modules
+may prove useful when troubleshooting Ansible. <a href="/ansible/using-modules-for-troubleshooting-and-testing/#ch11.xhtml#tab11_4">Table
+11-4</a> gives an overview.</p>
+<p>::: group
+<strong>Table 11-4</strong> Troubleshooting Modules Overview</p>
+<p><a href="#R-image-a6837c0b8273a872686089bad7ceda15" class="lightbox-link"><img alt="Image" class="lazy lightbox figure-image" loading="lazy" src="Images/11tab04.jpg" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-a6837c0b8273a872686089bad7ceda15"><img alt="Image" class="lazy lightbox lightbox-image" loading="lazy" src="Images/11tab04.jpg"></a> {width=&ldquo;940&rdquo; height=&ldquo;295&rdquo;}
+:::</p>
+<p>The following sections discuss how these modules can be used.</p>
+<h4 id="using-the-debug-module" class="h4">Using the Debug Module<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>The debug module is useful to visualize what is happening at a certain
+point in a playbook. It works with two arguments: the <strong>msg</strong> argument
+can be used to print a message, and the <strong>var</strong> argument can be used to
+print the value of a variable. Notice that when you use the <strong>var</strong>
+argument, the variable does not have to be referred to using the usual
+<strong>{{ varname }}</strong> structure, just use <strong>varname</strong> instead. If variables
+are used in the <strong>msg</strong> argument, they must be referred to the normal
+way, using the <strong>{{ varname }}</strong> syntax.</p>
+<p>Because you have already seen the debug module in action in numerous
+examples in Chapters 6, 7, and 8 of this book, no new examples are
+included here.</p>
+<h4 id="using-the-uri-module" class="h4">Using the uri Module<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>The best way to learn how to work with these modules is to look at some
+examples. <a href="/ansible/using-modules-for-troubleshooting-and-testing/#ch11.xhtml#list11_7">Listing 11-7</a> shows an example where
+the uri module is used.</p>
+<p><strong>Listing 11-7</strong> Using the uri Module</p>
+<p>::: pre_1
+&mdash;
+- name: test webserver access
+hosts: localhost
+become: no
+tasks:
+- name: connect to the web server
+uri:
+url: <a href="http://ansible2.example.com" rel="external" target="_blank">http://ansible2.example.com</a>
+return_content: yes
+register: this
+failed_when: &ldquo;’welcome’ not in this.content&rdquo;
+- debug:
+var: this.content
+:::</p>
+<p>The playbook in <a href="/ansible/using-modules-for-troubleshooting-and-testing/#ch11.xhtml#list11_7">Listing 11-7</a> uses the uri module
+to connect to a web server. The <strong>return_content</strong> argument captures the
+web server content, which is stored in a variable using <strong>register</strong>.
+Next, the <strong>failed_when</strong> statement makes this module fail if the text
+&ldquo;welcome&rdquo; is not in the registered variable. For debugging purposes, the
+debug module is used to show the contents of the variable.</p>
+<p>In <a href="/ansible/using-modules-for-troubleshooting-and-testing/#ch11.xhtml#list11_8">Listing 11-8</a> you can see the partial result
+of running this playbook. Notice that the playbook does not generate a
+failure because the default web page that is shown by the Apache web
+server contains the text &ldquo;welcome.&rdquo;</p>
+<p><strong>Listing 11-8 ansible-playbook listing117.yaml</strong> Command Result</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>ansible@control rhce8-book<span style="color:#ff7b72;font-weight:bold">]</span>$ ansible-playbook listing117.yaml
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    PLAY <span style="color:#ff7b72;font-weight:bold">[</span>test webserver access<span style="color:#ff7b72;font-weight:bold">]</span> ***************************************************
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    TASK <span style="color:#ff7b72;font-weight:bold">[</span>Gathering Facts<span style="color:#ff7b72;font-weight:bold">]</span> *********************************************************
+</span></span><span style="display:flex;"><span>    ok: <span style="color:#ff7b72;font-weight:bold">[</span>localhost<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    TASK <span style="color:#ff7b72;font-weight:bold">[</span>connect to the web server<span style="color:#ff7b72;font-weight:bold">]</span> ***********************************************
+</span></span><span style="display:flex;"><span>    ok: <span style="color:#ff7b72;font-weight:bold">[</span>localhost<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    TASK <span style="color:#ff7b72;font-weight:bold">[</span>debug<span style="color:#ff7b72;font-weight:bold">]</span> *******************************************************************
+</span></span><span style="display:flex;"><span>    ok: <span style="color:#ff7b72;font-weight:bold">[</span>localhost<span style="color:#ff7b72;font-weight:bold">]</span> <span style="color:#ff7b72;font-weight:bold">=</span>&gt; <span style="color:#ff7b72;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a5d6ff">&#34;this.content&#34;</span>: <span style="color:#a5d6ff">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">    
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">    PLAY RECAP *********************************************************************
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">    localhost                  : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">    </span></span></span></code></pre></div>
+<p>Using the uri module can be useful to perform a simple test to check
+whether a web server is available, but you can also use it to check
+accessibility or returned information from an API endpoint.</p>
+<h4 id="using-the-stat-module" class="h4">Using the stat Module<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>You can use the stat module to check on the status of files. Although
+this module can be useful for checking on the status of just a few
+files, it&rsquo;s not a file system integrity checker that was developed to
+check file status on a large scale. If you need large-scale file system
+integrity checking, you should use Linux utilities such as aide.</p>
+<p>The stat module is useful in combination with <strong>register</strong>. In this use,
+the stat module is used to register the status of a specific file, and
+in a <strong>when</strong> statement, a check can be done to see whether the file
+status is not as expected. In combination with the fail module, you can
+use this module to generate a failure and error message if the file does
+not meet the expected status. <a href="/ansible/using-modules-for-troubleshooting-and-testing/#ch11.xhtml#list11_9">Listing 11-9</a> shows
+an example, and <a href="/ansible/using-modules-for-troubleshooting-and-testing/#ch11.xhtml#list11_10">Listing 11-10</a> shows the
+resulting output, where you can see that the fail module fails the
+playbook because the file owner is not root.</p>
+<p><strong>Listing 11-9</strong> Using stat to Check Expected File Status</p>
+<p>::: pre_1
+&mdash;
+- name: create a file
+hosts: all
+tasks:
+- file:
+path: /tmp/statfile
+state: touch
+owner: ansible</p>
+<pre><code>- name: check file status
+  hosts: all
+  tasks:
+  - stat:
+      path: /tmp/statfile
+    register: stat_out
+  - fail:
+      msg: &quot;/tmp/statfile file owner not as expected&quot;
+    when: stat_out.stat.pw_name != ’root’
+</code></pre>
+<p>:::</p>
+<p><strong>Listing 11-10 ansible-playbook listing119.yaml</strong> Command Result</p>
+<p>::: pre_1
+[ansible@control rhce8-book]$ ansible-playbook listing119.yaml</p>
+<pre><code>PLAY [create a file] ***********************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ansible2]
+ok: [ansible1]
+ok: [ansible3]
+ok: [ansible4]
+fatal: [ansible6]: UNREACHABLE! =&gt; {&quot;changed&quot;: false, &quot;msg&quot;: &quot;Failed to connect to the host via ssh: ansible@ansible6: Permission denied (publickey,gssapi-keyex,gssapi-with-mic,password).&quot;, &quot;unreachable&quot;: true}
+fatal: [ansible5]: UNREACHABLE! =&gt; {&quot;changed&quot;: false, &quot;msg&quot;: &quot;Failed to connect to the host via ssh: ssh: connect to host ansible5 port 22: No route to host&quot;, &quot;unreachable&quot;: true}
+
+TASK [file] ********************************************************************
+changed: [ansible2]
+changed: [ansible1]
+changed: [ansible3]
+changed: [ansible4]
+
+PLAY [check file status] *******************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ansible1]
+ok: [ansible2]
+ok: [ansible3]
+ok: [ansible4]
+
+TASK [stat] ********************************************************************
+ok: [ansible2]
+ok: [ansible1]
+ok: [ansible3]
+ok: [ansible4]
+
+TASK [fail] ********************************************************************
+fatal: [ansible2]: FAILED! =&gt; {&quot;changed&quot;: false, &quot;msg&quot;: &quot;/tmp/statfile file owner not as expected&quot;}
+fatal: [ansible1]: FAILED! =&gt; {&quot;changed&quot;: false, &quot;msg&quot;: &quot;/tmp/statfile file owner not as expected&quot;}
+fatal: [ansible3]: FAILED! =&gt; {&quot;changed&quot;: false, &quot;msg&quot;: &quot;/tmp/statfile file owner not as expected&quot;}
+fatal: [ansible4]: FAILED! =&gt; {&quot;changed&quot;: false, &quot;msg&quot;: &quot;/tmp/statfile file owner not as expected&quot;}
+
+PLAY RECAP *********************************************************************
+ansible1                   : ok=4    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0
+ansible2                   : ok=4    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0
+ansible3                   : ok=4    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0
+ansible4                   : ok=4    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0
+ansible5                   : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0
+ansible6                   : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0
+</code></pre>
+<p>:::</p>
+<h4 id="using-the-assert-module" class="h4">Using the assert Module<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>The assert module is a bit like the fail module. You can use it to
+perform a specific conditional action. The assert module works with a
+<strong>that</strong> option that defines a list of conditionals. If any one of these
+conditionals is false, the task fails, and if all the conditionals are
+true, the task is successful. Based on the success or failure of a task,
+the module uses the <strong>success_msg</strong> or <strong>fail_msg</strong> options to print a
+message. <a href="/ansible/using-modules-for-troubleshooting-and-testing/#ch11.xhtml#list11_11">Listing 11-11</a> shows an example that
+uses the assert module.</p>
+<p><strong>Listing 11-11</strong> Using the assert Module</p>
+<p>::: pre_1
+&mdash;
+- hosts: localhost
+vars_prompt:
+- name: filesize
+prompt: &ldquo;specify a file size in megabytes&rdquo;
+tasks:
+- name: check if file size is valid
+assert:
+that:
+- &ldquo;{{ (filesize | int) &lt;= 100 }}&rdquo;
+- &ldquo;{{ (filesize | int) &gt;= 1 }}&rdquo;
+fail_msg: &ldquo;file size must be between 0 and 100&rdquo;
+success_msg: &ldquo;file size is good, let\’s continue&rdquo;
+- name: create a file
+command: dd if=/dev/zero of=/bigfile bs=1 count={{ filesize }}
+:::</p>
+<p>The example in <a href="/ansible/using-modules-for-troubleshooting-and-testing/#ch11.xhtml#list11_11">Listing 11-11</a> contains a few new
+items. As you can see, the play header starts with a <strong>vars_prompt</strong>.
+This defines a variable named <strong>filesize</strong>, which is based on the input
+provided by the user. This <strong>filesize</strong> variable is next used by the
+assert module. The <strong>that</strong> statement contains a list in which two
+conditions are stated. If specified like this, all conditions stated in
+the <strong>that</strong> condition must be true. So you are looking for <strong>filesize</strong>
+to be equal to or bigger than 1, and smaller than or equal to 100.</p>
+<p>Before this can be done, one little problem needs to be managed: when
+<strong>vars_prompt</strong> is used, the variable type is set to be a string by
+default. This means that a statement like</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>**filesize left <span style="color:#79c0ff">caret</span><span style="color:#ff7b72;font-weight:bold">=</span> 100**</span></span></code></pre></div>
+<p>would
+fail with a type mismatch. That is why a Jinja2 filter is used to
+convert the variable type from string to integer.</p>
+<p>Filters are a powerful feature provided by the Jinja2 templating
+language and can be used in Ansible to modify variables before
+processing. For more information about filters, see
+<a href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html" rel="external" target="_blank">https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html</a>.
+The int filter can be used to convert the value of a string variable to
+an integer. To do this, you need to rewrite the entire variable as a
+Jinja2 operation, which is done using <strong>&quot;{{ (filesize | int) left caret= 100
+}}&quot;</strong>.</p>
+<p>In this line, the entire string is written as a variable. The variable
+is further treated in a Jinja2 context. In this context, the part
+<strong>(filesize | int)</strong> ensures that the string is converted to an
+integer, which makes it possible to check if the value is smaller than
+100.</p>
+<p>When you run the code in <a href="/ansible/using-modules-for-troubleshooting-and-testing/#ch11.xhtml#list11_11">Listing 11-11</a>, the
+result shown in <a href="/ansible/using-modules-for-troubleshooting-and-testing/#ch11.xhtml#list11_12">Listing 11-12</a> is produced.</p>
+<p><strong>Listing 11-12 ansible-playbook listing1111.yaml</strong> Output</p>
+<p>::: pre_1
+[ansible@control rhce8-book]$ ansible-playbook listing1111.yaml</p>
+<pre><code>PLAY [localhost] *****************************************************************
+
+TASK [Gathering Facts] ***********************************************************
+ok: [localhost]
+
+TASK [check if file size is valid] ***********************************************
+fatal: [localhost]: FAILED! =&gt; {
+    &quot;assertion&quot;: &quot;filesize left caret= 100&quot;,
+    &quot;changed&quot;: false,
+    &quot;evaluated_to&quot;: false,
+    &quot;msg&quot;: &quot;file size must be between 0 and 100&quot;
+}
+
+PLAY RECAP ***********************************************************************
+localhost                  : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0
+</code></pre>
+<p>:::</p>
+<p>As you can see, the task that is defined with the assert module fails
+because the variable has a value that is not between the minimum and
+maximum sizes that are defined.</p>
+<p>Understanding the need for using the filter to convert the variable type
+might not be easy. So, let&rsquo;s also look at <a href="/ansible/using-modules-for-troubleshooting-and-testing/#ch11.xhtml#list11_13">Listing
+11-13</a>, which shows an example of a playbook that
+will fail. You can see its behavior in <a href="/ansible/using-modules-for-troubleshooting-and-testing/#ch11.xhtml#list11_14">Listing
+11-14</a>, where the playbook is executed.</p>
+<p><strong>Listing 11-13</strong> Failing Version of the <a href="/ansible/using-modules-for-troubleshooting-and-testing/#ch11.xhtml#list11_11">Listing
+11-11</a> Playbook</p>
+<p>::: pre_1
+&mdash;
+- hosts: localhost
+vars_prompt:
+- name: filesize
+prompt: &ldquo;specify a file size in megabytes&rdquo;
+tasks:
+- name: check if file size is valid
+assert:
+that:
+- filesize &lt;= 100
+- filesize &gt;= 1
+fail_msg: &ldquo;file size must be between 0 and 100&rdquo;
+success_msg: &ldquo;file size is good, let\’s continue&rdquo;
+- name: create a file
+command: dd if=/dev/zero of=/bigfile bs=1 count={{ filesize }}
+:::</p>
+<p><strong>Listing 11-14 ansible-playbook listing1113.yaml</strong> Failing Result</p>
+<p>::: pre_1
+[ansible@control rhce8-book]$ ansible-playbook listing1113.yaml
+specify a file size in megabytes:</p>
+<pre><code>PLAY [localhost] *****************************************************************
+
+TASK [Gathering Facts] ***********************************************************
+ok: [localhost]
+
+TASK [check if file size is valid] ***********************************************
+fatal: [localhost]: FAILED! =&gt; {&quot;msg&quot;: &quot;The conditional check ’filesize left caret= 100’ failed. The error was: Unexpected templating type error occurred on ({% if filesize left caret= 100 %} True {% else %} False {% endif %}): ’left caret=’ not supported between instances of ’str’ and ’int’&quot;}
+
+PLAY RECAP ***********************************************************************
+localhost                  : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0
+</code></pre>
+<p>:::</p>
+<p>As you can see, the code in <a href="/ansible/using-modules-for-troubleshooting-and-testing/#ch11.xhtml#list11_13">Listing 11-13</a> fails
+because the \left caret= test is not supported between a string and an integer.</p>
+<p>In <a href="/ansible/using-modules-for-troubleshooting-and-testing/#ch11.xhtml#exe11_2">Exercise 11-2</a> you work with some of the
+modules discussed in this section.</p>
+<p>::: box
+<strong>Exercise 11-2 Using Modules for Troubleshooting</strong></p>
+<p>1. Open your editor to create the file exercise112.yaml and define the
+play header:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code class="language-pre1" data-lang="pre1">---
+- name: using assert to check if volume group vgdata exists
+  hosts: all
+  tasks:</code></pre></div>
+<p>2. Add a task that uses the command <strong>vgs vgdata</strong> to check whether a
+volume group with the name vgdata exists. The task should use
+<strong>register</strong> to register the command result, and it should continue if
+this is not the case.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code class="language-pre1" data-lang="pre1">- name: check if vgdata exists
+  command: vgs vgdata
+  register: vg_result
+  ignore_errors: true</code></pre></div>
+<p>3. To make it easier to use <strong>assert</strong> in the next step on the right
+variable, include a <strong>debug</strong> task to show the value of the variable:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code class="language-pre1" data-lang="pre1">- name: show vg_result variable
+  debug:
+    var: vg_result</code></pre></div>
+<p>4. Add a task to print a success or failure message, depending on the
+result of the <strong>vgs</strong> command from the first task:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code class="language-pre1" data-lang="pre1">- name: print a message
+  assert:
+    that:
+    - vg_result.rc == 0
+    fail_msg: volume group not found
+    success_msg: volume group was found</code></pre></div>
+<p>5. Use the command <strong>ansible-playbook exercise112.yaml</strong> to verify its
+contents. Assuming that the LVM Volume Group vgdata was not found, it
+should print &ldquo;volume group not found.&rdquo;</p>
+<p>6. Change the playbook to verify that it will print the <strong>success_msg</strong>
+if the requested volume group was found. You can do so by having it run
+the command <strong>vgs cl</strong>, which on CentOS 8 should give a positive result.
+:::</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="parent " data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606" checked><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ad-hoc-ansible-commands/"><a class="padding" href="/ansible/ad-hoc-ansible-commands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-documentation/"><a class="padding" href="/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-facts/"><a class="padding" href="/ansible/ansible-facts/">Ansible Facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-galaxy-roles/"><a class="padding" href="/ansible/ansible-galaxy-roles/">Ansible Galaxy Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-inventory/"><a class="padding" href="/ansible/ansible-inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-playbooks/"><a class="padding" href="/ansible/ansible-playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-ansible-roles/"><a class="padding" href="/ansible/using-ansible-roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-inventory-command/"><a class="padding" href="/ansible/ansible-inventory-command/">Ansible-inventory command<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible.cfg/"><a class="padding" href="/ansible/ansible.cfg/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/building-an-ansible-lab-with-ansible/"><a class="padding" href="/ansible/building-an-ansible-lab-with-ansible/">Building an Ansible lab with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/common-modules-with-examples/"><a class="padding" href="/ansible/common-modules-with-examples/">Common modules with examples<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/discovering-storage-related-facts/"><a class="padding" href="/ansible/discovering-storage-related-facts/">Discovering storage related facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/dynamic-inventory/"><a class="padding" href="/ansible/dynamic-inventory/">Dynamic Inventory<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/execution-environments/"><a class="padding" href="/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/host-name-patterns/"><a class="padding" href="/ansible/host-name-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/including-and-importing-files/"><a class="padding" href="/ansible/including-and-importing-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2-templates/"><a class="padding" href="/ansible/jinja2-templates/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-ansible-errors-and-logs/"><a class="padding" href="/ansible/managing-ansible-errors-and-logs/">Managing Ansible Errors and Logs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-packages/"><a class="padding" href="/ansible/managing-packages/">Managing Packages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-partitions-and-lvm/"><a class="padding" href="/ansible/managing-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-services/"><a class="padding" href="/ansible/managing-services/">Managing Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/networking-with-ansible/"><a class="padding" href="/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/nfs-setup/"><a class="padding" href="/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimizing-ansible-processing/"><a class="padding" href="/ansible/optimizing-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/repositories-and-subscriptions/"><a class="padding" href="/ansible/repositories-and-subscriptions/">Repositories and subscriptions<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux-file-properties/"><a class="padding" href="/ansible/selinux-file-properties/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/setting-up-an-ansible-lab/"><a class="padding" href="/ansible/setting-up-an-ansible-lab/">Setting up an Ansible Lab<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/troubleshooting-common-scenarios/"><a class="padding" href="/ansible/troubleshooting-common-scenarios/">Troubleshooting Common Scenarios<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/users-and-groups/"><a class="padding" href="/ansible/users-and-groups/">Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-loops-and-items/"><a class="padding" href="/ansible/using-loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="active " data-nav-id="/ansible/using-modules-for-troubleshooting-and-testing/"><a class="padding" href="/ansible/using-modules-for-troubleshooting-and-testing/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-multiple-inventories/"><a class="padding" href="/ansible/using-multiple-inventories/">Using Multiple Inventories<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-rhel-system-roles/"><a class="padding" href="/ansible/using-rhel-system-roles/">Using RHEL System roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-tags/"><a class="padding" href="/ansible/using-tags/">Using Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-when-to-run-tasks-conditionally/"><a class="padding" href="/ansible/using-when-to-run-tasks-conditionally/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Variables<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/boot/"><input type="checkbox" id="R-section-a53bfb333437907a8d5bdc636d15c75d" aria-controls="R-subsections-a53bfb333437907a8d5bdc636d15c75d"><label for="R-section-a53bfb333437907a8d5bdc636d15c75d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Boot</span></label><a class="padding default-animation" href="/boot/"><i class="fa-solid fa-hourglass-start"></i> Boot<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-a53bfb333437907a8d5bdc636d15c75d" class="collapsible-menu">
+            <li class="" data-nav-id="/boot/boot-process-grub2-and-kernel/"><a class="padding" href="/boot/boot-process-grub2-and-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/boot/system-initialization-message-logging-and-system-tuning/"><a class="padding" href="/boot/system-initialization-message-logging-and-system-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5"><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="" data-nav-id="/containers/containers-1/"><a class="padding" href="/containers/containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/learning-touch-typing/"><a class="padding" href="/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/files/"><input type="checkbox" id="R-section-31e56884d732922d4a0e407592968056" aria-controls="R-subsections-31e56884d732922d4a0e407592968056"><label for="R-section-31e56884d732922d4a0e407592968056"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Files</span></label><a class="padding default-animation" href="/files/"><i class="fa-solid fa-copy"></i> Files<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-31e56884d732922d4a0e407592968056" class="collapsible-menu">
+            <li class="" data-nav-id="/files/advanced-file-management/"><a class="padding" href="/files/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/files/file-management/"><a class="padding" href="/files/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-synchronization/"><a class="padding" href="/networking/dns-and-time-synchronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/resources-for-passing-ccna/"><a class="padding" href="/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/"><i class="fa-solid fa-box-open"></i> Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
+            <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
+            <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/local-file-systems-and-swap/"><a class="padding" href="/storage/local-file-systems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/network-file-system-nfs/"><a class="padding" href="/storage/network-file-system-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/partitioning-mbr-and-gpt/"><a class="padding" href="/storage/partitioning-mbr-and-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/remove-a-filesystem-from-a-partition/"><a class="padding" href="/storage/remove-a-filesystem-from-a-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/system/"><input type="checkbox" id="R-section-0ea554b019cc5a3e6337c45b68b3a647" aria-controls="R-subsections-0ea554b019cc5a3e6337c45b68b3a647"><label for="R-section-0ea554b019cc5a3e6337c45b68b3a647"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/system/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-0ea554b019cc5a3e6337c45b68b3a647" class="collapsible-menu">
+            <li class="" data-nav-id="/system/installation/"><a class="padding" href="/system/installation/">Installation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/system/interaction/"><a class="padding" href="/system/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/system/process-and-task-scheduling/"><a class="padding" href="/system/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-vagrant-on-linux/"><a class="padding" href="/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-man-pages/"><a class="padding" href="/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users and Groups</span></label><a class="padding default-animation" href="/users-and-groups/"><i class="fa-solid fa-users"></i> Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
+            <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/virtualization/"><input type="checkbox" id="R-section-da8ee4406de37987b502b79e5b0a9d1c" aria-controls="R-subsections-da8ee4406de37987b502b79e5b0a9d1c"><label for="R-section-da8ee4406de37987b502b79e5b0a9d1c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualization</span></label><a class="padding default-animation" href="/virtualization/"><i class="fa-solid fa-microchip"></i> Virtualization<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-da8ee4406de37987b502b79e5b0a9d1c" class="collapsible-menu">
+            <li class="" data-nav-id="/virtualization/rhcsa-vagrant-lab-setup/"><a class="padding" href="/virtualization/rhcsa-vagrant-lab-setup/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1772206888" defer></script>
+    <script src="/js/theme.min.js?1772206888" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="description" content="Shell scripting and logical constructs">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Shell Scripting :: Linux Documentation Site">
+    <meta name="twitter:description" content="Shell scripting and logical constructs">
+    <meta property="og:url" content="https://linuxreader.com/bash/shell-scripting/">
+    <meta property="og:site_name" content="Linux Documentation Site">
+    <meta property="og:title" content="Shell Scripting :: Linux Documentation Site">
+    <meta property="og:description" content="Shell scripting and logical constructs">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Bash">
+    <meta itemprop="name" content="Shell Scripting :: Linux Documentation Site">
+    <meta itemprop="description" content="Shell scripting and logical constructs">
+    <meta itemprop="wordCount" content="4089">
+    <title>Shell Scripting :: Linux Documentation Site</title>
+    <link href="/bash/shell-scripting/index.md" rel="alternate" type="text/markdown" title="Shell Scripting :: Linux Documentation Site">
+    <link href="/images/favicon.svg?1772206888" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1772206888" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1772206888" defer></script>
+    <script src="/js/search-lunr.min.js?1772206888" defer></script>
+    <script src="/js/search.min.js?1772206888" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1772206888";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1772206888" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1772206888" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1772206888" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1772206888" rel="stylesheet">
+    <link href="/css/theme.min.css?1772206888" rel="stylesheet">
+    <link href="/css/format-html.min.css?1772206888" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = `.min`;
+      window.relearn.path='\/bash\/shell-scripting\/';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='https:\/\/linuxreader.com';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/bash/shell-scripting/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#shell-scripts">Shell Scripts</a>
+      <ul>
+        <li><a href="#script01-displaying-system-information">Script01: Displaying System Information</a></li>
+        <li><a href="#executing-a-script">Executing a Script</a></li>
+        <li><a href="#debugging-a-script">Debugging a Script</a></li>
+        <li><a href="#script02-using-local-variables">Script02: Using Local Variables</a></li>
+        <li><a href="#script03-using-pre-defined-environment-variables">Script03: Using Pre-Defined Environment Variables</a></li>
+        <li><a href="#script04-using-command-substitution">Script04: Using Command Substitution</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#script05-using-special-and-positional-parameters">Script05: Using Special and Positional Parameters</a></li>
+        <li><a href="#script06-shifting-command-line-arguments">Script06: Shifting Command Line Arguments</a></li>
+      </ul>
+    </li>
+    <li><a href="#logical-constructs">Logical Constructs</a>
+      <ul>
+        <li><a href="#if-then-fi-construct">if-then-fi Construct</a></li>
+        <li><a href="#script07-the-if-then-fi-construct">Script07: The if-then-fi Construct</a></li>
+        <li><a href="#if-then-else-fi-construct">if-then-else-fi Construct</a></li>
+        <li><a href="#script08-the-if-then-else-fi-construct">Script08: The if-then-else-fi Construct</a></li>
+        <li><a href="#the-if-then-elif-fi-construct">The if-then-elif-fi Construct</a></li>
+        <li><a href="#script09-the-if-then-elif-fi-construct-example-1">Script09: The if-then-elif-fi Construct (Example 1)</a></li>
+        <li><a href="#script10-the-if-then-elif-fi-construct-example-2">Script10: The if-then-elif-fi Construct (Example 2)</a></li>
+        <li><a href="#looping-constructs">Looping Constructs</a></li>
+        <li><a href="#test-conditions">Test Conditions</a></li>
+        <li><a href="#the-for-loop">The for Loop</a></li>
+        <li><a href="#script11-print-alphabets-using-for-loop">Script11: Print Alphabets Using for Loop</a></li>
+        <li><a href="#script12-create-users-using-for-loop">Script12: Create Users Using for Loop</a></li>
+      </ul>
+    </li>
+    <li><a href="#shell-scripting-diy-labs">Shell Scripting DIY Labs</a>
+      <ul>
+        <li><a href="#lab-write-script-to-create-logical-volumes">Lab: Write Script to Create Logical Volumes</a></li>
+        <li><a href="#lab-write-script-to-create-file-systems">Lab: Write Script to Create File Systems</a></li>
+        <li><a href="#lab-21-3-write-script-to-configure-new-network-connection-profile">Lab 21-3: Write Script to Configure New Network Connection Profile</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/bash/"><span itemprop="name">Bash</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">Shell Scripting</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/bash/shell-scripting/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/bash/bash-shell/" title="Bash (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/boot/" title="Boot (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable bash" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="shell-scripting">Shell Scripting</h1>
+
+<h2 id="shell-scripts">Shell Scripts<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>
+<p>A group of Linux commands along with control structures and optional comments stored in a text file.</p>
+</li>
+<li>
+<p>Can be executed directly at the Linux command prompt.</p>
+</li>
+<li>
+<p>Do not need to be compiled as they are interpreted by the shell line by line.</p>
+</li>
+<li>
+<p>Managing packages and users, administering partitions and file systems, monitoring file system utilization, trimming log files, archiving and compressing files, finding and removing unnecessary files, starting and stopping database services and applications, and producing reports.</p>
+</li>
+<li>
+<p>Run by the shell one at a time in the order in which they are listed.</p>
+</li>
+<li>
+<p>Each line is executed as if it is typed and run at the command prompt.</p>
+</li>
+<li>
+<p>Control structures are utilized for creating and managing conditional and looping constructs.</p>
+</li>
+<li>
+<p>Comments are also generally included to add information about the script such as the author name, creation date, previous modification dates, purpose, and usage.</p>
+</li>
+<li>
+<p>If the script encounters an error during execution, the error message is printed on the screen.</p>
+</li>
+<li>
+<p>Can use the <code>nl</code> command to enumerate the lines for troubleshooting.</p>
+</li>
+<li>
+<p>Can store your scripts in the <em>/usr/local/bin</em> directory, which is included in the PATH of all users by default.</p>
+</li>
+</ul>
+<h3 id="script01-displaying-system-information">Script01: Displaying System Information<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Create the first script called <em>sys_info.sh</em> in <em>/usr/local/bin/</em></li>
+<li>Use the vim editor with sudo to write the script.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#8b949e;font-weight:bold;font-style:italic">#!/bin/bash
+</span></span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;Display Basic System Information&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;==================================&#34;</span>
+</span></span><span style="display:flex;"><span>echo
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;The hostname, hardware, and OS information is:&#34;</span>
+</span></span><span style="display:flex;"><span>/usr/bin/hostnamectl
+</span></span><span style="display:flex;"><span>echo
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;The Following users are currently logged in:&#34;</span>
+</span></span><span style="display:flex;"><span>/usr/bin/who</span></span></code></pre></div>
+<ul>
+<li>Within vim, press the ESC key and then type :set nu to view line numbers associated with each line entry.</li>
+<li>Must add execute bit to run the script</li>
+</ul>
+<h3 id="executing-a-script">Executing a Script<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>chmod +x /usr/local/bin/sys_info.sh
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ll /usr/local/bin/sys_info.sh
+</span></span><span style="display:flex;"><span>-rwxr-xr-x. <span style="color:#a5d6ff">1</span> root root <span style="color:#a5d6ff">244</span> Jul <span style="color:#a5d6ff">30</span> 09:47 /usr/local/bin/sys_info.sh&gt;<span style="color:#ff7b72;font-weight:bold">)</span></span></span></code></pre></div>
+<ul>
+<li>Any user on the system can now run this script using either its name or the full path.</li>
+</ul>
+<p>Let&rsquo;s run the script and see what the output will look like:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ sys_info.sh
+</span></span><span style="display:flex;"><span>Display Basic System <span style="color:#79c0ff">Information</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">==================================</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The hostname, hardware, and OS information is:
+</span></span><span style="display:flex;"><span> Static hostname: server30
+</span></span><span style="display:flex;"><span>       Icon name: computer-vm
+</span></span><span style="display:flex;"><span>         Chassis: vm 🖴
+</span></span><span style="display:flex;"><span>      Machine ID: eaa6174e108d4a27bd619754…
+</span></span><span style="display:flex;"><span>         Boot ID: 13d8b3c167b24757b3678e4f…
+</span></span><span style="display:flex;"><span>  Virtualization: oracle
+</span></span><span style="display:flex;"><span>Operating System: Red Hat Enterprise Linux…
+</span></span><span style="display:flex;"><span>     CPE OS Name: cpe:/o:redhat:enterprise…
+</span></span><span style="display:flex;"><span>          Kernel: Linux 5.14.0-362.24.1.el…
+</span></span><span style="display:flex;"><span>    Architecture: x86-64
+</span></span><span style="display:flex;"><span> Hardware Vendor: innotek GmbH
+</span></span><span style="display:flex;"><span>  Hardware Model: VirtualBox
+</span></span><span style="display:flex;"><span>Firmware Version: VirtualBox
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The Following users are currently logged in:
+</span></span><span style="display:flex;"><span>root     pts/0        2024-07-30 07:22 <span style="color:#ff7b72;font-weight:bold">(</span>172.16.7.95<span style="color:#ff7b72;font-weight:bold">)</span></span></span></code></pre></div>
+<h3 id="debugging-a-script">Debugging a Script<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Can either append the <code>-x</code> option to the &ldquo;<code>#!/bin/bash</code>&rdquo; at the beginning of the script to look like &ldquo;<code>#!/bin/bash -x</code>&rdquo;, or execute the script as follows:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># bash -x sys_info.sh</span>
+</span></span><span style="display:flex;"><span>+ echo <span style="color:#a5d6ff">&#39;Display Basic System Information&#39;</span>
+</span></span><span style="display:flex;"><span>Display Basic System Information
+</span></span><span style="display:flex;"><span>+ echo <span style="color:#ff7b72;font-weight:bold">==================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">==================================</span>
+</span></span><span style="display:flex;"><span>+ echo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>+ echo <span style="color:#a5d6ff">&#39;The hostname, hardware, and OS information is:&#39;</span>
+</span></span><span style="display:flex;"><span>The hostname, hardware, and OS information is:
+</span></span><span style="display:flex;"><span>+ /usr/bin/hostnamectl
+</span></span><span style="display:flex;"><span> Static hostname: server30
+</span></span><span style="display:flex;"><span>       Icon name: computer-vm
+</span></span><span style="display:flex;"><span>         Chassis: vm 🖴
+</span></span><span style="display:flex;"><span>      Machine ID: eaa6174e108d4a27bd6197548ce77270
+</span></span><span style="display:flex;"><span>         Boot ID: 13d8b3c167b24757b3678e4fd3fe19ee
+</span></span><span style="display:flex;"><span>  Virtualization: oracle
+</span></span><span style="display:flex;"><span>Operating System: Red Hat Enterprise Linux 9.3 <span style="color:#ff7b72;font-weight:bold">(</span>Plow<span style="color:#ff7b72;font-weight:bold">)</span>     
+</span></span><span style="display:flex;"><span>     CPE OS Name: cpe:/o:redhat:enterprise_linux:9::baseos
+</span></span><span style="display:flex;"><span>          Kernel: Linux 5.14.0-362.24.1.el9_3.x86_64
+</span></span><span style="display:flex;"><span>    Architecture: x86-64
+</span></span><span style="display:flex;"><span> Hardware Vendor: innotek GmbH
+</span></span><span style="display:flex;"><span>  Hardware Model: VirtualBox
+</span></span><span style="display:flex;"><span>Firmware Version: VirtualBox
+</span></span><span style="display:flex;"><span>+ echo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>+ echo <span style="color:#a5d6ff">&#39;The Following users are currently logged in:&#39;</span>
+</span></span><span style="display:flex;"><span>The Following users are currently logged in:
+</span></span><span style="display:flex;"><span>+ /usr/bin/who
+</span></span><span style="display:flex;"><span>root     pts/0        2024-07-30 07:22 <span style="color:#ff7b72;font-weight:bold">(</span>172.16.7.95<span style="color:#ff7b72;font-weight:bold">)</span></span></span></code></pre></div>
+<ul>
+<li>Actual lines from the script prefixed by the + sign and followed by the command execution result.</li>
+<li>Shows the line number of the problem line in the output if there is any.</li>
+<li>This way you can identify any issues pertaining to the path, command name, use of special characters, etc., and address it quickly.</li>
+</ul>
+<p>Change one of the echo commands in the script to &ldquo;iecho&rdquo; and re-run the script in the debug mode to see the error:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># bash -x sys_info.sh</span>
+</span></span><span style="display:flex;"><span>+ echo <span style="color:#a5d6ff">&#39;Display Basic System Information&#39;</span>
+</span></span><span style="display:flex;"><span>Display Basic System Information
+</span></span><span style="display:flex;"><span>+ echo <span style="color:#ff7b72;font-weight:bold">==================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">==================================</span>
+</span></span><span style="display:flex;"><span>+ iecho
+</span></span><span style="display:flex;"><span>/usr/local/bin/sys_info.sh: line 4: iecho: command not found
+</span></span><span style="display:flex;"><span>+ echo <span style="color:#a5d6ff">&#39;The hostname, hardware, and OS information is:&#39;</span>
+</span></span><span style="display:flex;"><span>The hostname, hardware, and OS information is:
+</span></span><span style="display:flex;"><span>+ /usr/bin/hostnamectl
+</span></span><span style="display:flex;"><span> Static hostname: server30
+</span></span><span style="display:flex;"><span>       Icon name: computer-vm
+</span></span><span style="display:flex;"><span>         Chassis: vm 🖴
+</span></span><span style="display:flex;"><span>      Machine ID: eaa6174e108d4a27bd6197548ce77270
+</span></span><span style="display:flex;"><span>         Boot ID: 13d8b3c167b24757b3678e4fd3fe19ee
+</span></span><span style="display:flex;"><span>  Virtualization: oracle
+</span></span><span style="display:flex;"><span>Operating System: Red Hat Enterprise Linux 9.3 <span style="color:#ff7b72;font-weight:bold">(</span>Plow<span style="color:#ff7b72;font-weight:bold">)</span>     
+</span></span><span style="display:flex;"><span>     CPE OS Name: cpe:/o:redhat:enterprise_linux:9::baseos
+</span></span><span style="display:flex;"><span>          Kernel: Linux 5.14.0-362.24.1.el9_3.x86_64
+</span></span><span style="display:flex;"><span>    Architecture: x86-64
+</span></span><span style="display:flex;"><span> Hardware Vendor: innotek GmbH
+</span></span><span style="display:flex;"><span>  Hardware Model: VirtualBox
+</span></span><span style="display:flex;"><span>Firmware Version: VirtualBox
+</span></span><span style="display:flex;"><span>+ echo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>+ echo <span style="color:#a5d6ff">&#39;The Following users are currently logged in:&#39;</span>
+</span></span><span style="display:flex;"><span>The Following users are currently logged in:
+</span></span><span style="display:flex;"><span>+ /usr/bin/who
+</span></span><span style="display:flex;"><span>root     pts/0        2024-07-30 07:22 <span style="color:#ff7b72;font-weight:bold">(</span>172.16.7.95<span style="color:#ff7b72;font-weight:bold">)</span></span></span></code></pre></div>
+<h3 id="script02-using-local-variables">Script02: Using Local Variables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Create a script called <em>use_var.sh</em></li>
+<li>Define a local variable and display its value on the screen.</li>
+<li>Re-check the value of the variable after the script execution has completed.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># vim /usr/local/bin/use_var.sh</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#!/bin/bash</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;Setting a Local Variable&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;========================&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">SYSNAME</span><span style="color:#ff7b72;font-weight:bold">=</span>server30.example.com
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;The hostname of this system is </span><span style="color:#79c0ff">$SYSNAME</span><span style="color:#a5d6ff">&#34;</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># chmod +x /usr/local/bin/use_var.sh</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># use_var.sh</span>
+</span></span><span style="display:flex;"><span>Setting a Local <span style="color:#79c0ff">Variable</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">========================</span>
+</span></span><span style="display:flex;"><span>The hostname of this system is server30.example.com</span></span></code></pre></div>
+<p>If you run the echo command to see what is stored in the SYSNAME
+variable, you will get nothing:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># echo $SYSNAME</span></span></span></code></pre></div>
+<h3 id="script03-using-pre-defined-environment-variables">Script03: Using Pre-Defined Environment Variables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>The following script called pre_env.sh will display the values of SHELL and LOGNAME environment variables:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># vim /usr/local/bin/pre_env.sh</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#!/bin/bash</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;The location of my shell command is:&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#79c0ff">$SHELL</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;I am logged in as </span><span style="color:#79c0ff">$LOGNAME</span><span style="color:#a5d6ff">&#34;</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># chmod +x /usr/local/bin/pre_env.sh</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># pre_env.sh</span>
+</span></span><span style="display:flex;"><span>The location of my shell command is:
+</span></span><span style="display:flex;"><span>/bin/bash
+</span></span><span style="display:flex;"><span>I am logged in as root</span></span></code></pre></div>
+<h3 id="script04-using-command-substitution">Script04: Using Command Substitution<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>
+<p>Can use the command substitution feature of the bash shell and store the output generated by the command into a variable.</p>
+</li>
+<li>
+<p>Two different ways to use command substitution: Backtics or subshell</p>
+</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#8b949e;font-weight:bold;font-style:italic">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#79c0ff">SYSNAME</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#ff7b72">$(</span>hostname<span style="color:#ff7b72">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">KERNVER</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">`</span>uname -r<span style="color:#a5d6ff">`</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;The hostname is </span><span style="color:#79c0ff">$SYSNAME</span><span style="color:#a5d6ff">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;The kernel version is </span><span style="color:#79c0ff">$KERNVER</span><span style="color:#a5d6ff">&#34;</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># vim /usr/local/bin/cmd_out.sh</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># chmod +x /usr/local/bin/cmd_out.sh</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># cmd_out.sh</span>
+</span></span><span style="display:flex;"><span>The hostname is server30
+</span></span><span style="display:flex;"><span>The kernel version is 5.14.0-362.24.1.el9_3.x86_64</span></span></code></pre></div>
+<h1 id="shell-parameters">Shell Parameters<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<ul>
+<li>An entity that holds a value such as a name, special character, or number.</li>
+<li>The parameter that holds a <strong>name</strong> is referred to as a <strong>variable</strong></li>
+<li>A parameter that holds a <strong>special character</strong> is referred to as a <strong>special parameter</strong>
+<ul>
+<li>Represents the command or script itself ($0), count of supplied arguments ($* or $@), all arguments ($#), and PID of the process ($$)</li>
+</ul>
+</li>
+<li>One or more digits, except for 0 is referred to as a <strong>positional parameter</strong> (a command line argument).
+<ul>
+<li>($1, $2, $3 . . .) is an argument supplied to a script at the time of its invocation</li>
+<li>Position is determined by the shell based on its location with respect to the calling script.</li>
+<li>Positional parameters beyond 9 are to be enclosed in curly brackets.</li>
+</ul>
+</li>
+</ul>
+<p><a href="#R-image-673060bf6a16cc772631a3a23b2ea939" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/image-G1VF6C4I%201.jpg" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-673060bf6a16cc772631a3a23b2ea939"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/image-G1VF6C4I%201.jpg"></a></p>
+<ul>
+<li>Just like the variable and command substitutions, the shell uses the dollar ($) sign for special and positional parameter expansions as well.</li>
+</ul>
+<h3 id="script05-using-special-and-positional-parameters">Script05: Using Special and Positional Parameters<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Create <em>com_line_arg.sh</em> to show the supplied arguments, total count, value of the first argument, and PID of the script:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># vim /usr/local/bin/com_line_arg.sh</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#!/bin/bash</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;There are </span><span style="color:#79c0ff">$#</span><span style="color:#a5d6ff"> arguments specified at the command line&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;The arguments supplied are: </span><span style="color:#79c0ff">$*</span><span style="color:#a5d6ff">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;The first argument is: </span><span style="color:#79c0ff">$1</span><span style="color:#a5d6ff">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;The Process ID of the script is: </span><span style="color:#79c0ff">$$</span><span style="color:#a5d6ff">&#34;</span>                                          </span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># chmod +x /usr/local/bin/com_line_arg.sh</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># com_line_arg.sh</span>
+</span></span><span style="display:flex;"><span>There are <span style="color:#a5d6ff">0</span> arguments specified at the command line
+</span></span><span style="display:flex;"><span>The arguments supplied are: 
+</span></span><span style="display:flex;"><span>The first argument is: 
+</span></span><span style="display:flex;"><span>The Process ID of the script is: <span style="color:#a5d6ff">1935</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># com_line_arg.sh the dog jumped over the frog</span>
+</span></span><span style="display:flex;"><span>There are <span style="color:#a5d6ff">6</span> arguments specified at the command line
+</span></span><span style="display:flex;"><span>The arguments supplied are: the dog jumped over the frog
+</span></span><span style="display:flex;"><span>The first argument is: the
+</span></span><span style="display:flex;"><span>The Process ID of the script is: <span style="color:#a5d6ff">1936</span></span></span></code></pre></div>
+<h3 id="script06-shifting-command-line-arguments">Script06: Shifting Command Line Arguments<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><code>shift</code> command</p>
+<ul>
+<li>Used to move arguments one position to the left.</li>
+<li>During this move, the value of the first argument is lost.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># vim /usr/local/bin/com_line_arg_shift.sh</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#!/bin/bash</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;There are </span><span style="color:#79c0ff">$#</span><span style="color:#a5d6ff"> arguments specified at the command line&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;The arguments supplied are: </span><span style="color:#79c0ff">$*</span><span style="color:#a5d6ff">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;The first argument is: </span><span style="color:#79c0ff">$1</span><span style="color:#a5d6ff">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;The Process ID of the script is: </span><span style="color:#79c0ff">$$</span><span style="color:#a5d6ff">&#34;</span>
+</span></span><span style="display:flex;"><span>shift
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;The new first argument after the first shift is: </span><span style="color:#79c0ff">$1</span><span style="color:#a5d6ff">&#34;</span>
+</span></span><span style="display:flex;"><span>shift
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;The new first argument after the second shift is: </span><span style="color:#79c0ff">$1</span><span style="color:#a5d6ff">&#34;</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># chmod +x /usr/local/bin/com_line_arg_shift.sh</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># com_line_arg_shift.sh</span>
+</span></span><span style="display:flex;"><span>There are <span style="color:#a5d6ff">0</span> arguments specified at the command line
+</span></span><span style="display:flex;"><span>The arguments supplied are: 
+</span></span><span style="display:flex;"><span>The first argument is: 
+</span></span><span style="display:flex;"><span>The Process ID of the script is: <span style="color:#a5d6ff">1941</span>
+</span></span><span style="display:flex;"><span>The new first argument after the first shift is: 
+</span></span><span style="display:flex;"><span>The new first argument after the second shift is: 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># com_line_arg_shift.sh the dog jumped over the frog</span>
+</span></span><span style="display:flex;"><span>There are <span style="color:#a5d6ff">6</span> arguments specified at the command line
+</span></span><span style="display:flex;"><span>The arguments supplied are: the dog jumped over the frog
+</span></span><span style="display:flex;"><span>The first argument is: the
+</span></span><span style="display:flex;"><span>The Process ID of the script is: <span style="color:#a5d6ff">1942</span>
+</span></span><span style="display:flex;"><span>The new first argument after the first shift is: dog
+</span></span><span style="display:flex;"><span>The new first argument after the second shift is: jumped</span></span></code></pre></div>
+<ul>
+<li>Multiple shifts in a single attempt may be performed by furnishing a count of desired shifts to the shift command as an argument. For example, &ldquo;shift 2&rdquo; will carry out two shifts, &ldquo;shift 3&rdquo; will make three shifts, and so on.</li>
+</ul>
+<h2 id="logical-constructs">Logical Constructs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Use test conditions, which decides what to do next based on the true or false status of the condition.</li>
+</ul>
+<p>The shell offers two logical constructs:
+<strong>if-then-fi</strong>
+<strong>case</strong></p>
+<p><strong>Exit Codes</strong> (exit values)</p>
+<ul>
+<li>Refer to the value returned by a command when it finishes execution.
+<ul>
+<li>Value is based on the outcome of the command.</li>
+</ul>
+</li>
+<li>If the command runs successfully, you typically get a zero exit code(return code), otherwise you get a non-zero value.</li>
+<li>Return code is stored in a special shell parameter called ? (question mark).</li>
+</ul>
+<p>Let&rsquo;s look at the following two examples to understand their usage:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># pwd</span>
+</span></span><span style="display:flex;"><span>/root
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># echo $?</span>
+</span></span><span style="display:flex;"><span><span style="color:#a5d6ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># man</span>
+</span></span><span style="display:flex;"><span>What manual page <span style="color:#ff7b72">do</span> you want?
+</span></span><span style="display:flex;"><span>For example, try <span style="color:#a5d6ff">&#39;man man&#39;</span>.
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># echo $?</span>
+</span></span><span style="display:flex;"><span><span style="color:#a5d6ff">1</span></span></span></code></pre></div>
+<ul>
+<li>Exit code was returned and stored in the ?.</li>
+<li>Non-zero exit code was stored in ? with an error.</li>
+<li>Can define exit codes within a script at different locations to help debug the script by knowing where exactly it terminated.</li>
+</ul>
+<p><strong>Test Conditions</strong></p>
+<ul>
+<li>Used in logical constructs to decide what to do next.</li>
+<li>Can be set on integer values, string values, or files using the <code>test</code> command or by enclosing them within the square brackets [].</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>man test</span></span></code></pre></div>
+<p><strong>Operation on Integer Value</strong></p>
+<p><code>integer1 -eq (-ne) integer2</code></p>
+<ul>
+<li>Integer1 is equal (not equal) to integer2</li>
+</ul>
+<p><code>integer1 -lt (-gt) integer2 </code></p>
+<ul>
+<li>Integer1 is less (greater) than integer2</li>
+</ul>
+<p><code>integer1 -le (-ge) integer2</code></p>
+<ul>
+<li>Integer1 is less (greater) than or equal to integer2</li>
+</ul>
+<p><strong>Operation on String Value</strong></p>
+<p><code>string1=(!=)string2</code></p>
+<ul>
+<li>Tests whether the two strings are identical (not identical)</li>
+</ul>
+<p><code>-l string or -z string</code></p>
+<ul>
+<li>Tests whether the string length is zero</li>
+</ul>
+<p><code>string or -n string</code></p>
+<ul>
+<li>Tests whether the string length is non-zero</li>
+</ul>
+<p><strong>Operation on File</strong></p>
+<p><code>-b (-c) file</code></p>
+<ul>
+<li>Tests whether the file is a block (character) device file</li>
+</ul>
+<p><code>-d (-f) file</code></p>
+<ul>
+<li>Tests whether the file is a directory (normal file)</li>
+</ul>
+<p><code>-e (-s) file</code></p>
+<ul>
+<li>Tests whether the file exists (non-empty)</li>
+</ul>
+<p><code>-L file</code></p>
+<ul>
+<li>Tests whether the file is a symlink</li>
+</ul>
+<p><code>-r (-w) (-x) file</code></p>
+<ul>
+<li>Tests whether the file is readable (writable) (executable)</li>
+</ul>
+<p><code>-u (-g) (-k) file</code></p>
+<ul>
+<li>Tests whether the file has the setuid (setgid) (sticky) bit</li>
+</ul>
+<p><code>file1 -nt (-ot) file2</code></p>
+<ul>
+<li>Tests whether file1 is newer (older) than file2</li>
+</ul>
+<p><strong>Logical Operators</strong></p>
+<p><code>!</code></p>
+<ul>
+<li>The logical NOT operator</li>
+</ul>
+<p><code>-a</code> or <code>&amp;&amp;</code> (two ampersand characters)</p>
+<ul>
+<li>The logical AND operator. Both operands must be true for the condition to be true. Syntax: <code>[ -b file1 &amp;&amp; -r file1 ]</code></li>
+</ul>
+<p><code>-o </code> or <code> ||</code> (two pipe characters)</p>
+<ul>
+<li>The logical OR operator. Either of the two or both operands must be true for the condition to be true. Syntax: <code>[ (x == 1 -o y == 2) ]</code></li>
+</ul>
+<h3 id="if-then-fi-construct">if-then-fi Construct<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Evaluates the condition for true or false.</li>
+<li>Executes the specified action if the condition is true.</li>
+<li>Otherwise, it exits the construct.</li>
+<li>Begins with an <code>if</code> and ends with a <code>fi</code></li>
+<li>Can execute an action only if the specified condition is true. It quits the statement if the condition is untrue.</li>
+</ul>
+<p><a href="#R-image-0f2d0615e3fab859ad8e6759cddae640" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/image-7FX8FVMW%201.jpg" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-0f2d0615e3fab859ad8e6759cddae640"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/image-7FX8FVMW%201.jpg"></a></p>
+<p>The general syntax of this statement is as follows:</p>
+<p>if condition &gt; then &gt; action &gt; fi</p>
+<h3 id="script07-the-if-then-fi-construct">Script07: The if-then-fi Construct<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Create <em>if_then_fi.sh</em> to determine the number of arguments and print an error message if there are none provided:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># vim /usr/local/bin/if_then_fi.sh</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#!/bin/bash </span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">if</span> <span style="color:#ff7b72;font-weight:bold">[</span> <span style="color:#79c0ff">$#</span> -ne <span style="color:#a5d6ff">2</span> <span style="color:#ff7b72;font-weight:bold">]</span> <span style="color:#8b949e;font-style:italic"># Ensure there is a space after [ and before ] </span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">then</span> 
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;Error: Invalid number of arguments supplied&#34;</span> 
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;Usage: </span><span style="color:#79c0ff">$0</span><span style="color:#a5d6ff"> source_file destination_file&#34;</span> 
+</span></span><span style="display:flex;"><span>exit <span style="color:#a5d6ff">2</span> 
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">fi</span> 
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;Script terminated&#34;</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># chmod +x /usr/local/bin/if_then_fi.sh</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># if_then_fi.sh</span>
+</span></span><span style="display:flex;"><span>Error: Invalid number of arguments supplied
+</span></span><span style="display:flex;"><span>Usage: /usr/local/bin/if_then_fi.sh source_file destination_file</span></span></code></pre></div>
+<p>This script will display the following messages on the screen if it is
+executed without exactly two arguments specified at the command line:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># if_then_fi.sh</span>
+</span></span><span style="display:flex;"><span>Error: Invalid number of arguments supplied
+</span></span><span style="display:flex;"><span>Usage: /usr/local/bin/if_then_fi.sh source_file destination_file</span></span></code></pre></div>
+<p>Return code value reflects the exit code in the script .</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># echo $?</span>
+</span></span><span style="display:flex;"><span><span style="color:#a5d6ff">2</span></span></span></code></pre></div>
+<p>Return code will be 0 if you supply a pair of arguments:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># if_then_fi.sh a b</span>
+</span></span><span style="display:flex;"><span>Script terminated
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># echo $?</span>
+</span></span><span style="display:flex;"><span><span style="color:#a5d6ff">0</span></span></span></code></pre></div>
+<h3 id="if-then-else-fi-construct">if-then-else-fi Construct<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Can execute an action if the condition is true and another action if the condition is false.</li>
+</ul>
+<p><a href="#R-image-315de533f841be5978f4373604de155b" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/image-CMLV644G%201.jpg" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-315de533f841be5978f4373604de155b"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/image-CMLV644G%201.jpg"></a></p>
+<p>The general syntax of this statement is as follows:</p>
+<p>if condition &gt; then &gt; action1 &gt; else &gt; action2 &gt; fi</p>
+<h3 id="script08-the-if-then-else-fi-construct">Script08: The if-then-else-fi Construct<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Create a script called <em>if_then_else_fi.sh</em> that will accept an integer value as an argument and tell if the value is positive or negative:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vim /usr/local/bin/if_then_else_fi.sh</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>#!/bin/bash
+if [ $1 -gt 0 ]
+then
+        echo &#34;$1 is a positive integer value&#34;
+else
+        echo &#34;$1 is a negative integer value&#34;
+fi</code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># chmod +x /usr/local/bin/if_then_else_fi.sh</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># if_then_else_fi.sh</span>
+</span></span><span style="display:flex;"><span>/usr/local/bin/if_then_else_fi.sh: line 2: <span style="color:#ff7b72;font-weight:bold">[</span>: -gt: unary operator expected
+</span></span><span style="display:flex;"><span> is a negative integer value
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># if_then_else_fi.sh 3</span>
+</span></span><span style="display:flex;"><span><span style="color:#a5d6ff">3</span> is a positive integer value
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># if_then_else_fi.sh -3</span>
+</span></span><span style="display:flex;"><span>-3 is a negative integer value</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># if_then_else_fi.sh a</span>
+</span></span><span style="display:flex;"><span>/usr/local/bin/if_then_else_fi.sh: line 2: <span style="color:#ff7b72;font-weight:bold">[</span>: a: integer expression expected
+</span></span><span style="display:flex;"><span>a is a negative integer value
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># echo $?</span>
+</span></span><span style="display:flex;"><span><span style="color:#a5d6ff">0</span></span></span></code></pre></div>
+<h3 id="the-if-then-elif-fi-construct">The if-then-elif-fi Construct<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Can define multiple conditions and associate an action with each one of them.</li>
+<li>The action corresponding to the true condition is performed.</li>
+</ul>
+<p><a href="#R-image-1cc5b4670cb5ecb58cab5561df084bd5" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/image-TNYN7SP2%201.jpg" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-1cc5b4670cb5ecb58cab5561df084bd5"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/image-TNYN7SP2%201.jpg"></a></p>
+<p>The general syntax of this statement is as follows:</p>
+<p>if  condition1 &gt; then action1 &gt; elif condition2 &gt; then action2 &gt; elif  condition3 &gt; then action3 &gt; else &gt; action(n) &gt; fi</p>
+<h3 id="script09-the-if-then-elif-fi-construct-example-1">Script09: The if-then-elif-fi Construct (Example 1)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Create <em>if_then_elif_fi.sh</em> script to accept an integer value as an argument and tell if the integer is positive, negative, or zero. If a non-integer value or no argument is supplied, the script will complain. Employ the exit command after each action to help you identify where it exited.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># vim /usr/local/bin/if_then_elif_fi.sh</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#8b949e;font-weight:bold;font-style:italic">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#ff7b72">if</span> <span style="color:#ff7b72;font-weight:bold">[</span> <span style="color:#79c0ff">$1</span> -gt <span style="color:#a5d6ff">0</span> <span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">then</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;</span><span style="color:#79c0ff">$1</span><span style="color:#a5d6ff"> is a positive integer value&#34;</span>
+</span></span><span style="display:flex;"><span>exit <span style="color:#a5d6ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">elif</span> <span style="color:#ff7b72;font-weight:bold">[</span> <span style="color:#79c0ff">$1</span> -eq <span style="color:#a5d6ff">0</span> <span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">then</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;</span><span style="color:#79c0ff">$1</span><span style="color:#a5d6ff"> is a zero integer value&#34;</span>
+</span></span><span style="display:flex;"><span>exit <span style="color:#a5d6ff">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">elif</span> <span style="color:#ff7b72;font-weight:bold">[</span> <span style="color:#79c0ff">$1</span> -lt <span style="color:#a5d6ff">0</span> <span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">then</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;</span><span style="color:#79c0ff">$1</span><span style="color:#a5d6ff"> is a negative integer value&#34;</span>
+</span></span><span style="display:flex;"><span>exit <span style="color:#a5d6ff">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">else</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;</span><span style="color:#79c0ff">$1</span><span style="color:#a5d6ff"> is not an integer value. Please supply an i
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">nteger.&#34;</span>
+</span></span><span style="display:flex;"><span>exit <span style="color:#a5d6ff">4</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">fi</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># if_then_elif_fi.sh -0</span>
+</span></span><span style="display:flex;"><span>-0 is a zero integer value
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># echo $?</span>
+</span></span><span style="display:flex;"><span><span style="color:#a5d6ff">2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># if_then_elif_fi.sh -1</span>
+</span></span><span style="display:flex;"><span>-1 is a negative integer value
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># echo $?</span>
+</span></span><span style="display:flex;"><span><span style="color:#a5d6ff">3</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># if_then_elif_fi.sh 10</span>
+</span></span><span style="display:flex;"><span><span style="color:#a5d6ff">10</span> is a positive integer value
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># echo $?</span>
+</span></span><span style="display:flex;"><span><span style="color:#a5d6ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># if_then_elif_fi.sh abd</span>
+</span></span><span style="display:flex;"><span>/usr/local/bin/if_then_elif_fi.sh: line 2: <span style="color:#ff7b72;font-weight:bold">[</span>: abd: integer expression expected
+</span></span><span style="display:flex;"><span>/usr/local/bin/if_then_elif_fi.sh: line 6: <span style="color:#ff7b72;font-weight:bold">[</span>: abd: integer expression expected
+</span></span><span style="display:flex;"><span>/usr/local/bin/if_then_elif_fi.sh: line 10: <span style="color:#ff7b72;font-weight:bold">[</span>: abd: integer expression expected
+</span></span><span style="display:flex;"><span>abd is not an integer value. Please supply an i
+</span></span><span style="display:flex;"><span>nteger.&gt;<span style="color:#ff7b72;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># echo $?</span>
+</span></span><span style="display:flex;"><span><span style="color:#a5d6ff">4</span></span></span></code></pre></div>
+<h3 id="script10-the-if-then-elif-fi-construct-example-2">Script10: The if-then-elif-fi Construct (Example 2)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Create <em>ex200_ex294.sh</em> to display the name of the Red Hat exam RHCSA or RHCE in the output based on the input argument (ex200 or ex294). If a random or no argument is provided, it will print &ldquo;Usage: Acceptable values are ex200 and ex294&rdquo;. Add white spaces in the conditions.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># vim /usr/local/bin/ex200_ex294.sh</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#8b949e;font-weight:bold;font-style:italic">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#ff7b72">if</span> <span style="color:#ff7b72;font-weight:bold">[</span> <span style="color:#a5d6ff">&#34;</span><span style="color:#79c0ff">$1</span><span style="color:#a5d6ff">&#34;</span> <span style="color:#ff7b72;font-weight:bold">=</span> ex200 <span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">then</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;RHCSA&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">elif</span> <span style="color:#ff7b72;font-weight:bold">[</span> <span style="color:#a5d6ff">&#34;</span><span style="color:#79c0ff">$1</span><span style="color:#a5d6ff">&#34;</span> <span style="color:#ff7b72;font-weight:bold">=</span> ex294 <span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">then</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;RHCE&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">else</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;Usage: Acceptable values are ex200 and ex294&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">fi</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># chmod +x /usr/local/bin/ex200_ex294.sh</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ex200_ex294.sh ex200</span>
+</span></span><span style="display:flex;"><span>RHCSA
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ex200_ex294.sh ex294</span>
+</span></span><span style="display:flex;"><span>RHCE
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ex200_ex294.sh frog</span>
+</span></span><span style="display:flex;"><span>Usage: Acceptable values are ex200 and ex294</span></span></code></pre></div>
+<h3 id="looping-constructs">Looping Constructs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Perform certain task on a number of given elements.</li>
+<li>Or repeatedly until a specified condition becomes true or false.</li>
+<li>Examples:
+<ul>
+<li>if plenty of disks need to be initialized for use in LVM, you can either run the <code>pvcreate</code> command on each disk one at a time manually or employ a loop to do it for you.</li>
+<li>Based on a condition, you may want a program to continue to run until that condition becomes true or false.</li>
+</ul>
+</li>
+</ul>
+<p>Three looping constructs:
+<strong>for-do-done</strong></p>
+<ul>
+<li><strong>for loop</strong> is also referred to as the <strong>foreach</strong> loop.</li>
+<li>iterates on a list of given values until the list is exhausted.
+<strong>while-do-done</strong></li>
+<li>while loop runs repeatedly until the specified condition becomes false.
+<strong>until-do-done</strong></li>
+<li>until loop does just the opposite of the while loop</li>
+<li>Performs an operation repeatedly until the specified condition becomes true.</li>
+</ul>
+<h3 id="test-conditions">Test Conditions<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><code>let</code> command</p>
+<ul>
+<li>Used in looping constructs to evaluate a condition at each iteration.</li>
+<li>Compares the value stored in a variable against a pre-defined value</li>
+<li>Each time the loop does an iteration, the variable value is altered.</li>
+<li>Can enclose the condition for arithmetic evaluation within a pair of parentheses (( )) or quotation marks (&quot; &ldquo;) instead of using the let command explicitly.</li>
+</ul>
+<p>Operators used in test conditions</p>
+<p><strong>!</strong></p>
+<ul>
+<li>Negation</li>
+</ul>
+<p><strong>+ / &ndash; / * / /</strong></p>
+<ul>
+<li>Addition / subtraction /multiplication / division</li>
+</ul>
+<p><strong>%</strong></p>
+<ul>
+<li>Remainder</li>
+</ul>
+<p><strong>&lt; / &lt;=</strong></p>
+<ul>
+<li>Less than / less than or equal to</li>
+</ul>
+<p><strong>&gt; / &gt;=</strong></p>
+<ul>
+<li>Greater than / greater than or equal to</li>
+</ul>
+<p><strong>=</strong></p>
+<ul>
+<li>Assignment</li>
+</ul>
+<p><strong>== / !=</strong></p>
+<ul>
+<li>Comparison for equality /non-equality</li>
+</ul>
+<h3 id="the-for-loop">The for Loop<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Executed on an array of elements until all the elements in the array are consumed.</li>
+<li>Each element is assigned to a variable one after the other for processing.</li>
+</ul>
+<p><a href="#R-image-767967b7da566e5c93ee84018fd25967" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/image-BPQ7RWER%201.jpg" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-767967b7da566e5c93ee84018fd25967"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/image-BPQ7RWER%201.jpg"></a></p>
+<p>The general syntax of this construct is as follows:</p>
+<p>for VAR in list &gt; do &gt; action &gt; done</p>
+<h3 id="script11-print-alphabets-using-for-loop">Script11: Print Alphabets Using for Loop<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Create script <em>for_do_done.sh</em> script that initializes the variable COUNT to 0. The for loop will read each letter sequentially from the range placed within curly brackets (no spaces before the letter A and after the letter Z), assign it to another variable LETTER, and display the value on the screen. The <code>expr</code> command is an arithmetic processor, and it is used here to increment the COUNT by 1 at each loop iteration.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># vim /usr/local/bin/for_do_done.sh</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#8b949e;font-weight:bold;font-style:italic">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#79c0ff">COUNT</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">for</span> LETTER in <span style="color:#ff7b72;font-weight:bold">{</span>A..Z<span style="color:#ff7b72;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">do</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#79c0ff">COUNT</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">`</span>/usr/bin/expr <span style="color:#79c0ff">$COUNT</span> + 1<span style="color:#a5d6ff">`</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;Letter </span><span style="color:#79c0ff">$COUNT</span><span style="color:#a5d6ff"> is [</span><span style="color:#79c0ff">$LETTER</span><span style="color:#a5d6ff">]&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">done</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># chmod +x /usr/local/bin/for_do_done.sh</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># for_do_done.sh</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">1</span> is <span style="color:#ff7b72;font-weight:bold">[</span>A<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">2</span> is <span style="color:#ff7b72;font-weight:bold">[</span>B<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">3</span> is <span style="color:#ff7b72;font-weight:bold">[</span>C<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">4</span> is <span style="color:#ff7b72;font-weight:bold">[</span>D<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">5</span> is <span style="color:#ff7b72;font-weight:bold">[</span>E<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">6</span> is <span style="color:#ff7b72;font-weight:bold">[</span>F<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">7</span> is <span style="color:#ff7b72;font-weight:bold">[</span>G<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">8</span> is <span style="color:#ff7b72;font-weight:bold">[</span>H<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">9</span> is <span style="color:#ff7b72;font-weight:bold">[</span>I<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">10</span> is <span style="color:#ff7b72;font-weight:bold">[</span>J<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">11</span> is <span style="color:#ff7b72;font-weight:bold">[</span>K<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">12</span> is <span style="color:#ff7b72;font-weight:bold">[</span>L<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">13</span> is <span style="color:#ff7b72;font-weight:bold">[</span>M<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">14</span> is <span style="color:#ff7b72;font-weight:bold">[</span>N<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">15</span> is <span style="color:#ff7b72;font-weight:bold">[</span>O<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">16</span> is <span style="color:#ff7b72;font-weight:bold">[</span>P<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">17</span> is <span style="color:#ff7b72;font-weight:bold">[</span>Q<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">18</span> is <span style="color:#ff7b72;font-weight:bold">[</span>R<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">19</span> is <span style="color:#ff7b72;font-weight:bold">[</span>S<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">20</span> is <span style="color:#ff7b72;font-weight:bold">[</span>T<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">21</span> is <span style="color:#ff7b72;font-weight:bold">[</span>U<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">22</span> is <span style="color:#ff7b72;font-weight:bold">[</span>V<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">23</span> is <span style="color:#ff7b72;font-weight:bold">[</span>W<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">24</span> is <span style="color:#ff7b72;font-weight:bold">[</span>X<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">25</span> is <span style="color:#ff7b72;font-weight:bold">[</span>Y<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>Letter <span style="color:#a5d6ff">26</span> is <span style="color:#ff7b72;font-weight:bold">[</span>Z<span style="color:#ff7b72;font-weight:bold">]</span></span></span></code></pre></div>
+<h3 id="script12-create-users-using-for-loop">Script12: Create Users Using for Loop<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Create script <em>create_user.sh</em> script to create several Linux user accounts. As each account is created, the value of the variable ? is checked. If the value is 0, a message saying the account is created successfully will be displayed, otherwise the script will terminate. In case of a successful
+account creation, the <code>passwd</code> command will be invoked to assign the user the same password as their username.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># vim /usr/local/bin/create_user.sh</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#8b949e;font-weight:bold;font-style:italic">#!/bin/bash
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">for</span> USER in user<span style="color:#ff7b72;font-weight:bold">{</span>10..12<span style="color:#ff7b72;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">do</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;Create account for user </span><span style="color:#79c0ff">$USER</span><span style="color:#a5d6ff">&#34;</span>
+</span></span><span style="display:flex;"><span>        /usr/sbin/useradd <span style="color:#79c0ff">$USER</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">if</span> <span style="color:#ff7b72;font-weight:bold">[</span> <span style="color:#79c0ff">$?</span> <span style="color:#ff7b72;font-weight:bold">=</span> <span style="color:#a5d6ff">0</span> <span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">then</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#79c0ff">$USER</span> | /usr/bin/passwd --stdin <span style="color:#79c0ff">$USER</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;</span><span style="color:#79c0ff">$USER</span><span style="color:#a5d6ff"> is created successfully&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">else</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;Failed to create account </span><span style="color:#79c0ff">$USER</span><span style="color:#a5d6ff">&#34;</span>
+</span></span><span style="display:flex;"><span>exit
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">fi</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">done</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># chmod +x /usr/local/bin/create_user.sh</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># create_user.sh</span>
+</span></span><span style="display:flex;"><span>Create account <span style="color:#ff7b72">for</span> user user10
+</span></span><span style="display:flex;"><span>Changing password <span style="color:#ff7b72">for</span> user user10.
+</span></span><span style="display:flex;"><span>passwd: all authentication tokens updated successfully.
+</span></span><span style="display:flex;"><span>user10 is created successfully
+</span></span><span style="display:flex;"><span>Create account <span style="color:#ff7b72">for</span> user user11
+</span></span><span style="display:flex;"><span>Changing password <span style="color:#ff7b72">for</span> user user11.
+</span></span><span style="display:flex;"><span>passwd: all authentication tokens updated successfully.
+</span></span><span style="display:flex;"><span>user11 is created successfully
+</span></span><span style="display:flex;"><span>Create account <span style="color:#ff7b72">for</span> user user12
+</span></span><span style="display:flex;"><span>Changing password <span style="color:#ff7b72">for</span> user user12.
+</span></span><span style="display:flex;"><span>passwd: all authentication tokens updated successfully.
+</span></span><span style="display:flex;"><span>user12 is created successfully</span></span></code></pre></div>
+<p>Script fails if ran again:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># create_user.sh</span>
+</span></span><span style="display:flex;"><span>Create account <span style="color:#ff7b72">for</span> user user10
+</span></span><span style="display:flex;"><span>useradd: user <span style="color:#a5d6ff">&#39;user10&#39;</span> already exists
+</span></span><span style="display:flex;"><span>Failed to create account user10</span></span></code></pre></div>
+<h2 id="shell-scripting-diy-labs">Shell Scripting DIY Labs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="lab-write-script-to-create-logical-volumes">Lab: Write Script to Create Logical Volumes<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Present 2x1GB virtual disks to server40 in VirtualBox Manager.</li>
+<li>As user1 with sudo on server40, write a single bash script to create 2x400MB partitions on each disk using parted and then bring both partitions into LVM control with the <code>pvcreate</code> command.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> vim /usr/local/bin/lvscript.sh</span></span></code></pre></div>
+<ul>
+<li>Create a volume group called <code>vgscript</code> and add both physical volumes to it.</li>
+<li>Create three logical volumes each of size 200MB and name them lvscript1, lvscript2, and lvscript3.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#8b949e;font-style:italic">#!/bin/bash</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72">for</span> DEVICE in <span style="color:#a5d6ff">&#34;/dev/sd&#34;</span><span style="color:#ff7b72;font-weight:bold">{</span>b..c<span style="color:#ff7b72;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72">do</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;Creating partition 1 with the size of 400MB on </span><span style="color:#79c0ff">$DEVICE</span><span style="color:#a5d6ff">&#34;</span>
+</span></span><span style="display:flex;"><span>        parted <span style="color:#79c0ff">$DEVICE</span> mklabel msdos
+</span></span><span style="display:flex;"><span>        parted <span style="color:#79c0ff">$DEVICE</span> mkpart primary <span style="color:#a5d6ff">1</span> <span style="color:#a5d6ff">401</span>
+</span></span><span style="display:flex;"><span>        pvcreate <span style="color:#79c0ff">$DEVICE</span><span style="color:#ff7b72;font-weight:bold">[</span>1<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;Creating partition 2 with the size of 400MB on </span><span style="color:#79c0ff">$DEVICE</span><span style="color:#a5d6ff">&#34;</span>
+</span></span><span style="display:flex;"><span>        parted <span style="color:#79c0ff">$DEVICE</span> mkpart primary <span style="color:#a5d6ff">402</span> <span style="color:#a5d6ff">802</span>
+</span></span><span style="display:flex;"><span>        pvcreate <span style="color:#79c0ff">$DEVICE</span><span style="color:#ff7b72;font-weight:bold">[</span>2<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>        vgcreate vgscript <span style="color:#79c0ff">$DEVICE</span><span style="color:#ff7b72;font-weight:bold">[</span>1<span style="color:#ff7b72;font-weight:bold">]</span> <span style="color:#79c0ff">$DEVICE</span><span style="color:#ff7b72;font-weight:bold">[</span>2<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72">done</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72">for</span> LV in <span style="color:#a5d6ff">&#34;lvscript&#34;</span><span style="color:#ff7b72;font-weight:bold">{</span>1..3<span style="color:#ff7b72;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72">do</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;Creating logical volume </span><span style="color:#79c0ff">$LV</span><span style="color:#a5d6ff"> in volume group vgscript with the size of 200MB&#34;</span>
+</span></span><span style="display:flex;"><span>        lvcreate vgscript -L 200MB -n <span style="color:#79c0ff">$LV</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72">done</span></span></span></code></pre></div>
+<h3 id="lab-write-script-to-create-file-systems">Lab: Write Script to Create File Systems<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Write another bash script to create xfs, ext4, and vfat file system structures in the logical volumes, respectively.</li>
+<li>Create mount points /mnt/xfs, /mnt/ext4, and /mnt/vfat, and mount the file systems.</li>
+<li>Include the df command with -h in the script to list the mounted file systems.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> vim /usr/local/bin/fsscript.sh</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server40 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># chmod +x /usr/local/bin/fsscript.sh</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#8b949e;font-style:italic">#!/bin/bash</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72">for</span> DEVICE in lvscript<span style="color:#ff7b72;font-weight:bold">{</span>1..3<span style="color:#ff7b72;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72">do</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72">if</span> <span style="color:#ff7b72;font-weight:bold">[</span> <span style="color:#a5d6ff">&#34;</span><span style="color:#79c0ff">$DEVICE</span><span style="color:#a5d6ff">&#34;</span> <span style="color:#ff7b72;font-weight:bold">=</span> lvscript1 <span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72">then</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;Creating xfs filesystem on logical volume lvscript1&#34;</span>
+</span></span><span style="display:flex;"><span>        echo
+</span></span><span style="display:flex;"><span>        mkfs.xfs /dev/vgscript/lvscript1
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;Creating /mnt/xfs&#34;</span>
+</span></span><span style="display:flex;"><span>        mkdir /mnt/xfs
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;Mounting filesystem&#34;</span>
+</span></span><span style="display:flex;"><span>        mount /dev/vgscript/lvscript1 /mnt/xfs
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72">elif</span> <span style="color:#ff7b72;font-weight:bold">[</span> <span style="color:#a5d6ff">&#34;</span><span style="color:#79c0ff">$DEVICE</span><span style="color:#a5d6ff">&#34;</span> <span style="color:#ff7b72;font-weight:bold">=</span> lvscript2 <span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72">then</span>    
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;Creating ext4 filesystem on logical volume lvscript2&#34;</span>
+</span></span><span style="display:flex;"><span>        echo
+</span></span><span style="display:flex;"><span>        mkfs.ext4 /dev/vgscript/lvscript2
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;Creating /mnt/ext4&#34;</span>
+</span></span><span style="display:flex;"><span>        mkdir /mnt/ext4
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;Mounting filesystem&#34;</span>
+</span></span><span style="display:flex;"><span>        mount /dev/vgscript/lvscript2 /mnt/ext4
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72">elif</span> <span style="color:#ff7b72;font-weight:bold">[</span> <span style="color:#a5d6ff">&#34;</span><span style="color:#79c0ff">$DEVICE</span><span style="color:#a5d6ff">&#34;</span> <span style="color:#ff7b72;font-weight:bold">=</span> lvscript3 <span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72">then</span>    
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;Creating vfat filesystem on logical volume lvscript3&#34;</span>
+</span></span><span style="display:flex;"><span>        echo
+</span></span><span style="display:flex;"><span>        mkfs.vfat /dev/vgscript/lvscript3
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;Creating /mnt/vfat&#34;</span>
+</span></span><span style="display:flex;"><span>        mkdir /mnt/vfat
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;Mounting filesystem&#34;</span>
+</span></span><span style="display:flex;"><span>        mount /dev/vgscript/lvscript3 /mnt/vfat
+</span></span><span style="display:flex;"><span>        echo
+</span></span><span style="display:flex;"><span>        echo
+</span></span><span style="display:flex;"><span>        echo <span style="color:#a5d6ff">&#34;Done!&#34;</span>
+</span></span><span style="display:flex;"><span>                df -h
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72">else</span>
+</span></span><span style="display:flex;"><span>        echo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72">fi</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72">done</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server40 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># fsscript.sh</span>
+</span></span><span style="display:flex;"><span> Creating xfs filesystem on logical volume lvscript1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Filesystem should be larger than 300MB.
+</span></span><span style="display:flex;"><span> Log size should be at least 64MB.
+</span></span><span style="display:flex;"><span> Support <span style="color:#ff7b72">for</span> filesystems like this one is deprecated and they will not be supported in future releases.
+</span></span><span style="display:flex;"><span> meta-data<span style="color:#ff7b72;font-weight:bold">=</span>/dev/vgscript/lvscript1 <span style="color:#79c0ff">isize</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">512</span>    <span style="color:#79c0ff">agcount</span><span style="color:#ff7b72;font-weight:bold">=</span>4,  <span style="color:#79c0ff">agsize</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">12800</span> <span style="color:#79c0ff">blks</span>
+</span></span><span style="display:flex;"><span>         <span style="color:#ff7b72;font-weight:bold">=</span>                       <span style="color:#79c0ff">sectsz</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">512</span>   <span style="color:#79c0ff">attr</span><span style="color:#ff7b72;font-weight:bold">=</span>2, <span style="color:#79c0ff">projid32bit</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#79c0ff">1</span>
+</span></span><span style="display:flex;"><span>         <span style="color:#ff7b72;font-weight:bold">=</span>                       <span style="color:#79c0ff">crc</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">1</span>        <span style="color:#79c0ff">finobt</span><span style="color:#ff7b72;font-weight:bold">=</span>1, <span style="color:#79c0ff">sparse</span><span style="color:#ff7b72;font-weight:bold">=</span>1,  <span style="color:#79c0ff">rmapbt</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#79c0ff">0</span>
+</span></span><span style="display:flex;"><span>         <span style="color:#ff7b72;font-weight:bold">=</span>                       <span style="color:#79c0ff">reflink</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">1</span>    <span style="color:#79c0ff">bigtime</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">1</span> <span style="color:#79c0ff">inobtcount</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">1</span>  <span style="color:#79c0ff">nrext64</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span>
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">data</span>     <span style="color:#ff7b72;font-weight:bold">=</span>                       <span style="color:#79c0ff">bsize</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">4096</span>   <span style="color:#79c0ff">blocks</span><span style="color:#ff7b72;font-weight:bold">=</span>51200, <span style="color:#79c0ff">imaxpct</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#79c0ff">25</span>
+</span></span><span style="display:flex;"><span>         <span style="color:#ff7b72;font-weight:bold">=</span>                       <span style="color:#79c0ff">sunit</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span>      <span style="color:#79c0ff">swidth</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span> blks
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">naming</span>   <span style="color:#ff7b72;font-weight:bold">=</span>version <span style="color:#a5d6ff">2</span>              <span style="color:#79c0ff">bsize</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">4096</span>   ascii-ci<span style="color:#ff7b72;font-weight:bold">=</span>0, <span style="color:#79c0ff">ftype</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">1</span>
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">log</span>      <span style="color:#ff7b72;font-weight:bold">=</span>internal log           <span style="color:#79c0ff">bsize</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">4096</span>   <span style="color:#79c0ff">blocks</span><span style="color:#ff7b72;font-weight:bold">=</span>1368, <span style="color:#79c0ff">version</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#79c0ff">2</span>
+</span></span><span style="display:flex;"><span>         <span style="color:#ff7b72;font-weight:bold">=</span>                       <span style="color:#79c0ff">sectsz</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">512</span>   <span style="color:#79c0ff">sunit</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span> blks, lazy- <span style="color:#79c0ff">count</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">1</span>
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">realtime</span> <span style="color:#ff7b72;font-weight:bold">=</span>none                   <span style="color:#79c0ff">extsz</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">4096</span>   <span style="color:#79c0ff">blocks</span><span style="color:#ff7b72;font-weight:bold">=</span>0, <span style="color:#79c0ff">rtextents</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span>
+</span></span><span style="display:flex;"><span> Creating /mnt/xfs
+</span></span><span style="display:flex;"><span> Mounting filesystem
+</span></span><span style="display:flex;"><span> Creating ext4 filesystem on logical volume lvscript2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> mke2fs 1.46.5 <span style="color:#ff7b72;font-weight:bold">(</span>30-Dec-2021<span style="color:#ff7b72;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span> Creating filesystem with <span style="color:#a5d6ff">204800</span> 1k blocks and <span style="color:#a5d6ff">51200</span> inodes
+</span></span><span style="display:flex;"><span> Filesystem UUID: b16383bf-7b65-4a00-bb6d-c297733f60b3
+</span></span><span style="display:flex;"><span> Superblock backups stored on blocks: 
+</span></span><span style="display:flex;"><span>	8193, 24577, 40961, 57345, <span style="color:#a5d6ff">73729</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Allocating group tables: <span style="color:#ff7b72">done</span>                            
+</span></span><span style="display:flex;"><span> Writing inode tables: <span style="color:#ff7b72">done</span>                            
+</span></span><span style="display:flex;"><span> Creating journal <span style="color:#ff7b72;font-weight:bold">(</span><span style="color:#a5d6ff">4096</span> blocks<span style="color:#ff7b72;font-weight:bold">)</span>: <span style="color:#ff7b72">done</span>
+</span></span><span style="display:flex;"><span> Writing superblocks and filesystem accounting information: <span style="color:#ff7b72">done</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Creating /mnt/ext4
+</span></span><span style="display:flex;"><span> Mounting filesystem
+</span></span><span style="display:flex;"><span> Creating vfat filesystem on logical volume lvscript3
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> mkfs.fat 4.2 <span style="color:#ff7b72;font-weight:bold">(</span>2021-01-31<span style="color:#ff7b72;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span> Creating /mnt/vfat
+</span></span><span style="display:flex;"><span> Mounting filesystem
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Done!</span></span></code></pre></div>
+<h3 id="lab-21-3-write-script-to-configure-new-network-connection-profile">Lab 21-3: Write Script to Configure New Network Connection Profile<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Present a new network interface to server40 in VirtualBox Manager.</li>
+<li>As user1 with sudo on server40, write a single bash script to run the nmcli command to configure custom IP assignments (choose your own settings) on the new network device.</li>
+<li>Make a copy of the /etc/hosts file as part of this script.</li>
+<li>Choose a hostname of your choice and add a mapping to the /etc/hosts file without overwriting existing file content.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server40 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># vim /usr/local/bin/network.sh</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#8b949e;font-style:italic">#!/bin/bash</span>
+</span></span><span style="display:flex;"><span> cp /etc/hosts /etc/hosts.bak <span style="color:#ff7b72;font-weight:bold">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span> nmcli c a type Ethernet con-name enp0s9 ifname enp0s9 ip4  10.32.32.2/24 gw4 10.32.32.1
+</span></span><span style="display:flex;"><span> echo <span style="color:#a5d6ff">&#34;10.32.33.14 frog.example.com frog&#34;</span> &gt;&gt; /etc/hosts</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server40 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># chmod +x /usr/local/bin/network.sh</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server40 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># network.sh</span>
+</span></span><span style="display:flex;"><span> Connection <span style="color:#a5d6ff">&#39;enp0s9&#39;</span> <span style="color:#ff7b72;font-weight:bold">(</span>5a342243-e77b-452e-88e2-8838d3ecea6d<span style="color:#ff7b72;font-weight:bold">)</span>  successfully added.</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server40 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># cat /etc/hosts</span>
+</span></span><span style="display:flex;"><span> 127.0.0.1   localhost localhost.localdomain localhost4  localhost4.localdomain4
+</span></span><span style="display:flex;"><span> ::1         localhost localhost.localdomain localhost6  localhost6.localdomain6
+</span></span><span style="display:flex;"><span> 10.32.33.14 frog.example.com frog</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server40 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ip a</span>
+</span></span><span style="display:flex;"><span> enp0s9: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span style="color:#a5d6ff">1500</span> qdisc fq_codel  state UP group default qlen <span style="color:#a5d6ff">1000</span>
+</span></span><span style="display:flex;"><span>    link/ether 08:00:27:1d:f4:c1 brd ff:ff:ff:ff:ff:ff
+</span></span><span style="display:flex;"><span>    inet 10.32.32.2/24 brd 10.32.32.255 scope global noprefixroute enp0s9
+</span></span><span style="display:flex;"><span>       valid_lft forever preferred_lft forever
+</span></span><span style="display:flex;"><span>    inet6 fe80::2c5d:31cc:1d79:6b43/64 scope link noprefixroute 
+</span></span><span style="display:flex;"><span>       valid_lft forever preferred_lft forever</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server40 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># nmcli d s</span>
+</span></span><span style="display:flex;"><span> DEVICE  TYPE      STATE                   CONNECTION 
+</span></span><span style="display:flex;"><span> enp0s3  ethernet  connected               enp0s3     
+</span></span><span style="display:flex;"><span> enp0s8  ethernet  connected               enp0s8     
+</span></span><span style="display:flex;"><span> enp0s9  ethernet  connected               enp0s9     
+</span></span><span style="display:flex;"><span> lo      loopback  connected <span style="color:#ff7b72;font-weight:bold">(</span>externally<span style="color:#ff7b72;font-weight:bold">)</span>  lo  </span></span></code></pre></div>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ad-hoc-ansible-commands/"><a class="padding" href="/ansible/ad-hoc-ansible-commands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-documentation/"><a class="padding" href="/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-facts/"><a class="padding" href="/ansible/ansible-facts/">Ansible Facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-galaxy-roles/"><a class="padding" href="/ansible/ansible-galaxy-roles/">Ansible Galaxy Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-inventory/"><a class="padding" href="/ansible/ansible-inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-playbooks/"><a class="padding" href="/ansible/ansible-playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-ansible-roles/"><a class="padding" href="/ansible/using-ansible-roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-inventory-command/"><a class="padding" href="/ansible/ansible-inventory-command/">Ansible-inventory command<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible.cfg/"><a class="padding" href="/ansible/ansible.cfg/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/building-an-ansible-lab-with-ansible/"><a class="padding" href="/ansible/building-an-ansible-lab-with-ansible/">Building an Ansible lab with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/common-modules-with-examples/"><a class="padding" href="/ansible/common-modules-with-examples/">Common modules with examples<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/discovering-storage-related-facts/"><a class="padding" href="/ansible/discovering-storage-related-facts/">Discovering storage related facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/dynamic-inventory/"><a class="padding" href="/ansible/dynamic-inventory/">Dynamic Inventory<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/execution-environments/"><a class="padding" href="/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/host-name-patterns/"><a class="padding" href="/ansible/host-name-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/including-and-importing-files/"><a class="padding" href="/ansible/including-and-importing-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2-templates/"><a class="padding" href="/ansible/jinja2-templates/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-ansible-errors-and-logs/"><a class="padding" href="/ansible/managing-ansible-errors-and-logs/">Managing Ansible Errors and Logs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-packages/"><a class="padding" href="/ansible/managing-packages/">Managing Packages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-partitions-and-lvm/"><a class="padding" href="/ansible/managing-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-services/"><a class="padding" href="/ansible/managing-services/">Managing Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/networking-with-ansible/"><a class="padding" href="/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/nfs-setup/"><a class="padding" href="/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimizing-ansible-processing/"><a class="padding" href="/ansible/optimizing-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/repositories-and-subscriptions/"><a class="padding" href="/ansible/repositories-and-subscriptions/">Repositories and subscriptions<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux-file-properties/"><a class="padding" href="/ansible/selinux-file-properties/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/setting-up-an-ansible-lab/"><a class="padding" href="/ansible/setting-up-an-ansible-lab/">Setting up an Ansible Lab<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/troubleshooting-common-scenarios/"><a class="padding" href="/ansible/troubleshooting-common-scenarios/">Troubleshooting Common Scenarios<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/users-and-groups/"><a class="padding" href="/ansible/users-and-groups/">Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-loops-and-items/"><a class="padding" href="/ansible/using-loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-modules-for-troubleshooting-and-testing/"><a class="padding" href="/ansible/using-modules-for-troubleshooting-and-testing/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-multiple-inventories/"><a class="padding" href="/ansible/using-multiple-inventories/">Using Multiple Inventories<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-rhel-system-roles/"><a class="padding" href="/ansible/using-rhel-system-roles/">Using RHEL System roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-tags/"><a class="padding" href="/ansible/using-tags/">Using Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-when-to-run-tasks-conditionally/"><a class="padding" href="/ansible/using-when-to-run-tasks-conditionally/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Variables<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d" checked><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="active " data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/boot/"><input type="checkbox" id="R-section-a53bfb333437907a8d5bdc636d15c75d" aria-controls="R-subsections-a53bfb333437907a8d5bdc636d15c75d"><label for="R-section-a53bfb333437907a8d5bdc636d15c75d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Boot</span></label><a class="padding default-animation" href="/boot/"><i class="fa-solid fa-hourglass-start"></i> Boot<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-a53bfb333437907a8d5bdc636d15c75d" class="collapsible-menu">
+            <li class="" data-nav-id="/boot/boot-process-grub2-and-kernel/"><a class="padding" href="/boot/boot-process-grub2-and-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/boot/system-initialization-message-logging-and-system-tuning/"><a class="padding" href="/boot/system-initialization-message-logging-and-system-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5"><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="" data-nav-id="/containers/containers-1/"><a class="padding" href="/containers/containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/learning-touch-typing/"><a class="padding" href="/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/files/"><input type="checkbox" id="R-section-31e56884d732922d4a0e407592968056" aria-controls="R-subsections-31e56884d732922d4a0e407592968056"><label for="R-section-31e56884d732922d4a0e407592968056"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Files</span></label><a class="padding default-animation" href="/files/"><i class="fa-solid fa-copy"></i> Files<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-31e56884d732922d4a0e407592968056" class="collapsible-menu">
+            <li class="" data-nav-id="/files/advanced-file-management/"><a class="padding" href="/files/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/files/file-management/"><a class="padding" href="/files/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-synchronization/"><a class="padding" href="/networking/dns-and-time-synchronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/resources-for-passing-ccna/"><a class="padding" href="/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/"><i class="fa-solid fa-box-open"></i> Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
+            <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
+            <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/local-file-systems-and-swap/"><a class="padding" href="/storage/local-file-systems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/network-file-system-nfs/"><a class="padding" href="/storage/network-file-system-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/partitioning-mbr-and-gpt/"><a class="padding" href="/storage/partitioning-mbr-and-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/remove-a-filesystem-from-a-partition/"><a class="padding" href="/storage/remove-a-filesystem-from-a-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/system/"><input type="checkbox" id="R-section-0ea554b019cc5a3e6337c45b68b3a647" aria-controls="R-subsections-0ea554b019cc5a3e6337c45b68b3a647"><label for="R-section-0ea554b019cc5a3e6337c45b68b3a647"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/system/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-0ea554b019cc5a3e6337c45b68b3a647" class="collapsible-menu">
+            <li class="" data-nav-id="/system/installation/"><a class="padding" href="/system/installation/">Installation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/system/interaction/"><a class="padding" href="/system/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/system/process-and-task-scheduling/"><a class="padding" href="/system/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-vagrant-on-linux/"><a class="padding" href="/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-man-pages/"><a class="padding" href="/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users and Groups</span></label><a class="padding default-animation" href="/users-and-groups/"><i class="fa-solid fa-users"></i> Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
+            <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/virtualization/"><input type="checkbox" id="R-section-da8ee4406de37987b502b79e5b0a9d1c" aria-controls="R-subsections-da8ee4406de37987b502b79e5b0a9d1c"><label for="R-section-da8ee4406de37987b502b79e5b0a9d1c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualization</span></label><a class="padding default-animation" href="/virtualization/"><i class="fa-solid fa-microchip"></i> Virtualization<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-da8ee4406de37987b502b79e5b0a9d1c" class="collapsible-menu">
+            <li class="" data-nav-id="/virtualization/rhcsa-vagrant-lab-setup/"><a class="padding" href="/virtualization/rhcsa-vagrant-lab-setup/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1772206888" defer></script>
+    <script src="/js/theme.min.js?1772206888" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

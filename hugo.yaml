@@ -5,15 +5,14 @@ theme: ["hugo-theme-relearn-9.0.3"]
 publishDir: "docs"
 
 params:
-  linktitle: 'Linux Reader'
+  #linktitle: 'Linux Reader'
   imagesDir: "content/images"
   lightbox: false
   alwaysopen: false
   editURL: ""
   author.name: "David Thomas"
-  description: "Linux, Tech, Open Source Software, Privacy"
-  showVisitedLinks: false
-  disableSearch: false
+  showVisitedLinks: true
+  search.disable: false
   disableSearchHiddenPages: false
   disableSeoHiddenPages: false
   disableTagHiddenPages: false
@@ -24,21 +23,42 @@ params:
   disableLandingPageButton: true
   disableLanguageSwitchingButton: false
   disableMarkdownButton: false
-  disableBreadcrumb: true
+  #disableBreadcrumb: true
   disableToc: false
   disableNextPrev: false
   ordersectionsby: "weight"
-#  themeVariant: "zen"
+  themeVariant: "oled"
   titleSeparator: "::"
   highlightWrap: true
-  collapsibleMenu: false
+  collapsibleMenu: true
   disableExplicitIndexURLs: true
   externalLinkTarget: "_blank"
 
+ignoreLogs: 
+  - "warning-goldmark-raw-html"
+
+outputs:
+  home:
+  - html
+  - rss
+  - markdown
+  page:
+  - html
+  - markdown
+  section:
+  - html
+  - rss
+  - markdown
+
 markup:
-  markup.highlight:
+  highlight:
     guessSyntax: false
-    style: "base16-snazzy"
+    style: "github-dark"
+
+  goldmark:
+    renderer:
+      unsafe: true
+
 
 #menu.shortcuts:
  # name: "<i class='fas fa-solid fa-circle-info'></i> About"
@@ -70,7 +90,7 @@ markup:
 #name: "<i class='fab fa-fw fa-github'></i> GitHub"
 #identifier: "ds"
 #url: "https://github.com/linuxreader"
-weight: 14
+#weight: 14
 
 #[[menu.shortcuts]]
 #name: "<i class='fab fa-fw fa-linkedin'></i> LinkedIn"

@@ -1,0 +1,77 @@
+---
+title: Book Graveyard
+---
+
+I started keeping a list of all of the books I did not finish. These aren't necessarily bad books. A lot of them I've read 3/4 of the way through and just never finished because other priorities got in the way. Some of them I probably won't pick up again. And some were just plain awful. 
+
+- Antifragile
+- 12 Rules for Life: An Antidote to Chaos
+- The Four Agreements: A Practical Guide to Personal Freedom (A Toltec Wisdom Book)
+- Crush It!: Why NOW Is the Time to Cash In on Your Passion
+- Ninja Selling: Subtle Skills. Big Results.
+- The Royal Road to Card Magic
+- The Book Of Pook
+- Bang: The Most Infamous Pickup Book In The World
+- New World Ronin: Strategies for Artists, Entrepreneurs, Rebels, Warriors and Outcasts
+- The Book of Mormon: Another Testament of Jesus Christ
+- The Bible
+- A Byte of Python
+- Bachelor Pad Economics
+- What Color Is Your Parachute? 2019: A Practical Manual for Job-Hunters and Career-Changers
+- The Cheater's Guide to Writing Erotic Romance
+- Let's Play Chess: A Step by Step Guide for New Players (The Pandolfini Chess Library): A Step-By-Step Guide for New Players
+- Chess Fundamentals
+- Stick Control: For the Snare Drummer
+- The Ethical Slut, Third Edition: A Practical Guide to Polyamory, Open Relationships, and Other Freedoms in Sex and Love
+- Jiu-Jitsu University
+- CCNP and CCIE Enterprise Core ENCOR 350-401 Official Cert Guidee
+- The Miracle Morning for Addiction Recovery: Letting Go of Who You've Been for Who You Can Become
+- Reset Your Child's Brain: A Four-Week Plan to End Meltdowns, Raise Grades, and Boost Social Skills by Reversing the Effects of Electronic Screen-Time
+- How to Talk so Little Kids Will Listen: A Survival Guide to Life with Children Ages 2-7 (The How To Talk Series
+- The Neverending Story
+- How to Talk When Kids Won't Listen: Whining, Fighting, Meltdowns, Defiance, and Other Challenges of Childhood (The How To Talk Series)
+- Ten Arguments for Deleting Your Social Media Accounts Right Now
+- Digital Minimalism: Choosing a Focused Life in a Noisy World
+- Essentialism: The Disciplined Pursuit of Less
+- Deep Work: Rules for Focused Success in a Distracted World
+- How To Bullet Journal For Beginners: The Ultimate Bullet Journal Guide To Effectively Master Your Life, Reach Your Goals, & Manifest Your Dreams (BONUS: Mastery Journal Template Included!)
+- Glow Kids: How Screen Addiction Is Hijacking Our Kids -- And How to Break the Trance
+- The DHEA Breakthrough: Look Younger, Live Longer, Feel Better
+- Zen and the Art of Motorcycle Maintenance: An Inquiry Into Values
+- Feelings Buried Alive Never Die
+- The Healing Nutrients Within
+- Myofascial Pain and Dysfunction: The Trigger Point Manual; Vol. 1. The Upper Half of Body
+- Fretboard Logic SE - Special Edition The Reasoning Behind the Guitar's Unique Tuning + Chords Scales and Arpeggios Complete (Volumes I and II Combined
+- The E-Myth Revisited: Why Most Small Businesses Don't Work and What to Do About It
+- The 48 Laws of Power
+- Fifty Shades of Grey: Book One of the Fifty Shades Trilogy
+- Introducing Neuro-linguistic Programming: The New Psychology of Personal Excellence
+- NLP: The New Technology of Achievement
+- The Selfish Gene: 30th Anniversary Edition--with a new Introduction by the Author
+- Unlimited Power : The New Science Of Personal Achievement
+- Awaken the Giant Within : How to Take Immediate Control of Your Mental, Emotional, Physical and Financial Destiny
+- Testosterone: A Man's Guide- Second Edition
+- To Be a Man: A Guide to True Masculine Power
+- Medicinal Mushrooms: The Essential Guide
+- Blood Meridian: Or the Evening Redness in the West
+- About Face: The Odyssey of an American Warrior
+- Tantric Sex for Men: Making Love a Meditation
+- The Karezza Method: Magnetation, The Art of Connubial Love (Forgotten Books
+- NLP: The Essential Guide to Neuro-Linguistic Programming
+- The Backyard Blacksmith: Traditional Techniques for the Modern Smith
+- Breakthrough Advertising: How to Write Ads that Shatter Traditions and Sales Records
+- How to Write a Good Advertisement
+- Coaching Questions: A Coach's Guide to Powerful Asking Skills
+- Do You Talk Funny?: 7 Comedy Habits to Become a Better (and Funnier) Public Speaker
+- The Frozen Shoulder Workbook: Trigger Point Therapy for Overcoming Pain and Regaining Range of Motion (A New Harbinger Self-Help Workbook
+- Silver Surfer: Rebirth of Thanos (Silver Surfer (Paperback)
+- The Creative Cure: How Finding and Freeing Your Inner Artist Can Heal Your Life
+- The Slight Edge
+- The Coiled Serpent 
+- Unconditional Parenting
+- The Other End of the Leash
+- The Oxygen Advantage
+- UNIX and Linux System Administration Handbook
+- The Linux Command Line, 2nd Edition: A Complete Introduction
+- The 80/20 Principle: The Secret to Achieving More with Less
+- The Rape Of Nanking: The Forgotten Holocaust Of World War II

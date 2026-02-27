@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="description" content="My Fedora Setup">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="My Fedora Setup :: Linux Documentation Site">
+    <meta name="twitter:description" content="My Fedora Setup">
+    <meta property="og:url" content="https://linuxreader.com/desktop/my-fedora-setup/">
+    <meta property="og:site_name" content="Linux Documentation Site">
+    <meta property="og:title" content="My Fedora Setup :: Linux Documentation Site">
+    <meta property="og:description" content="My Fedora Setup">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Desktop">
+    <meta itemprop="name" content="My Fedora Setup :: Linux Documentation Site">
+    <meta itemprop="description" content="My Fedora Setup">
+    <meta itemprop="wordCount" content="1381">
+    <meta itemprop="keywords" content="Explanation">
+    <title>My Fedora Setup :: Linux Documentation Site</title>
+    <link href="/desktop/my-fedora-setup/index.md" rel="alternate" type="text/markdown" title="My Fedora Setup :: Linux Documentation Site">
+    <link href="/images/favicon.svg?1772206888" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1772206888" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1772206888" defer></script>
+    <script src="/js/search-lunr.min.js?1772206888" defer></script>
+    <script src="/js/search.min.js?1772206888" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1772206888";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1772206888" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1772206888" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1772206888" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1772206888" rel="stylesheet">
+    <link href="/css/theme.min.css?1772206888" rel="stylesheet">
+    <link href="/css/format-html.min.css?1772206888" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = `.min`;
+      window.relearn.path='\/desktop\/my-fedora-setup\/';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='https:\/\/linuxreader.com';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/desktop/my-fedora-setup/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#install-just-and-run-the-justfile">Install just and run the justfile</a></li>
+    <li><a href="#install-homebrew-stuff">Install Homebrew Stuff:</a>
+      <ul>
+        <li><a href="#visudo-config">visudo config</a></li>
+      </ul>
+    </li>
+    <li><a href="#virt-manager">Virt Manager</a></li>
+    <li><a href="#configure-howdy">Configure Howdy</a></li>
+    <li><a href="#seahorse">Seahorse</a></li>
+    <li><a href="#initialize-chezmoi">Initialize Chezmoi</a></li>
+    <li><a href="#add-badname-user-if-needed">Add badname user (if needed)</a></li>
+    <li><a href="#additional-dnf-stuff">Additional DNF stuff:</a></li>
+    <li><a href="#set-up-rpm-fusion">Set up RPM Fusion</a></li>
+    <li><a href="#appstream-metadata">AppStream metadata</a></li>
+    <li><a href="#flatpaks">Flatpaks</a></li>
+    <li><a href="#set-a-hostname">Set a hostname</a></li>
+    <li><a href="#other-stuff">Other Stuff</a>
+      <ul>
+        <li><a href="#input-leap">Input Leap</a></li>
+      </ul>
+    </li>
+    <li><a href="#virtual-machine-manager">Virtual machine Manager</a></li>
+    <li><a href="#box-buddy">Box Buddy</a></li>
+    <li><a href="#warehouse">Warehouse</a></li>
+    <li><a href="#mission-center">Mission Center</a></li>
+    <li><a href="#pika-backup">Pika Backup</a></li>
+    <li><a href="#clapper">Clapper</a></li>
+    <li><a href="#airpods-not-pairing-issue">Airpods not pairing Issue</a></li>
+    <li><a href="#enable-fractional-scaling">Enable Fractional Scaling</a></li>
+    <li><a href="#remove-pasted-characters-">Remove pasted characters ^</a></li>
+    <li><a href="#install-gimp">Install gimp</a></li>
+    <li><a href="#distrobox">Distrobox</a></li>
+    <li><a href="#zsh-for-humans">ZSH For Humans</a></li>
+    <li><a href="#install-starcraft-on-fedora">Install Starcraft on Fedora</a></li>
+    <li><a href="#fedora-hotkeys">Fedora Hotkeys</a></li>
+    <li><a href="#terminal">Terminal</a></li>
+    <li><a href="#desktop">Desktop</a></li>
+    <li><a href="#browser">Browser</a>
+      <ul>
+        <li><a href="#firefox">Firefox</a></li>
+      </ul>
+    </li>
+    <li><a href="#slack">Slack</a></li>
+    <li><a href="#actual-budget">Actual Budget</a>
+      <ul>
+        <li><a href="#set-vim-to-default-editor-for-visudo">Set Vim to default editor for visudo</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/desktop/"><span itemprop="name">Desktop</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">My Fedora Setup</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/desktop/my-fedora-setup/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/desktop/learning-touch-typing/" title="Learning Touch Typing (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/desktop/silverblue/" title="Silverblue (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable  " tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="my-fedora-setup">My Fedora Setup</h1>
+
+<p>When you first download Fedora Workstation, it&rsquo;s going to be a little hard to figure out how to make it usable. Especially if you&rsquo;ve never tinkered with Linux before.</p>
+<p>This is because Fedora with Gnome desktop is a blank canvas. The point is to let you customize it to your needs. When I first install Fedora, I pull my justfile to install most of the programs I use:</p>
+<pre><code>`curl -sL https://raw.githubusercontent.com/linuxreader/dotfiles/main/dot_justfile -o ~/.justfile`
+</code></pre>
+<h2 id="install-just-and-run-the-justfile">Install just and run the justfile<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>To run the just file, I then install the just program and run it on the justfile:</p>
+<p><code>dnf install just</code></p>
+<p><code>just first-install</code></p>
+<p>This is my current .justfile:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>first-install:
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># Install flatpacks</span>
+</span></span><span style="display:flex;"><span>	flatpak install --noninteractive <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub com.bitwarden.desktop <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub com.brave.Browser <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub org.gimp.GIMP <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub org.gnome.Snapshot <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub org.libreoffice.LibreOffice <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub org.remmina.Remmina <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub com.termius.Termius <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub com.slack.Slack <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub org.keepassxc.KeePassXC <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub md.obsidian.Obsidian <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub com.calibre_ebook.calibre <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub org.mozilla.Thunderbird <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub us.zoom.Zoom <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub org.wireshark.Wireshark <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub com.nextcloud.desktopclient.nextcloud <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub com.google.Chrome <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub io.github.shiftey.Desktop <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub io.github.dvlv.boxbuddyrs <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub com.github.tchx84.Flatseal <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub io.github.flattool.Warehouse <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub io.missioncenter.MissionCenter <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub org.gnome.World.PikaBackup <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub com.github.rafostar.Clapper <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub com.mattjakeman.ExtensionManager <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub com.jgraph.drawio.desktop <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flathub org.adishatz.Screenshot <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flatpak com.github.finefindus.eyedropper <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flatpak com.github.johnfactotum.Foliate <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flatpak com.usebottles.bottles <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flatpak com.obsproject.Studio <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flatpak net.lutris.Lutris <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flatpak com.vivaldi.Vivaldi <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flatpak com.vscodium.codium <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flatpak io.podman_desktop.PodmanDesktop <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      flatpak org.kde.kdenlive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># Install Homebrew</span>
+</span></span><span style="display:flex;"><span>    sudo dnf -y groupinstall <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      <span style="color:#a5d6ff">&#34;Development Tools&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    /bin/bash -c <span style="color:#a5d6ff">&#34;</span><span style="color:#ff7b72">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span style="color:#ff7b72">)</span><span style="color:#a5d6ff">&#34;</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#a5d6ff">&#39;eval &#34;$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)&#34;&#39;</span> &gt;&gt; ~/.bash_profile
+</span></span><span style="display:flex;"><span>    eval <span style="color:#a5d6ff">&#34;</span><span style="color:#ff7b72">$(</span>/home/linuxbrew/.linuxbrew/bin/brew shellenv<span style="color:#ff7b72">)</span><span style="color:#a5d6ff">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># Configure dnf for faster speeds</span>
+</span></span><span style="display:flex;"><span>    sudo bash -c <span style="color:#a5d6ff">&#39;echo &#34;fastestmirror=True&#34; &gt;&gt; /etc/dnf/dnf.conf&#39;</span>
+</span></span><span style="display:flex;"><span>    sudo bash -c <span style="color:#a5d6ff">&#39;echo &#34;max_parallel_downloads=10&#34; &gt;&gt; /etc/dnf/dnf.conf&#39;</span>
+</span></span><span style="display:flex;"><span>    sudo bash -c <span style="color:#a5d6ff">&#39;echo &#34;defaultyes=True&#34; &gt;&gt; /etc/dnf/dnf.conf&#39;</span>
+</span></span><span style="display:flex;"><span>    sudo bash -c <span style="color:#a5d6ff">&#39;echo &#34;keepcache=True&#34; &gt;&gt; /etc/dnf/dnf.conf&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># Other software, updates, etc. </span>
+</span></span><span style="display:flex;"><span>    sudo dnf -y update
+</span></span><span style="display:flex;"><span>    sudo dnf install -y gnome-screenshot
+</span></span><span style="display:flex;"><span>    sudo dnf -y groupupdate core
+</span></span><span style="display:flex;"><span>    sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+</span></span><span style="display:flex;"><span>    sudo dnf install -y wireguard-tools
+</span></span><span style="display:flex;"><span>    sudo dnf install gnome-tweaks
+</span></span><span style="display:flex;"><span>    sudo dnf -y install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-<span style="color:#ff7b72">$(</span>rpm -E %fedora<span style="color:#ff7b72">)</span>.noarch.rpm <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>    https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-<span style="color:#ff7b72">$(</span>rpm -E %fedora<span style="color:#ff7b72">)</span>.noarch.rpm
+</span></span><span style="display:flex;"><span>    sudo dnf -y update
+</span></span><span style="display:flex;"><span>    sudo dnf install gnome-themes-extra
+</span></span><span style="display:flex;"><span>    gsettings set org.gnome.desktop.interface gtk-theme <span style="color:#a5d6ff">&#34;Adwaita-dark&#34;</span>
+</span></span><span style="display:flex;"><span>    sudo dnf install -y go
+</span></span><span style="display:flex;"><span>    echo <span style="color:#a5d6ff">&#39;export PATH=$PATH:/usr/local/go/bin&#39;</span> &gt;&gt; ~/.bashrc
+</span></span><span style="display:flex;"><span>    source ~/.bashrc
+</span></span><span style="display:flex;"><span>    gsettings set org.gnome.mutter experimental-features <span style="color:#a5d6ff">&#34;[&#39;scale-monitor-framebuffer&#39;]&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>homebrew:
+</span></span><span style="display:flex;"><span>    brew install <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      chezmoi <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      hugo <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>      virt-manager</span></span></code></pre></div>
+<h2 id="install-homebrew-stuff">Install Homebrew Stuff:<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>then run <code>just homebrew</code> after a reboot to install packages with brew</p>
+<h3 id="visudo-config">visudo config<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Add to /etc/sudoers to make Vim default for <code>visudo</code></p>
+<p><code>Defaults editor=/usr/bin/vim</code></p>
+<h2 id="virt-manager">Virt Manager<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo dnf install @virtualization</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo vi /etc/libvirt/libvirtd.conf</span></span></code></pre></div>
+<p>Uncomment the line: <code>unix_sock_group = &quot;libvirt&quot;</code></p>
+<p>Adjust the UNIX socket permissions for the R/W socket:
+<code>unix_sock_rw_perms = &quot;0770&quot;</code></p>
+<p>Start the service:
+<code>systemctl enable --now libvirtd</code></p>
+<p>Add user to group:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo usermod -a -G libvirt <span style="color:#ff7b72">$(</span>whoami<span style="color:#ff7b72">)</span> <span style="color:#ff7b72;font-weight:bold">&amp;&amp;</span> sudo usermod -a -G kvm <span style="color:#ff7b72">$(</span>whoami<span style="color:#ff7b72">)</span></span></span></code></pre></div>
+<p>use the Tweaks app to set the appearance of Legacy Applications to &lsquo;adwaita-dark&rsquo;.</p>
+<h2 id="configure-howdy">Configure Howdy<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Howdy is a tool for using an IR webcam for authentication:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo dnf copr enable principis/howdy
+</span></span><span style="display:flex;"><span>sudo dnf --refresh install -y howdy</span></span></code></pre></div>
+<p><a href="https://copr.fedorainfracloud.org/coprs/principis/howdy/" rel="external" target="_blank">https://copr.fedorainfracloud.org/coprs/principis/howdy/</a>
+<a href="https://github.com/boltgolt/howdy" rel="external" target="_blank">https://github.com/boltgolt/howdy</a></p>
+<h2 id="seahorse">Seahorse<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>I was using this to fix the Login Keyring error that is common with Fedora, but it no longer works.
+<code>sudo dnf -y install seahorse &amp;&amp; seahorse</code></p>
+<p>Applications &gt; Passwords and Keys &gt; Passwords &gt; Right-click Login &gt; Change Password to blank.</p>
+<p><a href="https://itsfoss.com/seahorse/" rel="external" target="_blank">https://itsfoss.com/seahorse/</a></p>
+<h2 id="initialize-chezmoi">Initialize Chezmoi<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Chezmoi let&rsquo;s you easy sync your dotfiles with Github and your other computers. Just init Chezmoi and add your Github username. This assumes your dotfiles in Github are saved in the proper format.
+`chezmoi init &ndash;apply linuxreader</p>
+<h2 id="add-badname-user-if-needed">Add badname user (if needed)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>If you need to use username with the format <code>firstname.lastname</code>, use the <code>badname</code> flag with the <code>adduser</code> command. You will have to create a normal user first, because you can&rsquo;t do this during the initial install:
+<code>$ adduser --badname firstname.lastname</code>
+<code>$ sudo usermod -aG wheel username</code></p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># uncomment this line in the visudo file 
+$ sudo visudo
+%wheel ALL=(ALL) ALL</code></pre></div>
+<p>Delete the other user:
+<code>$ userdel username</code></p>
+<h2 id="additional-dnf-stuff">Additional DNF stuff:<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Clear cache (do this occasionally):
+<code>sudo dnf clean dbcache</code>
+or <code>sudo dnf clean all</code></p>
+<p>Update DNF:
+<code>sudo dnf -y update</code></p>
+<p>Additional DNF commands:
+<a href="https://docs.fedoraproject.org/en-US/fedora/latest/system-administrators-guide/package-management/DNF/" rel="external" target="_blank" title="https://docs.fedoraproject.org/en-US/fedora/latest/system-administrators-guide/package-management/DNF/">https://docs.fedoraproject.org/en-US/fedora/latest/system-administrators-guide/package-management/DNF/</a></p>
+<h2 id="set-up-rpm-fusion">Set up RPM Fusion<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>RPM Fusion give you more accessibility to various software packages.</p>
+<p>Install:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>sudo dnf -y install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm</code></pre></div>
+<p><a href="https://rpmfusion.org/" rel="external" target="_blank" title="https://rpmfusion.org/">https://rpmfusion.org/</a></p>
+<h2 id="appstream-metadata">AppStream metadata<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Use AppStream to enable users to install packages using Gnome Software/KDE Discover:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>sudo dnf -y groupupdate core</code></pre></div>
+<h2 id="flatpaks">Flatpaks<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>To enable Flatpaks (this may no longer be needed:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo</code></pre></div>
+<p><a href="https://flatpak.org/setup/Fedora" rel="external" target="_blank">https://flatpak.org/setup/Fedora</a></p>
+<h2 id="set-a-hostname">Set a hostname<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Set a hostname for the system. This will show after next reboot:
+<code>sudo hostnamectl set-hostname &quot;New_Custom_Name&quot;</code></p>
+<h2 id="other-stuff">Other Stuff<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Here is some other stuff I install from the software center.</p>
+<h3 id="input-leap">Input Leap<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Input Leap let&rsquo;s you share a mouse and keyboard between two workstations.</p>
+<p><a href="#R-image-1c8cff69ccb12a254262a206347a5b34" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240905105932.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-1c8cff69ccb12a254262a206347a5b34"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240905105932.png"></a></p>
+<p>I don&rsquo;t know what this is or why it is here:
+installing Git and a bunch of other stuff?</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo dnf install git cmake make gcc-c++ xorg-x11-server-devel <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>                 libcurl-devel avahi-compat-libdns_sd-devel <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>                 libXtst-devel qt5-qtbase qt5-qtbase-devel  <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>                 qt5-qttools-devel libICE-devel libSM-devel <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span>                 openssl-devel libXrandr-devel libXinerama-devel</span></span></code></pre></div>
+<h2 id="virtual-machine-manager">Virtual machine Manager<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>The best way to manage VMs on desktop.</p>
+<p><a href="#R-image-a6a927cd4b15a78ea9a2de90f8b1c725" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240905110024.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-a6a927cd4b15a78ea9a2de90f8b1c725"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240905110024.png"></a></p>
+<h2 id="box-buddy">Box Buddy<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>For managing containers.</p>
+<p><a href="#R-image-575c255b38cb3f652d2eea134660e55e" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240905110223.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-575c255b38cb3f652d2eea134660e55e"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240905110223.png"></a></p>
+<h2 id="warehouse">Warehouse<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Managing installed applications.</p>
+<p><a href="#R-image-7c38a44911b53c1f0dea6dcb4dba706b" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/Pasted%20image%2020240905110143.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-7c38a44911b53c1f0dea6dcb4dba706b"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/Pasted%20image%2020240905110143.png"></a></p>
+<h2 id="mission-center">Mission Center<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Task Manager like application.</p>
+<p><a href="#R-image-7da13e5c81ff8015101e44c44532131e" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240905110500.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-7da13e5c81ff8015101e44c44532131e"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240905110500.png"></a></p>
+<h2 id="pika-backup">Pika Backup<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>For backing up your desktop.
+<a href="#R-image-24faaab4bc3269b5764a94c9d97603b4" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240905110555.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-24faaab4bc3269b5764a94c9d97603b4"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240905110555.png"></a></p>
+<h2 id="clapper">Clapper<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Video player.</p>
+<p><a href="#R-image-be654544eb9b2bce6990e949cb64046d" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240905110319.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-be654544eb9b2bce6990e949cb64046d"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240905110319.png"></a></p>
+<p>And some extensions installed through Extension Manager:
+<a href="#R-image-3e83930fd2802979ab53447a26f6d3b2" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240905105517.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-3e83930fd2802979ab53447a26f6d3b2"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240905105517.png"></a></p>
+<p>Install Gnome Screenshot tool:</p>
+<p>Install the extention:
+<a href="https://extensions.gnome.org/extension/1112/screenshot-tool/" rel="external" target="_blank">https://extensions.gnome.org/extension/1112/screenshot-tool/</a></p>
+<p>You also need to install from DNF for some reason:
+<code>dnf install -y gnome-screenshot</code></p>
+<h2 id="airpods-not-pairing-issue">Airpods not pairing Issue<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>If you ever have the issue where Airpods won&rsquo;t pair. Remove them from the pairing list, force them in pairing mode, and pair them back. This can be made easy with bluetoothctl:</p>
+<p>Just in case, restart the bluetooth service:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo systemctl restart bluetooth
+</span></span><span style="display:flex;"><span>systemctl status bluetooth </span></span></code></pre></div>
+<p>Show devices:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># bluetoothctl
+
+[bluetooth] $ devices
+Device 42:42:42:42:42:42 My AirPods &lt;-- grab the name here
+[bluetooth] $ remove 42:42:42:42:42:42 </code></pre></div>
+<p>Now, make sure your Airpods are in the charging case, close the lid, wait 15 seconds, then open the lid. Press and hold the setup button on the case for up to 10 seconds. The status light should flash white, which means that your Airpods are ready to connect.</p>
+<p>Pair them back:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>[bluetooth] $ pair 42:42:42:42:42:42</code></pre></div>
+<h2 id="enable-fractional-scaling">Enable Fractional Scaling<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>This lets you change display scaling in smaller increments. You&rsquo;ll need to make sure Wayland is turned on.</p>
+<p>Turn on the feature then reboot:
+<code>gsettings set org.gnome.mutter experimental-features &quot;['scale-monitor-framebuffer']&quot;</code></p>
+<p><code>reboot</code></p>
+<h2 id="remove-pasted-characters-">Remove pasted characters ^<a href="200~'"></a><span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Kept having pasted format characters ^<a href="200~'"></a> mess up my groove. Here&rsquo;s the fix.</p>
+<p>Open your inputrc file and add the line below:
+<code>vim ~/.inputrc</code></p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#a5d6ff">&#34;\C-v&#34;</span>: <span style="color:#a5d6ff">&#34;&#34;</span></span></span></code></pre></div>
+<h2 id="install-gimp">Install gimp<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p><code>sudo dnf install gimp</code>
+enable in screenshot tool after install for gimp {f}</p>
+<p>Install Arrows
+<a href="https://graphicdesign.stackexchange.com/questions/44797/how-do-i-insert-arrows-into-a-picture-in-gimp" rel="external" target="_blank">https://graphicdesign.stackexchange.com/questions/44797/how-do-i-insert-arrows-into-a-picture-in-gimp</a></p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>Go to your home folder
+Go to .config/GIMP
+Go to the folder with a version number (2.10 for me)
+Go to scripts
+Download the arrow.scm file and place it here. Don&#39;t forget to unzip.
+Open GIMP and draw a path</code></pre></div>
+<p>From Tools menu, select Arrow</p>
+<p>= h.265 main 10 profile media codec error =</p>
+<h2 id="distrobox">Distrobox<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>See <a href="/tools/distrobox/">distrobox</a></p>
+<h2 id="zsh-for-humans">ZSH For Humans<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p><a href="https://github.com/romkatv/zsh4humans" rel="external" target="_blank">GitHub - romkatv/zsh4humans: A turnkey configuration for Zsh</a></p>
+<h2 id="install-starcraft-on-fedora">Install Starcraft on Fedora<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p><a href="https://www.youtube.com/watch?v=eefsL9K2w4k" rel="external" target="_blank">https://www.youtube.com/watch?v=eefsL9K2w4k</a></p>
+<ol>
+<li>Install your latest gpu driver <a href="https://github.com/lutris/docs/blob/master/InstallingDrivers.md" rel="external" target="_blank">https://github.com/lutris/docs/blob/master/InstallingDrivers.md</a></li>
+</ol>
+<p>I am just running off of built in AMD graphics. So we just need to install support for Vulkan API
+<code>sudo dnf install vulkan-loader vulkan-loader.i686</code></p>
+<p>Install Wine
+<code>$ sudo dnf -y install wine</code></p>
+<p>Install Lutris
+Install the Flatpak version in software center.</p>
+<h2 id="fedora-hotkeys">Fedora Hotkeys<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h2 id="terminal">Terminal<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Close Terminal
+shift + c + q</p>
+<p>Previous Tab
+c + Page Up</p>
+<p>Next Tab
+c + Page Down</p>
+<p>Move to Specific Tab
+Alt + #</p>
+<p>Full Screen
+F11</p>
+<p>New Window
+Shift + Ctrl + t</p>
+<p>Close Tab
+Shift + Ctrl + w</p>
+<h2 id="desktop">Desktop<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Run a command
+super + F2</p>
+<p>Switch Between Applications
+Alt + Esc</p>
+<p>Move Window to Left Monitor
+Shift + Super + &lt;-</p>
+<p>Move Window to Right Monitor
+Shift + Super + -&gt;</p>
+<p>Minimize Current Window
+Super + H</p>
+<p>Close Current Appllication
+Ctrl + Q</p>
+<h2 id="browser">Browser<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="firefox">Firefox<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Switch Between Tabs
+Ctrl + Tab</p>
+<p>Switch Between Tabs in Reverse
+Ctrl + Shift + Tab</p>
+<h4 id="detach-tab-extension">Detach Tab Extension<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p><a href="https://addons.mozilla.org/en-US/firefox/addon/detach-tab/" rel="external" target="_blank">https://addons.mozilla.org/en-US/firefox/addon/detach-tab/</a></p>
+<p>Detach Tab
+Ctrl _ Shift _ Space</p>
+<p>Reattach Tab
+Ctrl + Shift + v</p>
+<h2 id="slack">Slack<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Installing via package manager because of screen sharing issue.</p>
+<p>Upgrade dnf and download the slack rpm from the website.</p>
+<p><strong>Screen Sharing in Slack:</strong></p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vim /usr/share/applications/slack.desktop</span></span></code></pre></div>
+<p>Update the exec line to:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#79c0ff">Exec</span><span style="color:#ff7b72;font-weight:bold">=</span>/usr/bin/slack --enable-features<span style="color:#ff7b72;font-weight:bold">=</span>WebRTCPipeWireCapturer %U</span></span></code></pre></div>
+<h2 id="actual-budget">Actual Budget<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p><a href="https://github.com/actualbudget/actual" rel="external" target="_blank">https://github.com/actualbudget/actual</a></p>
+<h3 id="set-vim-to-default-editor-for-visudo">Set Vim to default editor for visudo<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>add <code>Defaults editor=/usr/bin/vim</code> to top of visudo file.su</p>
+
+  <footer class="footline">
+<div class="R-taxonomy taxonomy-categories cstyle" title="Categories" style="--VARIABLE-TAGS-BG-color: var(--INTERNAL-TAG-BG-color);">
+  <i class="fa-fw fas fa-layer-group"></i>
+  <ul>
+    <li><a class="term-link" href="/categories/explanation/">Explanation</a></li>
+  </ul>
+</div>
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ad-hoc-ansible-commands/"><a class="padding" href="/ansible/ad-hoc-ansible-commands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-documentation/"><a class="padding" href="/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-facts/"><a class="padding" href="/ansible/ansible-facts/">Ansible Facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-galaxy-roles/"><a class="padding" href="/ansible/ansible-galaxy-roles/">Ansible Galaxy Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-inventory/"><a class="padding" href="/ansible/ansible-inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-playbooks/"><a class="padding" href="/ansible/ansible-playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-ansible-roles/"><a class="padding" href="/ansible/using-ansible-roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-inventory-command/"><a class="padding" href="/ansible/ansible-inventory-command/">Ansible-inventory command<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible.cfg/"><a class="padding" href="/ansible/ansible.cfg/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/building-an-ansible-lab-with-ansible/"><a class="padding" href="/ansible/building-an-ansible-lab-with-ansible/">Building an Ansible lab with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/common-modules-with-examples/"><a class="padding" href="/ansible/common-modules-with-examples/">Common modules with examples<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/discovering-storage-related-facts/"><a class="padding" href="/ansible/discovering-storage-related-facts/">Discovering storage related facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/dynamic-inventory/"><a class="padding" href="/ansible/dynamic-inventory/">Dynamic Inventory<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/execution-environments/"><a class="padding" href="/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/host-name-patterns/"><a class="padding" href="/ansible/host-name-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/including-and-importing-files/"><a class="padding" href="/ansible/including-and-importing-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2-templates/"><a class="padding" href="/ansible/jinja2-templates/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-ansible-errors-and-logs/"><a class="padding" href="/ansible/managing-ansible-errors-and-logs/">Managing Ansible Errors and Logs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-packages/"><a class="padding" href="/ansible/managing-packages/">Managing Packages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-partitions-and-lvm/"><a class="padding" href="/ansible/managing-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-services/"><a class="padding" href="/ansible/managing-services/">Managing Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/networking-with-ansible/"><a class="padding" href="/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/nfs-setup/"><a class="padding" href="/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimizing-ansible-processing/"><a class="padding" href="/ansible/optimizing-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/repositories-and-subscriptions/"><a class="padding" href="/ansible/repositories-and-subscriptions/">Repositories and subscriptions<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux-file-properties/"><a class="padding" href="/ansible/selinux-file-properties/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/setting-up-an-ansible-lab/"><a class="padding" href="/ansible/setting-up-an-ansible-lab/">Setting up an Ansible Lab<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/troubleshooting-common-scenarios/"><a class="padding" href="/ansible/troubleshooting-common-scenarios/">Troubleshooting Common Scenarios<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/users-and-groups/"><a class="padding" href="/ansible/users-and-groups/">Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-loops-and-items/"><a class="padding" href="/ansible/using-loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-modules-for-troubleshooting-and-testing/"><a class="padding" href="/ansible/using-modules-for-troubleshooting-and-testing/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-multiple-inventories/"><a class="padding" href="/ansible/using-multiple-inventories/">Using Multiple Inventories<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-rhel-system-roles/"><a class="padding" href="/ansible/using-rhel-system-roles/">Using RHEL System roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-tags/"><a class="padding" href="/ansible/using-tags/">Using Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-when-to-run-tasks-conditionally/"><a class="padding" href="/ansible/using-when-to-run-tasks-conditionally/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Variables<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/boot/"><input type="checkbox" id="R-section-a53bfb333437907a8d5bdc636d15c75d" aria-controls="R-subsections-a53bfb333437907a8d5bdc636d15c75d"><label for="R-section-a53bfb333437907a8d5bdc636d15c75d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Boot</span></label><a class="padding default-animation" href="/boot/"><i class="fa-solid fa-hourglass-start"></i> Boot<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-a53bfb333437907a8d5bdc636d15c75d" class="collapsible-menu">
+            <li class="" data-nav-id="/boot/boot-process-grub2-and-kernel/"><a class="padding" href="/boot/boot-process-grub2-and-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/boot/system-initialization-message-logging-and-system-tuning/"><a class="padding" href="/boot/system-initialization-message-logging-and-system-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5"><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="" data-nav-id="/containers/containers-1/"><a class="padding" href="/containers/containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696" checked><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/learning-touch-typing/"><a class="padding" href="/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="active " data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/files/"><input type="checkbox" id="R-section-31e56884d732922d4a0e407592968056" aria-controls="R-subsections-31e56884d732922d4a0e407592968056"><label for="R-section-31e56884d732922d4a0e407592968056"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Files</span></label><a class="padding default-animation" href="/files/"><i class="fa-solid fa-copy"></i> Files<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-31e56884d732922d4a0e407592968056" class="collapsible-menu">
+            <li class="" data-nav-id="/files/advanced-file-management/"><a class="padding" href="/files/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/files/file-management/"><a class="padding" href="/files/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-synchronization/"><a class="padding" href="/networking/dns-and-time-synchronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/resources-for-passing-ccna/"><a class="padding" href="/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/"><i class="fa-solid fa-box-open"></i> Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
+            <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
+            <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/local-file-systems-and-swap/"><a class="padding" href="/storage/local-file-systems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/network-file-system-nfs/"><a class="padding" href="/storage/network-file-system-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/partitioning-mbr-and-gpt/"><a class="padding" href="/storage/partitioning-mbr-and-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/remove-a-filesystem-from-a-partition/"><a class="padding" href="/storage/remove-a-filesystem-from-a-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/system/"><input type="checkbox" id="R-section-0ea554b019cc5a3e6337c45b68b3a647" aria-controls="R-subsections-0ea554b019cc5a3e6337c45b68b3a647"><label for="R-section-0ea554b019cc5a3e6337c45b68b3a647"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/system/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-0ea554b019cc5a3e6337c45b68b3a647" class="collapsible-menu">
+            <li class="" data-nav-id="/system/installation/"><a class="padding" href="/system/installation/">Installation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/system/interaction/"><a class="padding" href="/system/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/system/process-and-task-scheduling/"><a class="padding" href="/system/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-vagrant-on-linux/"><a class="padding" href="/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-man-pages/"><a class="padding" href="/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users and Groups</span></label><a class="padding default-animation" href="/users-and-groups/"><i class="fa-solid fa-users"></i> Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
+            <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/virtualization/"><input type="checkbox" id="R-section-da8ee4406de37987b502b79e5b0a9d1c" aria-controls="R-subsections-da8ee4406de37987b502b79e5b0a9d1c"><label for="R-section-da8ee4406de37987b502b79e5b0a9d1c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualization</span></label><a class="padding default-animation" href="/virtualization/"><i class="fa-solid fa-microchip"></i> Virtualization<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-da8ee4406de37987b502b79e5b0a9d1c" class="collapsible-menu">
+            <li class="" data-nav-id="/virtualization/rhcsa-vagrant-lab-setup/"><a class="padding" href="/virtualization/rhcsa-vagrant-lab-setup/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1772206888" defer></script>
+    <script src="/js/theme.min.js?1772206888" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

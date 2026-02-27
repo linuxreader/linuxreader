@@ -1,0 +1,20 @@
++++
+title = "Contact Me"
+[_build]
+  render = "always"
+  list = "never"
+  publishResources = true
++++
+
+<h6>Need to get in touch?</h6>
+
+<form action="https://api.web3forms.com/submit" method="POST">
+
+    <input type="hidden" name="access_key" value="74d69bd3-9add-4b8b-8784-7b95a65baec2">
+
+    Your Full Name:<input type="text" name="name" required>
+    Your Email Address:<input type="email" name="email" required>
+    Message:<textarea name="message" required></textarea>
+    <button type="submit">Submit Form</button>
+
+</form>

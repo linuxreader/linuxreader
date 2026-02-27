@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    <meta name="description" content="Discover Ansible’s parallel nature Verify group multi hostnames: ansible multi -a &#34;hostname&#34;
+If Ansible reports No hosts matched or returns some other inventory-related error, try setting the ANSIBLE_HOSTS environment variable explicitly: export ANSIBLE_HOSTS=/etc/ansible/hosts. Generally Ansible will read the file in /etc/ansible/hosts automatically, but depending on how you installed Ansible, you may need to explicitly set ANSIBLE_HOSTS for the ansible command to work correctly.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="Discover Ansible’s parallel nature Verify group multi hostnames: ansible multi -a &#34;hostname&#34;
+If Ansible reports No hosts matched or returns some other inventory-related error, try setting the ANSIBLE_HOSTS environment variable explicitly: export ANSIBLE_HOSTS=/etc/ansible/hosts. Generally Ansible will read the file in /etc/ansible/hosts automatically, but depending on how you installed Ansible, you may need to explicitly set ANSIBLE_HOSTS for the ansible command to work correctly.">
+    <meta property="og:url" content="https://linuxreader.com/ansible/ansible4devops/chapter-3---ad-hoc-commands/">
+    <meta property="og:site_name" content="Linux Documentation Site">
+    <meta property="og:description" content="Discover Ansible’s parallel nature Verify group multi hostnames: ansible multi -a &#34;hostname&#34;
+If Ansible reports No hosts matched or returns some other inventory-related error, try setting the ANSIBLE_HOSTS environment variable explicitly: export ANSIBLE_HOSTS=/etc/ansible/hosts. Generally Ansible will read the file in /etc/ansible/hosts automatically, but depending on how you installed Ansible, you may need to explicitly set ANSIBLE_HOSTS for the ansible command to work correctly.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Ansible">
+    <meta itemprop="description" content="Discover Ansible’s parallel nature Verify group multi hostnames: ansible multi -a &#34;hostname&#34;
+If Ansible reports No hosts matched or returns some other inventory-related error, try setting the ANSIBLE_HOSTS environment variable explicitly: export ANSIBLE_HOSTS=/etc/ansible/hosts. Generally Ansible will read the file in /etc/ansible/hosts automatically, but depending on how you installed Ansible, you may need to explicitly set ANSIBLE_HOSTS for the ansible command to work correctly.">
+    <meta itemprop="wordCount" content="5653">
+    <title></title>
+    <link href="/ansible/ansible4devops/chapter-3---ad-hoc-commands/index.md" rel="alternate" type="text/markdown" title="">
+    <link href="/images/favicon.svg?1772206888" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1772206888" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1772206888" defer></script>
+    <script src="/js/search-lunr.min.js?1772206888" defer></script>
+    <script src="/js/search.min.js?1772206888" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1772206888";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1772206888" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1772206888" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1772206888" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1772206888" rel="stylesheet">
+    <link href="/css/theme.min.css?1772206888" rel="stylesheet">
+    <link href="/css/format-html.min.css?1772206888" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = `.min`;
+      window.relearn.path='\/ansible\/ansible4devops\/chapter-3---ad-hoc-commands\/';
+      window.relearn.relBasePath='..\/..\/..';
+      window.relearn.relBaseUri='..\/..\/..';
+      window.relearn.absBaseUri='https:\/\/linuxreader.com';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/ansible/ansible4devops/chapter-3---ad-hoc-commands/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+        <li><a href="#chap05.xhtml_leanpub-auto-configure-groups-of-servers-or-individual-servers">Configure groups of servers, or individual servers</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#chap05.xhtml_leanpub-auto-manage-users-and-groups">Manage users and groups</a></li>
+        <li><a href="#chap05.xhtml_leanpub-auto-manage-files-and-directories">Manage files and directories</a></li>
+        <li><a href="#chap05.xhtml_leanpub-auto-run-operations-in-the-background">Run operations in the background</a></li>
+        <li><a href="#chap05.xhtml_leanpub-auto-check-log-files">Check log files</a></li>
+        <li><a href="#chap05.xhtml_leanpub-auto-manage-cron-jobs">Manage cron jobs</a></li>
+        <li><a href="#chap05.xhtml_leanpub-auto-deploy-a-version-controlled-application">Deploy a version-controlled application</a></li>
+        <li><a href="#chap05.xhtml_leanpub-auto-ansibles-ssh-connection-history">Ansible&rsquo;s SSH connection history</a></li>
+        <li><a href="#chap05.xhtml_leanpub-auto-summary-2">Summary</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/ansible/"><span itemprop="name">Ansible</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/ansible/ansible4devops/chapter-3---ad-hoc-commands/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/ansible/" title="Ansible (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/ansible/ad-hoc-ansible-commands/" title="Ad Hoc Ansible Commands (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable ansible" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id=""></h1>
+
+<h4 id="discover-ansibles-parallel-nature">Discover Ansible&rsquo;s parallel nature<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Verify group multi hostnames:
+<code>ansible multi -a &quot;hostname&quot;</code></p>
+<p>If Ansible reports <code>No hosts matched</code> or returns some other
+inventory-related error, try setting the <code>ANSIBLE_HOSTS</code> environment
+variable explicitly: <code>export ANSIBLE_HOSTS=/etc/ansible/hosts</code>.
+Generally Ansible will read the file in <code>/etc/ansible/hosts</code>
+automatically, but depending on how you installed Ansible, you may need
+to explicitly set <code>ANSIBLE_HOSTS</code> for the <code>ansible</code> command to work
+correctly.</p>
+<p>You may have noticed that the command was not run on each server in the
+order you&rsquo;d expect. Go ahead and run the command a few more times, and
+see the order:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code># First run results:                # Second run results:
+192.168.60.5 | success | rc=0 &gt;&gt;    192.168.60.6 | success | rc=0 &gt;&gt;
+orc-app2.dev                        orc-db.dev
+<p>192.168.60.6 | success | rc=0 &gt;&gt;    192.168.60.5 | success | rc=0 &gt;&gt;
+orc-db.dev                          orc-app2.dev</p>
+<p>192.168.60.4 | success | rc=0 &gt;&gt;    192.168.60.4 | success | rc=0 &gt;&gt;
+orc-app1.dev                        orc-app1.dev</code></pre></p>
+</div>
+</figure>
+<p>By default, Ansible will run your commands in parallel, using multiple
+process forks, so the command will complete more quickly. If you&rsquo;re
+managing a few servers, this may not be much quicker than running the
+command serially, on one server after the other, but even managing 5-10
+servers, you&rsquo;ll notice a dramatic speedup if you use Ansible&rsquo;s
+parallelism (which is enabled by default).</p>
+<p>Run the same command again, but this time, add the argument <code>-f 1</code> to
+tell Ansible to use only one fork (basically, to perform the command on
+each server in sequence):</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -a &quot;hostname&quot; -f 1
+192.168.60.4 | success | rc=0 &gt;&gt;
+orc-app1.dev
+<p>192.168.60.5 | success | rc=0 &gt;&gt;
+orc-app2.dev</p>
+<p>192.168.60.6 | success | rc=0 &gt;&gt;
+orc-db.dev</code></pre></p>
+</div>
+</figure>
+<p>Run the same command over and over again, and it will always return
+results in the same order. It&rsquo;s fairly rare that you will ever need to
+do this, but it&rsquo;s much more frequent that you&rsquo;ll want to <em>increase</em> the
+value (like <code>-f 10</code>, or <code>-f 25</code>&hellip; depending on how much your system and
+network connection can handle) to speed up the process of running
+commands on tens or hundreds of servers.</p>
+<aside class="tip blurb">
+<p>Most people place the target of the action (<code>multi</code>) before the
+command/action itself (&ldquo;on X servers, run Y command&rdquo;), but if your brain
+works in the reverse order (&ldquo;run Y command on X servers&rdquo;), you could put
+the target <em>after</em> the other arguments
+(<code>ansible -a &quot;hostname&quot; multi</code>)&mdash;the commands are equivalent.</p>
+</aside>
+<h4 id="learning-about-your-environment">Learning about your environment<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Now that we trust Vagrant&rsquo;s ability to set hostnames correctly, let&rsquo;s
+make sure everything else is in order.</p>
+<p>First, let&rsquo;s make sure the servers have disk space available for our
+application:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -a &quot;df -h&quot;
+192.168.60.6 | success | rc=0 &gt;&gt;
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/mapper/centos-root   19G 1014M   18G   6% /
+devtmpfs                 111M     0  111M   0% /dev
+tmpfs                    120M     0  120M   0% /dev/shm
+tmpfs                    120M  4.3M  115M   4% /run
+tmpfs                    120M     0  120M   0% /sys/fs/cgroup
+/dev/sda1                497M  124M  374M  25% /boot
+none                     233G  217G   17G  94% /vagrant
+<p>192.168.60.5 | success | rc=0 &gt;&gt;
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/mapper/centos-root   19G 1014M   18G   6% /
+devtmpfs                 111M     0  111M   0% /dev
+tmpfs                    120M     0  120M   0% /dev/shm
+tmpfs                    120M  4.3M  115M   4% /run
+tmpfs                    120M     0  120M   0% /sys/fs/cgroup
+/dev/sda1                497M  124M  374M  25% /boot
+none                     233G  217G   17G  94% /vagrant</p>
+<p>192.168.60.4 | success | rc=0 &gt;&gt;
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/mapper/centos-root   19G 1014M   18G   6% /
+devtmpfs                 111M     0  111M   0% /dev
+tmpfs                    120M     0  120M   0% /dev/shm
+tmpfs                    120M  4.3M  115M   4% /run
+tmpfs                    120M     0  120M   0% /sys/fs/cgroup
+/dev/sda1                497M  124M  374M  25% /boot
+none                     233G  217G   17G  94% /vagrant</code></pre></p>
+</div>
+</figure>
+<p>It looks like we have plenty of room for now; our application is pretty
+lightweight.</p>
+<p>Second, let&rsquo;s also make sure there is enough memory on our servers:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -a &quot;free -m&quot;
+192.168.60.4 | success | rc=0 &gt;&gt;
+             total       used       free     shared    buffers     cached
+Mem:           238        187         50          4          1         69
+-/+ buffers/cache:        116        121
+Swap:         1055          0       1055
+<p>192.168.60.6 | success | rc=0 &gt;&gt;
+total       used       free     shared    buffers     cached
+Mem:           238        190         47          4          1         72
+-/+ buffers/cache:        116        121
+Swap:         1055          0       1055</p>
+<p>192.168.60.5 | success | rc=0 &gt;&gt;
+total       used       free     shared    buffers     cached
+Mem:           238        186         52          4          1         67
+-/+ buffers/cache:        116        121
+Swap:         1055          0       1055</code></pre></p>
+</div>
+</figure>
+<p>Memory is pretty tight, but since we&rsquo;re running three VMs on our
+localhost, we need to be a little conservative.</p>
+<p>Third, let&rsquo;s make sure the date and time on each server is in sync:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -a &quot;date&quot;
+192.168.60.5 | success | rc=0 &gt;&gt;
+Sat Feb  1 20:23:08 UTC 2021
+<p>192.168.60.4 | success | rc=0 &gt;&gt;
+Sat Feb  1 20:23:08 UTC 2021</p>
+<p>192.168.60.6 | success | rc=0 &gt;&gt;
+Sat Feb  1 20:23:08 UTC 2021</code></pre></p>
+</div>
+</figure>
+<p>Most applications are written with slight tolerances for per-server time
+jitter, but it&rsquo;s always a good idea to make sure the times on the
+different servers are as close as possible, and the simplest way to do
+that is to use the Network Time Protocol, which is easy enough to
+configure. We&rsquo;ll do that next, using Ansible&rsquo;s modules to make the
+process painless.</p>
+<aside class="tip blurb">
+<p>To get an exhaustive list of all the environment details (&lsquo;facts&rsquo;, in
+Ansible&rsquo;s lingo) for a particular server (or for a group of servers),
+use the command <code>ansible [host-or-group] -m setup</code>. This will provide a
+list of every minute bit of detail about the server (including file
+systems, memory, OS, network interfaces&hellip; you name it, it&rsquo;s in the
+list).</p>
+</aside>
+<h4 id="make-changes-using-ansible-modules">Make changes using Ansible modules<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>We want to install the NTP daemon on the server to keep the time in
+sync. Instead of running the command <code>yum install -y ntp</code> on each of the
+servers, we&rsquo;ll use ansible&rsquo;s <code>yum</code> module to do the same (just like we
+did in the playbook example earlier, but this time using an ad-hoc
+command).</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -s -m yum -a &quot;name=ntp state=present&quot;</code></pre>
+</div>
+</figure>
+<p>You should see three simple &lsquo;success&rsquo; messages, reporting no change,
+since NTP was already installed on the three machines; this confirms
+everything is in working order.</p>
+<aside class="information blurb">
+<p>The <code>-s</code> option (alias for <code>--sudo</code>) tells Ansible to run the command
+with sudo. This will work fine with our Vagrant VMs, but if you&rsquo;re
+running commands against a server where your user account requires a
+sudo password, you should also pass in <code>-K</code> (alias for
+<code>--ask-sudo-pass</code>), so you can enter your sudo password when Ansible
+needs it.</p>
+</aside>
+<p>Now we&rsquo;ll make sure the NTP daemon is started and set to run on boot. We
+could use two separate commands, <code>service ntpd start</code> and
+<code>chkconfig ntpd on</code>, but we&rsquo;ll use Ansible&rsquo;s <code>service</code> module instead.</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -s -m service -a &quot;name=ntpd state=started enabled=yes&quot;</code></pre>
+</div>
+</figure>
+<p>All three servers should show a success message like:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>&quot;changed&quot;: true,
+&quot;enabled&quot;: true,
+&quot;name&quot;: &quot;ntpd&quot;,
+&quot;state&quot;: &quot;started&quot;</code></pre>
+</div>
+</figure>
+<p>If you run the exact same command again, everything will be the same,
+but Ansible will report that nothing has changed, so the <code>&quot;changed&quot;</code>
+value becomes <code>false</code>.</p>
+<p>When you use Ansible&rsquo;s modules instead of plain shell commands, you can
+use the powers of abstraction and idempotency offered by Ansible. Even
+if you&rsquo;re running shell commands, you could wrap them in Ansible&rsquo;s
+<code>shell</code> or <code>command</code> modules (like <code>ansible -m shell -a &quot;date&quot; multi</code>),
+but for these kind of commands, there&rsquo;s usually no need to use an
+Ansible module when running them ad-hoc.</p>
+<p>The last thing we should do is check to make sure our servers are synced
+closely to the official time on the NTP server:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -s -a &quot;service ntpd stop&quot;
+$ ansible multi -s -a &quot;ntpdate -q 0.rhel.pool.ntp.org&quot;
+$ ansible multi -s -a &quot;service ntpd start&quot;</code></pre>
+</div>
+</figure>
+<p>For the <code>ntpdate</code> command to work, the <code>ntpd</code> service has to be stopped,
+so we stop the service, run the command to check our jitter, then start
+the service again.</p>
+<p>In my test, I was within three one-hundredths of a second on all three
+servers&mdash;close enough for my purposes.</p>
+<h3 id="chap05.xhtml_leanpub-auto-configure-groups-of-servers-or-individual-servers">Configure groups of servers, or individual servers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Now that we&rsquo;ve been able to get all our servers to a solid baseline
+(e.g. all of them at least have the correct time), we need to set up the
+application servers, then the database server.</p>
+<p>Since we set up two separate groups in our inventory file, <code>app</code> and
+<code>db</code>, we can target commands to just the servers in those groups.</p>
+<h4 id="chap05.xhtml_leanpub-auto-configure-the-application-servers">Configure the Application servers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Our hypothetical web application uses Django, so we need to make sure
+Django and its dependencies are installed. Django is not in the official
+CentOS yum repository, but we can install it using Python&rsquo;s easy_install
+(which, conveniently, has an Ansible module).</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible app -s -m yum -a &quot;name=MySQL-python state=present&quot;
+$ ansible app -s -m yum -a &quot;name=python-setuptools state=present&quot;
+$ ansible app -s -m easy_install -a &quot;name=django&quot;</code></pre>
+</div>
+</figure>
+<p>You could also install django using <code>pip</code>, which can be installed via
+<code>easy_install</code> (since Ansible&rsquo;s <code>easy_install</code> module doesn&rsquo;t allow you
+to uninstall packages like <code>pip</code> does), but for simplicity&rsquo;s sake, we&rsquo;ve
+installed it with <code>easy_install</code>.</p>
+<p>Check to make sure Django is installed and working correctly.</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible app -a &quot;python -c &#39;import django; print django.get_version()&#39;&quot;
+192.168.60.4 | success | rc=0 &gt;&gt;
+1.8
+<p>192.168.60.5 | success | rc=0 &gt;&gt;
+1.8</code></pre></p>
+</div>
+</figure>
+<p>Things look like they&rsquo;re working correctly on our app servers. We can
+now move on to our database server.</p>
+<aside class="tip blurb">
+<p>Almost all of the configuration we&rsquo;ve done in this chapter would be much
+better off in an Ansible playbook (which will be explored in greater
+depth throughout the rest of this book). This chapter demonstrates how
+easy it is to manage multiple servers&mdash;for whatever purpose&mdash;using
+Ansible. Even if you set up and configure servers by hand using shell
+commands, using Ansible will save you a ton of time and help you do
+everything in the most secure and efficient manner possible.</p>
+</aside>
+<h4 id="chap05.xhtml_leanpub-auto-configure-the-database-servers">Configure the Database servers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>We configured the application servers using the <code>app</code> group defined in
+Ansible&rsquo;s main inventory, and we can configure the database server
+(currently the only server in the <code>db</code> group) using the
+similarly-defined <code>db</code> group.</p>
+<p>Let&rsquo;s install MariaDB, start it, and configure the server&rsquo;s firewall to
+allow access on MariaDB&rsquo;s default port, 3306.</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible db -s -m yum -a &quot;name=mariadb-server state=present&quot;
+$ ansible db -s -m service -a &quot;name=mariadb state=started enabled=yes&quot;
+$ ansible db -s -a &quot;iptables -F&quot;
+$ ansible db -s -a &quot;iptables -A INPUT -s 192.168.60.0/24 -p tcp \
+-m tcp --dport 3306 -j ACCEPT&quot;</code></pre>
+</div>
+</figure>
+<p>If you try connecting to the database from the app servers (or your host
+machine) at this point, you won&rsquo;t be able to connect, since MariaDB
+still needs to be set up. Typically, you&rsquo;d do this by logging into the
+server and running <code>mysql_secure_installation</code>. Luckily, though, Ansible
+can control a MariaDB server with its assorted <code>mysql_*</code> modules. For
+now, we need to allow MySQL access for one user from our app servers.
+The MySQL modules require the <code>MySQL-python</code> module to be present on the
+managed server.</p>
+<aside class="tip blurb">
+<p>Why MariaDB and not MySQL? RHEL 7 and CentOS 7 have MariaDB as the
+default supported MySQL-compatible database server. Some of the tooling
+around MariaDB still uses the old &lsquo;MySQL*&rsquo; naming syntax, but if you&rsquo;re
+used to MySQL, things work similarly with MariaDB.</p>
+</aside>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible db -s -m yum -a &quot;name=MySQL-python state=present&quot;
+$ ansible db -s -m mysql_user -a &quot;name=django host=% password=12345 \
+priv=*.*:ALL state=present&quot;</code></pre>
+</div>
+</figure>
+<p>At this point, you should be able to create or deploy a Django
+application on the app servers, then point it at the database server
+with the username django and password 12345.</p>
+<aside class="information blurb">
+<p>The MySQL configuration used here is for example/development purposes
+only! There are a few other things you should do to secure a production
+MySQL server, including removing the test database, adding a password
+for the root user account, restricting the IP addresses allowed to
+access port 3306 more closely, and some other minor cleanups. Some of
+these things will be covered later in this book, but, as always, you are
+responsible for securing your servers&mdash;make sure you&rsquo;re doing it
+correctly!</p>
+</aside>
+<h4 id="chap05.xhtml_leanpub-auto-make-changes-to-just-one-server">Make changes to just one server<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Congratulations! You now have a small web application environment
+running Django and MySQL. It&rsquo;s not much, and there&rsquo;s not even a load
+balancer in front of the app servers to spread out the requests; but
+we&rsquo;ve configured everything pretty quickly, and without ever having to
+log into a server. What&rsquo;s even more impressive is that you could run any
+of the ansible commands again (besides a couple of the simple shell
+commands), and they wouldn&rsquo;t change anything&mdash;they would return
+<code>&quot;changed&quot;: false</code>, giving you peace of mind that the original
+configuration is intact.</p>
+<p>Now that your local infrastructure has been running a while, you notice
+(hypothetically, of course) that the logs indicate one of the two app
+servers&rsquo; time has gotten way out of sync with the others, likely because
+the NTP daemon has crashed or somehow been stopped. Quickly, you enter
+the following command to check the status of <code>ntpd</code>:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible app -s -a &quot;service ntpd status&quot;</code></pre>
+</div>
+</figure>
+<p>Then, you restart the service on the affected app server:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible app -s -a &quot;service ntpd restart&quot; --limit &quot;192.168.60.4&quot;</code></pre>
+</div>
+</figure>
+<p>In this command, we used the <code>--limit</code> argument to limit the command to
+a specific host in the specified group. <code>--limit</code> will match either an
+exact string or a regular expression (prefixed with <code>~</code>). The above
+command could be stated more simply if you want to apply the command to
+only the <code>.4</code> server (assuming you know there are no other servers with
+the an IP address ending in .4), the following would work exactly the
+same:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code># Limit hosts with a simple pattern (asterisk is a wildcard).
+$ ansible app -s -a &quot;service ntpd restart&quot; --limit &quot;*.4&quot;
+<h1 id="limit-hosts-with-a-regular-expression-prefix-with-a-tilde">Limit hosts with a regular expression (prefix with a tilde).<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>$ ansible app -s -a &quot;service ntpd restart&quot; &ndash;limit ~&quot;.*.4&quot;</code></pre></p>
+</div>
+</figure>
+<p>In these examples, we&rsquo;ve been using IP addresses instead of hostnames,
+but in many real-world scenarios, you&rsquo;ll probably be using hostnames
+like nyc-dev-1.example.com; being able to match on regular expressions
+is often helpful.</p>
+<aside class="tip blurb">
+<p>Try to reserve the <code>--limit</code> option for running commands on single
+servers. If you often find yourself running commands on the same set of
+servers using <code>--limit</code>, consider instead adding them to a group in your
+inventory file. That way you can enter
+<code>ansible [my-new-group-name] [command]</code>, and save yourself a few
+keystrokes.</p>
+</aside>
+<h3 id="chap05.xhtml_leanpub-auto-manage-users-and-groups">Manage users and groups<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>One of the most common uses for Ansible&rsquo;s ad-hoc commands in my
+day-to-day usage is user and group management. I don&rsquo;t know how many
+times I&rsquo;ve had to re-read the man pages or do a Google search just to
+remember which arguments I need to create a user with or without a home
+folder, add the user to certain groups, etc.</p>
+<p>Ansible&rsquo;s <code>user</code> and <code>group</code> modules make things pretty simple and
+standard across any Linux flavor.</p>
+<p>First, add an <code>admin</code> group on the app servers for the server
+administrators:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible app -s -m group -a &quot;name=admin state=present&quot;</code></pre>
+</div>
+</figure>
+<p>The <code>group</code> module is pretty simple; you can remove a group by setting
+<code>state=absent</code>, set a group id with <code>gid=[gid]</code>, and indicate that the
+group is a system group with <code>system=yes</code>.</p>
+<p>Now add the user <code>johndoe</code> to the app servers with the group I just
+created and give him a home folder in <code>/home/johndoe</code> (the default
+location for most Linux distributions). Simple:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible app -s -m user -a &quot;name=johndoe group=admin createhome=yes&quot;</code></pre>
+</div>
+</figure>
+<p>If you want to automatically create an SSH key for the new user (if one
+doesn&rsquo;t already exist), you can run the same command with the additional
+parameter <code>generate_ssh_key=yes</code>. You can also set the UID of the user
+by passing in <code>uid=[uid]</code>, set the user&rsquo;s shell with <code>shell=[shell]</code>,
+and the password with <code>password=[encrypted-password]</code>.</p>
+<p>What if you want to delete the account?</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible app -s -m user -a &quot;name=johndoe state=absent remove=yes&quot;</code></pre>
+</div>
+</figure>
+<p>You can do just about anything you could do with <code>useradd</code>, <code>userdel</code>,
+and <code>usermod</code> using Ansible&rsquo;s <code>user</code> module, except you can do it more
+easily. The <a href="http://docs.ansible.com/user_module.html" rel="external" target="_blank">official documentation of the User
+module</a> explains all the
+possibilities in great detail.</p>
+<h3 id="chap05.xhtml_leanpub-auto-manage-files-and-directories">Manage files and directories<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Another common use for ad-hoc commands is remote file management.
+Ansible makes it easy to copy files from your host to remote servers,
+create directories, manage file and directory permissions and ownership,
+and delete files or directories.</p>
+<h4 id="chap05.xhtml_leanpub-auto-get-information-about-a-file">Get information about a file<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>If you need to check a file&rsquo;s permissions, MD5, or owner, use Ansible&rsquo;s
+<code>stat</code> module:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -m stat -a &quot;path=/etc/environment&quot;</code></pre>
+</div>
+</figure>
+<p>This gives the same information you&rsquo;d get when running the <code>stat</code>
+command, but passes back information in JSON, which can be parsed a
+little more easily (or, later, used in playbooks to conditionally do or
+not do certain tasks).</p>
+<h4 id="chap05.xhtml_leanpub-auto-copy-a-file-to-the-servers">Copy a file to the servers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>You probably use <code>scp</code> and/or <code>rsync</code> to copy files and directories to
+remote servers, and while Ansible has recently gained an <code>rsync</code> module,
+most file copy operations can be completed with Ansible&rsquo;s <code>copy</code> module:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -m copy -a &quot;src=/etc/hosts dest=/tmp/hosts&quot;</code></pre>
+</div>
+</figure>
+<p>The <code>src</code> can be a file or a directory. If you include a trailing slash,
+only the contents of the directory will be copied into the <code>dest</code>. If
+you omit the trailing slash, the contents <em>and</em> the directory itself
+will be copied into the <code>dest</code>.</p>
+<p>The <code>copy</code> module is perfect for single-file copies, and works very well
+with small directories. When you want to copy hundreds of files,
+especially in very deeply-nested directory structures, you should
+consider either copying then expanding an archive of the files with
+Ansible&rsquo;s <code>unarchive</code> module, or using Ansible&rsquo;s <code>synchronize</code> module.</p>
+<h4 id="chap05.xhtml_leanpub-auto-retrieve-a-file-from-the-servers">Retrieve a file from the servers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>The <code>fetch</code> module works almost exactly the same as the <code>copy</code> module,
+except in reverse. The major difference is that files will be copied
+down to the local <code>dest</code> in a directory structure that matches the host
+from which you copied them. For example, use the following command to
+grab the hosts file from the servers:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -s -m fetch -a &quot;src=/etc/hosts dest=/tmp&quot;</code></pre>
+</div>
+</figure>
+<p>Fetch will, by default, put the <code>/etc/hosts</code> file from each server into
+a folder in the destination with the name of the host (in our case, the
+three IP addresses), then in the location defined by <code>src</code>. So, the db
+server&rsquo;s hosts file will end up in <code>/tmp/192.168.60.6/etc/hosts</code>.</p>
+<p>You can add the parameter <code>flat=yes</code>, and set the <code>dest</code> to <code>dest=/tmp/</code>
+(add a trailing slash), to make Ansible fetch the files directly into
+the <code>/tmp</code> directory. However, filenames must be unique for this to
+work, so it&rsquo;s not as useful when copying down files from multiple hosts.
+Only use <code>flat=yes</code> if you&rsquo;re copying files from a single host.</p>
+<h4 id="chap05.xhtml_leanpub-auto-create-directories-and-files">Create directories and files<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>You can use the <code>file</code> module to create files and directories (like
+<code>touch</code>), manage permissions and ownership on files and directories,
+modify SELinux properties, and create symlinks.</p>
+<p>Here&rsquo;s how to create a directory:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -m file -a &quot;dest=/tmp/test mode=644 state=directory&quot;</code></pre>
+</div>
+</figure>
+<p>Here&rsquo;s how to create a symlink (set <code>state=link</code>):</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -m file -a &quot;src=/src/symlink dest=/dest/symlink \
+owner=root group=root state=link&quot;</code></pre>
+</div>
+</figure>
+<h4 id="chap05.xhtml_leanpub-auto-delete-directories-and-files">Delete directories and files<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>You can set the <code>state</code> to <code>absent</code> to delete a file or directory.</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -m file -a &quot;dest=/tmp/test state=absent&quot;</code></pre>
+</div>
+</figure>
+<p>There are many simple ways to manage files remotely using Ansible. We&rsquo;ve
+briefly covered the <code>copy</code> and <code>file</code> modules here, but be sure to read
+the documentation for the other file-management modules like
+<code>lineinfile</code>, <code>ini_file</code>, and <code>unarchive</code>. This book will cover these
+additional modules in depth in later chapters (when dealing with
+playbooks).</p>
+<h3 id="chap05.xhtml_leanpub-auto-run-operations-in-the-background">Run operations in the background<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Some operations take quite a while (minutes or even hours). For example,
+when you run <code>yum update</code> or <code>apt-get update &amp;&amp; apt-get dist-upgrade</code>,
+it could be a few minutes before all the packages on your servers are
+updated.</p>
+<p>In these situations, you can tell Ansible to run the commands
+asynchronously, and poll the servers to see when the commands finish.
+When you&rsquo;re only managing one server, this is not really helpful, but if
+you have many servers, Ansible starts the command <em>very</em> quickly on all
+your servers (especially if you set a higher <code>--forks</code> value), then
+polls the servers for status until they&rsquo;re all up to date.</p>
+<p>To run a command in the background, you set the following options:</p>
+<ul>
+<li><code>-B &lt;seconds&gt;</code>: the maximum amount of time (in seconds) to let the job
+run.</li>
+<li><code>-P &lt;seconds&gt;</code>: the amount of time (in seconds) to wait between
+polling the servers for an updated job status.</li>
+</ul>
+<h4 id="chap05.xhtml_leanpub-auto-update-servers-asynchronously-monitoring-progress">Update servers asynchronously, monitoring progress<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Let&rsquo;s run <code>yum -y update</code> on all our servers to get them up to date. If
+we leave out <code>-P</code>, Ansible defaults to polling every 10 seconds:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -s -B 3600 -a &quot;yum -y update&quot;
+background launch...
+<p>192.168.60.6 | success &gt;&gt; {
+&quot;ansible_job_id&quot;: &quot;763350539037&quot;,
+&quot;results_file&quot;: &quot;/root/.ansible_async/763350539037&quot;,
+&quot;started&quot;: 1
+}</p>
+<p>&hellip; [other hosts] &hellip;</code></pre></p>
+</div>
+</figure>
+<p>Wait a little while (or a <em>long</em> while, depending on how old the system
+image is we used to build our example VMs!), and eventually, you should
+see something like:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>&lt;job 763350539037&gt; finished on 192.168.60.6 =&gt; {
+    &quot;ansible_job_id&quot;: &quot;763350539037&quot;,
+    &quot;changed&quot;: true,
+    &quot;cmd&quot;: [
+        &quot;yum&quot;,
+        &quot;-y&quot;,
+        &quot;update&quot;
+    ],
+    &quot;delta&quot;: &quot;0:13:13.973892&quot;,
+    &quot;end&quot;: &quot;2021-02-09 04:47:58.259723&quot;,
+    &quot;finished&quot;: 1,
+<p>&hellip; [more info and stdout from job] &hellip;</code></pre></p>
+</div>
+</figure>
+<p>While a background task is running, you can also check on the status
+elsewhere using Ansible&rsquo;s <code>async_status</code> module, as long as you have the
+<code>ansible_job_id</code> value to pass in as <code>jid</code>:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -s -m async_status -a &quot;jid=763350539037&quot;</code></pre>
+</div>
+</figure>
+<h4 id="chap05.xhtml_leanpub-auto-fire-and-forget-tasks">Fire-and-forget tasks<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>You may also need to run occasional long-running maintenance scripts, or
+other tasks that take many minutes or hours to complete, and you&rsquo;d
+rather not babysit the task. In these cases, you can set the <code>-B</code> value
+as high as you want (be generous, so your task will complete before
+Ansible kills it!), and set <code>-P</code> to &lsquo;0&rsquo;, so Ansible fires off the
+command then forgets about it:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -B 3600 -P 0 -a &quot;/path/to/fire-and-forget-script.sh&quot;
+background launch...
+<p>192.168.60.5 | success &gt;&gt; {
+&quot;ansible_job_id&quot;: &quot;204960925196&quot;,
+&quot;results_file&quot;: &quot;/root/.ansible_async/204960925196&quot;,
+&quot;started&quot;: 1
+}</p>
+<p>&hellip; [other hosts] &hellip;</p>
+<p>$</code></pre></p>
+</div>
+</figure>
+<p>Running the command this way doesn&rsquo;t allow status updates via
+<code>async_status</code> and a jid, but you can still inspect the file
+<code>~/.ansible_async/&lt;jid&gt;</code> on the remote server. This option is usually
+more helpful for &lsquo;fire-and-forget&rsquo; tasks.</p>
+<aside class="warning blurb">
+<p>For tasks you don&rsquo;t track remotely, it&rsquo;s usually a good idea to log the
+progress of the task <em>somewhere</em>, and also send some sort of alert on
+failure&mdash;especially, for example, when running backgrounded tasks that
+perform backup operations, or when running business-critical database
+maintenance tasks.</p>
+</aside>
+<p>You can also run tasks in Ansible playbooks in the background,
+asynchronously, by defining an <code>async</code> and <code>poll</code> parameter on the play.
+We&rsquo;ll discuss playbook task backgrounding in later chapters.</p>
+<h3 id="chap05.xhtml_leanpub-auto-check-log-files">Check log files<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Sometimes, when debugging application errors, or diagnosing outages or
+other problems, you need to check server log files. Any common log file
+operation (like using <code>tail</code>, <code>cat</code>, <code>grep</code>, etc.) works through the
+<code>ansible</code> command, with a few caveats:</p>
+<ol>
+<li>Operations that continuously monitor a file, like <code>tail -f</code>, won&rsquo;t
+work via Ansible, because Ansible only displays output after the
+operation is complete, and you won&rsquo;t be able to send the Control-C
+command to stop following the file. Someday, the async module might
+have this feature, but for now, it&rsquo;s not possible.</li>
+<li>It&rsquo;s not a good idea to run a command that returns a huge amount of
+data via stdout via Ansible. If you&rsquo;re going to cat a file larger
+than a few KB, you should probably log into the server(s)
+individually.</li>
+<li>If you redirect and filter output from a command run via Ansible,
+you need to use the <code>shell</code> module instead of Ansible&rsquo;s default
+<code>command</code> module (add <code>-m shell</code> to your commands).</li>
+</ol>
+<p>As a simple example, let&rsquo;s view the last few lines of the messages log
+file on each of our servers:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -s -a &quot;tail /var/log/messages&quot;</code></pre>
+</div>
+</figure>
+<p>As stated in the caveats, if you want to filter the messages log with
+something like <code>grep</code>, you can&rsquo;t use Ansible&rsquo;s default <code>command</code> module,
+but instead, <code>shell</code>:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -s -m shell -a &quot;tail /var/log/messages | \
+grep ansible-command | wc -l&quot;
+<p>192.168.60.5 | success | rc=0 &gt;&gt;
+12</p>
+<p>192.168.60.4 | success | rc=0 &gt;&gt;
+12</p>
+<p>192.168.60.6 | success | rc=0 &gt;&gt;
+14</code></pre></p>
+</div>
+</figure>
+<p>This command shows how many ansible commands have been run on each
+server (the numbers you get may be different).</p>
+<h3 id="chap05.xhtml_leanpub-auto-manage-cron-jobs">Manage cron jobs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Periodic tasks run via cron are managed by a system&rsquo;s crontab. Normally,
+to change cron job settings on a server, you would log into the server,
+use <code>crontab -e</code> under the account where the cron jobs reside, and type
+in an entry with the interval and job.</p>
+<p>Ansible makes managing cron jobs easy with its <code>cron</code> module. If you
+want to run a shell script on all the servers every day at 4 a.m., add
+the cron job with:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -s -m cron -a &quot;name=&#39;daily-cron-all-servers&#39; \
+hour=4 job=&#39;/path/to/daily-script.sh&#39;&quot;</code></pre>
+</div>
+</figure>
+<p>Ansible will assume <code>*</code> for all values you don&rsquo;t specify (valid values
+are <code>day</code>, <code>hour</code>, <code>minute</code>, <code>month</code>, and <code>weekday</code>). You could also
+specify special time values like <code>reboot</code>, <code>yearly</code>, or <code>monthly</code> using
+<code>special_time=[value]</code>. You can also set the user the job will run under
+via <code>user=[user]</code>, and create a backup of the current crontab by passing
+<code>backup=yes</code>.</p>
+<p>What if we want to remove the cron job? Simple enough, use the same
+<code>cron</code> command, and pass the name of the cron job you want to delete,
+and <code>state=absent</code>:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible multi -s -m cron -a &quot;name=&#39;daily-cron-all-servers&#39; state=absent&quot;</code></pre>
+</div>
+</figure>
+<p>You can also use Ansible to manage custom crontab files; use the same
+syntax as you used earlier, but specify the location to the cron file
+with: <code>cron_file=cron_file_name</code> (where <code>cron_file_name</code> is a cron file
+located in <code>/etc/cron.d</code>).</p>
+<aside class="information blurb">
+<p>Ansible denotes Ansible-managed crontab entries by adding a comment on
+the line above the entry like <code>#Ansible: daily-cron-all-servers</code>. It&rsquo;s
+best to leave things be in the crontab itself, and always manage entries
+via ad-hoc commands or playbooks using Ansible&rsquo;s <code>cron</code> module.</p>
+</aside>
+<h3 id="chap05.xhtml_leanpub-auto-deploy-a-version-controlled-application">Deploy a version-controlled application<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>For simple application deployments, where you may need to update a git
+checkout, or copy a new bit of code to a group of servers, then run a
+command to finish the deployment, Ansible&rsquo;s ad-hoc mode can help. For
+more complicated deployments, use Ansible playbooks and rolling update
+features (which will be discussed in later chapters) to ensure
+successful deployments with zero downtime.</p>
+<p>In the example below, I&rsquo;ll assume we&rsquo;re running a simple application on
+one or two servers, in the directory <code>/opt/myapp</code>. This directory is a
+git repository cloned from a central server or a service like GitHub,
+and application deployments and updates are done by updating the clone,
+then running a shell script at <code>/opt/myapp/scripts/update.sh</code>.</p>
+<p>First, update the git checkout to the application&rsquo;s new version branch,
+1.2.4, on all the app servers:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible app -s -m git -a &quot;repo=git://example.com/path/to/repo.git \
+dest=/opt/myapp update=yes version=1.2.4&quot;</code></pre>
+</div>
+</figure>
+<p>Ansible&rsquo;s git module lets you specify a branch, tag, or even a specific
+commit with the <code>version</code> parameter (in this case, we chose to checkout
+tag <code>1.2.4</code>, but if you run the command again with a branch name, like
+<code>prod</code>, Ansible will happily do that instead). To force Ansible to
+update the checked-out copy, we passed in <code>update=yes</code>. The <code>repo</code> and
+<code>dest</code> options should be self-explanatory.</p>
+<aside class="information blurb">
+<p>If you get a message saying &ldquo;Failed to find required executable git&rdquo;,
+you will need to install Git on the server. To do so, run the ad-hoc
+command <code>ansible app -s -m yum -a &quot;name=git state=present&quot;</code> (substitute
+your OS&rsquo;s package manager for <code>yum</code>).</p>
+<p>If you get a message saying the Git server has an &ldquo;unknown hostkey&rdquo;, add
+the option <code>accept_hostkey=yes</code> to the command, or add the hostkey to
+your server&rsquo;s <code>known_hosts</code> file before running this command.</p>
+</aside>
+<p>Then, run the application&rsquo;s <code>update.sh</code> shell script:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible app -s -a &quot;/opt/myapp/update.sh&quot;</code></pre>
+</div>
+</figure>
+<p>Ad-hoc commands are fine for the simple deployments (like our example
+above), but you should use Ansible&rsquo;s more powerful and flexible
+application deployment features described later in this book if you have
+complex application or infrastructure needs. See especially the &lsquo;Rolling
+Updates&rsquo; section later in this book.</p>
+<h3 id="chap05.xhtml_leanpub-auto-ansibles-ssh-connection-history">Ansible&rsquo;s SSH connection history<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>One of Ansible&rsquo;s greatest features is its ability to function without
+running any extra applications or daemons on the servers it manages.
+Instead of using a proprietary protocol to communicate with the servers,
+Ansible uses the standard and secure SSH connection that is commonly
+used for basic administration on almost every Linux server running
+today.</p>
+<p>Since a stable, fast, and secure SSH connection is the heart of
+Ansible&rsquo;s communication abilities, Ansible&rsquo;s implementation of SSH has
+continually improved throughout the past few years&mdash;and is still
+improving today.</p>
+<p>One thing that is universal to all of Ansible&rsquo;s SSH connection methods
+is that Ansible uses the connection to transfer one or a few files
+defining a play or command to the remote server, then runs the
+play/command, then deletes the transferred file(s), and reports back the
+results. This sequence of events may change and become more
+simple/direct with later versions of Ansible (see the notes on Ansible
+1.5 below), but a fast, stable, and secure SSH connection is of
+paramount importance to Ansible.</p>
+<h4 id="chap05.xhtml_leanpub-auto-paramiko">Paramiko<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>In the beginning, Ansible used paramiko&mdash;an open source SSH2
+implementation for Python&mdash;exclusively. However, as a single library
+for a single language (Python), development of paramiko doesn&rsquo;t keep
+pace with development of OpenSSH (the standard implementation of SSH
+used almost everywhere), and its performance and security is slightly
+worse than OpenSSH&mdash;at least to this writer&rsquo;s eyes.</p>
+<p>Ansible continues to support the use of paramiko, and even chooses it as
+the default for systems (like RHEL 5/6) which don&rsquo;t support
+ControlPersist&mdash;an option present only in OpenSSH 5.6 or newer.
+(ControlPersist allows SSH connections to persist so frequent commands
+run over SSH don&rsquo;t have to go through the initial handshake over and
+over again until the <code>ControlPersist</code> timeout set in the server&rsquo;s SSH
+config is reached.)</p>
+<h4 id="chap05.xhtml_leanpub-auto-openssh-default">OpenSSH (default)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Beginning in Ansible 1.3, Ansible defaulted to using native OpenSSH
+connections to connect to servers supporting ControlPersist. Ansible had
+this ability since version 0.5, but didn&rsquo;t default to it until 1.3.</p>
+<p>Most local SSH configuration parameters (like hosts, key files, etc.)
+are respected, but if you need to connect via a port other than port 22
+(the default SSH port), you need to specify the port in an inventory
+file (<code>ansible_ssh_port</code> option) or when running <code>ansible</code> commands.</p>
+<p>OpenSSH is faster, and a little more reliable, than paramiko, but there
+are ways to make Ansible faster still.</p>
+<h4 id="chap05.xhtml_leanpub-auto-accelerated-mode">Accelerated Mode<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>While not too helpful for ad-hoc commands, Ansible&rsquo;s Accelerated mode
+achieves greater performance for playbooks. Instead of connecting
+repeatedly via SSH, Ansible connects via SSH initially, then uses the
+AES key used in the initial connection to communicate further commands
+and transfers via a separate port (5099 by default, but this is
+configurable).</p>
+<p>The only extra package required to use accelerated mode is
+<code>python-keyczar</code>, and almost everything in normal OpenSSH/Paramiko mode
+works in Accelerated mode, with two exceptions when using <code>sudo</code>:</p>
+<ul>
+<li>Your sudoers file needs to have <code>requiretty</code> disabled (comment out the
+line with it, or set it per user by changing the line to
+<code>Defaults:username !requiretty</code>).</li>
+<li>You must disable sudo passwords by setting <code>NOPASSWD</code> in the sudoers
+file.</li>
+</ul>
+<p>Accelerated mode can offer 2-4 times faster performance (especially for
+things like file transfers) compared to OpenSSH, and you can enable it
+for a playbook by adding the option <code>accelerate: true</code> to your playbook,
+like so:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>---
+- hosts: all
+  accelerate: true
+  [...]</code></pre>
+</div>
+</figure>
+<p>It goes without saying, if you use accelerated mode, you need to have
+the port through which it communicates open in your firewall (port 5099
+by default, or whatever port you set with the <code>accelerate_port</code> option
+after <code>accelerate</code>).</p>
+<p>Accelerate mode is a spiritual descendant of the now-deprecated
+&lsquo;Fireball&rsquo; mode, which used a similar method for accelerating Ansible
+communications, but required ZeroMQ to be installed on the controlled
+server (which is at odds with Ansible&rsquo;s simple no-dependency, no-daemon
+philosophy), and didn&rsquo;t work with sudo commands at all.</p>
+<h4 id="chap05.xhtml_leanpub-auto-faster-openssh-in-ansible-15">Faster OpenSSH in Ansible 1.5+<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Ansible 1.5 and later contains a very nice improvement to Ansible&rsquo;s
+default OpenSSH implementation.</p>
+<p>Instead of copying files, running them on the remote server, then
+removing them, the new method of OpenSSH transfer will send and execute
+commands for most Ansible modules directly over the SSH connection.</p>
+<p>This method of connection is only available in Ansible 1.5+, and it can
+be enabled by adding <code>pipelining=True</code> under the <code>[ssh_connection]</code>
+section of the Ansible configuration file (<code>ansible.cfg</code>, which will be
+covered in more detail later).</p>
+<aside class="warning blurb">
+<p>The <code>pipelining=True</code> configuration option won&rsquo;t help much unless you
+have removed or commented the <code>Defaults requiretty</code> option in
+<code>/etc/sudoers</code>. This is commented out in the default configuration for
+most OSes, but you might want to double-check this setting to make sure
+you&rsquo;re getting the fastest connection possible!</p>
+</aside>
+<aside class="warning blurb">
+<p>If you&rsquo;re running a recent version of Mac OS X, Ubuntu, Windows with
+Cygwin, or most other OS for the host from which you run <code>ansible</code> and
+<code>ansible-playbook</code>, you should be running OpenSSH version 5.6 or later,
+which works perfectly with the <code>ControlPersist</code> setting used with all of
+Ansible&rsquo;s SSH connections settings.</p>
+<p>If the host on which Ansible runs has RHEL or CentOS, however, you might
+need to update your version of OpenSSH so it supports the
+faster/persistent connection method. Any OpenSSH version 5.6 or greater
+should work. To install a later version, either compile from source, or
+use a different repository (like
+<a href="http://mirror.neu.edu.cn/CentALT/readme.txt" rel="external" target="_blank">CentALT</a> and
+<code>yum update openssh</code>.</p>
+</aside>
+<h3 id="chap05.xhtml_leanpub-auto-summary-2">Summary<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>In this chapter, you learned how to build a multi-server infrastructure
+for testing on your local workstation using Vagrant, and you configured,
+monitored, and managed the infrastructure without ever logging in to an
+individual server. You also learned how Ansible connects to remote
+servers, and how to use the <code>ansible</code> command to perform tasks on many
+servers quickly in parallel, or one by one.</p>
+<p>By now, you should be getting familiar with the basics of Ansible, and
+you should be able to start managing your own infrastructure more
+efficiently.</p>
+<figure class="code">
+<div class="highlight">
+<pre><code> ______________________________________
+/ It&#39;s easier to seek forgiveness than \
+\ ask for permission. (Proverb)        /
+ --------------------------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||</code></pre>
+</div>
+</figure>
+:::
+<p>[]{#chap06.xhtml}</p>
+<p>::: {}</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="parent " data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606" checked><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="active hidden " data-nav-id="/ansible/ansible4devops/chapter-3---ad-hoc-commands/"><a class="padding" href="/ansible/ansible4devops/chapter-3---ad-hoc-commands/"><i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ad-hoc-ansible-commands/"><a class="padding" href="/ansible/ad-hoc-ansible-commands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-documentation/"><a class="padding" href="/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-facts/"><a class="padding" href="/ansible/ansible-facts/">Ansible Facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-galaxy-roles/"><a class="padding" href="/ansible/ansible-galaxy-roles/">Ansible Galaxy Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-inventory/"><a class="padding" href="/ansible/ansible-inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-playbooks/"><a class="padding" href="/ansible/ansible-playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-ansible-roles/"><a class="padding" href="/ansible/using-ansible-roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-inventory-command/"><a class="padding" href="/ansible/ansible-inventory-command/">Ansible-inventory command<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible.cfg/"><a class="padding" href="/ansible/ansible.cfg/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/building-an-ansible-lab-with-ansible/"><a class="padding" href="/ansible/building-an-ansible-lab-with-ansible/">Building an Ansible lab with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/common-modules-with-examples/"><a class="padding" href="/ansible/common-modules-with-examples/">Common modules with examples<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/discovering-storage-related-facts/"><a class="padding" href="/ansible/discovering-storage-related-facts/">Discovering storage related facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/dynamic-inventory/"><a class="padding" href="/ansible/dynamic-inventory/">Dynamic Inventory<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/execution-environments/"><a class="padding" href="/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/host-name-patterns/"><a class="padding" href="/ansible/host-name-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/including-and-importing-files/"><a class="padding" href="/ansible/including-and-importing-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2-templates/"><a class="padding" href="/ansible/jinja2-templates/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-ansible-errors-and-logs/"><a class="padding" href="/ansible/managing-ansible-errors-and-logs/">Managing Ansible Errors and Logs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-packages/"><a class="padding" href="/ansible/managing-packages/">Managing Packages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-partitions-and-lvm/"><a class="padding" href="/ansible/managing-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-services/"><a class="padding" href="/ansible/managing-services/">Managing Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/networking-with-ansible/"><a class="padding" href="/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/nfs-setup/"><a class="padding" href="/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimizing-ansible-processing/"><a class="padding" href="/ansible/optimizing-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/repositories-and-subscriptions/"><a class="padding" href="/ansible/repositories-and-subscriptions/">Repositories and subscriptions<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux-file-properties/"><a class="padding" href="/ansible/selinux-file-properties/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/setting-up-an-ansible-lab/"><a class="padding" href="/ansible/setting-up-an-ansible-lab/">Setting up an Ansible Lab<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/troubleshooting-common-scenarios/"><a class="padding" href="/ansible/troubleshooting-common-scenarios/">Troubleshooting Common Scenarios<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/users-and-groups/"><a class="padding" href="/ansible/users-and-groups/">Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-loops-and-items/"><a class="padding" href="/ansible/using-loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-modules-for-troubleshooting-and-testing/"><a class="padding" href="/ansible/using-modules-for-troubleshooting-and-testing/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-multiple-inventories/"><a class="padding" href="/ansible/using-multiple-inventories/">Using Multiple Inventories<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-rhel-system-roles/"><a class="padding" href="/ansible/using-rhel-system-roles/">Using RHEL System roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-tags/"><a class="padding" href="/ansible/using-tags/">Using Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-when-to-run-tasks-conditionally/"><a class="padding" href="/ansible/using-when-to-run-tasks-conditionally/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Variables<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/boot/"><input type="checkbox" id="R-section-a53bfb333437907a8d5bdc636d15c75d" aria-controls="R-subsections-a53bfb333437907a8d5bdc636d15c75d"><label for="R-section-a53bfb333437907a8d5bdc636d15c75d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Boot</span></label><a class="padding default-animation" href="/boot/"><i class="fa-solid fa-hourglass-start"></i> Boot<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-a53bfb333437907a8d5bdc636d15c75d" class="collapsible-menu">
+            <li class="" data-nav-id="/boot/boot-process-grub2-and-kernel/"><a class="padding" href="/boot/boot-process-grub2-and-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/boot/system-initialization-message-logging-and-system-tuning/"><a class="padding" href="/boot/system-initialization-message-logging-and-system-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5"><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="" data-nav-id="/containers/containers-1/"><a class="padding" href="/containers/containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/learning-touch-typing/"><a class="padding" href="/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/files/"><input type="checkbox" id="R-section-31e56884d732922d4a0e407592968056" aria-controls="R-subsections-31e56884d732922d4a0e407592968056"><label for="R-section-31e56884d732922d4a0e407592968056"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Files</span></label><a class="padding default-animation" href="/files/"><i class="fa-solid fa-copy"></i> Files<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-31e56884d732922d4a0e407592968056" class="collapsible-menu">
+            <li class="" data-nav-id="/files/advanced-file-management/"><a class="padding" href="/files/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/files/file-management/"><a class="padding" href="/files/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-synchronization/"><a class="padding" href="/networking/dns-and-time-synchronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/resources-for-passing-ccna/"><a class="padding" href="/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/"><i class="fa-solid fa-box-open"></i> Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
+            <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
+            <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/local-file-systems-and-swap/"><a class="padding" href="/storage/local-file-systems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/network-file-system-nfs/"><a class="padding" href="/storage/network-file-system-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/partitioning-mbr-and-gpt/"><a class="padding" href="/storage/partitioning-mbr-and-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/remove-a-filesystem-from-a-partition/"><a class="padding" href="/storage/remove-a-filesystem-from-a-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/system/"><input type="checkbox" id="R-section-0ea554b019cc5a3e6337c45b68b3a647" aria-controls="R-subsections-0ea554b019cc5a3e6337c45b68b3a647"><label for="R-section-0ea554b019cc5a3e6337c45b68b3a647"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/system/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-0ea554b019cc5a3e6337c45b68b3a647" class="collapsible-menu">
+            <li class="" data-nav-id="/system/installation/"><a class="padding" href="/system/installation/">Installation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/system/interaction/"><a class="padding" href="/system/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/system/process-and-task-scheduling/"><a class="padding" href="/system/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-vagrant-on-linux/"><a class="padding" href="/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-man-pages/"><a class="padding" href="/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users and Groups</span></label><a class="padding default-animation" href="/users-and-groups/"><i class="fa-solid fa-users"></i> Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
+            <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/virtualization/"><input type="checkbox" id="R-section-da8ee4406de37987b502b79e5b0a9d1c" aria-controls="R-subsections-da8ee4406de37987b502b79e5b0a9d1c"><label for="R-section-da8ee4406de37987b502b79e5b0a9d1c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualization</span></label><a class="padding default-animation" href="/virtualization/"><i class="fa-solid fa-microchip"></i> Virtualization<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-da8ee4406de37987b502b79e5b0a9d1c" class="collapsible-menu">
+            <li class="" data-nav-id="/virtualization/rhcsa-vagrant-lab-setup/"><a class="padding" href="/virtualization/rhcsa-vagrant-lab-setup/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1772206888" defer></script>
+    <script src="/js/theme.min.js?1772206888" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

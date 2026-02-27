@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="description" content="The confusing world of SELinux">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Security Enhanced Linux :: Linux Documentation Site">
+    <meta name="twitter:description" content="The confusing world of SELinux">
+    <meta property="og:url" content="https://linuxreader.com/cyber-security/security-enhanced-linux/">
+    <meta property="og:site_name" content="Linux Documentation Site">
+    <meta property="og:title" content="Security Enhanced Linux :: Linux Documentation Site">
+    <meta property="og:description" content="The confusing world of SELinux">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Cyber Security">
+    <meta itemprop="name" content="Security Enhanced Linux :: Linux Documentation Site">
+    <meta itemprop="description" content="The confusing world of SELinux">
+    <meta itemprop="wordCount" content="5032">
+    <title>Security Enhanced Linux :: Linux Documentation Site</title>
+    <link href="/cyber-security/security-enhanced-linux/index.md" rel="alternate" type="text/markdown" title="Security Enhanced Linux :: Linux Documentation Site">
+    <link href="/images/favicon.svg?1772206888" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1772206888" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1772206888" defer></script>
+    <script src="/js/search-lunr.min.js?1772206888" defer></script>
+    <script src="/js/search.min.js?1772206888" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1772206888";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1772206888" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1772206888" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1772206888" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1772206888" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1772206888" rel="stylesheet">
+    <link href="/css/theme.min.css?1772206888" rel="stylesheet">
+    <link href="/css/format-html.min.css?1772206888" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = `.min`;
+      window.relearn.path='\/cyber-security\/security-enhanced-linux\/';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='https:\/\/linuxreader.com';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/cyber-security/security-enhanced-linux/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#selinux-terminology">SELinux Terminology</a>
+      <ul>
+        <li><a href="#key-terms">Key Terms</a></li>
+      </ul>
+    </li>
+    <li><a href="#selinux-contexts">SELinux Contexts</a>
+      <ul>
+        <li><a href="#selinux-contexts-for-users">SELinux Contexts for Users</a></li>
+        <li><a href="#selinux-contexts-for-processes">SELinux Contexts for Processes</a></li>
+        <li><a href="#selinux-contexts-for-files">SELinux Contexts for Files</a></li>
+        <li><a href="#copying-moving-and-archiving-files-with-selinux-contexts">Copying, Moving, and Archiving Files with SELinux Contexts</a></li>
+        <li><a href="#selinux-contexts-for-ports">SELinux Contexts for Ports</a></li>
+      </ul>
+    </li>
+    <li><a href="#domain-transitioning">Domain Transitioning</a></li>
+    <li><a href="#selinux-booleans">SELinux Booleans</a></li>
+    <li><a href="#selinux-administration">SELinux Administration</a>
+      <ul>
+        <li><a href="#management-commands">Management Commands</a></li>
+        <li><a href="#viewing-and-controlling-selinux-operational-state">Viewing and Controlling SELinux Operational State</a></li>
+        <li><a href="#querying-status">Querying Status</a></li>
+        <li><a href="#lab-modify-selinux-file-context">Lab: Modify SELinux File Context</a></li>
+        <li><a href="#lab-add-and-apply-file-context">Lab: Add and Apply File Context</a></li>
+        <li><a href="#lab-add-and-delete-network-ports">Lab: Add and Delete Network Ports</a></li>
+        <li><a href="#lab-copy-files-with-and-without-context">Lab: Copy Files with and without Context</a></li>
+        <li><a href="#exercise-20-5-view-and-toggle-selinux-boolean-values">Exercise 20-5: View and Toggle SELinux Boolean Values</a></li>
+        <li><a href="#monitoring-and-analyzing-selinux-violations">Monitoring and Analyzing SELinux Violations</a></li>
+        <li><a href="#lab-get-an-avc-deny-message">Lab Get an AVC deny message</a></li>
+      </ul>
+    </li>
+    <li><a href="#selinux-diy-labs">SELinux DIY Labs</a>
+      <ul>
+        <li><a href="#lab-disable-and-enable-the-selinux-operating-mode">Lab: Disable and Enable the SELinux Operating Mode</a></li>
+        <li><a href="#lab-modify-context-on-files">Lab: Modify Context on Files</a></li>
+        <li><a href="#lab-add-network-port-to-policy-database">Lab: Add Network Port to Policy Database</a></li>
+        <li><a href="#lab-copy-files-with-and-without-context-1">Lab: Copy Files with and without Context</a></li>
+        <li><a href="#lab-flip-selinux-booleans">Lab: Flip SELinux Booleans</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/cyber-security/"><span itemprop="name">Cyber Security</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">Security Enhanced Linux</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/cyber-security/security-enhanced-linux/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/cyber-security/" title="Cyber Security (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/cyber-security/the-linux-firewall/" title="The Linux Firewall (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable cyber-security" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="security-enhanced-linux">Security Enhanced Linux</h1>
+
+<h2 id="selinux-terminology">SELinux Terminology<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>
+<p>Implementation of the Mandatory Access Control (MAC) architecture</p>
+<ul>
+<li>developed by the U.S. National Security Agency (NSA)</li>
+<li>flexible, enriched, and granular security controls in Linux.</li>
+<li>integrated into the Linux kernel as a set of patches using the Linux Security Modules (LSM) framework
+<ul>
+<li>allows the kernel to support various security implementations</li>
+</ul>
+</li>
+<li>provides an added layer of protection above and beyond the standard Linux Discretionary Access Control (DAC) security architecture.</li>
+<li>DAC includes:
+<ul>
+<li>traditional file and directory permissions</li>
+<li>extended attribute settings</li>
+<li>setuid/setgid bits</li>
+<li>su/sudo privileges</li>
+<li>etc.</li>
+</ul>
+</li>
+<li>Limits the ability of a <strong>subject</strong> (Linux user or process) to access an <strong>object</strong> (file, directory, file system, device, network interface/connection, port, pipe, socket, etc.)
+<ul>
+<li>To reduce or eliminate the potential damage the subject may be able to inflict on the system if compromised.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>MAC controls</strong></p>
+<ul>
+<li>Fine-grained</li>
+<li>Protect other services in the event one service is negotiated.</li>
+<li>Example:
+<ul>
+<li>If the HTTP service process is compromised, the attacker can only damage the files the hacked process will have access to, and not the other processes running on the system, or the objects the other processes will have access to.</li>
+</ul>
+</li>
+<li>To ensure this coarse-grained control, MAC uses a set of defined authorization rules called <strong>policy</strong> to examine security attributes associated with subjects and objects when a subject tries to access an object, and decides whether to permit the access attempt.</li>
+<li>These attributes are stored in <strong>contexts</strong> (a.k.a. <strong>labels</strong>), and are applied to both subjects and objects.</li>
+</ul>
+</li>
+<li>
+<p>SELinux decisions are stored in a special cache area called <strong>Access</strong> <strong>Vector Cache</strong> (<strong>AVC</strong>).</p>
+</li>
+<li>
+<p>This cache area is checked for each access attempt by a process to determine whether the access attempt was previously allowed.</p>
+</li>
+<li>
+<p>With this mechanism in place, SELinux does not have to check the policy ruleset repeatedly, thus improving performance.</p>
+</li>
+<li>
+<p>SELinux is enabled by default</p>
+<ul>
+<li>Confines processes to the bare minimum privileges that they need to function.</li>
+</ul>
+</li>
+</ul>
+<h3 id="key-terms">Key Terms<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><strong>Subject</strong></p>
+<ul>
+<li>Any user or process that accesses an object.</li>
+<li>Examples:
+<ul>
+<li><em>system_u</em> for the SELinux system user</li>
+<li><em>unconfined_u</em> for subjects that are not bound by the SELinux policy</li>
+</ul>
+</li>
+<li>Stored in field 1 of the context.</li>
+</ul>
+<p><strong>Object</strong></p>
+<ul>
+<li>A resource, such as a file, directory, hardware device, network interface/connection, port, pipe, or socket, that a subject accesses.</li>
+<li>Examples:
+<ul>
+<li><em>object_r</em> for general objects</li>
+<li><em>system_r</em> for system-owned objects</li>
+<li><em>unconfined_r</em> for objects that are not bound by the SELinux policy.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Access</strong></p>
+<ul>
+<li>An action performed by the subject on an object.</li>
+<li>Examples:
+<ul>
+<li>creating, reading, or updating a file</li>
+<li>creating or navigating a directory</li>
+<li>accessing a network port or socket</li>
+</ul>
+</li>
+</ul>
+<p><strong>Policy</strong></p>
+<ul>
+<li>A defined ruleset that is enforced system-wide</li>
+<li>Used to analyze security attributes assigned to subjects and objects.</li>
+<li>Referenced to decide whether to permit a subject&rsquo;s access attempt to an object, or a subject&rsquo;s attempt to interact with another subject.</li>
+<li>The default behavior of SELinux in the absence of a rule is to deny the access.</li>
+<li>Standard preconfigured policies:
+<ul>
+<li><strong>targeted</strong> (default)
+<ul>
+<li>Any process that is targeted runs in a confined domain</li>
+<li>Any process that is not targeted runs in an unconfined domain.</li>
+<li>Example:
+<ul>
+<li>SELinux runs logged-in users in the unconfined domain, and the httpd process in a confined domain by default.</li>
+<li>Any subject running unconfined is more vulnerable than the one running confined.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>mls</strong>
+<ul>
+<li>Places tight security controls at deeper levels.</li>
+</ul>
+</li>
+<li><strong>minimum</strong>
+<ul>
+<li>light version of the targeted policy</li>
+<li>designed to protect only selected processes.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Context</strong> (label)</p>
+<ul>
+<li>A tag to store security attributes for subjects and objects.</li>
+<li>Every subject and object has a context assigned</li>
+<li>Consists of a SELinux user, role, type (or domain), and sensitivity level.</li>
+<li>Used by SELinux  to make access control decisions.</li>
+</ul>
+<p><strong>Labeling</strong></p>
+<ul>
+<li>Mapping of files with their stored contexts.</li>
+</ul>
+<p><strong>SELinux User</strong></p>
+<ul>
+<li>Several predefined SELinux user identities that are authorized for a particular set of roles.</li>
+<li>Linux user to SELinux user identity mapping to place SELinux user restrictions on Linux users.</li>
+<li>Controls what roles and levels a process (with a particular SELinux user identity) can enter.</li>
+<li>Example:
+<ul>
+<li>A Linux user cannot run the <code>su</code> and <code>sudo</code> commands or the programs located in their home directories if they are mapped to the SELinux user <em>user_u</em>.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Role</strong></p>
+<ul>
+<li>An attribute of the <strong>Role-Based Access Control (RBAC)</strong> security model that is part of SELinux.</li>
+<li>Classifies who (subject) is allowed to access what (domains or types).</li>
+<li>SELinux users are authorized for roles, and roles are authorized for domains and types.</li>
+<li>Each subject has an associated role to ensure that the system and user processes are separated.</li>
+<li>A subject can transition into a new role to gain access to other domains and types.</li>
+<li>Examples:
+<ul>
+<li><em>user_r</em> for ordinary users</li>
+<li><em>sysadm_r</em> for administrators</li>
+<li><em>system_r</em> for processes that initiate under the <em>system_r</em> role</li>
+</ul>
+</li>
+<li>Stored in field 2 of the context.</li>
+</ul>
+<p><strong>Type Enforcement</strong> (TE)</p>
+<ul>
+<li>Identifies and limits a subject&rsquo;s ability to access domains for processes, and types for files.</li>
+<li>References the contexts of the subjects and objects for this enforcement.</li>
+</ul>
+<p><strong>Type</strong></p>
+<ul>
+<li>Attribute of type enforcement.</li>
+<li>Group of objects based on uniformity in their security requirements.</li>
+<li>Objects such as files and directories with common security requirements, are grouped within a specific type.</li>
+<li>Examples:
+<ul>
+<li><em>user_home_dir_t</em> for objects located in user home directories</li>
+<li><em>usr_t</em> for most objects stored in the /usr directory.</li>
+</ul>
+</li>
+<li>Stored in field 3 of a file context.</li>
+</ul>
+<p><strong>Domain</strong></p>
+<ul>
+<li>Determines the type of access that a process has.</li>
+<li>Processes with common security requirements are grouped within a specific domain type, and they run confined within that domain.</li>
+<li>Examples:
+<ul>
+<li><em>init_t</em> for the systemd process</li>
+<li><em>firewalld_t</em> for the firewalld process</li>
+<li><em>unconfined_t</em> for all processes that are not bound by SELinux policy.</li>
+</ul>
+</li>
+<li>Stored in field 3 of a process context.</li>
+</ul>
+<p><strong>Rules</strong></p>
+<ul>
+<li>Outline how types can access each other, domains can access types, and domains can access each other.</li>
+</ul>
+<p><strong>Level</strong></p>
+<ul>
+<li>An attribute of <strong>Multi-Level Security (MLS)</strong> and <strong>Multi-Category</strong> <strong>Security (MCS)</strong>.</li>
+<li>Pair of <em>sensitivity:category</em> values that defines the level of security in the context.</li>
+<li><em>category</em> may be defined as a single value or a range of values, such as c0.c4 to represent c0 through c4.</li>
+<li>In RHEL 9, the targeted policy is used as the default, which enforces <strong>MCS</strong> (MCS supports only one sensitivity level (s0) with 0 to 1023 different categories).</li>
+</ul>
+<h2 id="selinux-contexts">SELinux Contexts<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="selinux-contexts-for-users">SELinux Contexts for Users<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>SELinux contexts define security attributes placed on subjects and objects.</li>
+<li>Each context contains a type and a security level with subject and object information.</li>
+</ul>
+<p>Use the <code>id</code> command with the <code>-Z</code> option to view the context set on Linux users:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># id -Z</span>
+</span></span><span style="display:flex;"><span>unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023</span></span></code></pre></div>
+<p>Output:</p>
+<ul>
+<li>
+<p>Mapped to the SELinux unconfined_u user</p>
+</li>
+<li>
+<p>No SELinux restrictions placed on this user.</p>
+</li>
+<li>
+<p>All Linux users, including root, run unconfined by default, (full system access)</p>
+</li>
+<li>
+<p>Seven confined user identities with restricted access to objects.</p>
+<ul>
+<li>Mapped to Linux users via SELinux policy.</li>
+<li>Helps safeguard the system from potential damage that Linux users might inflict on the system.</li>
+</ul>
+</li>
+</ul>
+<p>Use the <code>seinfo</code> query command to list the SELinux users; however, the <code>setools-console</code> software package must be installed before doing so.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># seinfo -u</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Users: <span style="color:#a5d6ff">8</span>
+</span></span><span style="display:flex;"><span>   guest_u
+</span></span><span style="display:flex;"><span>   root
+</span></span><span style="display:flex;"><span>   staff_u
+</span></span><span style="display:flex;"><span>   sysadm_u
+</span></span><span style="display:flex;"><span>   system_u
+</span></span><span style="display:flex;"><span>   unconfined_u
+</span></span><span style="display:flex;"><span>   user_u
+</span></span><span style="display:flex;"><span>   xguest_u</span></span></code></pre></div>
+<p>Use the <code>semanage</code> command to view the mapping between Linux and SELinux users:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># semanage login -l</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Login Name           SELinux User         MLS/MCS Range        Service
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>__default__          unconfined_u         s0-s0:c0.c1023       *
+</span></span><span style="display:flex;"><span>root                 unconfined_u         s0-s0:c0.c1023       *</span></span></code></pre></div>
+<p><strong>MLS/MCS Range</strong></p>
+<ul>
+<li>Associated security level and the context for the Linux user (the * represents all services).</li>
+<li>By default, all non-root Linux users are represented as <code>__default__</code>, which is mapped to the unconfined_u user in the policy.</li>
+</ul>
+<h3 id="selinux-contexts-for-processes">SELinux Contexts for Processes<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Determine the context for processes using the <code>ps</code> command with the <code>-Z</code> flag:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ps -eZ | head -2</span>
+</span></span><span style="display:flex;"><span>LABEL                               PID TTY          TIME CMD
+</span></span><span style="display:flex;"><span>system_u:system_r:init_t:s0           <span style="color:#a5d6ff">1</span> ?        00:00:02 systemd</span></span></code></pre></div>
+<p>Output:</p>
+<ul>
+<li>
+<p>The subject <em>system_u</em> is a SELinux username (mapped to Linux user root)</p>
+</li>
+<li>
+<p>Object is <em>system_r</em></p>
+</li>
+<li>
+<p>Domain <em>init_t</em> reveals the type of protection applied to the process.</p>
+</li>
+<li>
+<p>Level of security <code>s0</code></p>
+</li>
+<li>
+<p>A process that is unprotected will run in the unconfined_t domain.</p>
+</li>
+</ul>
+<h3 id="selinux-contexts-for-files">SELinux Contexts for Files<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><code>ls -Z</code></p>
+<ul>
+<li>View context for files and directories.</li>
+</ul>
+<p>Show the four attributes set on the /etc/passwd file:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -lZ /etc/passwd</span>
+</span></span><span style="display:flex;"><span>-rw-r--r--. <span style="color:#a5d6ff">1</span> root root system_u:object_r:passwd_file_t:s0 <span style="color:#a5d6ff">2806</span> Jul <span style="color:#a5d6ff">19</span> 21:54 /etc/passwd</span></span></code></pre></div>
+<ul>
+<li>Subject <em>system_u</em></li>
+<li>Object <em>object_r</em></li>
+<li>Type <code>passwd_file_t</code></li>
+<li>Security level <code>s0</code> for the passwd file.</li>
+</ul>
+<p><em>/etc/selinux/targeted/contexts/files/file_contexts</em>
+<em>/etc/selinux/targeted/contexts/files/file_contexts.local</em></p>
+<ul>
+<li>Stores contexts for system-installed and user-created files.</li>
+<li>Policy files.</li>
+<li>Can be updated using the <code>semanage</code> command.</li>
+</ul>
+<h3 id="copying-moving-and-archiving-files-with-selinux-contexts">Copying, Moving, and Archiving Files with SELinux Contexts<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>All files in RHEL are labeled with an SELINUX security context by default.</li>
+<li>New files inherit the parent directory&rsquo;s context at the time of creation.</li>
+</ul>
+<p>Rules for copy move and archive:</p>
+<ol>
+<li>
+<p>If a file is copied to a different directory, the destination file will receive the destination directory&rsquo;s context, unless the <code>--preserve=context</code> switch is specified with the <code>cp</code> command to retain the source file&rsquo;s original context.</p>
+</li>
+<li>
+<p>If a copy operation overwrites the destination file in the same or different directory, the file being copied will receive the context of the overwritten file, unless the <code>--preserve=context</code> switch is specified with the <code>cp</code> command to preserve the source file&rsquo;s original context.</p>
+</li>
+<li>
+<p>If a file is moved to the same or different directory, the SELinux context will remain intact, which may differ from the destination directory&rsquo;s context.</p>
+</li>
+<li>
+<p>If a file is archived with the tar command, use the <code>--selinux</code> option to preserve the context.</p>
+</li>
+</ol>
+<h3 id="selinux-contexts-for-ports">SELinux Contexts for Ports<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>View attributes for network ports with the <code>semanage</code> command:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># semanage port -l | head -7</span>
+</span></span><span style="display:flex;"><span>SELinux Port Type              Proto    Port Number
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>afs3_callback_port_t           tcp      <span style="color:#a5d6ff">7001</span>
+</span></span><span style="display:flex;"><span>afs3_callback_port_t           udp      <span style="color:#a5d6ff">7001</span>
+</span></span><span style="display:flex;"><span>afs_bos_port_t                 udp      <span style="color:#a5d6ff">7007</span>
+</span></span><span style="display:flex;"><span>afs_fs_port_t                  tcp      <span style="color:#a5d6ff">2040</span>
+</span></span><span style="display:flex;"><span>afs_fs_port_t                  udp      7000, <span style="color:#a5d6ff">7005</span></span></span></code></pre></div>
+<ul>
+<li>By default, SELinux allows services to listen on a restricted set of network ports only.</li>
+</ul>
+<h2 id="domain-transitioning">Domain Transitioning<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>SELinux allows a process running in one domain to enter another domain to execute an application that is restricted to run in that domain only.</li>
+<li>A rule must exist in the policy to support such transition.</li>
+<li><strong>entrypoint</strong>
+<ul>
+<li>Permission setting</li>
+<li>Control processes that can transition into another domain.</li>
+</ul>
+</li>
+</ul>
+<p>Example:
+What happens when a Linux user attempts to change their password using the <code>/usr/bin/passwd</code> command.</p>
+<p>The <code>passwd</code> command is labeled with the passwd_exec_t type:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -lZ /usr/bin/passwd</span>
+</span></span><span style="display:flex;"><span>-rwsr-xr-x. <span style="color:#a5d6ff">1</span> root root system_u:object_r:passwd_exec_t:s0 <span style="color:#a5d6ff">32648</span> Aug <span style="color:#a5d6ff">10</span>  <span style="color:#a5d6ff">2021</span> /usr/bin/passwd</span></span></code></pre></div>
+<p>The <code>passwd</code> command requires access to the <code>/etc/shadow</code> file in order to modify a user password. The shadow file has a different type set on it
+(<em>shadow_t</em>):</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>**<span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -lZ /etc/shadow</span>
+</span></span><span style="display:flex;"><span>----------. <span style="color:#a5d6ff">1</span> root root system_u:object_r:shadow_t:s0 <span style="color:#a5d6ff">2756</span> Jul <span style="color:#a5d6ff">19</span> 21:54 /etc/shadow</span></span></code></pre></div>
+<ul>
+<li>The SELinux policy has rules that specifically allow processes running in domain <em>passwd_t</em> to read and modify the files with type <em>shadow_t</em>, and allow them <strong>entrypoint</strong> permission into domain <em>passwd_exec_t</em>.</li>
+<li>This rule enables the user&rsquo;s shell process executing the <code>passwd</code> command to switch into the <em>passwd_t</em> domain and update the shadow file.</li>
+</ul>
+<p>Open two terminal windows. In window 1, issue the passwd command as
+user1 and wait at the prompt:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user1@server30 root<span style="color:#ff7b72;font-weight:bold">]</span>$ passwd
+</span></span><span style="display:flex;"><span>Changing password <span style="color:#ff7b72">for</span> user user1.
+</span></span><span style="display:flex;"><span>Current password: </span></span></code></pre></div>
+<p>In window 2, run the ps command:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ps -eZ | grep passwd</span>
+</span></span><span style="display:flex;"><span>unconfined_u:unconfined_r:passwd_t:s0-s0:c0.c1023 <span style="color:#a5d6ff">13001</span> pts/1 00:00:00 passwd</span></span></code></pre></div>
+<ul>
+<li>The <code>passwd</code> command (process) transitioned into the <em>passwd_t</em> domain to change the user password.</li>
+</ul>
+<h2 id="selinux-booleans">SELinux Booleans<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>on/off switches that SELinux uses to determine whether to permit an action.</li>
+<li>Activate or deactivate certain rule in the SELinux policy immediately and without the need to recompile or reload the policy.</li>
+<li>For instance, the <em>ftpd_anon_write</em> Boolean can be turned on to enable anonymous users to upload files.</li>
+<li>This privilege can be revoked by turning this Boolean off.</li>
+<li>Boolean values are stored in virtual files located in <em>/sys/fs/selinux/booleans/</em>.</li>
+<li>The filenames match the Boolean names.</li>
+</ul>
+<p>A sample listing of this directory is provided below:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -l /sys/fs/selinux/booleans/ | head -7</span>
+</span></span><span style="display:flex;"><span>total <span style="color:#a5d6ff">0</span>
+</span></span><span style="display:flex;"><span>-rw-r--r--. <span style="color:#a5d6ff">1</span> root root <span style="color:#a5d6ff">0</span> Jul <span style="color:#a5d6ff">23</span> 04:44 abrt_anon_write
+</span></span><span style="display:flex;"><span>-rw-r--r--. <span style="color:#a5d6ff">1</span> root root <span style="color:#a5d6ff">0</span> Jul <span style="color:#a5d6ff">23</span> 04:44 abrt_handle_event
+</span></span><span style="display:flex;"><span>-rw-r--r--. <span style="color:#a5d6ff">1</span> root root <span style="color:#a5d6ff">0</span> Jul <span style="color:#a5d6ff">23</span> 04:44 abrt_upload_watch_anon_write
+</span></span><span style="display:flex;"><span>-rw-r--r--. <span style="color:#a5d6ff">1</span> root root <span style="color:#a5d6ff">0</span> Jul <span style="color:#a5d6ff">23</span> 04:44 antivirus_can_scan_system
+</span></span><span style="display:flex;"><span>-rw-r--r--. <span style="color:#a5d6ff">1</span> root root <span style="color:#a5d6ff">0</span> Jul <span style="color:#a5d6ff">23</span> 04:44 antivirus_use_jit
+</span></span><span style="display:flex;"><span>-rw-r--r--. <span style="color:#a5d6ff">1</span> root root <span style="color:#a5d6ff">0</span> Jul <span style="color:#a5d6ff">23</span> 04:44 auditadm_exec_content</span></span></code></pre></div>
+<ul>
+<li>
+<p>The manual pages of the Booleans are available through the <code>selinux-policy-doc</code> package.</p>
+</li>
+<li>
+<p>Once installed, use the <code>-K</code> option with the <code>man</code> command to bring the pages up for a specific Boolean.</p>
+</li>
+<li>
+<p>For instance, issue <code>man -K abrt_anon_write</code> to view the manual pages for the <code>abrt_anon_write</code> Boolean.</p>
+</li>
+<li>
+<p>Can be viewed, and flipped temporarily or for permanence.</p>
+</li>
+<li>
+<p>New value takes effect right away.</p>
+</li>
+<li>
+<p>Temporary changes are stored as a &ldquo;1&rdquo; or &ldquo;0&rdquo; in the corresponding Boolean file in the <em>/sys/fs/selinux/booleans/</em></p>
+</li>
+<li>
+<p>Permanent changes are saved in the policy database.</p>
+</li>
+</ul>
+<h2 id="selinux-administration">SELinux Administration<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Controlling the activation mode, checking operational status, setting security contexts on subjects and objects, and switching Boolean values.</li>
+</ul>
+<p>Utilities and the commands they provide</p>
+<ul>
+<li><code>libselinux-utils</code>
+<ul>
+<li><code>getenforce</code></li>
+<li><code>getsebool</code></li>
+</ul>
+</li>
+<li><code>policycoreutils</code>
+<ul>
+<li><code>sestatus</code></li>
+<li><code>setsebool</code></li>
+<li><code>restorecon</code></li>
+</ul>
+</li>
+<li><code>policycoreutils-python-utils</code>
+<ul>
+<li><code>semanage</code></li>
+</ul>
+</li>
+<li><code>setools-console</code>
+<ul>
+<li><code>seinfo</code></li>
+<li><code>sesearch</code></li>
+</ul>
+</li>
+</ul>
+<p><strong>SELinux Alert Browser</strong></p>
+<ul>
+<li>
+<p>Graphical tool for viewing alerts and debugging SELinux issues.</p>
+</li>
+<li>
+<p>Part of the <code>setroubleshoot-server</code> package.</p>
+</li>
+<li>
+<p>In order to fully manage SELinux, you need to ensure that all these packages are installed on the system.</p>
+</li>
+</ul>
+<h3 id="management-commands">Management Commands<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>SELinux delivers a variety of commands for effective administration.
+Table 20-1 lists and describes the commands mentioned above plus a few more under various management categories.</p>
+<p><strong>Mode Management</strong></p>
+<p><code>getenforce</code></p>
+<ul>
+<li>Displays the current mode of operation</li>
+</ul>
+<p><code>grubby</code></p>
+<ul>
+<li>Updates and displays information about the configuration files for the grub2 boot loader</li>
+</ul>
+<p><code>sestatus</code></p>
+<ul>
+<li>Shows SELinux runtime status and Boolean values</li>
+</ul>
+<p><code>setenforce</code></p>
+<ul>
+<li>Switches the operating mode between enforcing and permissive temporarily</li>
+</ul>
+<p><strong>Context Management</strong></p>
+<p><code>chcon</code></p>
+<ul>
+<li>Changes context on files (changes do not survive file system relabeling)</li>
+</ul>
+<p><code>restorecon</code></p>
+<ul>
+<li>Restores default contexts on files by referencing the files in  <em>/etc/selinux/targeted/contexts/files/</em></li>
+</ul>
+<p><code>semanage </code></p>
+<ul>
+<li>Changes context on files with the <code>fcontext</code> subcommand (changes survive file system relabeling)</li>
+</ul>
+<p><strong>Policy Management</strong></p>
+<p><code>seinfo </code></p>
+<ul>
+<li>Provides information on policy components</li>
+</ul>
+<p><code>semanage</code></p>
+<ul>
+<li>Manages policy database</li>
+</ul>
+<p><code>sesearch</code></p>
+<ul>
+<li>Searches rules in the policy database</li>
+</ul>
+<p><strong>Boolean Management</strong></p>
+<p><code>getsebool</code></p>
+<ul>
+<li>Displays Booleans and their current settings.</li>
+</ul>
+<p><code>setsebool</code></p>
+<ul>
+<li>Modifies Boolean values temporarily, or in the policy database.</li>
+</ul>
+<p><code>semanage</code></p>
+<ul>
+<li>Modifies Boolean values in the policy database with the <code>boolean</code>subcommand.</li>
+</ul>
+<p><strong>Troubleshooting</strong></p>
+<p><code>sealert</code></p>
+<ul>
+<li>The graphical troubleshooting tool</li>
+</ul>
+<h3 id="viewing-and-controlling-selinux-operational-state">Viewing and Controlling SELinux Operational State<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><em>/etc/selinux/config</em></p>
+<ul>
+<li>One of the key configuration files that controls the SELinux operational state, and sets its default type</li>
+</ul>
+<p>The default content of the file is displayed below:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># cat /etc/selinux/config</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># This file controls the state of SELinux on the system.</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># SELINUX= can take one of these three values:</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#     enforcing - SELinux security policy is enforced.</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#     permissive - SELinux prints warnings instead of enforcing.</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#     disabled - No SELinux policy is loaded.</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># See also:</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/using_selinux/changing-selinux-states-and-modes_using-selinux#changing-selinux-modes-at-boot-time_changing-selinux-states-and-modes</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># NOTE: Up to RHEL 8 release included, SELINUX=disabled would also</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># fully disable SELinux during boot. If you need a system with SELinux</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># fully disabled instead of SELinux running with no policy loaded, you</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># need to pass selinux=0 to the kernel command line. You can use grubby</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># to persistently set the bootloader to boot with selinux=0:</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#    grubby --update-kernel ALL --args selinux=0</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># To revert back to SELinux enabled:</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#    grubby --update-kernel ALL --remove-args selinux</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">SELINUX</span><span style="color:#ff7b72;font-weight:bold">=</span>enforcing
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># SELINUXTYPE= can take one of these three values:</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#     targeted - Targeted processes are protected,</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#     minimum - Modification of targeted policy. Only selected processes are protected.</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#     mls - Multi Level Security protection.</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">SELINUXTYPE</span><span style="color:#ff7b72;font-weight:bold">=</span>targeted</span></span></code></pre></div>
+<p>Directives:</p>
+<p><strong>SELINUX</strong></p>
+<ul>
+<li>Sets the activation mode for SELinux.</li>
+<li><em>Enforcing</em> activates it and allows or denies actions based on the policy rules.</li>
+<li><em>Permissive</em> activates SELinux, but permits all actions.
+<ul>
+<li>It records all security violations.</li>
+<li>Useful for troubleshooting and developing or tuning the policy.</li>
+</ul>
+</li>
+<li>The third option is to completely turn SELinux off. When running in enforcing mode</li>
+</ul>
+<p><strong>SELINUXTYPE</strong></p>
+<ul>
+<li>Dictates the type of policy to be enforced.</li>
+<li>Default is targeted.</li>
+</ul>
+<p>Determine the current operating mode:
+<code>getenforce</code></p>
+<p>Change the state to permissive and verify:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># setenforce permissive</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># getenforce</span>
+</span></span><span style="display:flex;"><span>Permissive</span></span></code></pre></div>
+<ul>
+<li>Can also &ldquo;0&rdquo; for permissive and a &ldquo;1&rdquo; for enforcing.</li>
+<li>Changes will be lost at the next system reboot.</li>
+<li>Edit  <em>/etc/selinux/config</em> <strong>SELINUX</strong> directive to the desired mode for persistence.</li>
+</ul>
+<p>EXAM TIP: You may switch SELinux to permissive for troubleshooting a
+non-functioning service. Don&rsquo;t forget to change it back to enforcing
+when the issue is resolved.</p>
+<p>Disable SELinux persistently:
+<code>grubby --update-kernel ALL --args selinux=0</code></p>
+<ul>
+<li>Appends the selinux=0 setting to the end of the &ldquo;options&rdquo; line in the bootloader configuration file located in the /boot/loader/entries directory:</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat /boot/loader/entries/dcb323fab47049e8b89dae2ae00d41e8-5.14.0-427.26.1.el9_4.x86_64.conf </span></span></code></pre></div>
+<p>Revert the above:
+<code>grubby --update-kernel ALL --remove-args selinux=0</code></p>
+<h3 id="querying-status">Querying Status<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><code>sestatus</code> Command</p>
+<ul>
+<li>View the current runtime status of SELinux</li>
+<li>Displays the location of principal directories, the policy in effect, and the activation mode.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># sestatus</span>
+</span></span><span style="display:flex;"><span>SELinux status:                 enabled
+</span></span><span style="display:flex;"><span>SELinuxfs mount:                /sys/fs/selinux
+</span></span><span style="display:flex;"><span>SELinux root directory:         /etc/selinux
+</span></span><span style="display:flex;"><span>Loaded policy name:             targeted
+</span></span><span style="display:flex;"><span>Current mode:                   permissive
+</span></span><span style="display:flex;"><span>Mode from config file:          enforcing
+</span></span><span style="display:flex;"><span>Policy MLS status:              enabled
+</span></span><span style="display:flex;"><span>Policy deny_unknown status:     allowed
+</span></span><span style="display:flex;"><span>Memory protection checking:     actual <span style="color:#ff7b72;font-weight:bold">(</span>secure<span style="color:#ff7b72;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>Max kernel policy version:      <span style="color:#a5d6ff">33</span></span></span></code></pre></div>
+<p><code>-v </code></p>
+<ul>
+<li>Report on security contexts set on files and processes, as listed in <em>/etc/sestatus.conf</em> .</li>
+<li>Reports the contexts for the current process (Current context) and the init (systemd) process (Init context) under Process Contexts.</li>
+<li>Reveals the file contexts for the controlling terminal and associated files under File Contexts.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># cat /etc/sestatus.conf</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>files<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>/etc/passwd
+</span></span><span style="display:flex;"><span>/etc/shadow
+</span></span><span style="display:flex;"><span>/bin/bash
+</span></span><span style="display:flex;"><span>/bin/login
+</span></span><span style="display:flex;"><span>/bin/sh
+</span></span><span style="display:flex;"><span>/sbin/agetty
+</span></span><span style="display:flex;"><span>/sbin/init
+</span></span><span style="display:flex;"><span>/sbin/mingetty
+</span></span><span style="display:flex;"><span>/usr/sbin/sshd
+</span></span><span style="display:flex;"><span>/lib/libc.so.6
+</span></span><span style="display:flex;"><span>/lib/ld-linux.so.2
+</span></span><span style="display:flex;"><span>/lib/ld.so.1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>process<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>/sbin/mingetty
+</span></span><span style="display:flex;"><span>/sbin/agetty
+</span></span><span style="display:flex;"><span>/usr/sbin/sshd</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># sestatus -v</span>
+</span></span><span style="display:flex;"><span>SELinux status:                 enabled
+</span></span><span style="display:flex;"><span>SELinuxfs mount:                /sys/fs/selinux
+</span></span><span style="display:flex;"><span>SELinux root directory:         /etc/selinux
+</span></span><span style="display:flex;"><span>Loaded policy name:             targeted
+</span></span><span style="display:flex;"><span>Current mode:                   permissive
+</span></span><span style="display:flex;"><span>Mode from config file:          enforcing
+</span></span><span style="display:flex;"><span>Policy MLS status:              enabled
+</span></span><span style="display:flex;"><span>Policy deny_unknown status:     allowed
+</span></span><span style="display:flex;"><span>Memory protection checking:     actual <span style="color:#ff7b72;font-weight:bold">(</span>secure<span style="color:#ff7b72;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>Max kernel policy version:      <span style="color:#a5d6ff">33</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Process contexts:
+</span></span><span style="display:flex;"><span>Current context:                unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+</span></span><span style="display:flex;"><span>Init context:                   system_u:system_r:init_t:s0
+</span></span><span style="display:flex;"><span>/sbin/agetty                    system_u:system_r:getty_t:s0-s0:c0.c1023
+</span></span><span style="display:flex;"><span>/usr/sbin/sshd                  system_u:system_r:sshd_t:s0-s0:c0.c1023
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>File contexts:
+</span></span><span style="display:flex;"><span>Controlling terminal:           unconfined_u:object_r:user_devpts_t:s0
+</span></span><span style="display:flex;"><span>/etc/passwd                     system_u:object_r:passwd_file_t:s0
+</span></span><span style="display:flex;"><span>/etc/shadow                     system_u:object_r:shadow_t:s0
+</span></span><span style="display:flex;"><span>/bin/bash                       system_u:object_r:shell_exec_t:s0
+</span></span><span style="display:flex;"><span>/bin/login                      system_u:object_r:login_exec_t:s0
+</span></span><span style="display:flex;"><span>/bin/sh                         system_u:object_r:bin_t:s0 -&gt; system_u:object_r:shell_exec_t:s0
+</span></span><span style="display:flex;"><span>/sbin/agetty                    system_u:object_r:getty_exec_t:s0
+</span></span><span style="display:flex;"><span>/sbin/init                      system_u:object_r:bin_t:s0 -&gt; system_u:object_r:init_exec_t:s0
+</span></span><span style="display:flex;"><span>/usr/sbin/sshd                  system_u:object_r:sshd_exec_t:s0</span></span></code></pre></div>
+<h3 id="lab-modify-selinux-file-context">Lab: Modify SELinux File Context<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Create a directory sedir1 under /tmp and a file sefile1 under sedir1.</li>
+<li>Check the context on the directory and file.</li>
+<li>Change the SELinux user and type to user_u and public_content_t on both and verify.</li>
+</ul>
+<p>1. Create the hierarchy sedir1/sefile1 under /tmp:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># cd /tmp</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># mkdir sedir1</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># touch sedir1/sefile1</span></span></span></code></pre></div>
+<p>2. Determine the context on the new directory and file:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -ldZ sedir1</span>
+</span></span><span style="display:flex;"><span> drwxr-xr-x. <span style="color:#a5d6ff">2</span> root root  unconfined_u:object_r:user_tmp_t:s0 <span style="color:#a5d6ff">21</span> Jul <span style="color:#a5d6ff">28</span> 15:12  sedir1 </span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -ldZ sedir1/sefile1</span>
+</span></span><span style="display:flex;"><span> -rw-r--r--. <span style="color:#a5d6ff">1</span> root root  unconfined_u:object_r:user_tmp_t:s0 <span style="color:#a5d6ff">0</span> Jul <span style="color:#a5d6ff">28</span> 15:12  sedir1/sefile1</span></span></code></pre></div>
+<p>3. Modify the SELinux user (<code>-u</code>) on the directory to <code>user_u</code> and type
+(<code>-t</code>) to <code>public_content_t</code> recursively (<code>-R</code>) with the <code>chcon</code> command:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># chcon -vu user_u -t  public_content_t sedir1 -R</span>
+</span></span><span style="display:flex;"><span> changing security context of <span style="color:#a5d6ff">&#39;sedir1/sefile1&#39;</span>
+</span></span><span style="display:flex;"><span> changing security context of <span style="color:#a5d6ff">&#39;sedir1&#39;</span></span></span></code></pre></div>
+<p>4. Validate the new context:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -ldZ sedir1</span>
+</span></span><span style="display:flex;"><span> drwxr-xr-x. <span style="color:#a5d6ff">2</span> root root  user_u:object_r:public_content_t:s0 <span style="color:#a5d6ff">21</span> Jul <span style="color:#a5d6ff">28</span> 15:12  sedir1</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -ldZ sedir1/sefile1</span>
+</span></span><span style="display:flex;"><span> -rw-r--r--. <span style="color:#a5d6ff">1</span> root root  user_u:object_r:public_content_t:s0 <span style="color:#a5d6ff">0</span> Jul <span style="color:#a5d6ff">28</span> 15:12  sedir1/sefile1</span></span></code></pre></div>
+<h3 id="lab-add-and-apply-file-context">Lab: Add and Apply File Context<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Add the current context on sedir1 to the SELinux policy database to ensure a relabeling will not reset it to its previous value</li>
+<li>Change the context on the directory to some random values.</li>
+<li>Restore the default context from the policy database back to the directory recursively.</li>
+</ul>
+<ol>
+<li>Determine the current context:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -ldZ sedir1</span>
+</span></span><span style="display:flex;"><span> drwxr-xr-x. <span style="color:#a5d6ff">2</span> root root  user_u:object_r:public_content_t:s0 <span style="color:#a5d6ff">21</span> Jul <span style="color:#a5d6ff">28</span> 15:12  sedir1</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -ldZ sedir1/sefile1</span>
+</span></span><span style="display:flex;"><span> -rw-r--r--. <span style="color:#a5d6ff">1</span> root root  user_u:object_r:public_content_t:s0 <span style="color:#a5d6ff">0</span> Jul <span style="color:#a5d6ff">28</span> 15:12  sedir1/sefile1</span></span></code></pre></div>
+<ol start="2">
+<li>Add (-a) the directory recursively to the policy database using the <code>semanage</code> command with the <code>fcontext</code> subcommand:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># semanage fcontext -a -s user_u -t public_content_t &#34;/tmp/sedir1(/.*)?&#34;</span></span></span></code></pre></div>
+<ul>
+<li>The regular expression (/.*)? instructs the command to include all files and subdirectories under /tmp/sedir1.
+<ul>
+<li>Needed only if recursion is required.</li>
+</ul>
+</li>
+</ul>
+<p>The above command added the context to the <em>/etc/selinux/targeted/contexts/files/file_contexts.local file</em>.</p>
+<ol>
+<li>Validate the addition by listing (-l) the recent changes (-C) in the policy database:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># semanage fcontext -Cl | grep  sedir</span>
+</span></span><span style="display:flex;"><span> /tmp/sedir1<span style="color:#ff7b72;font-weight:bold">(</span>/.*<span style="color:#ff7b72;font-weight:bold">)</span>?                                   all files           user_u:object_r:public_content_t:s0 </span></span></code></pre></div>
+<ol start="2">
+<li>Change the current context on sedir1 to something random (staff_u/etc_t) with the <code>chcon</code> command:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> root@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># chcon -vu staff_u -t etc_t  sedir1 -R</span>
+</span></span><span style="display:flex;"><span> changing security context of <span style="color:#a5d6ff">&#39;sedir1/sefile1&#39;</span>
+</span></span><span style="display:flex;"><span> changing security context of <span style="color:#a5d6ff">&#39;sedir1&#39;</span></span></span></code></pre></div>
+<ol>
+<li>The security context is changed successfully. Confirm with the <code>ls</code> command:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -ldZ sedir1 ; ls -lZ  sedir1/sefile1</span>
+</span></span><span style="display:flex;"><span> drwxr-xr-x. <span style="color:#a5d6ff">2</span> root root staff_u:object_r:etc_t:s0  <span style="color:#a5d6ff">21</span> Jul <span style="color:#a5d6ff">28</span> 15:12 sedir1
+</span></span><span style="display:flex;"><span> -rw-r--r--. <span style="color:#a5d6ff">1</span> root root staff_u:object_r:etc_t:s0 <span style="color:#a5d6ff">0</span>  Jul <span style="color:#a5d6ff">28</span> 15:12 sedir1/sefile1</span></span></code></pre></div>
+<ol>
+<li>Reinstate the context on the sedir1 directory recursively (<code>-R</code>) as stored in the policy database using the <code>restorecon</code> command: (-F option will update all attributes, only does type by default. )</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ restorecon -R -v -F sedir1
+</span></span><span style="display:flex;"><span>Relabeled /tmp/sedir1 from unconfined_u:object_r:public_content_t:s0 to user_u:object_r:public_content_t:s0
+</span></span><span style="display:flex;"><span>Relabeled /tmp/sedir1/sefile1 from unconfined_u:object_r:public_content_t:s0 to user_u:object_r:public_content_t:s0</span></span></code></pre></div>
+<h3 id="lab-add-and-delete-network-ports">Lab: Add and Delete Network Ports<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Add a non-standard network port 8010 to the SELinux policy database for the httpd service.</li>
+<li>Confirm the addition.</li>
+<li>Remove the port from the policy and verify the deletion.</li>
+</ul>
+<ol start="2">
+<li>List (<code>-l</code>) the ports for the httpd service as defined in the SELinux policy database:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># semanage port -l | grep ^http_port</span>
+</span></span><span style="display:flex;"><span> http_port_t                    tcp      80, 81, 443, 488, 8008, 8009, 8443, <span style="color:#a5d6ff">9000</span></span></span></code></pre></div>
+<p>The output reveals eight network ports the httpd process is currently allowed to listen on.</p>
+<ol>
+<li>Add port 8010 with type <code>http_port_t</code> and protocol tcp to the policy:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># semanage port -at http_port_t -p  tcp 8010</span></span></span></code></pre></div>
+<ol start="2">
+<li>Confirm the addition:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># semanage port -l | grep ^http_port</span>
+</span></span><span style="display:flex;"><span> http_port_t                    tcp      8010, 80,  81, 443, 488, 8008, 8009, 8443, <span style="color:#a5d6ff">9000</span></span></span></code></pre></div>
+<ol>
+<li>Delete port <code>8010</code> from the policy and confirm:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># semanage port -dp tcp 8010</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># semanage port -l | grep ^http_port</span>
+</span></span><span style="display:flex;"><span> http_port_t                    tcp      80, 81,  443, 488, 8008, 8009, 8443, <span style="color:#a5d6ff">9000</span></span></span></code></pre></div>
+<p>EXAM TIP: Any non-standard port you want to use for any service, make certain to add it to the SELinux policy database with the correct type.</p>
+<h3 id="lab-copy-files-with-and-without-context">Lab: Copy Files with and without Context<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Create a file called sefile2 under /tmp and display its context.</li>
+<li>Copy this file to the /etc/default directory, and observe the change in the context.</li>
+<li>Remove sefile2 from /etc/default, and copy it again to the same destination, ensuring that the target file receives the source file&rsquo;s context.</li>
+</ul>
+<p>1. Create file sefile2 under /tmp and show context:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># touch /tmp/sefile2</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -lZ /tmp/sefile2</span>
+</span></span><span style="display:flex;"><span> -rw-r--r--. <span style="color:#a5d6ff">1</span> root root  unconfined_u:object_r:user_tmp_t:s0 <span style="color:#a5d6ff">0</span> Jul <span style="color:#a5d6ff">29</span> 08:44  /tmp/sefile2</span></span></code></pre></div>
+<p>2. Copy this file to the /etc/default directory, and check the context again:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># cp /tmp/sefile2 /etc/default/</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -lZ /etc/default/sefile2</span>
+</span></span><span style="display:flex;"><span> -rw-r--r--. <span style="color:#a5d6ff">1</span> root root  unconfined_u:object_r:etc_t:s0 <span style="color:#a5d6ff">0</span> Jul <span style="color:#a5d6ff">29</span> 08:45  /etc/default/sefile2</span></span></code></pre></div>
+<p>3. Erase the <em>/etc/default/sefile2</em> file, and copy it again with the <code>--preserve=context</code> option:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># rm /etc/default/sefile2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># cp --preserve=context  /tmp/sefile2 /etc/default</span></span></span></code></pre></div>
+<p>4. List the file to view the context:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -lZ /etc/default/sefile2</span>
+</span></span><span style="display:flex;"><span> -rw-r--r--. <span style="color:#a5d6ff">1</span> root root  unconfined_u:object_r:user_tmp_t:s0 <span style="color:#a5d6ff">0</span> Jul <span style="color:#a5d6ff">29</span> 08:49  /etc/default/sefile2</span></span></code></pre></div>
+<h3 id="exercise-20-5-view-and-toggle-selinux-boolean-values">Exercise 20-5: View and Toggle SELinux Boolean Values<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Display the current state of the Boolean <code>nfs_export_all_rw</code>.</li>
+<li>Toggle its value temporarily, and reboot the system.</li>
+<li>Flip its value persistently after the system has been back up.</li>
+</ul>
+<p>1. Display the current setting of the Boolean <code>nfs_export_all_rw</code> using three different commands&mdash;<code>getsebool</code>, <code>sestatus</code>, and <code>semanage</code>:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># getsebool -a | grep  nfs_export_all_rw</span>
+</span></span><span style="display:flex;"><span> nfs_export_all_rw --&gt; on
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># sestatus -b | grep  nfs_export_all_rw</span>
+</span></span><span style="display:flex;"><span> nfs_export_all_rw                           on
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># semanage boolean -l | grep  nfs_export_all_rw</span>
+</span></span><span style="display:flex;"><span> nfs_export_all_rw              <span style="color:#ff7b72;font-weight:bold">(</span>on   ,   on<span style="color:#ff7b72;font-weight:bold">)</span>  Allow  nfs to export all rw
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># </span></span></span></code></pre></div>
+<p>2. Turn off the value of <code>nfs_export_all_rw</code> using the setsebool command by simply furnishing &ldquo;<code>off</code>&rdquo; or &ldquo;<code>0</code>&rdquo; with it and confirm:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># setsebool nfs_export_all_rw 0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># getsebool -a | grep  nfs_export_all_rw</span>
+</span></span><span style="display:flex;"><span> nfs_export_all_rw --&gt; off</span></span></code></pre></div>
+<p>3. Reboot the system and rerun the <code>getsebool</code> command to check the Boolean state:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># getsebool -a | grep  nfs_export_all_rw</span>
+</span></span><span style="display:flex;"><span> nfs_export_all_rw --&gt; on</span></span></code></pre></div>
+<p>4. Set the value of the Boolean persistently (<code>-P</code> or <code>-m</code> as needed) using either of the following:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># setsebool -P nfs_export_all_rw off</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># semanage boolean -m -0  nfs_export_all_rw</span></span></span></code></pre></div>
+<p>5. Validate the new value using the getsebool, sestatus, or semanage command:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># sestatus -b | grep  nfs_export_all_rw</span>
+</span></span><span style="display:flex;"><span> nfs_export_all_rw                           off
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># semanage boolean -l | grep  nfs_export_all_rw</span>
+</span></span><span style="display:flex;"><span> nfs_export_all_rw              <span style="color:#ff7b72;font-weight:bold">(</span>off  ,  off<span style="color:#ff7b72;font-weight:bold">)</span>  Allow  nfs to export all rw
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># semanage boolean -l | grep  nfs_export_all_rw </span>
+</span></span><span style="display:flex;"><span> nfs_export_all_rw              <span style="color:#ff7b72;font-weight:bold">(</span>off  ,  off<span style="color:#ff7b72;font-weight:bold">)</span>  Allow  nfs to export all rw</span></span></code></pre></div>
+<h3 id="monitoring-and-analyzing-selinux-violations">Monitoring and Analyzing SELinux Violations<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>
+<p>SELinux generates alerts for system activities when it runs in enforcing or permissive mode.</p>
+</li>
+<li>
+<p>It writes the alerts to <em>/var/log/audit/audit.log</em>if the <strong>auditd</strong> daemon is running, or to <em>/var/log/messages</em> via the <strong>rsyslog</strong> daemon in the absence of <strong>auditd</strong>.</p>
+</li>
+<li>
+<p>SELinux also logs the alerts that are generated due to denial of an action, and identifies them with a type tag <strong>AVC (Access Vector Cache)</strong> in the audit.log file.</p>
+</li>
+<li>
+<p>It also writes the rejection in the messages file with a message ID, and how to view the message details.</p>
+</li>
+<li>
+<p>SELinux denial messages are analyzed, and the audit data is examined to identify the potential cause of the rejection.</p>
+</li>
+<li>
+<p>The results of the analysis are recorded with recommendations on how to fix it.</p>
+</li>
+<li>
+<p>These results can be reviewed to aid in troubleshooting, and recommended actions taken to address the issue.</p>
+</li>
+<li>
+<p>SELinux runs a service daemon called <strong>setroubleshootd</strong> that performs this analysis and examination in the background.</p>
+</li>
+<li>
+<p>This service also has a client interface called <strong>SELinux Troubleshooter</strong> (the <code>sealert</code> command) that reads the data and displays it for assessment.</p>
+</li>
+<li>
+<p>The client tool has both text and graphical interfaces.</p>
+</li>
+<li>
+<p>The server and client components are part of the <code>setroubleshoot-server</code> software package that must be installed on the system prior to using this service.</p>
+</li>
+</ul>
+<p>How SELinux handles an incoming access request (from a subject) to a target object:</p>
+<p>Subject (eg: a process) makes an Action request (eg: read) &gt; SELinux Security Server checks the SELinux Policy Database &gt; if permission is not granted the AVC Denied Message is diaplayed. If Permission is granted, then access to object (eg: a file) is granted.</p>
+<p>su to root from user1 and view the log:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># cat /var/log/audit/audit.log |  tail -10</span>
+</span></span><span style="display:flex;"><span> ...
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">type</span><span style="color:#ff7b72;font-weight:bold">=</span>USER_START <span style="color:#79c0ff">msg</span><span style="color:#ff7b72;font-weight:bold">=</span>audit<span style="color:#ff7b72;font-weight:bold">(</span>1722274070.748:90<span style="color:#ff7b72;font-weight:bold">)</span>:  <span style="color:#79c0ff">pid</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">1394</span> <span style="color:#79c0ff">uid</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">1000</span> <span style="color:#79c0ff">auid</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span> <span style="color:#79c0ff">ses</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">1</span>  <span style="color:#79c0ff">subj</span><span style="color:#ff7b72;font-weight:bold">=</span>unconfined_u:unconfined_r:unconfined_t:s0- s0:c0.c1023 <span style="color:#79c0ff">msg</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#39;op=PAM:session_open  grantors=pam_keyinit,pam_limits,pam_systemd,pam_unix, pam_umask,pam_xauth acct=&#34;root&#34; exe=&#34;/usr/bin/su&#34;  hostname=? addr=? terminal=/dev/pts/0  res=success&#39;</span><span style="color:#79c0ff">UID</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#34;user1&#34;</span> <span style="color:#79c0ff">AUID</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#34;root&#34;</span></span></span></code></pre></div>
+<p>WIll show avc denied if denied.</p>
+<h3 id="lab-get-an-avc-deny-message">Lab Get an AVC deny message<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Change the SELinux type on the shadow file to something random (etc_t).</li>
+<li>Issue the <code>passwd</code> command as user1 to modify the password.</li>
+<li>Restored the type on the shadow file with <code>restorecon /etc/shadow</code>. '</li>
+<li>Re-try the password change.</li>
+</ul>
+<ol start="2">
+<li>Change the SELinux type on <em>/etc/shadow</em> to something random (etc_t)</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># chcon -vt etc_t /etc/shadow</span>
+</span></span><span style="display:flex;"><span> changing security context of <span style="color:#a5d6ff">&#39;/etc/shadow&#39;</span></span></span></code></pre></div>
+<ol start="3">
+<li>Issue the <code>passwd</code> command as user1 to modify the password:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server10 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># su user1</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>user1@server10 root<span style="color:#ff7b72;font-weight:bold">]</span>$ passwd
+</span></span><span style="display:flex;"><span> Changing password <span style="color:#ff7b72">for</span> user user1.
+</span></span><span style="display:flex;"><span> Current password: 
+</span></span><span style="display:flex;"><span> roopasswd: Authentication token manipulation error</span></span></code></pre></div>
+<p>The following is a sample denial record from the same file in raw format:</p>
+<p><a href="#R-image-c7c0903844a70cf28225858ea7f17fde" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/image-C7TMRBJO%201.jpg" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-c7c0903844a70cf28225858ea7f17fde"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/image-C7TMRBJO%201.jpg"></a></p>
+<ul>
+<li>AVC type</li>
+<li>Related to the <code>passwd</code> command (comm)</li>
+<li>Source context (<code>scontext</code>) <code>unconfined_u:unconfined_r:passwd_t:s0-s0:c0.c1023</code></li>
+<li><em>nshadow</em> file (name) with file type (<em>tclass</em>) &ldquo;file&rdquo;</li>
+<li>Target context (tcontext) <code>system_u:object_r:etc_t:s0</code></li>
+<li>Indicates the SELinux operating mode, which is enforcing <code>permissive=0</code>.</li>
+<li>This message indicates that the <em>/etc/shadow</em> file does not have the correct context set on it, and that&rsquo;s why SELinux prevented the <code>passwd</code> command from updating the user&rsquo;s password.</li>
+</ul>
+<p>Use <code>sealert</code> to analyze (<code>-a</code>) all <strong>AVC</strong> records in the <em>audit.log</em> file. This command produces a formatted report with all relevant details:</p>
+<p><a href="#R-image-ff2c84e8db5e3025b83ee94e92e5b2b0" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/image-WYWDQX1V%201.jpg" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-ff2c84e8db5e3025b83ee94e92e5b2b0"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/image-WYWDQX1V%201.jpg"></a></p>
+<h2 id="selinux-diy-labs">SELinux DIY Labs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="lab-disable-and-enable-the-selinux-operating-mode">Lab: Disable and Enable the SELinux Operating Mode<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Check and make a note of the current SELinux operating mode.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># getenforce</span>
+</span></span><span style="display:flex;"><span> Enforcing</span></span></code></pre></div>
+<ul>
+<li>Modify the configuration file and set the mode to disabled.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># vim /etc/selinux/config </span>
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">SELINUX</span><span style="color:#ff7b72;font-weight:bold">=</span>disabled</span></span></code></pre></div>
+<ul>
+<li>Reboot the system to apply the change.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># reboot</span></span></span></code></pre></div>
+<ul>
+<li>Run <code>sudo getenforce</code> to confirm the change when the system is up.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># getenforce</span>
+</span></span><span style="display:flex;"><span> Disabled</span></span></code></pre></div>
+<ul>
+<li>Restore the directive&rsquo;s value to enforcing in the configuration file, and reboot to apply the new mode.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># vim /etc/selinux/config</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">SELINUX</span><span style="color:#ff7b72;font-weight:bold">=</span>enforcing
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># reboot</span></span></span></code></pre></div>
+<ul>
+<li>Run <code>sudo getenforce</code> to confirm the mode when the system is up.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># getenforce</span>
+</span></span><span style="display:flex;"><span> Enforcing</span></span></code></pre></div>
+<h3 id="lab-modify-context-on-files">Lab: Modify Context on Files<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Create directory hierarchy <em>/tmp/d1/d2</em>.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> mkdir -p /tmp/d1/d2</span></span></code></pre></div>
+<ul>
+<li>Check the contexts on <em>/tmp/d1</em> and <em>/tmp/d1/d2</em>.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 d1<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -ldZ /tmp/d1</span>
+</span></span><span style="display:flex;"><span> drwxr-xr-x. <span style="color:#a5d6ff">3</span> root root unconfined_u:object_r:user_tmp_t:s0 <span style="color:#a5d6ff">16</span> Jul <span style="color:#a5d6ff">29</span> 13:17 /tmp/d1
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 d1<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -ldZ /tmp/d1/d2</span>
+</span></span><span style="display:flex;"><span> drwxr-xr-x. <span style="color:#a5d6ff">2</span> root root unconfined_u:object_r:user_tmp_t:s0 <span style="color:#a5d6ff">6</span> Jul <span style="color:#a5d6ff">29</span>  13:17 /tmp/d1/d2</span></span></code></pre></div>
+<ul>
+<li>Change the SELinux type on <em>/tmp/d1</em> to <code>etc_t</code> recursively with the <code>chcon</code> command and confirm.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># chcon -Rv -t etc_t /tmp/d1</span>
+</span></span><span style="display:flex;"><span> changing security context of <span style="color:#a5d6ff">&#39;/tmp/d1/d2&#39;</span>
+</span></span><span style="display:flex;"><span> changing security context of <span style="color:#a5d6ff">&#39;/tmp/d1&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -ldZ /tmp/d1</span>
+</span></span><span style="display:flex;"><span> drwxr-xr-x. <span style="color:#a5d6ff">3</span> root root unconfined_u:object_r:etc_t:s0 <span style="color:#a5d6ff">16</span> Jul <span style="color:#a5d6ff">29</span>  13:17 /tmp/d1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -ldZ /tmp/d1/d2</span>
+</span></span><span style="display:flex;"><span> drwxr-xr-x. <span style="color:#a5d6ff">2</span> root root unconfined_u:object_r:etc_t:s0 <span style="color:#a5d6ff">6</span> Jul <span style="color:#a5d6ff">29</span> 13:17 /tmp/d1/d2</span></span></code></pre></div>
+<ul>
+<li>Add <em>/tmp/d1</em> to the policy database with the <code>semanage</code> command to ensure the new context is persistent on the directory hierarchy.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># semanage fcontext -a -t etc_t /tmp/d1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># reboot</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -ldZ /tmp/d1</span>
+</span></span><span style="display:flex;"><span> drwxr-xr-x. <span style="color:#a5d6ff">3</span> root root unconfined_u:object_r:etc_t:s0 <span style="color:#a5d6ff">16</span> Jul <span style="color:#a5d6ff">29</span>  13:17 /tmp/d1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -ldZ /tmp/d1/d2</span>
+</span></span><span style="display:flex;"><span> drwxr-xr-x. <span style="color:#a5d6ff">2</span> root root unconfined_u:object_r:etc_t:s0 <span style="color:#a5d6ff">6</span> Jul <span style="color:#a5d6ff">29</span> 13:17 /tmp/d1/d2</span></span></code></pre></div>
+<h3 id="lab-add-network-port-to-policy-database">Lab: Add Network Port to Policy Database<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Add network port 9005 to the SELinux policy database for the secure HTTP service using the semanage command.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># semanage port -l | grep ^http_port</span>
+</span></span><span style="display:flex;"><span> http_port_t                    tcp      80, 81, 443, 488, 8008, 8009, 8443, <span style="color:#a5d6ff">9000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># semanage port -at http_port_t -p tcp 9005</span></span></span></code></pre></div>
+<ul>
+<li>Verify the addition.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># semanage port -l | grep ^http_port</span>
+</span></span><span style="display:flex;"><span> http_port_t                    tcp      9005, 80, 81, 443, 488, 8008, 8009, 8443, <span style="color:#a5d6ff">9000</span></span></span></code></pre></div>
+<h3 id="lab-copy-files-with-and-without-context-1">Lab: Copy Files with and without Context<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Create file <em>sef1</em> under <em>/tmp</em>.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># touch /tmp/sef1</span></span></span></code></pre></div>
+<ul>
+<li>Copy the file to the <em>/usr/local</em> directory.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># cp /tmp/sef1 /usr/local</span></span></span></code></pre></div>
+<ul>
+<li>Check and compare the contexts on both source and destination files.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -lZ /tmp/sef1</span>
+</span></span><span style="display:flex;"><span> -rw-r--r--. <span style="color:#a5d6ff">1</span> root root unconfined_u:object_r:user_tmp_t:s0 <span style="color:#a5d6ff">0</span> Jul <span style="color:#a5d6ff">29</span>  13:33 /tmp/sef1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -lZ /usr/local/sef1</span>
+</span></span><span style="display:flex;"><span> -rw-r--r--. <span style="color:#a5d6ff">1</span> root root unconfined_u:object_r:usr_t:s0 <span style="color:#a5d6ff">0</span> Jul <span style="color:#a5d6ff">29</span> 13:33 /usr/local/sef1</span></span></code></pre></div>
+<ul>
+<li>Create another file <em>sef2</em> under <em>/tmp</em> and copy it to the <em>/var/local</em> directory using the <code>--preserve=context</code> option with the <code>cp</code> command.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># touch /tmp/sef2</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># cp --preserve=context /tmp/sef2 /var/local/</span></span></span></code></pre></div>
+<ul>
+<li>Check and compare the contexts on both source and destination files.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -lZ /tmp/sef2 /var/local/sef2</span>
+</span></span><span style="display:flex;"><span> -rw-r--r--. <span style="color:#a5d6ff">1</span> root root unconfined_u:object_r:user_tmp_t:s0 <span style="color:#a5d6ff">0</span> Jul <span style="color:#a5d6ff">29</span>  13:35 /tmp/sef2
+</span></span><span style="display:flex;"><span> -rw-r--r--. <span style="color:#a5d6ff">1</span> root root unconfined_u:object_r:user_tmp_t:s0 <span style="color:#a5d6ff">0</span> Jul <span style="color:#a5d6ff">29</span>  13:36 /var/local/sef2</span></span></code></pre></div>
+<h3 id="lab-flip-selinux-booleans">Lab: Flip SELinux Booleans<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Check the current value of Boolean <code>ssh_use_tcpd</code> using the <code>getsebool</code> and <code>sestatus</code> commands.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># getsebool -a | grep ssh_use_tcpd</span>
+</span></span><span style="display:flex;"><span> ssh_use_tcpd --&gt; off</span></span></code></pre></div>
+<ul>
+<li>Use the <code>setsebool</code> command and toggle the value of the directive.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># setsebool ssh_use_tcpd 1 </span></span></span></code></pre></div>
+<ul>
+<li>Confirm the new value with the <code>getsebool</code>, <code>semanage</code>, or <code>sestatus</code> command.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># getsebool -a | grep ssh_use_tcpd</span>
+</span></span><span style="display:flex;"><span> ssh_use_tcpd --&gt; on
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># sestatus -b | grep ssh_use_tcpd</span>
+</span></span><span style="display:flex;"><span> ssh_use_tcpd                                on
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># semanage boolean -l | grep ssh_use_tcpd </span>
+</span></span><span style="display:flex;"><span> ssh_use_tcpd                   <span style="color:#ff7b72;font-weight:bold">(</span>on   ,  off<span style="color:#ff7b72;font-weight:bold">)</span>  Allow ssh to use tcpd</span></span></code></pre></div>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ad-hoc-ansible-commands/"><a class="padding" href="/ansible/ad-hoc-ansible-commands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-documentation/"><a class="padding" href="/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-facts/"><a class="padding" href="/ansible/ansible-facts/">Ansible Facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-galaxy-roles/"><a class="padding" href="/ansible/ansible-galaxy-roles/">Ansible Galaxy Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-inventory/"><a class="padding" href="/ansible/ansible-inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-playbooks/"><a class="padding" href="/ansible/ansible-playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-ansible-roles/"><a class="padding" href="/ansible/using-ansible-roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-inventory-command/"><a class="padding" href="/ansible/ansible-inventory-command/">Ansible-inventory command<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible.cfg/"><a class="padding" href="/ansible/ansible.cfg/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/building-an-ansible-lab-with-ansible/"><a class="padding" href="/ansible/building-an-ansible-lab-with-ansible/">Building an Ansible lab with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/common-modules-with-examples/"><a class="padding" href="/ansible/common-modules-with-examples/">Common modules with examples<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/discovering-storage-related-facts/"><a class="padding" href="/ansible/discovering-storage-related-facts/">Discovering storage related facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/dynamic-inventory/"><a class="padding" href="/ansible/dynamic-inventory/">Dynamic Inventory<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/execution-environments/"><a class="padding" href="/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/host-name-patterns/"><a class="padding" href="/ansible/host-name-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/including-and-importing-files/"><a class="padding" href="/ansible/including-and-importing-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2-templates/"><a class="padding" href="/ansible/jinja2-templates/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-ansible-errors-and-logs/"><a class="padding" href="/ansible/managing-ansible-errors-and-logs/">Managing Ansible Errors and Logs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-packages/"><a class="padding" href="/ansible/managing-packages/">Managing Packages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-partitions-and-lvm/"><a class="padding" href="/ansible/managing-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/managing-services/"><a class="padding" href="/ansible/managing-services/">Managing Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/networking-with-ansible/"><a class="padding" href="/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/nfs-setup/"><a class="padding" href="/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimizing-ansible-processing/"><a class="padding" href="/ansible/optimizing-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/repositories-and-subscriptions/"><a class="padding" href="/ansible/repositories-and-subscriptions/">Repositories and subscriptions<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux-file-properties/"><a class="padding" href="/ansible/selinux-file-properties/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/setting-up-an-ansible-lab/"><a class="padding" href="/ansible/setting-up-an-ansible-lab/">Setting up an Ansible Lab<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/troubleshooting-common-scenarios/"><a class="padding" href="/ansible/troubleshooting-common-scenarios/">Troubleshooting Common Scenarios<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/users-and-groups/"><a class="padding" href="/ansible/users-and-groups/">Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-loops-and-items/"><a class="padding" href="/ansible/using-loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-modules-for-troubleshooting-and-testing/"><a class="padding" href="/ansible/using-modules-for-troubleshooting-and-testing/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-multiple-inventories/"><a class="padding" href="/ansible/using-multiple-inventories/">Using Multiple Inventories<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-rhel-system-roles/"><a class="padding" href="/ansible/using-rhel-system-roles/">Using RHEL System roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-tags/"><a class="padding" href="/ansible/using-tags/">Using Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/using-when-to-run-tasks-conditionally/"><a class="padding" href="/ansible/using-when-to-run-tasks-conditionally/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Variables<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/boot/"><input type="checkbox" id="R-section-a53bfb333437907a8d5bdc636d15c75d" aria-controls="R-subsections-a53bfb333437907a8d5bdc636d15c75d"><label for="R-section-a53bfb333437907a8d5bdc636d15c75d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Boot</span></label><a class="padding default-animation" href="/boot/"><i class="fa-solid fa-hourglass-start"></i> Boot<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-a53bfb333437907a8d5bdc636d15c75d" class="collapsible-menu">
+            <li class="" data-nav-id="/boot/boot-process-grub2-and-kernel/"><a class="padding" href="/boot/boot-process-grub2-and-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/boot/system-initialization-message-logging-and-system-tuning/"><a class="padding" href="/boot/system-initialization-message-logging-and-system-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5"><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="" data-nav-id="/containers/containers-1/"><a class="padding" href="/containers/containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" checked><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="active " data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/learning-touch-typing/"><a class="padding" href="/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/files/"><input type="checkbox" id="R-section-31e56884d732922d4a0e407592968056" aria-controls="R-subsections-31e56884d732922d4a0e407592968056"><label for="R-section-31e56884d732922d4a0e407592968056"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Files</span></label><a class="padding default-animation" href="/files/"><i class="fa-solid fa-copy"></i> Files<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-31e56884d732922d4a0e407592968056" class="collapsible-menu">
+            <li class="" data-nav-id="/files/advanced-file-management/"><a class="padding" href="/files/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/files/file-management/"><a class="padding" href="/files/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-synchronization/"><a class="padding" href="/networking/dns-and-time-synchronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/resources-for-passing-ccna/"><a class="padding" href="/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/"><i class="fa-solid fa-box-open"></i> Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
+            <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
+            <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/local-file-systems-and-swap/"><a class="padding" href="/storage/local-file-systems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/network-file-system-nfs/"><a class="padding" href="/storage/network-file-system-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/partitioning-mbr-and-gpt/"><a class="padding" href="/storage/partitioning-mbr-and-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/remove-a-filesystem-from-a-partition/"><a class="padding" href="/storage/remove-a-filesystem-from-a-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/system/"><input type="checkbox" id="R-section-0ea554b019cc5a3e6337c45b68b3a647" aria-controls="R-subsections-0ea554b019cc5a3e6337c45b68b3a647"><label for="R-section-0ea554b019cc5a3e6337c45b68b3a647"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/system/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-0ea554b019cc5a3e6337c45b68b3a647" class="collapsible-menu">
+            <li class="" data-nav-id="/system/installation/"><a class="padding" href="/system/installation/">Installation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/system/interaction/"><a class="padding" href="/system/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/system/process-and-task-scheduling/"><a class="padding" href="/system/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-vagrant-on-linux/"><a class="padding" href="/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-man-pages/"><a class="padding" href="/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users and Groups</span></label><a class="padding default-animation" href="/users-and-groups/"><i class="fa-solid fa-users"></i> Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
+            <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/virtualization/"><input type="checkbox" id="R-section-da8ee4406de37987b502b79e5b0a9d1c" aria-controls="R-subsections-da8ee4406de37987b502b79e5b0a9d1c"><label for="R-section-da8ee4406de37987b502b79e5b0a9d1c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualization</span></label><a class="padding default-animation" href="/virtualization/"><i class="fa-solid fa-microchip"></i> Virtualization<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-da8ee4406de37987b502b79e5b0a9d1c" class="collapsible-menu">
+            <li class="" data-nav-id="/virtualization/rhcsa-vagrant-lab-setup/"><a class="padding" href="/virtualization/rhcsa-vagrant-lab-setup/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1772206888" defer></script>
+    <script src="/js/theme.min.js?1772206888" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>
