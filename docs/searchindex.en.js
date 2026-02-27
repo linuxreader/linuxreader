@@ -137,8 +137,8 @@ var relearn_searchindex = [
   },
   {
     "breadcrumb": "",
-    "content": "Hey, I’m David\nI’m a Linux system administrator and freelance writer. Click the links if you are here for RHCSA or RHCE notes. Or check out what I am up to Now. You can also subscribe to get updates on articles, book notes, and more. Ansible\rBash\rBoot\rContainers\rCyber Security\rDesktop\rFiles\rNetworking\rPackages\rStorage\rSystem\rTools\rUsers and Groups\rVirtualization",
-    "description": "Hey, I’m David\nI’m a Linux system administrator and freelance writer. Click the links if you are here for RHCSA or RHCE notes. Or check out what I am up to Now. You can also subscribe to get updates on articles, book notes, and more. Ansible\rBash\rBoot\rContainers\rCyber Security\rDesktop\rFiles\rNetworking\rPackages\rStorage\rSystem\rTools\rUsers and Groups\rVirtualization",
+    "content": "Hey, I’m David. This is my Linux documentation site. I’m an RHCSA certified Linux System Administrator. This is the place where I put all of my notes, tips, and tricks for Linux and other open-source tools.\nBrowse categories below or navigate using the sidebar.\nHave fun!\nAnsible\rBash\rBoot\rContainers\rCyber Security\rDesktop\rFiles\rNetworking\rPackages\rStorage\rSystem\rTools\rUsers and Groups\rVirtualization",
+    "description": "Hey, I’m David. This is my Linux documentation site. I’m an RHCSA certified Linux System Administrator. This is the place where I put all of my notes, tips, and tricks for Linux and other open-source tools.\nBrowse categories below or navigate using the sidebar.\nHave fun!\nAnsible\rBash\rBoot\rContainers\rCyber Security\rDesktop\rFiles\rNetworking\rPackages\rStorage\rSystem\rTools\rUsers and Groups\rVirtualization",
     "tags": [],
     "title": "Linux Reader",
     "uri": "/"
