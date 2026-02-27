@@ -11,4 +11,4 @@ featured_image = "images/bash.png"
   publishResources = true
 +++
 
-{{% children depth="3" description="true" headingdepth="4" type="list" %}}
+{{< children type="card" description="false" >}}

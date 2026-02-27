@@ -1,7 +1,9 @@
-+++
-title = 'Bash'
-description = 'Bash variables, redirections, history substitution, metacharacters, startup files, etc. '
-+++
+---
+title: 'Bash'
+description: 'Bash variables, redirections, history substitution, metacharacters, startup files, etc. '
+featured_image: images/Pasted%20image%2020250316051144.png
+---
+
 ## My name is Marcel and I'm partially a shell..
 
 ![](/images/Pasted%20image%2020250316051144.png)
