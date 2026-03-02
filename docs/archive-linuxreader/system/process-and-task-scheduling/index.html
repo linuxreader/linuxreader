@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=32883&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="description" content="Processes, priorities, and scheduling jobs.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Process and Task Scheduling">
+    <meta name="twitter:description" content="Processes, priorities, and scheduling jobs.">
+    <meta property="og:url" content="http://localhost:32883/archive-linuxreader/system/process-and-task-scheduling/">
+    <meta property="og:title" content="Process and Task Scheduling">
+    <meta property="og:description" content="Processes, priorities, and scheduling jobs.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="">
+    <meta itemprop="name" content="Process and Task Scheduling">
+    <meta itemprop="description" content="Processes, priorities, and scheduling jobs.">
+    <meta itemprop="wordCount" content="3488">
+    <title>Process and Task Scheduling</title>
+    <link href="/archive-linuxreader/system/process-and-task-scheduling/index.md" rel="alternate" type="text/markdown" title="Process and Task Scheduling">
+    <link href="/images/favicon.svg?1772467092" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1772467092" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1772467092" defer></script>
+    <script src="/js/search-lunr.js?1772467092" defer></script>
+    <script src="/js/search.js?1772467092" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1772467092";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1772467092" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1772467092" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1772467092" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1772467092" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1772467092" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1772467092" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1772467092" rel="stylesheet">
+    <link href="/css/theme.css?1772467092" rel="stylesheet">
+    <link href="/css/format-html.css?1772467092" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/archive-linuxreader\/system\/process-and-task-scheduling\/';
+      window.relearn.relBasePath='..\/..\/..';
+      window.relearn.relBaseUri='..\/..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:32883';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/archive-linuxreader/system/process-and-task-scheduling/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#processes-and-priorities">Processes and Priorities</a>
+      <ul>
+        <li><a href="#process-states">Process States</a></li>
+        <li><a href="#ps-command"><code>ps</code> command</a></li>
+        <li><a href="#top-command"><code>top</code> command</a></li>
+        <li><a href="#listing-a-specific-process">Listing a Specific Process</a></li>
+        <li><a href="#pidof-and-pgrep-command"><code>pidof</code> and <code>pgrep</code> command</a></li>
+        <li><a href="#listing-processes-by-user-and-group-ownership">Listing Processes by User and Group Ownership</a></li>
+        <li><a href="#process-niceness-and-priority">Process Niceness and Priority</a></li>
+        <li><a href="#nice-command"><code>nice</code> command</a></li>
+        <li><a href="#renice-command"><code>renice</code> command</a></li>
+        <li><a href="#controlling-processes-with-signals">Controlling Processes with Signals</a></li>
+        <li><a href="#kill-command"><code>kill</code> command</a></li>
+        <li><a href="#pkill-command">pkill command</a></li>
+      </ul>
+    </li>
+    <li><a href="#job-scheduling">Job Scheduling</a>
+      <ul>
+        <li><a href="#atd">atd</a></li>
+        <li><a href="#crond">crond</a></li>
+        <li><a href="#controlling-user-access">Controlling user access</a></li>
+        <li><a href="#scheduler-log-file">Scheduler Log File</a></li>
+        <li><a href="#at-command"><code>at</code> command</a></li>
+        <li><a href="#crontab">Crontab</a></li>
+        <li><a href="#crontab-command"><code>crontab</code> command</a></li>
+        <li><a href="#syntax-of-user-crontables">Syntax of User Crontables</a></li>
+        <li><a href="#anacron">Anacron</a></li>
+      </ul>
+    </li>
+    <li><a href="#process-and-task-scheduling-labs">Process and Task Scheduling Labs</a>
+      <ul>
+        <li><a href="#lab-ps">Lab: ps</a></li>
+        <li><a href="#lab-top">Lab: top</a></li>
+        <li><a href="#lab-list-a-specific-process">Lab: List a specific process</a></li>
+        <li><a href="#lab-listing-processes-by-user-and-group-ownership">Lab: Listing Processes by User and Group Ownership</a></li>
+        <li><a href="#lab-nice">Lab: nice</a></li>
+        <li><a href="#lab-start-processes-at-non-default-priorities-2-terminals">Lab: Start Processes at Non-Default Priorities (2 terminals)</a></li>
+        <li><a href="#lab-alter-process-priorities-2-terminals">Lab: Alter Process Priorities (2 terminals)</a></li>
+        <li><a href="#lab-controlling-processes-with-signals">Lab: Controlling Processes with Signals</a></li>
+        <li><a href="#lab-cron-and-atd">Lab: cron and atd</a></li>
+        <li><a href="#lab-at-and-crond">Lab: at and crond</a></li>
+        <li><a href="#lab-submit-view-list-and-erase-an-at-job">Lab: Submit, View, List, and Erase an at Job</a></li>
+        <li><a href="#lab-add-list-and-erase-a-cron-job">Lab: Add, List, and Erase a Cron Job</a></li>
+        <li><a href="#lab-anacron">Lab: Anacron</a></li>
+        <li><a href="#lab-8-1-nice-and-renice-a-process">Lab 8-1: Nice and Renice a Process</a></li>
+        <li><a href="#lab-8-2-configure-a-user-crontab-file">Lab 8-2: Configure a User Crontab File</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/archive-linuxreader/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/archive-linuxreader/system/"><span itemprop="name">System</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">Process and Task Scheduling</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive-linuxreader/system/process-and-task-scheduling/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive-linuxreader/system/interaction/" title="Interaction (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive-linuxreader/tools/" title="Tools (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable archive-linuxreader" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="process-and-task-scheduling">Process and Task Scheduling</h1>
+
+<h2 id="processes-and-priorities">Processes and Priorities<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Process</p>
+<ul>
+<li>a unit for provisioning system resources.</li>
+<li>any program, application, or command that runs on the system.</li>
+<li>created in memory when a program, application, or command is initiated.</li>
+<li>organized in a hierarchical fashion.</li>
+<li>Each process has a parent process (a.k.a. a calling process) that spawns it.</li>
+<li>A single parent process may have one or many child processes
+<ul>
+<li>passes many of its attributes to them at the time of their creation.</li>
+</ul>
+</li>
+<li>Each process is assigned an exclusive identification number (Process IDentifier (PID))
+<ul>
+<li>is used by the kernel to manage and control the process through its lifecycle.</li>
+</ul>
+</li>
+<li>When a process completes its lifespan or is terminated, this event is reported back to its parent process, and all the resources provisioned to it (cpu cycles, memory, etc.) are then freed and the PID is removed from the system.</li>
+<li>background system processes are called daemons
+<ul>
+<li>which sit in the memory and wait for an event to trigger a request to use their services.</li>
+</ul>
+</li>
+<li><em>/proc</em>
+<ul>
+<li>Where information for each running process is recorded and maintained.</li>
+<li>Referenced by <code>ps</code> and other commands</li>
+</ul>
+</li>
+<li></li>
+</ul>
+<h3 id="process-states">Process States<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Five basic process states:
+<ul>
+<li>running
+<ul>
+<li>being executed by the system CPU.</li>
+</ul>
+</li>
+<li>sleeping
+<ul>
+<li>waiting for input from a user or another process.</li>
+</ul>
+</li>
+<li>waiting
+<ul>
+<li>has received the input it was waiting for and is now ready to run as soon as its turn comes.</li>
+</ul>
+</li>
+<li>stopped
+<ul>
+<li>currently halted and will not run even when its turn comes unless a signal is sent to change its behavior.</li>
+</ul>
+</li>
+<li>zombie
+<ul>
+<li>Dead.</li>
+<li>Exists in the process table alongside other process entries</li>
+<li>takes up no resources.</li>
+<li>entry is retained until its parent process permits it to die</li>
+<li>also called a defunct process.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><a href="#R-image-4551ce3d858665d39dd696bf1ffbbc30" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/image-5YWJN0KN%201.jpg" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-4551ce3d858665d39dd696bf1ffbbc30"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/image-5YWJN0KN%201.jpg"></a></p>
+<h3 id="ps-command"><code>ps</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Lists processes specific to the terminal where this command is issued.</li>
+<li>Shows:
+<ul>
+<li>PID</li>
+<li>terminal (TTY) the process spawned in</li>
+<li>cumulative time (TIME) the system CPU has given to the process</li>
+<li>name of the command or program (CMD) being executed.</li>
+<li>may be customized to view only desired columns</li>
+<li>can use ps to list a process by it&rsquo;s ownership or owning group.</li>
+</ul>
+</li>
+<li>Output with -ef
+<ul>
+<li>UID
+<ul>
+<li>UID of process owner</li>
+</ul>
+</li>
+<li>PID
+<ul>
+<li>Process ID</li>
+</ul>
+</li>
+<li>PPID
+<ul>
+<li>Parent Process ID</li>
+</ul>
+</li>
+<li>C
+<ul>
+<li>CPU utilization</li>
+</ul>
+</li>
+<li>STIME
+<ul>
+<li>Start time</li>
+</ul>
+</li>
+<li>TTY
+<ul>
+<li>Controlling terminal</li>
+<li>?
+<ul>
+<li>daemon process</li>
+</ul>
+</li>
+<li>console
+<ul>
+<li>system console</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>TIME
+<ul>
+<li>Aggregated execution time</li>
+</ul>
+</li>
+<li>CMD
+<ul>
+<li>command or program name</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Flags
+<ul>
+<li>-e
+<ul>
+<li>every</li>
+</ul>
+</li>
+<li>-f
+<ul>
+<li>full format</li>
+</ul>
+</li>
+<li>-F
+<ul>
+<li>Extra full format</li>
+</ul>
+</li>
+<li>-l
+<ul>
+<li>long format</li>
+</ul>
+</li>
+<li>-efl
+<ul>
+<li>Detailed process report</li>
+</ul>
+</li>
+<li>&ndash;forest
+<ul>
+<li>tree like hierarchy</li>
+</ul>
+</li>
+<li>-x
+<ul>
+<li>include daemon processes</li>
+</ul>
+</li>
+<li>-o
+<ul>
+<li>user-defined format</li>
+<li>Make sure there are no white spaces between comma separated values.</li>
+</ul>
+</li>
+<li>-C
+<ul>
+<li>command list</li>
+<li>list processes that match a specific command name.</li>
+</ul>
+</li>
+<li>-U or -u
+<ul>
+<li>List user supplied as argument.</li>
+</ul>
+</li>
+<li>-G or -g
+<ul>
+<li>List processes owned by a specific group</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="top-command"><code>top</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Display processes in real time</li>
+<li>q or ctrl+c to quit</li>
+<li>Hotkeys while in top
+<ul>
+<li>o
+<ul>
+<li>re-sequence the process list.</li>
+</ul>
+</li>
+<li>f
+<ul>
+<li>add or remove fields</li>
+</ul>
+</li>
+<li>F
+<ul>
+<li>select the field to sort on</li>
+</ul>
+</li>
+<li>h
+<ul>
+<li>help</li>
+</ul>
+</li>
+<li></li>
+</ul>
+</li>
+<li>summary portion
+<ul>
+<li>First 5 lines
+<ul>
+<li>1
+<ul>
+<li>system uptime, number of users logged in, and system load averages over the period of 1, 5, and 15 minutes.</li>
+</ul>
+</li>
+<li>2
+<ul>
+<li>task (or process) information</li>
+<li>total number of tasks running</li>
+<li>How many of the total are running, sleeping, stopped, and zombie</li>
+</ul>
+</li>
+<li>3
+<ul>
+<li>processor usage</li>
+<li>CPU time in percentage spent in running user and system processes, in idling and waiting, and so on.</li>
+</ul>
+</li>
+<li>4
+<ul>
+<li>memory utilization
+<ul>
+<li>total, free, used, and allocated for buffering and caching</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>5
+<ul>
+<li>swap useage
+<ul>
+<li>total, free, and in use</li>
+</ul>
+</li>
+<li>avail Mem
+<ul>
+<li>estimate of memory available for starting processes without using swap.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>tasks portion
+<ul>
+<li>details for each process</li>
+<li>12 columns
+<ul>
+<li>1 and 2
+<ul>
+<li>Process identifier (PID) and owner (USER)</li>
+</ul>
+</li>
+<li>3 and 4
+<ul>
+<li>Process priority (PR) and nice value (NI)</li>
+</ul>
+</li>
+<li>5 and 6
+<ul>
+<li>Depict amounts of virtual memory (VIRT) and non-swapped resident memory (RES) in use</li>
+</ul>
+</li>
+<li>7
+<ul>
+<li>Shows the amount of shareable memory available to the process (SHR)</li>
+</ul>
+</li>
+<li>8
+<ul>
+<li>Represents the process status (S)</li>
+</ul>
+</li>
+<li>9 and 10
+<ul>
+<li>Express the CPU (%CPU) and memory (%MEM) utilization</li>
+</ul>
+</li>
+<li>11
+<ul>
+<li>Exhibits the CPU time in hundredths of a second (TIME+)</li>
+</ul>
+</li>
+<li>12
+<ul>
+<li>Identifies the process name (COMMAND)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="listing-a-specific-process">Listing a Specific Process<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<h3 id="pidof-and-pgrep-command"><code>pidof</code> and <code>pgrep</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>List only the PID of a specific process</li>
+<li>pass a process name as an argument to view its PID</li>
+<li>identical if used without any options</li>
+</ul>
+<h3 id="listing-processes-by-user-and-group-ownership">Listing Processes by User and Group Ownership<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>can use <code>ps</code> to list a process by it&rsquo;s ownership or owning group.</li>
+</ul>
+<h3 id="process-niceness-and-priority">Process Niceness and Priority<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>A process is spawned at a certain priority,</li>
+<li>priority is established based on the nice value.</li>
+<li>Higher niceness lowers execution priority of a process</li>
+<li>Lower niceness increase priority.</li>
+<li>Child process inherits nice value of it&rsquo;s calling process.</li>
+<li>Can choose a nicenes based on urgency, importance, or system load.</li>
+<li>Normal users can only increase niceness of their processes.</li>
+<li>Root can raise or lower niceness of any process.</li>
+<li>40 nice values
+<ul>
+<li>-20
+<ul>
+<li>highest and most favorable</li>
+</ul>
+</li>
+<li>+19
+<ul>
+<li>lowest and least favorable</li>
+</ul>
+</li>
+<li>0
+<ul>
+<li>default</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Showing nice and priority with ps
+<ul>
+<li>niceness of 0 corresponds to priority of 80</li>
+<li>-20 corresponds to priority of 60</li>
+</ul>
+</li>
+<li>Showing nice and priority with top.
+<ul>
+<li>niceness of 0 corresponds to priority of 20</li>
+<li>-20 corresponds to priority of 0</li>
+</ul>
+</li>
+</ul>
+<h3 id="nice-command"><code>nice</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Launch a program at a non-default priority.</li>
+</ul>
+<h3 id="renice-command"><code>renice</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Alter the priority of a running program</li>
+</ul>
+<h3 id="controlling-processes-with-signals">Controlling Processes with Signals<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>terminating the process gracefully</li>
+<li>killing it abruptly</li>
+<li>forcing it to re-read its configuration.</li>
+<li>Ordinary users can kill processes that they own, while the root user privilege is needed to kill any process on the system.</li>
+<li>Processes in a waiting state ignore the soft termination signal.</li>
+</ul>
+<h3 id="kill-command"><code>kill</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Pass a signal to a process</li>
+<li>Requires one or more PIDs</li>
+</ul>
+<p>Flags</p>
+<ul>
+<li>-l
+<ul>
+<li>view a list of signals</li>
+</ul>
+</li>
+</ul>
+<p>Common signals
+- 1 SIGHUP (hangup)
+- causes a process to disconnect itself from a closed terminal that it was tied to
+- instruct a running daemon to re-read its configuration without a restart.
+- 2 SIGINT
+- ^c (Ctrl+c) signal issued on the controlling terminal to interrupt the execution of a process.
+- 9 SIGKILL
+- Terminates a process abruptly
+- 15 SIGTERM (default)
+- Soft termination signal to stop a process in an orderly fashion.
+- Default signal if none is specified with the command.
+- 18 SIGCONT
+- Same as using the bg command to resume
+- 19 SIGSTOP
+- Same as using Ctrl+z to suspend a job
+- 20 SIGTSTP
+- Same as using the fg command</p>
+<h3 id="pkill-command">pkill command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>pass a signal to a process</li>
+<li>requires one or more process names to send a signal to.</li>
+</ul>
+<h2 id="job-scheduling">Job Scheduling<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Run a command at a specified time.</li>
+<li>One time or periodic.</li>
+<li>One time command can be used to run a command at a time with low system usage.</li>
+<li>Periodic examples:
+<ul>
+<li>creating a compressed archive</li>
+<li>trimming log files</li>
+<li>monitoring the system</li>
+<li>running a custom script</li>
+<li>removing unwanted files from the system.</li>
+</ul>
+</li>
+<li><code>atd</code> and <code>crond</code> manage jobs</li>
+</ul>
+<h3 id="atd">atd<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Run one time jobs.</li>
+<li>atd daemon retries a missed job at the same time next day.</li>
+<li>Does not need a restart with changes</li>
+</ul>
+<h3 id="crond">crond<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Run periodic scheduled jobs.</li>
+<li>Daemon reads the schedules in files located in the <em>/var/spool/cron</em> and <em>/etc/cron.d</em> directories.
+<ul>
+<li>scans these files in short intervals</li>
+<li>updates the in-memory schedules to reflect any modifications.</li>
+<li>runs a job at its scheduled time only</li>
+<li>does not entertain any missed jobs.</li>
+<li>Does not need a restart with changes</li>
+</ul>
+</li>
+</ul>
+<h3 id="controlling-user-access">Controlling user access<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>all users can schedule jobs</li>
+<li>access to job scheduling can be edited
+<ul>
+<li>must add users to allowed or deny file in <em>/etc</em>
+<ul>
+<li><em>/etc/at.allow</em> &amp; <em>/etc/cron.allow</em>
+<ul>
+<li>Does not exist by default.</li>
+</ul>
+</li>
+<li><em>/etc/at.deny</em> &amp; <em>/etc/cron.deny</em>
+<ul>
+<li>Exists by default</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>list one username per line</li>
+<li>root user is always permitted</li>
+</ul>
+</li>
+<li>Denial message appears if unauthorized user attempts to use at or cron.
+<ul>
+<li>Only if there is an entry for the calling user in the deny files.</li>
+</ul>
+<table>
+  <thead>
+      <tr>
+          <th>at.allow / cron.allow</th>
+          <th>at.deny / cron.deny</th>
+          <th>Impact</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Exists, and contains user entries</td>
+          <td>Existence does not matter</td>
+          <td>All users listed in allow files are permitted</td>
+      </tr>
+      <tr>
+          <td>Exists, but is empty</td>
+          <td>Existence does not matter</td>
+          <td>No users are permitted</td>
+      </tr>
+      <tr>
+          <td>Does not exist</td>
+          <td>Exists, and contains user entries</td>
+          <td>All users, other than those listed in deny files, are permitted</td>
+      </tr>
+      <tr>
+          <td>Does not exist</td>
+          <td>Exists, but is empty</td>
+          <td>All users are permitted</td>
+      </tr>
+      <tr>
+          <td>Does not exist</td>
+          <td>Does not exist</td>
+          <td>No users are permitted</td>
+      </tr>
+  </tbody>
+</table>
+</li>
+</ul>
+<h3 id="scheduler-log-file">Scheduler Log File<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><em>/var/log/cron</em>
+- Logs for both <code>atd</code> and <code>cron</code>
+Shows
+- time of activity
+- hostname
+- process name and PID
+- owner
+- message for each invocation
+- service start time and delays
+- must have root privileges to view</p>
+<h3 id="at-command"><code>at</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>schedule a one-time execution of a program in the future.</li>
+<li>Submitted jobs are spooled in the <em>/var/spool/at/</em> and executed by the atd daemon at the specified time.</li>
+<li>file created containing the settings for establishing the user’s shell environment to ensure a successful execution.
+<ul>
+<li>also includes the name of the command or program to be run.</li>
+</ul>
+</li>
+<li>no need to restart the daemon after a job submission.</li>
+<li>assumes the current year and today’s date if the year and date are not mentioned.</li>
+<li>ways to express time:
+<ul>
+<li>at 1:15am
+<ul>
+<li>(executes the task at the next 1:15 a.m.)</li>
+</ul>
+</li>
+<li>at noon
+<ul>
+<li>(executes the task at 12:00 p.m.)</li>
+</ul>
+</li>
+<li>at 23:45
+<ul>
+<li>(executes the task at 11:45 p.m.)</li>
+</ul>
+</li>
+<li>at midnight
+<ul>
+<li>(executes the task at 12:00 a.m.)</li>
+</ul>
+</li>
+<li>at 17:05 tomorrow
+<ul>
+<li>(executes the task at 5:05 p.m. on the next day)</li>
+</ul>
+</li>
+<li>at now + 5 hours
+<ul>
+<li>(executes the task 5 hours from now. We can specify minutes, days, or weeks in place of hours)</li>
+</ul>
+</li>
+<li>at 3:00 10/15/20
+<ul>
+<li>(executes the task at 3:00 a.m. on October 15, 2020)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Flags
+<ul>
+<li>-f
+<ul>
+<li>supply a filename</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="crontab">Crontab<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<h3 id="crontab-command"><code>crontab</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>other method for scheduling tasks for running in the future.</li>
+<li>Unlike atd, crond executes cron jobs on a regular basis as defined in the <em>/etc/crontab</em> file.</li>
+<li>Crontables (another name for crontab files) are located in the <em>/var/spool/cron</em> directory.</li>
+<li>Each authorized user with a scheduled job has a file matching their login name in this directory.
+<ul>
+<li>such as <em>/var/spool/cron/user1</em></li>
+</ul>
+</li>
+<li><em>/etc/crontab/</em> &amp; <em>/etc/cron.d/</em>
+<ul>
+<li>Other locations for system crontables.</li>
+<li>Only root can create, modify, or delete them.</li>
+</ul>
+</li>
+<li>crond daemon
+<ul>
+<li>scans entries in all 3 directories.</li>
+<li>adds log entry to <em>/var/log/cronfile</em></li>
+<li>no need to start after modifying cron jobs.</li>
+</ul>
+</li>
+<li>flags
+<ul>
+<li>-e
+<ul>
+<li>edit crontables</li>
+</ul>
+</li>
+<li>-l
+<ul>
+<li>list crontables</li>
+</ul>
+</li>
+<li>-r
+<ul>
+<li>remove crontables.</li>
+<li>Do not run crontab -r if you do not wish to remove the crontab file. Instead, edit the file with crontab -e and just erase the entry.</li>
+</ul>
+</li>
+<li>-u
+<ul>
+<li>modify a different user’s crontable</li>
+<li>provided they are allowed to do so and the other user is listed in the cron.allow file.</li>
+<li>root user can use the -u flag to alter other users’ crontables even if the affected users are not listed in the allow file.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="syntax-of-user-crontables">Syntax of User Crontables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><em>/etc/crontab</em>
+<ul>
+<li>Specifies the syntax that each user cron job must comply with in order for crond to interpret and execute it successfully.</li>
+</ul>
+</li>
+<li>Each entry for a user crontable has 6 lines
+<ul>
+<li>1-5
+<ul>
+<li>schedule</li>
+</ul>
+</li>
+<li>6
+<ul>
+<li>login name of executing user</li>
+</ul>
+</li>
+<li>rest for command or program to be executed.
+example crontable line</li>
+<li>20 1,12 1-15 feb * ls&gt; /tmp/ls.out</li>
+</ul>
+</li>
+<li>Field Content Description</li>
+<li>1
+<ul>
+<li>Minute of the hour</li>
+<li>Valid values are 0 (the exact hour) to 59. This field can have one specific value as in field 1, multiple comma-separated values as in field 2, a range of values as in field 3, a mix of fields 2 and 3 (1-5,6-19), or an * representing every minute of the hour as in field 5.</li>
+</ul>
+</li>
+<li>2
+<ul>
+<li>Hour of the day</li>
+<li>Valid values are 0 (midnight) to 23. Same usage applies as described for field 1.</li>
+</ul>
+</li>
+<li>3
+<ul>
+<li>Day of the month</li>
+<li>Valid values are 1 to 31. Same usage applies as described for field 1.</li>
+</ul>
+</li>
+<li>4
+<ul>
+<li>Month of the year</li>
+<li>Valid values are 1 to 12 or jan to dec. Same usage applies as described for field 1.</li>
+</ul>
+</li>
+<li>5
+<ul>
+<li>Day of the week</li>
+<li>Valid values are 0 to 7 or sun to sat, with 0 and 7 representing Sunday, 1 representing Monday, and so on. Same usage applies as described for field 1.</li>
+</ul>
+</li>
+<li>6
+<ul>
+<li>Command or program to execute</li>
+<li>Specifies the full path name of the command or program to be executed, along with any options or arguments that it requires.</li>
+</ul>
+</li>
+</ul>
+<p><em>/etc/crontab</em> contents:
+<a href="#R-image-69a534adba8849e35673529a8e966afe" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/Pasted%20image%2020240815080652.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-69a534adba8849e35673529a8e966afe"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/Pasted%20image%2020240815080652.png"></a></p>
+<ul>
+<li>Step values may be used with * and ranges in the crontables using the forward slash character (/).</li>
+<li>Step values allow the number of skips for a given value.</li>
+<li>Example:
+<ul>
+<li>/2 in the minute field
+<ul>
+<li>every second minute</li>
+</ul>
+</li>
+<li>/3 in the minute field
+<ul>
+<li>every third minute,</li>
+</ul>
+</li>
+<li>0-59/4 in the minute field
+<ul>
+<li>every 4th minute</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Make sure you understand and memorize the order of the fields defined in crontables.</p>
+<h3 id="anacron">Anacron<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>service that runs after every system reboot</li>
+<li>checks for any cron and at jobs that were scheduled for execution during the time the system was down and were missed as a result.</li>
+<li>useful on laptop, desktop, and similar purpose systems with extended periods of frequent downtimes and are not intended for 24/7 operations.</li>
+<li>Scans the <em>/etc/cron.hourly/0anacron</em> file for three factors to learn whether to run missed jobs.</li>
+<li>May be run manually at the command line.
+<ul>
+<li>Run <code>anacron</code> to run all jobs in <em>/etc/anacrontab</em> that were missed.</li>
+</ul>
+</li>
+<li><em>/var/spool/anacron</em>
+<ul>
+<li>Where anacron stores job execution dates</li>
+</ul>
+</li>
+<li>3 factors must be true for anacron to execute scripts in <em>/etc/cron.daily</em>, <em>/etc/cron.weekly</em>, and <em>/etc/cron.monthly</em>
+<ul>
+<li>
+<ol>
+<li>Presence of the <em>/var/spool/anacron/cron.daily</em> file.</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>Elapsed time of 24 hours since it was last run.</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>System is plugged in to an AC source.</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>settings defined in <em>/etc/anacrontab</em>
+<ul>
+<li>5 variables defined by default:
+<ul>
+<li><strong>SHELL</strong> and <strong>PATH</strong>
+<ul>
+<li>Set the shell and path to be used for executing the programs.</li>
+</ul>
+</li>
+<li><strong>MAILTO</strong>
+<ul>
+<li>Defines the login name or an email of the user who is to be sent any output and error messages.</li>
+</ul>
+</li>
+<li><strong>RANDOM_DELAY</strong>
+<ul>
+<li>Expresses the maximum arbitrary delay in minutes added to the base delay of the jobs as defined in column 2 of the last three lines.</li>
+</ul>
+</li>
+<li><strong>START_HOURS_RANGE</strong>
+<ul>
+<li>States the hour duration within which the missed jobs could be run.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Bottom 3 lines define the schedule and the programs to be executed:
+<ul>
+<li>Column 1:
+<ul>
+<li>Period in days (or @daily, @weekly, @monthly, or @yearly)</li>
+<li>How often to run the specified job.</li>
+</ul>
+</li>
+<li>Column 2:
+<ul>
+<li>How many minutes to wait after system boot to execute the job.</li>
+</ul>
+</li>
+<li>Column 3:
+<ul>
+<li>Unique job identifier</li>
+</ul>
+</li>
+<li>Columns 4 to 6:
+<ul>
+<li>Command to be used to execute the scripts located under the <em>/etc/cron.daily</em>, <em>/etc/cron.weekly</em>, and <em>/etc/cron.monthly</em> directories.</li>
+<li>By default, the <code>run-parts</code> command is invoked for execution at the default niceness.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>For each job:
+<ul>
+<li>Examines whether the job was already run during the specified period (column 1).</li>
+<li>Executes it after waiting for the number of minutes (column 2) plus the <strong>RANDOM_DELAY</strong> value if it wasn’t.</li>
+<li>When all missed jobs have been carried out and there is none pending, Anacron exits.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="process-and-task-scheduling-labs">Process and Task Scheduling Labs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="lab-ps">Lab: ps<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>ps</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ps</code></pre></div>
+<ol start="2">
+<li>Check manual pages:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>man ps</code></pre></div>
+<ol start="3">
+<li>Run with &ldquo;every&rdquo; and &ldquo;full format&rdquo; flags:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code> ps -ef</code></pre></div>
+<ol start="4">
+<li>Produce an output with the command name in column 1, PID in column 2, PPID in column 3, and owner name in column 4, run it as follows:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code> ps -o comm,pid,ppid,user</code></pre></div>
+<ol start="5">
+<li>Check how many sshd processes are currently running on the system:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code> ps -C sshd</code></pre></div>
+<h3 id="lab-top">Lab: top<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>top</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>top</code></pre></div>
+<ol start="2">
+<li>View manual page:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>man top</code></pre></div>
+<h3 id="lab-list-a-specific-process">Lab: List a specific process<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>list the PID of the rsyslogd daemon</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>pidof rsyslogd
+or
+pgrep rsyslogd</code></pre></div>
+<h3 id="lab-listing-processes-by-user-and-group-ownership">Lab: Listing Processes by User and Group Ownership<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>List processes owned by user1:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ps -U user1</code></pre></div>
+<ol start="2">
+<li>List processes owned by group root:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ps -G root</code></pre></div>
+<h3 id="lab-nice">Lab: nice<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>View the default nice value:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>nice</code></pre></div>
+<ol start="2">
+<li>List priority and niceness for all processes:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ps -efl</code></pre></div>
+<h3 id="lab-start-processes-at-non-default-priorities-2-terminals">Lab: Start Processes at Non-Default Priorities (2 terminals)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Run the top command at the default priority/niceness in Terminal 1:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>top</code></pre></div>
+<ol start="2">
+<li>Check the priority and niceness for the top command in Terminal 2 using the ps command:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ps -efl | grep top</code></pre></div>
+<ol start="3">
+<li>Terminate the top session in Terminal 1 by pressing the letter q and relaunch it at a lower priority with a nice value of +2:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>nice -n 2 top</code></pre></div>
+<ol start="4">
+<li>\Check the priority and niceness for the top command in Terminal 2 using the ps command:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ps -efl | grep top</code></pre></div>
+<ol start="5">
+<li>Terminate the top session in Terminal 1 by pressing the letter q and relaunch it at a higher priority with a nice value of -10. Use sudo for root privileges.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>sudo nice -n -10 top</code></pre></div>
+<ol start="6">
+<li>Check the priority and niceness for the top command in Terminal 2 using the ps command:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ps -efl | grep top</code></pre></div>
+<ol start="7">
+<li>Terminate the top session by pressing the letter q.</li>
+</ol>
+<h3 id="lab-alter-process-priorities-2-terminals">Lab: Alter Process Priorities (2 terminals)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Run the top command at the default priority/niceness in Terminal 1:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>top</code></pre></div>
+<ol start="2">
+<li>Check the priority and niceness for the top command in Terminal 2 using the ps command:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ps -efl | grep top</code></pre></div>
+<ol start="3">
+<li>While the top session is running in Terminal 1, increase its priority by renicing it to -5. Use the command substitution to get the PID of top. Prepend the renice command by sudo. The output indicates the old (0) and new (-5) priorities for the process.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>sudo renice -n -5 $(pidof top)</code></pre></div>
+<ol start="4">
+<li>Validate the above change with ps. Focus on columns 7 and 8.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ps -efl | grep top</code></pre></div>
+<ol start="5">
+<li>Repeat the above but set the process to run at a lower priority by renicing it to 8: The output indicates the old (-5) and new (8) priorities for the process.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>sudo renice -n 8 $(pidof top)</code></pre></div>
+<ol start="6">
+<li>Validate the above change with ps. Focus on columns 7 and 8.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ps -efl | grep top</code></pre></div>
+<h3 id="lab-controlling-processes-with-signals">Lab: Controlling Processes with Signals<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Pass the soft termination signal to the crond daemon, use either of the following:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>sudo pkill crond
+# or
+sudo kill $(pidof crond)</code></pre></div>
+<ol start="2">
+<li>Confirm:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ps -ef | grep crond</code></pre></div>
+<ol start="3">
+<li>Forcefully kill crond:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>sudo pkill -9 crond
+# or
+sudo pkill -s SIGKILL crond
+# or
+sudo kill -9 $(pgrep crond)</code></pre></div>
+<ol start="4">
+<li>Kill all crond processes:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>sudo killall crond</code></pre></div>
+<ol start="5">
+<li>View manual pages:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>man kill
+man pkill
+man killall</code></pre></div>
+<h3 id="lab-cron-and-atd">Lab: cron and atd<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>View log files for cron and atd</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>sudo cat /var/log/cron</code></pre></div>
+<h3 id="lab-at-and-crond">Lab: at and crond<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>run /home/user1/.bash_profile file for user1 2 hours from now:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>at -f ~/.bash_profile now + 2 hours</code></pre></div>
+<ol start="2">
+<li>Consult crontab manual pages:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>man crontab</code></pre></div>
+<h3 id="lab-submit-view-list-and-erase-an-at-job">Lab: Submit, View, List, and Erase an at Job<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>1.Run the at command and specify the correct execution time and date for the job. Type the entire command at the first at&gt; prompt and press Enter. Press Ctrl+d at the second at&gt; prompt to complete the job submission and return to the shell prompt.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>at 1:30pm 3/31/20
+date &amp;&gt; /tmp/date.out</code></pre></div>
+<p>The system assigned job ID 5 to it, and the output also pinpoints the job’s execution time.</p>
+<p>2.List the job file created in the /var/spool/at directory:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>sudo ls -l /var/spool/at/</code></pre></div>
+<p>3.List the spooled job with the at command. You may alternatively use atq to list it.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>at -l
+# or
+atq</code></pre></div>
+<p>4.Display the contents of this file with the at command and specify the job ID:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>at -c 5</code></pre></div>
+<p>5.Remove the spooled job with the at command by specifying its job ID. You may alternatively run atrm 5 to delete it.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>at -d 5</code></pre></div>
+<p>This should erase the job file from the /var/spool/at directory. You can</p>
+<ol start="6">
+<li>confirm the deletion by running atq or at -l.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>atq</code></pre></div>
+<h3 id="lab-add-list-and-erase-a-cron-job">Lab: Add, List, and Erase a Cron Job<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>assume that all users are currently denied access to cron</p>
+<ol>
+<li>Edit the /etc/cron.allow file and add user1 to it:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>sudo vim /etc/cron.allow
+user1</code></pre></div>
+<ol start="2">
+<li>Switch to user1 Open the crontable and append the following schedule to it. Save the file when done and exit out of the editor.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>crontab -e
+*/5 10-11 5,20 * * echo &#34;Hello, this is a cron test.&#34; &gt; /tmp/hello.out</code></pre></div>
+<ol start="3">
+<li>Check for the presence of a new file by the name user1 under the /var/spool/cron directory:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>sudo ls -l /var/spool/cron</code></pre></div>
+<ol start="4">
+<li>List the contents of the crontable:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>crontab -l</code></pre></div>
+<ol start="5">
+<li>Remove the crontable and confirm the deletion:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>crontab -r
+crontab -l</code></pre></div>
+<h3 id="lab-anacron">Lab: Anacron<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>View the default content of /etc/anacrontab without commented or empty lines:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>cat /etc/anacrontab | grep -ve ^# -ve ^$</code></pre></div>
+<ol start="2">
+<li>View anacron man pages:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>man anacron</code></pre></div>
+<h3 id="lab-8-1-nice-and-renice-a-process">Lab 8-1: Nice and Renice a Process<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>As user1 with sudo on server1, open two terminal sessions. Run the top command in terminal 1. Run the pgrep or ps command in terminal 2 to determine the PID and the nice value of top.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ps -efl | grep top</code></pre></div>
+<ol start="2">
+<li>Stop top on terminal 1 and relaunch at a lower priority (+8).</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>nice -n 8 top</code></pre></div>
+<ol start="3">
+<li>Confirm the new nice value of the process in terminal 2.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ps -efl | grep top</code></pre></div>
+<ol start="4">
+<li>Issue the renice command in terminal 2 and increase the priority of top to -10:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>renice -n -10 $(pidof top)</code></pre></div>
+<ol start="5">
+<li>Confirm:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ps -efl | grep top</code></pre></div>
+<h3 id="lab-8-2-configure-a-user-crontab-file">Lab 8-2: Configure a User Crontab File<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>As user1 on server1, run the tty and date commands to determine the terminal file (assume /dev/pts/1) and current system time.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>tty
+date</code></pre></div>
+<p>Create a cron entry to display “Hello World” on the terminal. Schedule echo “Hello World” &gt; /dev/tty/1 to run 3 minutes from the current system time.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>crontab -e
+*/3 * * * * echo &#34;Hello World&#34; &gt; /dev/pts/2</code></pre></div>
+<p>As root, ensure user1 can schedule cron jobs.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>sudo vim /etc/cron.allow
+user1</code></pre></div>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/the-cheat-code/"><a class="padding" href="/ansible/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/automate-kvm-vms/"><a class="padding" href="/ansible/automate-kvm-vms/">Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-documentation/"><a class="padding" href="/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/playbooks/"><a class="padding" href="/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/execution-environments/"><a class="padding" href="/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/hostname-patterns/"><a class="padding" href="/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/include-and-import-files/"><a class="padding" href="/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2/"><a class="padding" href="/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/user-and-groups/"><a class="padding" href="/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/storage-partitions-and-lvm/"><a class="padding" href="/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/services/"><a class="padding" href="/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/networking-with-ansible/"><a class="padding" href="/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/nfs-setup/"><a class="padding" href="/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimize-ansible-processing/"><a class="padding" href="/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux/"><a class="padding" href="/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/tags/"><a class="padding" href="/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/loops-and-items/"><a class="padding" href="/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/modules-for-troubleshooting/"><a class="padding" href="/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Using Variables In Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/when/"><a class="padding" href="/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5"><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="" data-nav-id="/containers/containers-1/"><a class="padding" href="/containers/containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/securityenhancedlinux/"><a class="padding" href="/cyber-security/securityenhancedlinux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/learning-touch-typing-1/"><a class="padding" href="/desktop/learning-touch-typing-1/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/learning-touch-typing/"><a class="padding" href="/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup-1/"><a class="padding" href="/desktop/my-fedora-setup-1/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue-2/"><a class="padding" href="/desktop/silverblue-2/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA? Some Ideas<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-ccna-exam/">How I Studied for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-synchronization/"><a class="padding" href="/networking/dns-and-time-synchronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns/"><a class="padding" href="/networking/dns/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networkdevicesandconnections/"><a class="padding" href="/networking/networkdevicesandconnections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/resources-for-passing-ccna/"><a class="padding" href="/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/systems/"><input type="checkbox" id="R-section-859f72c55acd170304a7ecf4dceebb83" aria-controls="R-subsections-859f72c55acd170304a7ecf4dceebb83"><label for="R-section-859f72c55acd170304a7ecf4dceebb83"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/systems/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-859f72c55acd170304a7ecf4dceebb83" class="collapsible-menu">
+            <li class="" data-nav-id="/systems/you-need-to-learn-man-pages/"><a class="padding" href="/systems/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/advanced-file-management/"><a class="padding" href="/systems/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/advanced-package-management/"><a class="padding" href="/systems/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/advanced-user-management/"><a class="padding" href="/systems/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/autofs/"><a class="padding" href="/systems/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/file-management/"><a class="padding" href="/systems/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/basic-package-management/"><a class="padding" href="/systems/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/basic-user-management/"><a class="padding" href="/systems/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/boot-process-grub2-kernel/"><a class="padding" href="/systems/boot-process-grub2-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/installation/"><a class="padding" href="/systems/installation/">Installing RHEL Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/interaction/"><a class="padding" href="/systems/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/local-filesystems-and-swap/"><a class="padding" href="/systems/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/network-filesystem-nfs/"><a class="padding" href="/systems/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/partitioning-mbr-gpt/"><a class="padding" href="/systems/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/process-and-task-scheduling/"><a class="padding" href="/systems/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/rm-filesystem-from-partition/"><a class="padding" href="/systems/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/rhcsa-exam-environment/"><a class="padding" href="/systems/rhcsa-exam-environment/">RHCSA Exam Environment Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/rhcsa-vagrant-lab-setup-1/"><a class="padding" href="/systems/rhcsa-vagrant-lab-setup-1/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/sys-init-logging-and-tuning/"><a class="padding" href="/systems/sys-init-logging-and-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/secure-shell-service-ssh/"><a class="padding" href="/systems/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/thin-provisioning/"><a class="padding" href="/systems/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/time-synchronization/"><a class="padding" href="/systems/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/virtual-data-optimizer-vdo/"><a class="padding" href="/systems/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/remove-formatting-from-highlights/"><a class="padding" href="/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-docker-nginx/"><a class="padding" href="/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/proxmox-pfsense-haproxy-setup/"><a class="padding" href="/tools/proxmox-pfsense-haproxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/stop-using-ai/"><a class="padding" href="/tools/stop-using-ai/">Why I Stopped Using AI so Much<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/install-ansible-using-uv/"><a class="padding" href="/tools/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-vagrant-on-linux/"><a class="padding" href="/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-man-pages/"><a class="padding" href="/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent hidden " data-nav-id="/archive-linuxreader/"><input type="checkbox" id="R-section-10b41ae93751628df313aaacfa9d2031" aria-controls="R-subsections-10b41ae93751628df313aaacfa9d2031" checked><label for="R-section-10b41ae93751628df313aaacfa9d2031"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Linux Reader</span></label><a class="padding default-animation" href="/archive-linuxreader/">Linux Reader<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-10b41ae93751628df313aaacfa9d2031" class="collapsible-menu">
+            <li class="" data-nav-id="/archive-linuxreader/ansible/"><input type="checkbox" id="R-section-388ee1d7407853a7b79a06793acd017c" aria-controls="R-subsections-388ee1d7407853a7b79a06793acd017c"><label for="R-section-388ee1d7407853a7b79a06793acd017c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/archive-linuxreader/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-388ee1d7407853a7b79a06793acd017c" class="collapsible-menu">
+            <li class="" data-nav-id="/archive-linuxreader/ansible/45-days-to-rhce-1/"><input type="checkbox" id="R-section-65ab60e7ffac98bb4495d9e8f7fdf400" aria-controls="R-subsections-65ab60e7ffac98bb4495d9e8f7fdf400"><label for="R-section-65ab60e7ffac98bb4495d9e8f7fdf400"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu 45 Days to RHCE</span></label><a class="padding default-animation" href="/archive-linuxreader/ansible/45-days-to-rhce-1/">45 Days to RHCE<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-65ab60e7ffac98bb4495d9e8f7fdf400" class="collapsible-menu">
+            <li class="" data-nav-id="/archive-linuxreader/ansible/45-days-to-rhce-1/ansible-navigator/"><a class="padding" href="/archive-linuxreader/ansible/45-days-to-rhce-1/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/45-days-to-rhce-1/crash-and-burn/"><a class="padding" href="/archive-linuxreader/ansible/45-days-to-rhce-1/crash-and-burn/">Crash and Burn<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/45-days-to-rhce-1/the-cheat-code/"><a class="padding" href="/archive-linuxreader/ansible/45-days-to-rhce-1/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/45-days-to-rhce-1/getting-ready/"><a class="padding" href="/archive-linuxreader/ansible/45-days-to-rhce-1/getting-ready/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/ansible-navigator/"><a class="padding" href="/archive-linuxreader/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/the-cheat-code/"><a class="padding" href="/archive-linuxreader/ansible/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/getting-ready-for-rhce/"><a class="padding" href="/archive-linuxreader/ansible/getting-ready-for-rhce/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/automate-kvm-vms/"><a class="padding" href="/archive-linuxreader/ansible/automate-kvm-vms/">Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/ad-hoc-ansible-commands/"><a class="padding" href="/archive-linuxreader/ansible/ad-hoc-ansible-commands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/adhoccommands/"><a class="padding" href="/archive-linuxreader/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/ansible-documentation/"><a class="padding" href="/archive-linuxreader/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/ansible-facts/"><a class="padding" href="/archive-linuxreader/ansible/ansible-facts/">Ansible Facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/ansible-galaxy-roles/"><a class="padding" href="/archive-linuxreader/ansible/ansible-galaxy-roles/">Ansible Galaxy Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/ansible-inventory/"><a class="padding" href="/archive-linuxreader/ansible/ansible-inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/inventory/"><a class="padding" href="/archive-linuxreader/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/ansible-playbooks/"><a class="padding" href="/archive-linuxreader/ansible/ansible-playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/playbooks/"><a class="padding" href="/archive-linuxreader/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/roles/"><a class="padding" href="/archive-linuxreader/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/using-ansible-roles/"><a class="padding" href="/archive-linuxreader/ansible/using-ansible-roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/ansible-vault/"><a class="padding" href="/archive-linuxreader/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/ansible-inventory-command/"><a class="padding" href="/archive-linuxreader/ansible/ansible-inventory-command/">Ansible-inventory command<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/ansible.cfg/"><a class="padding" href="/archive-linuxreader/ansible/ansible.cfg/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/ansibleconfig/"><a class="padding" href="/archive-linuxreader/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/boot-process/"><a class="padding" href="/archive-linuxreader/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/building-an-ansible-lab-with-ansible/"><a class="padding" href="/archive-linuxreader/ansible/building-an-ansible-lab-with-ansible/">Building an Ansible lab with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/common-modules-with-examples/"><a class="padding" href="/archive-linuxreader/ansible/common-modules-with-examples/">Common modules with examples<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/deploying-files/"><a class="padding" href="/archive-linuxreader/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/discovering-storage-related-facts/"><a class="padding" href="/archive-linuxreader/ansible/discovering-storage-related-facts/">Discovering storage related facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/dynamic-inventory/"><a class="padding" href="/archive-linuxreader/ansible/dynamic-inventory/">Dynamic Inventory<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/encrypted-passwords/"><a class="padding" href="/archive-linuxreader/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/execution-environments/"><a class="padding" href="/archive-linuxreader/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/handlers/"><a class="padding" href="/archive-linuxreader/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/host-name-patterns/"><a class="padding" href="/archive-linuxreader/ansible/host-name-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/hostname-patterns/"><a class="padding" href="/archive-linuxreader/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/include-and-import-files/"><a class="padding" href="/archive-linuxreader/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/including-and-importing-files/"><a class="padding" href="/archive-linuxreader/ansible/including-and-importing-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/jinja2-templates/"><a class="padding" href="/archive-linuxreader/ansible/jinja2-templates/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/jinja2/"><a class="padding" href="/archive-linuxreader/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/user-and-groups/"><a class="padding" href="/archive-linuxreader/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/managing-ansible-errors-and-logs/"><a class="padding" href="/archive-linuxreader/ansible/managing-ansible-errors-and-logs/">Managing Ansible Errors and Logs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/managing-packages/"><a class="padding" href="/archive-linuxreader/ansible/managing-packages/">Managing Packages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/archive-linuxreader/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/managing-partitions-and-lvm/"><a class="padding" href="/archive-linuxreader/ansible/managing-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/storage-partitions-and-lvm/"><a class="padding" href="/archive-linuxreader/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/managing-services/"><a class="padding" href="/archive-linuxreader/ansible/managing-services/">Managing Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/services/"><a class="padding" href="/archive-linuxreader/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/networking-with-ansible/"><a class="padding" href="/archive-linuxreader/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/nfs-setup/"><a class="padding" href="/archive-linuxreader/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/optimize-ansible-processing/"><a class="padding" href="/archive-linuxreader/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/optimizing-ansible-processing/"><a class="padding" href="/archive-linuxreader/ansible/optimizing-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/repositories-and-subscriptions/"><a class="padding" href="/archive-linuxreader/ansible/repositories-and-subscriptions/">Repositories and subscriptions<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/selinux-file-properties/"><a class="padding" href="/archive-linuxreader/ansible/selinux-file-properties/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/selinux/"><a class="padding" href="/archive-linuxreader/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/setting-up-an-ansible-lab/"><a class="padding" href="/archive-linuxreader/ansible/setting-up-an-ansible-lab/">Setting up an Ansible Lab<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/ssh-connections/"><a class="padding" href="/archive-linuxreader/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/troubleshooting-common-scenarios/"><a class="padding" href="/archive-linuxreader/ansible/troubleshooting-common-scenarios/">Troubleshooting Common Scenarios<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/users-and-groups/"><a class="padding" href="/archive-linuxreader/ansible/users-and-groups/">Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/tags/"><a class="padding" href="/archive-linuxreader/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/loops-and-items/"><a class="padding" href="/archive-linuxreader/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/using-loops-and-items/"><a class="padding" href="/archive-linuxreader/ansible/using-loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/modules-for-troubleshooting/"><a class="padding" href="/archive-linuxreader/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/using-modules-for-troubleshooting-and-testing/"><a class="padding" href="/archive-linuxreader/ansible/using-modules-for-troubleshooting-and-testing/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/using-multiple-inventories/"><a class="padding" href="/archive-linuxreader/ansible/using-multiple-inventories/">Using Multiple Inventories<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/using-rhel-system-roles/"><a class="padding" href="/archive-linuxreader/ansible/using-rhel-system-roles/">Using RHEL System roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/using-tags/"><a class="padding" href="/archive-linuxreader/ansible/using-tags/">Using Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/using-when-to-run-tasks-conditionally/"><a class="padding" href="/archive-linuxreader/ansible/using-when-to-run-tasks-conditionally/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/when/"><a class="padding" href="/archive-linuxreader/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/ansible/variables/"><a class="padding" href="/archive-linuxreader/ansible/variables/">Variables<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive-linuxreader/bash/"><input type="checkbox" id="R-section-49ae57c17ecb25797b1126f86df72893" aria-controls="R-subsections-49ae57c17ecb25797b1126f86df72893"><label for="R-section-49ae57c17ecb25797b1126f86df72893"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/archive-linuxreader/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-49ae57c17ecb25797b1126f86df72893" class="collapsible-menu">
+            <li class="" data-nav-id="/archive-linuxreader/bash/bash-shell/"><a class="padding" href="/archive-linuxreader/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/bash/shell-scripting/"><a class="padding" href="/archive-linuxreader/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive-linuxreader/boot/"><input type="checkbox" id="R-section-60439d39987d24d1814309eadc3fe77f" aria-controls="R-subsections-60439d39987d24d1814309eadc3fe77f"><label for="R-section-60439d39987d24d1814309eadc3fe77f"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Boot</span></label><a class="padding default-animation" href="/archive-linuxreader/boot/"><i class="fa-solid fa-hourglass-start"></i> Boot<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-60439d39987d24d1814309eadc3fe77f" class="collapsible-menu">
+            <li class="" data-nav-id="/archive-linuxreader/boot/boot-process-grub2-and-kernel/"><a class="padding" href="/archive-linuxreader/boot/boot-process-grub2-and-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/boot/system-initialization-message-logging-and-system-tuning/"><a class="padding" href="/archive-linuxreader/boot/system-initialization-message-logging-and-system-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive-linuxreader/containers/"><input type="checkbox" id="R-section-2c50edda15f8447ef1b1eae431c3fffc" aria-controls="R-subsections-2c50edda15f8447ef1b1eae431c3fffc"><label for="R-section-2c50edda15f8447ef1b1eae431c3fffc"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/archive-linuxreader/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-2c50edda15f8447ef1b1eae431c3fffc" class="collapsible-menu">
+            <li class="" data-nav-id="/archive-linuxreader/containers/containers-1/"><a class="padding" href="/archive-linuxreader/containers/containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive-linuxreader/cyber-security/"><input type="checkbox" id="R-section-c3ced914d37f2b0de3f2c0091b97848b" aria-controls="R-subsections-c3ced914d37f2b0de3f2c0091b97848b"><label for="R-section-c3ced914d37f2b0de3f2c0091b97848b"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/archive-linuxreader/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-c3ced914d37f2b0de3f2c0091b97848b" class="collapsible-menu">
+            <li class="" data-nav-id="/archive-linuxreader/cyber-security/security-enhanced-linux/"><a class="padding" href="/archive-linuxreader/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/cyber-security/securityenhancedlinux/"><a class="padding" href="/archive-linuxreader/cyber-security/securityenhancedlinux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/cyber-security/the-linux-firewall/"><a class="padding" href="/archive-linuxreader/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/cyber-security/the-secure-shell-service/"><a class="padding" href="/archive-linuxreader/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive-linuxreader/desktop/"><input type="checkbox" id="R-section-f7692476303dd1eafe28051f707b6844" aria-controls="R-subsections-f7692476303dd1eafe28051f707b6844"><label for="R-section-f7692476303dd1eafe28051f707b6844"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/archive-linuxreader/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f7692476303dd1eafe28051f707b6844" class="collapsible-menu">
+            <li class="" data-nav-id="/archive-linuxreader/desktop/new-setup/"><a class="padding" href="/archive-linuxreader/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/desktop/learning-touch-typing-1/"><a class="padding" href="/archive-linuxreader/desktop/learning-touch-typing-1/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/desktop/learning-touch-typing/"><a class="padding" href="/archive-linuxreader/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/desktop/my-fedora-setup-1/"><a class="padding" href="/archive-linuxreader/desktop/my-fedora-setup-1/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/desktop/my-fedora-setup/"><a class="padding" href="/archive-linuxreader/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/desktop/silverblue-2/"><a class="padding" href="/archive-linuxreader/desktop/silverblue-2/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/desktop/silverblue/"><a class="padding" href="/archive-linuxreader/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive-linuxreader/files/"><input type="checkbox" id="R-section-bb90f1918e4f472aa0f4c388942f3d47" aria-controls="R-subsections-bb90f1918e4f472aa0f4c388942f3d47"><label for="R-section-bb90f1918e4f472aa0f4c388942f3d47"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Files</span></label><a class="padding default-animation" href="/archive-linuxreader/files/"><i class="fa-solid fa-copy"></i> Files<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bb90f1918e4f472aa0f4c388942f3d47" class="collapsible-menu">
+            <li class="" data-nav-id="/archive-linuxreader/files/advanced-file-management/"><a class="padding" href="/archive-linuxreader/files/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/files/file-management/"><a class="padding" href="/archive-linuxreader/files/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive-linuxreader/networking/"><input type="checkbox" id="R-section-327867d69e34fc5aa21e6635a4201a4a" aria-controls="R-subsections-327867d69e34fc5aa21e6635a4201a4a"><label for="R-section-327867d69e34fc5aa21e6635a4201a4a"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/archive-linuxreader/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-327867d69e34fc5aa21e6635a4201a4a" class="collapsible-menu">
+            <li class="" data-nav-id="/archive-linuxreader/networking/what-to-learn-after-ccna/"><a class="padding" href="/archive-linuxreader/networking/what-to-learn-after-ccna/">What to Learn After CCNA? Some Ideas<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/networking/how-to-study-for-ccna-exam/"><a class="padding" href="/archive-linuxreader/networking/how-to-study-for-ccna-exam/">How I Studied for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/archive-linuxreader/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/networking/dns-and-time-synchronization/"><a class="padding" href="/archive-linuxreader/networking/dns-and-time-synchronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/networking/dns/"><a class="padding" href="/archive-linuxreader/networking/dns/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/archive-linuxreader/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/networking/juniper_cli_basics/"><a class="padding" href="/archive-linuxreader/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/networking/networkdevicesandconnections/"><a class="padding" href="/archive-linuxreader/networking/networkdevicesandconnections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/archive-linuxreader/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/networking/resources-for-passing-ccna/"><a class="padding" href="/archive-linuxreader/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/networking/time-synchronization/"><a class="padding" href="/archive-linuxreader/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/networking/toggle_poe/"><a class="padding" href="/archive-linuxreader/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive-linuxreader/packages/"><input type="checkbox" id="R-section-1a15f2425382d461037991ee7334e59f" aria-controls="R-subsections-1a15f2425382d461037991ee7334e59f"><label for="R-section-1a15f2425382d461037991ee7334e59f"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/archive-linuxreader/packages/"><i class="fa-solid fa-box-open"></i> Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-1a15f2425382d461037991ee7334e59f" class="collapsible-menu">
+            <li class="" data-nav-id="/archive-linuxreader/packages/advanced-package-management/"><a class="padding" href="/archive-linuxreader/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/packages/basic-package-management/"><a class="padding" href="/archive-linuxreader/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive-linuxreader/storage/"><input type="checkbox" id="R-section-b9569d9d079bed85def4acb4626c512e" aria-controls="R-subsections-b9569d9d079bed85def4acb4626c512e"><label for="R-section-b9569d9d079bed85def4acb4626c512e"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/archive-linuxreader/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-b9569d9d079bed85def4acb4626c512e" class="collapsible-menu">
+            <li class="" data-nav-id="/archive-linuxreader/storage/autofs/"><a class="padding" href="/archive-linuxreader/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/storage/local-file-systems-and-swap/"><a class="padding" href="/archive-linuxreader/storage/local-file-systems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/storage/network-file-system-nfs/"><a class="padding" href="/archive-linuxreader/storage/network-file-system-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/storage/partitioning-mbr-and-gpt/"><a class="padding" href="/archive-linuxreader/storage/partitioning-mbr-and-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/storage/remove-a-filesystem-from-a-partition/"><a class="padding" href="/archive-linuxreader/storage/remove-a-filesystem-from-a-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/storage/thin-provisioning/"><a class="padding" href="/archive-linuxreader/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/archive-linuxreader/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/"><input type="checkbox" id="R-section-797902af882cab8a98f468cf2c94b295" aria-controls="R-subsections-797902af882cab8a98f468cf2c94b295"><label for="R-section-797902af882cab8a98f468cf2c94b295"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/archive-linuxreader/systems/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-797902af882cab8a98f468cf2c94b295" class="collapsible-menu">
+            <li class="" data-nav-id="/archive-linuxreader/systems/you-need-to-learn-man-pages/"><a class="padding" href="/archive-linuxreader/systems/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/advanced-file-management/"><a class="padding" href="/archive-linuxreader/systems/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/advanced-package-management/"><a class="padding" href="/archive-linuxreader/systems/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/advanced-user-management/"><a class="padding" href="/archive-linuxreader/systems/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/autofs/"><a class="padding" href="/archive-linuxreader/systems/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/file-management/"><a class="padding" href="/archive-linuxreader/systems/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/basic-package-management/"><a class="padding" href="/archive-linuxreader/systems/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/basic-user-management/"><a class="padding" href="/archive-linuxreader/systems/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/boot-process-grub2-kernel/"><a class="padding" href="/archive-linuxreader/systems/boot-process-grub2-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/installation/"><a class="padding" href="/archive-linuxreader/systems/installation/">Installing RHEL Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/interaction/"><a class="padding" href="/archive-linuxreader/systems/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/local-filesystems-and-swap/"><a class="padding" href="/archive-linuxreader/systems/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/network-filesystem-nfs/"><a class="padding" href="/archive-linuxreader/systems/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/partitioning-mbr-gpt/"><a class="padding" href="/archive-linuxreader/systems/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/process-and-task-scheduling/"><a class="padding" href="/archive-linuxreader/systems/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/rm-filesystem-from-partition/"><a class="padding" href="/archive-linuxreader/systems/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/rhcsa-exam-environment/"><a class="padding" href="/archive-linuxreader/systems/rhcsa-exam-environment/">RHCSA Exam Environment Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/rhcsa-vagrant-lab-setup-1/"><a class="padding" href="/archive-linuxreader/systems/rhcsa-vagrant-lab-setup-1/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/sys-init-logging-and-tuning/"><a class="padding" href="/archive-linuxreader/systems/sys-init-logging-and-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/secure-shell-service-ssh/"><a class="padding" href="/archive-linuxreader/systems/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/thin-provisioning/"><a class="padding" href="/archive-linuxreader/systems/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/time-synchronization/"><a class="padding" href="/archive-linuxreader/systems/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/systems/virtual-data-optimizer-vdo/"><a class="padding" href="/archive-linuxreader/systems/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/archive-linuxreader/system/"><input type="checkbox" id="R-section-229e9b57647228aa010c8bf412d68b80" aria-controls="R-subsections-229e9b57647228aa010c8bf412d68b80" checked><label for="R-section-229e9b57647228aa010c8bf412d68b80"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/archive-linuxreader/system/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-229e9b57647228aa010c8bf412d68b80" class="collapsible-menu">
+            <li class="" data-nav-id="/archive-linuxreader/system/installation/"><a class="padding" href="/archive-linuxreader/system/installation/">Installation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/system/interaction/"><a class="padding" href="/archive-linuxreader/system/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="active " data-nav-id="/archive-linuxreader/system/process-and-task-scheduling/"><a class="padding" href="/archive-linuxreader/system/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive-linuxreader/tools/"><input type="checkbox" id="R-section-043e3e6c9aed5f88fcae38f6f1832157" aria-controls="R-subsections-043e3e6c9aed5f88fcae38f6f1832157"><label for="R-section-043e3e6c9aed5f88fcae38f6f1832157"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/archive-linuxreader/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-043e3e6c9aed5f88fcae38f6f1832157" class="collapsible-menu">
+            <li class="" data-nav-id="/archive-linuxreader/tools/remove-formatting-from-highlights/"><a class="padding" href="/archive-linuxreader/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/tools/calibre-web-docker-nginx/"><a class="padding" href="/archive-linuxreader/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/tools/proxmox-pfsense-haproxy-setup/"><a class="padding" href="/archive-linuxreader/tools/proxmox-pfsense-haproxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/tools/stop-using-ai/"><a class="padding" href="/archive-linuxreader/tools/stop-using-ai/">Why I Stopped Using AI so Much<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/tools/install-ansible-using-uv/"><a class="padding" href="/archive-linuxreader/tools/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/archive-linuxreader/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/archive-linuxreader/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/tools/process-bookfusion-highlights/"><a class="padding" href="/archive-linuxreader/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/archive-linuxreader/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/archive-linuxreader/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/archive-linuxreader/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/tools/using-vagrant-on-linux/"><a class="padding" href="/archive-linuxreader/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/tools/vimguide/"><a class="padding" href="/archive-linuxreader/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/tools/using-man-pages/"><a class="padding" href="/archive-linuxreader/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive-linuxreader/users-and-groups/"><input type="checkbox" id="R-section-b95f3f4f2398bce0fce1c1bd139b2f98" aria-controls="R-subsections-b95f3f4f2398bce0fce1c1bd139b2f98"><label for="R-section-b95f3f4f2398bce0fce1c1bd139b2f98"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users and Groups</span></label><a class="padding default-animation" href="/archive-linuxreader/users-and-groups/"><i class="fa-solid fa-users"></i> Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-b95f3f4f2398bce0fce1c1bd139b2f98" class="collapsible-menu">
+            <li class="" data-nav-id="/archive-linuxreader/users-and-groups/advanced-user-management/"><a class="padding" href="/archive-linuxreader/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive-linuxreader/users-and-groups/basic-user-management/"><a class="padding" href="/archive-linuxreader/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive-linuxreader/virtualization/"><input type="checkbox" id="R-section-263fa6f1761b92f91b8d63f4d3e2e6df" aria-controls="R-subsections-263fa6f1761b92f91b8d63f4d3e2e6df"><label for="R-section-263fa6f1761b92f91b8d63f4d3e2e6df"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualization</span></label><a class="padding default-animation" href="/archive-linuxreader/virtualization/"><i class="fa-solid fa-microchip"></i> Virtualization<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-263fa6f1761b92f91b8d63f4d3e2e6df" class="collapsible-menu">
+            <li class="" data-nav-id="/archive-linuxreader/virtualization/rhcsa-vagrant-lab-setup/"><a class="padding" href="/archive-linuxreader/virtualization/rhcsa-vagrant-lab-setup/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li></ul></li>
+            <li class="" data-nav-id="/archive/"><input type="checkbox" id="R-section-3efae3733ab07a14aa0bb0bbf1f8e3dd" aria-controls="R-subsections-3efae3733ab07a14aa0bb0bbf1f8e3dd"><label for="R-section-3efae3733ab07a14aa0bb0bbf1f8e3dd"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Archives</span></label><a class="padding default-animation" href="/archive/">Archives<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-3efae3733ab07a14aa0bb0bbf1f8e3dd" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/archive/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1772467092" defer></script>
+    <script src="/js/theme.js?1772467092" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

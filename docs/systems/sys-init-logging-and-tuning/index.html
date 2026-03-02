@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="description" content="System initialization, service management, tuning, and logging">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="System Initialization, Message Logging, and System Tuning">
+    <meta name="twitter:description" content="System initialization, service management, tuning, and logging">
+    <meta property="og:url" content="https://www.linuxreader.com/systems/sys-init-logging-and-tuning/">
+    <meta property="og:title" content="System Initialization, Message Logging, and System Tuning">
+    <meta property="og:description" content="System initialization, service management, tuning, and logging">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="System">
+    <meta itemprop="name" content="System Initialization, Message Logging, and System Tuning">
+    <meta itemprop="description" content="System initialization, service management, tuning, and logging">
+    <meta itemprop="wordCount" content="4930">
+    <title>System Initialization, Message Logging, and System Tuning</title>
+    <link href="/systems/sys-init-logging-and-tuning/index.md" rel="alternate" type="text/markdown" title="System Initialization, Message Logging, and System Tuning">
+    <link href="/images/favicon.svg?1772471523" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1772471523" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1772471523" defer></script>
+    <script src="/js/search-lunr.min.js?1772471523" defer></script>
+    <script src="/js/search.min.js?1772471523" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1772471523";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1772471523" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1772471523" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1772471523" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1772471523" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1772471523" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1772471523" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1772471523" rel="stylesheet">
+    <link href="/css/theme.min.css?1772471523" rel="stylesheet">
+    <link href="/css/format-html.min.css?1772471523" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = `.min`;
+      window.relearn.path='\/systems\/sys-init-logging-and-tuning\/';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='https:\/\/www.linuxreader.com';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/systems/sys-init-logging-and-tuning/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#system-initialization-and-service-management">System Initialization and Service Management</a>
+      <ul>
+        <li><a href="#units">Units</a></li>
+        <li><a href="#systemd-targets">Systemd Targets</a></li>
+        <li><a href="#systemctl-command">systemctl Command</a></li>
+        <li><a href="#listing-and-viewing-units">Listing and Viewing Units</a></li>
+        <li><a href="#managing-service-units">Managing Service Units</a></li>
+        <li><a href="#managing-target-units">Managing Target Units</a></li>
+        <li><a href="#switching-into-specific-targets">Switching into Specific Targets</a></li>
+      </ul>
+    </li>
+    <li><a href="#system-logging">System Logging</a>
+      <ul>
+        <li><a href="#thesyslog-configuration-file">TheSyslog Configuration File</a></li>
+        <li><a href="#rotating-log-files">Rotating Log Files</a></li>
+        <li><a href="#etccrondailylogrotate-script">/etc/cron.daily/logrotate script</a></li>
+        <li><a href="#logging-custom-messages">Logging Custom Messages</a></li>
+        <li><a href="#logger-command">logger command</a></li>
+        <li><a href="#the-systemd-journal">The systemd Journal</a></li>
+        <li><a href="#retrieving-and-viewing-messages">Retrieving and Viewing Messages</a></li>
+        <li><a href="#journalctl-command">journalctl command</a></li>
+        <li><a href="#preserving-journal-information">Preserving Journal Information</a></li>
+        <li><a href="#journal-data-storage-options">Journal Data Storage Options</a></li>
+        <li><a href="#lab-configure-persistent-storage-for-journal-information">Lab: Configure Persistent Storage for Journal Information</a></li>
+      </ul>
+    </li>
+    <li><a href="#system-tuning">System Tuning</a>
+      <ul>
+        <li><a href="#tuned-tuning-profiles">tuned tuning Profiles</a></li>
+        <li><a href="#tuning-profiles">Tuning Profiles</a></li>
+        <li><a href="#the-tuned-adm-command">The tuned-adm Command</a></li>
+        <li><a href="#lab-12-2-manage-tuning-profiles">Lab 12-2: Manage Tuning Profiles</a></li>
+      </ul>
+    </li>
+    <li><a href="#sysinit-logging-and-tuning-labs">Sysinit, Logging, and Tuning Labs</a>
+      <ul>
+        <li><a href="#lab-modify-default-boot-target">Lab: Modify Default Boot Target</a></li>
+        <li><a href="#lab-record-custom-alerts">Lab: Record Custom Alerts</a></li>
+        <li><a href="#lab-apply-tuning-profile">Lab: Apply Tuning Profile</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/systems/"><span itemprop="name">System</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">System Initialization, Message Logging, and System Tuning</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/systems/sys-init-logging-and-tuning/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/systems/rhcsa-vagrant-lab-setup-1/" title="RHCSA Vagrant Lab Setup (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/systems/secure-shell-service-ssh/" title="The Secure Shell Service (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable systems" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="system-initialization-message-logging-and-system-tuning">System Initialization, Message Logging, and System Tuning</h1>
+
+<h2 id="system-initialization-and-service-management">System Initialization and Service Management<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p><strong>systemd</strong> (system daemon)</p>
+<ul>
+<li>
+<p>System initialization and service management mechanism.</p>
+</li>
+<li>
+<p>Units and targets for initialization, service administration, and state changes</p>
+</li>
+<li>
+<p>Has fast-tracked system initialization and state transitioning by introducing:</p>
+<ul>
+<li>Parallel processing of startup scripts</li>
+<li>Improved handling of service dependencies</li>
+<li>On-demand activation of services</li>
+</ul>
+</li>
+<li>
+<p>Supports snapshotting of system states.</p>
+</li>
+<li>
+<p>Used to handle operational states of services</p>
+</li>
+<li>
+<p>Boots the system into one of several predefined targets</p>
+</li>
+<li>
+<p>Tracks processes using control groups</p>
+</li>
+<li>
+<p>Automatically maintains mount points.</p>
+</li>
+<li>
+<p>First process with PID 1 that spawns at boot</p>
+</li>
+<li>
+<p>Last process that terminates at shutdown.</p>
+</li>
+<li>
+<p>Spawns several processes during a service startup.</p>
+</li>
+<li>
+<p>Places the processes in a private hierarchy composed of <em>control groups</em> (or <em>cgroups</em> for short) to organize processes for the purposes of monitoring and controlling system resources such as:</p>
+<ul>
+<li>processor</li>
+<li>memory</li>
+<li>network bandwidth</li>
+<li>disk I/O</li>
+</ul>
+</li>
+<li>
+<p>Limit, isolate, and prioritize process usage of resources.</p>
+</li>
+<li>
+<p>Resources distributed among users, databases, and applications based on need and priority</p>
+</li>
+<li>
+<p>Initiates distinct services concurrently, taking advantage of multiple CPU cores and other compute resources.</p>
+</li>
+<li>
+<p>Creates sockets for all enabled services that support socket-based activation at the very beginning of the initialization process.</p>
+</li>
+<li>
+<p>It passes them on to service daemon processes as they attempt to start in parallel.</p>
+</li>
+<li>
+<p>This lets systemd handle inter-service order dependencies</p>
+</li>
+<li>
+<p>Allows services to start without any delays.</p>
+</li>
+<li>
+<p>Systemd creates sockets first, starts daemons next, and caches any client requests to daemons that have not yet started in the socket buffer.</p>
+</li>
+<li>
+<p>Files the pending client requests when the daemons they were awaiting come online.</p>
+</li>
+</ul>
+<p>Socket</p>
+<ul>
+<li>Communication method that allows a single process to talk to another process on the same or remote system.</li>
+</ul>
+<p>During the operational state, systemd:</p>
+<ul>
+<li>maintains the sockets and uses them to reconnect other daemons and services that were interacting with an old instance of a daemon before that daemon was terminated or restarted.</li>
+<li>services that use activation based on D-Bus (<em>Desktop Bus</em>) are started when a client application attempts to communicate with them for the first time.</li>
+<li>Additional methods used by systemd for activation are
+<ul>
+<li>device-based
+<ul>
+<li>starting the service when a specific hardware type such as USB is plugged in</li>
+</ul>
+</li>
+<li>path-based
+<ul>
+<li>starting the service when a particular file or directory alters its state.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>D-Bus</p>
+<ul>
+<li>Allows multiple services running in parallel on a system or remote systems to talk to one another</li>
+</ul>
+<p>on-demand activation</p>
+<ul>
+<li>systemd defers the startup of services&mdash;Bluetooth and printing&mdash;until they are actually needed.</li>
+</ul>
+<p>parallelization and on-demand activation</p>
+<ul>
+<li>save time and compute resources.</li>
+<li>contribute to expediting the boot process considerably.</li>
+</ul>
+<p>benefit of parallelism witnessed at system boot is</p>
+<ul>
+<li>the file systems are checked that may result in unnecessary delays.</li>
+<li>With autofs, the file systems are temporarily mounted on their normal mount points</li>
+<li>as soon as the checks on the file systems are finished, systemd remounts them using their standard devices.</li>
+<li>Parallelism in file system mounts does not affect the root and virtual file systems.</li>
+</ul>
+<h3 id="units">Units<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><em>Units</em></p>
+<ul>
+<li>
+<p>systemd objects used for organizing boot and maintenance tasks, such as:</p>
+<ul>
+<li>hardware initialization</li>
+<li>socket creation</li>
+<li>file system mounts</li>
+<li>service startups.</li>
+</ul>
+</li>
+<li>
+<p>Unit configuration is stored in their respective configuration files</p>
+</li>
+<li>
+<p>Config files are:</p>
+<ul>
+<li>Auto-generated from other configurations</li>
+<li>Created dynamically from the system state</li>
+<li>Produced at runtime</li>
+<li>User-developed.</li>
+</ul>
+</li>
+<li>
+<p>Units operational states:</p>
+<ul>
+<li>active</li>
+<li>inactive</li>
+<li>in the process of being activated</li>
+<li>deactivated</li>
+<li>failed.</li>
+</ul>
+</li>
+<li>
+<p>Units can be enabled or disabled</p>
+<ul>
+<li>enabled unit
+<ul>
+<li>can be started to an active state</li>
+</ul>
+</li>
+<li>disabled unit
+<ul>
+<li>cannot be started.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Units have a name and a type, and they are</p>
+<ul>
+<li>encoded in files with names in the form unitname.type. Some</li>
+<li>examples:
+<ul>
+<li>tmp.mount</li>
+<li>sshd.service</li>
+<li>syslog.socket</li>
+<li>umount.target.</li>
+</ul>
+</li>
+</ul>
+<p>There are two types of unit configuration files:</p>
+<ul>
+<li>System unit files
+<ul>
+<li>distributed with installed packages and located in the /usr/lib/systemd/system/</li>
+</ul>
+</li>
+<li>User unit files
+<ul>
+<li>user-defined and stored in the /etc/systemd/user/</li>
+</ul>
+</li>
+</ul>
+<p>View unit config file directories:
+<code>ls -l /usr/lib/systemd/system</code>
+<code>ls -l /etc/systemd/user</code></p>
+<p><code>pkg-config</code> command:</p>
+<ul>
+<li>
+<p>View systemd unit config directory information:
+<code>pkg-config systemd --variable=systemdsystemunitdir</code>
+<code>pkg-config systemd --variable=systemduserconfdir</code></p>
+</li>
+<li>
+<p>additional system units that are created at runtime and destroyed when they are no longer needed.</p>
+<ul>
+<li>located in  /run/systemd/system/</li>
+</ul>
+</li>
+<li>
+<p>runtime unit files take precedence over the system unit files</p>
+</li>
+<li>
+<p>user unit files take priority over the runtime files.</p>
+</li>
+</ul>
+<p>Unit configuration files</p>
+<ul>
+<li>direct replacement of the initialization scripts found in /etc/rc.d/init.d/ in older RHEL releases.</li>
+</ul>
+<p>11 unit types</p>
+<table>
+  <thead>
+      <tr>
+          <th><strong>Unit Type</strong></th>
+          <th><strong>Description</strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Automount</td>
+          <td>automount capabilities for on-demand mounting of file systems</td>
+      </tr>
+      <tr>
+          <td>Device</td>
+          <td>Exposes kernel devices in systemd and may be used to implement device-based activation</td>
+      </tr>
+      <tr>
+          <td>Mount</td>
+          <td>Controls when and how to mount or unmount file systems</td>
+      </tr>
+      <tr>
+          <td>Path</td>
+          <td>Activates a service when monitored files or directories are accessed</td>
+      </tr>
+      <tr>
+          <td>Scope</td>
+          <td>Manages foreign processes instead of starting them</td>
+      </tr>
+      <tr>
+          <td>Service</td>
+          <td>Starts, stops, restarts, or reloads service daemons and the processes they are made up of</td>
+      </tr>
+      <tr>
+          <td>Slice</td>
+          <td>May be used to group units, which manage system processes in a tree-like structure for resource management</td>
+      </tr>
+      <tr>
+          <td>Socket</td>
+          <td>Encapsulates local inter-process communication or network sockets for use by matching service units</td>
+      </tr>
+      <tr>
+          <td>Swap</td>
+          <td>Encapsulates swap partitions</td>
+      </tr>
+      <tr>
+          <td>Target</td>
+          <td>Defines logical grouping of units</td>
+      </tr>
+      <tr>
+          <td>Timer</td>
+          <td>Useful for triggering activation of other units based on timers</td>
+      </tr>
+  </tbody>
+</table>
+<p>Unit files contain common and specific configuration elements.
+Common elements</p>
+<ul>
+<li>fall under the [Unit] and [Install] sections
+<ul>
+<li>description</li>
+<li>documentation location</li>
+<li>dependency information</li>
+<li>conflict information</li>
+<li>other options</li>
+</ul>
+</li>
+<li>independent of the type of unit
+unit-specific configuration data</li>
+<li>located under the unit type section:
+<ul>
+<li>[Service] for the service unit type</li>
+<li>[Socket] for the socket unit type</li>
+<li>so forth</li>
+</ul>
+</li>
+</ul>
+<p>Sample unit file for sshd.service from the /usr/lib/systemd/system/:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>david@fedora:~$ cat /usr/lib/systemd/system/sshd.service
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>Unit<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">Description</span><span style="color:#ff7b72;font-weight:bold">=</span>OpenSSH server daemon
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">Documentation</span><span style="color:#ff7b72;font-weight:bold">=</span>man:sshd<span style="color:#ff7b72;font-weight:bold">(</span>8<span style="color:#ff7b72;font-weight:bold">)</span> man:sshd_config<span style="color:#ff7b72;font-weight:bold">(</span>5<span style="color:#ff7b72;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">After</span><span style="color:#ff7b72;font-weight:bold">=</span>network.target sshd-keygen.target
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">Wants</span><span style="color:#ff7b72;font-weight:bold">=</span>sshd-keygen.target
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># Migration for Fedora 38 change to remove group ownership for standard host keys</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># See https://fedoraproject.org/wiki/Changes/SSHKeySignSuidBit</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">Wants</span><span style="color:#ff7b72;font-weight:bold">=</span>ssh-host-keys-migration.service
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>Service<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">Type</span><span style="color:#ff7b72;font-weight:bold">=</span>notify
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">EnvironmentFile</span><span style="color:#ff7b72;font-weight:bold">=</span>-/etc/sysconfig/sshd
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">ExecStart</span><span style="color:#ff7b72;font-weight:bold">=</span>/usr/sbin/sshd -D <span style="color:#79c0ff">$OPTIONS</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">ExecReload</span><span style="color:#ff7b72;font-weight:bold">=</span>/bin/kill -HUP <span style="color:#79c0ff">$MAINPID</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">KillMode</span><span style="color:#ff7b72;font-weight:bold">=</span>process
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">Restart</span><span style="color:#ff7b72;font-weight:bold">=</span>on-failure
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">RestartSec</span><span style="color:#ff7b72;font-weight:bold">=</span>42s
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>Install<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">WantedBy</span><span style="color:#ff7b72;font-weight:bold">=</span>multi-user.target</span></span></code></pre></div>
+<ul>
+<li>Units can have dependencies based on a sequence (ordering) or a requirement.
+<ul>
+<li>sequence
+<ul>
+<li>outlines one or more actions that need to be taken before or after the activation of a unit (the Before and After directives).</li>
+</ul>
+</li>
+<li>requirement
+<ul>
+<li>specifies what must already be running (the Requires directive) or not running (the Conflicts directive) in order for the successful launch of a unit.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Example:</p>
+<ul>
+<li>The <em>graphical.target</em> unit file tells us that the system must already be operating in the multi-user mode and not in rescue mode in order for it to boot successfully into the graphical mode.</li>
+</ul>
+<p>Wants</p>
+<ul>
+<li>May be used instead of Requires in the [Unit] or [Install] section so that the unit is not forced to fail activation if a required unit fails to start.</li>
+</ul>
+<p>Run <strong>man systemd.unit</strong> for details on systemd unit files.</p>
+<ul>
+<li>There are also other types of dependencies</li>
+<li>systemd generally sets and maintains inter-service dependencies automatically
+<ul>
+<li>This can be done manually if needed.</li>
+</ul>
+</li>
+</ul>
+<p>Targets</p>
+<ul>
+<li>logical collections of units</li>
+<li>special systemd unit type with the .target file extension.</li>
+<li>share the directory locations with other unit configuration files.</li>
+<li>used to execute a series of units.
+<ul>
+<li>true for booting the system to a desired operational run level with all the required services up and running.</li>
+</ul>
+</li>
+<li>Some targets inherit services from other targets and add their own to them.</li>
+<li>systemd includes several predefined targets</li>
+</ul>
+<table>
+  <thead>
+      <tr>
+          <th>Target</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>halt</td>
+          <td>Shuts down and halts the system</td>
+      </tr>
+      <tr>
+          <td>poweroff</td>
+          <td>Shuts down and powers off the system</td>
+      </tr>
+      <tr>
+          <td>shutdown</td>
+          <td>Shuts down the system</td>
+      </tr>
+      <tr>
+          <td>rescue</td>
+          <td>Single-user target for running administrative and recovery functions. All local file systems are mounted. Some essential services are started, but networking remains disabled.</td>
+      </tr>
+      <tr>
+          <td>emergency</td>
+          <td>Runs an emergency shell. The root file system is mounted in read-only mode; other file systems are not mounted. Networking and other services remain disabled.</td>
+      </tr>
+      <tr>
+          <td>multi-user</td>
+          <td>Multi-user target with full network support, but without GUI</td>
+      </tr>
+      <tr>
+          <td>graphical</td>
+          <td>Multi-user target with full network support and GUI</td>
+      </tr>
+      <tr>
+          <td>reboot</td>
+          <td>Shuts down and reboots the system</td>
+      </tr>
+      <tr>
+          <td>default</td>
+          <td>A special soft link that points to the default system boot target (multi-user.target or graphical.target)</td>
+      </tr>
+      <tr>
+          <td>hibernate</td>
+          <td>Puts the system into hibernation by saving the running state of the system on the hard disk and powering it off. When powered up, the system restores from its saved state rather than booting up.</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="systemd-targets">Systemd Targets<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Target unit files</p>
+<ul>
+<li>contain all information under the [Unit] section
+<ul>
+<li>description</li>
+<li>documentation location</li>
+<li>dependency and conflict information.</li>
+</ul>
+</li>
+</ul>
+<p>Show the graphical target file (/usr/lib/systemd/system/graphical.target):</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># cat /usr/lib/systemd/system/graphical.target</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>Unit<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">Description</span><span style="color:#ff7b72;font-weight:bold">=</span>Graphical Interface
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">Documentation</span><span style="color:#ff7b72;font-weight:bold">=</span>man:systemd.special<span style="color:#ff7b72;font-weight:bold">(</span>7<span style="color:#ff7b72;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">Requires</span><span style="color:#ff7b72;font-weight:bold">=</span>multi-user.target
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">Wants</span><span style="color:#ff7b72;font-weight:bold">=</span>display-manager.service
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">Conflicts</span><span style="color:#ff7b72;font-weight:bold">=</span>rescue.service rescue.target
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">After</span><span style="color:#ff7b72;font-weight:bold">=</span>multi-user.target rescue.service rescue.target display-manager.service
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">AllowIsolate</span><span style="color:#ff7b72;font-weight:bold">=</span>yes</span></span></code></pre></div>
+<p>Requires, Wants, Conflicts, and After suggests that the system must have already accomplished the rescue.service, rescue.target, multi-user.target, and display-manager.service levels in order to be declared running in the graphical target.</p>
+<p>Run <code>man systemd.target</code>for details</p>
+<h3 id="systemctl-command">systemctl Command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Performs administrative functions and supports plentiful subcommands and flags.</li>
+</ul>
+<table>
+  <thead>
+      <tr>
+          <th><strong>Subcommand</strong></th>
+          <th><strong>Description</strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>daemon-reload</td>
+          <td>Re-reads and reloads all unit configuration files and recreates the entire user dependency tree.</td>
+      </tr>
+      <tr>
+          <td>enable (disable)</td>
+          <td>Activates (deactivates) a unit for autostart at system boot</td>
+      </tr>
+      <tr>
+          <td>get-default (set-default)</td>
+          <td>Shows (sets) the default boot target</td>
+      </tr>
+      <tr>
+          <td>get-property (set-property)</td>
+          <td>Returns (sets) the value of a property</td>
+      </tr>
+      <tr>
+          <td>is-active</td>
+          <td>Checks whether a unit is running</td>
+      </tr>
+      <tr>
+          <td>is-enabled</td>
+          <td>Displays whether a unit is set to autostart at system boot</td>
+      </tr>
+      <tr>
+          <td>is-failed</td>
+          <td>Checks whether a unit is in the failed state</td>
+      </tr>
+      <tr>
+          <td>isolate</td>
+          <td>Changes the running state of a system</td>
+      </tr>
+      <tr>
+          <td>kill</td>
+          <td>Terminates all processes for a unit</td>
+      </tr>
+      <tr>
+          <td>list-dependencies</td>
+          <td>Lists dependency tree for a unit</td>
+      </tr>
+      <tr>
+          <td>list-sockets</td>
+          <td>Lists units of type socket</td>
+      </tr>
+      <tr>
+          <td>list-unit-files</td>
+          <td>Lists installed unit files</td>
+      </tr>
+      <tr>
+          <td>list-units</td>
+          <td>Lists known units. This is the default behavior when systemctl is executed without any arguments.</td>
+      </tr>
+      <tr>
+          <td>mask (unmask)</td>
+          <td>Prohibits (permits) auto and manual activation of a unit to avoid potential conflict</td>
+      </tr>
+      <tr>
+          <td>reload</td>
+          <td>Forces a running unit to re-read its configuration file. This action does not change the PID of the running unit.</td>
+      </tr>
+      <tr>
+          <td>restart</td>
+          <td>Stops a running unit and restarts it</td>
+      </tr>
+      <tr>
+          <td>show</td>
+          <td>Shows unit properties</td>
+      </tr>
+      <tr>
+          <td>start (stop)</td>
+          <td>Starts (stops) a unit</td>
+      </tr>
+      <tr>
+          <td>status</td>
+          <td>Presents the unit status information</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="listing-and-viewing-units">Listing and Viewing Units<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>List all units that are currently loaded in memory along with their status and description:
+<code>systemctl</code></p>
+<p>Output:
+UNIT column</p>
+<ul>
+<li>
+<p>shows the name of the unit and its location in the tree
+LOAD column</p>
+</li>
+<li>
+<p>reflects whether the unit configuration file was properly loaded (loaded, not found, bad setting, error, and masked)
+ACTIVE column</p>
+</li>
+<li>
+<p>returns the high-level activation state ( active, reloading, inactive, failed, activating, and deactivating)
+SUB column</p>
+</li>
+<li>
+<p>depicts the low-level unit activation state (reports unit-specific information)
+DESCRIPTION column</p>
+</li>
+<li>
+<p>illustrates the  unit&rsquo;s content and functionality.</p>
+</li>
+<li>
+<p>systemctl only lists active units by default</p>
+</li>
+</ul>
+<p><code>--all</code></p>
+<ul>
+<li>include the inactive units:</li>
+</ul>
+<p>List all active and inactive units of type socket:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl -t socket --all</span></span></code></pre></div>
+<p>List all units of type socket currently loaded in memory and the service they activate, sorted by the listening address:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl list-sockets</span></span></code></pre></div>
+<p>List all unit files (column 1) installed on the system and their current state (column 2):</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl list-unit-files</span></span></code></pre></div>
+<p>List all units that failed to start at the last system boot:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl --failed</span></span></code></pre></div>
+<p>List the hierarchy of all dependencies (required and wanted units) for the current default target:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl list-dependencies</span></span></code></pre></div>
+<p>List the hierarchy of all dependencies (required and wanted units) for a specific unit such as <em>atd.service</em>:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl list-dependencies atd.service</span></span></code></pre></div>
+<h3 id="managing-service-units">Managing Service Units<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>systemctl subcommands to manage service units, including</p>
+<ul>
+<li>starting</li>
+<li>stopping</li>
+<li>restarting</li>
+<li>checking status</li>
+</ul>
+<p>Check the current operational status and other details for the <em>atd</em> service:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl status atd</span></span></code></pre></div>
+<p>Output:
+service description</p>
+<ul>
+<li>read from /usr/lib/systemd/system/atd.service
+load status, which</li>
+<li>reveals the current load status of the unit configuration file in memory.</li>
+<li>Other possibilities for &ldquo;Loaded&rdquo; include
+<ul>
+<li>&ldquo;error&rdquo; (if there was a problem loading the file)</li>
+<li>&quot;not-found&quot; (if no file associated with this unit was found)</li>
+<li>&quot;bad-setting&quot; (if a key setting was missing)</li>
+<li>&quot;masked&quot; (if the unit configuration file is masked)</li>
+</ul>
+</li>
+<li>(enable or disable) for autostart at system boot.
+Active</li>
+<li>current activation status</li>
+<li>time the service was started</li>
+<li>Possible states:
+<ul>
+<li><strong>Active (running)</strong>: The service is running with one or more processes</li>
+<li><strong>Active (exited):</strong> Completed a one-time configuration</li>
+<li><strong>Active (waiting)</strong>: Running but waiting for an event</li>
+<li><strong>Inactive:</strong> Not running</li>
+<li><strong>Activating:</strong> In the process of being activated</li>
+<li><strong>Deactivating</strong>: In the process of being deactivated</li>
+<li><strong>Failed:</strong> If the service crashed or could not be started
+Also includes Main PID of the service process and more.</li>
+</ul>
+</li>
+</ul>
+<p>Disable the <em>atd</em> service from autostarting at the next system reboot:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo systemctl disable atd</span></span></code></pre></div>
+<p>Re-enable <em>atd</em> to autostart at the next system reboot:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl enable atd</span></span></code></pre></div>
+<p>Check whether <em>atd</em> is set to autostart at the next system reboot:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl is-enabled atd</span></span></code></pre></div>
+<p>Check whether the <em>atd</em> service is running:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl is-active atd</span></span></code></pre></div>
+<p>Stop and restart <em>atd</em>, run either of the following:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl stop atd ; systemctl start atd</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl restart atd</span></span></code></pre></div>
+<p>Show the details of the <em>atd</em> service:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl show atd</span></span></code></pre></div>
+<p>Prohibit <em>atd</em> from being enabled or disabled:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl mask atd</span></span></code></pre></div>
+<p>Try disabling or enabling <em>atd</em> and observe the effect of the previous command:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl disable atd</span></span></code></pre></div>
+<p>Reverse the effect of the <em>mask</em> subcommand and try disable and enable operations:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl unmask atd <span style="color:#ff7b72;font-weight:bold">&amp;&amp;</span> systemctl disable atd <span style="color:#ff7b72;font-weight:bold">&amp;&amp;</span> systemctl enable atd</span></span></code></pre></div>
+<h3 id="managing-target-units">Managing Target Units<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><em>systemctl</em> can also manage target units.</p>
+<ul>
+<li>view or change the default boot target</li>
+<li>switch from one running target into another</li>
+</ul>
+<p>View what units of type target are currently loaded and active:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl -t target</span></span></code></pre></div>
+<p>output:</p>
+<ul>
+<li>target unit&rsquo;s name</li>
+<li>load state</li>
+<li>high-level and low-level activation states</li>
+<li>short description.</li>
+</ul>
+<p>&ndash;all option to the above</p>
+<ul>
+<li>see all loaded targets in either active or inactive state.</li>
+</ul>
+<p><strong>Viewing and Setting Default Boot Target</strong></p>
+<ul>
+<li>view the current default boot target and to set it.
+<ul>
+<li><em>get-default</em> and <em>set-default</em> subcommands</li>
+</ul>
+</li>
+</ul>
+<p>Check the current default boot target:</p>
+<ul>
+<li>You may have to modify the default boot target persistently for the exam.</li>
+</ul>
+<p>Change the current default boot target from graphical.target to multi-user.target:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl set-default multi-user</span></span></code></pre></div>
+<ul>
+<li>removes the existing symlink (<em>default.target</em>) pointing to the old boot target and replaces it with the new target file path.</li>
+</ul>
+<p>revert the default boot target to graphical:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl set-default graphical</span></span></code></pre></div>
+<h3 id="switching-into-specific-targets">Switching into Specific Targets<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Use  <code>systemctl</code> to transition the running system from one target state into another.</li>
+<li>graphical, multi-user, reboot, shutdown&mdash;are the most common</li>
+<li>rescue and emergency targets are for troubleshooting and system recovery purposes,</li>
+<li>poweroff and halt are similar to shutdown</li>
+<li>hibernate is suitable for mobile devices.</li>
+</ul>
+<p>Switch into multi-user using the <em>isolate</em> subcommand:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl isolate multi-user</span></span></code></pre></div>
+<ul>
+<li>This will stop the graphical service on the system and display the text-based console login screen.</li>
+</ul>
+<p>Type in a username such as <em>user1</em> and enter the password to log in:</p>
+<p>Log in and return to the graphical target:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl isolate graphical</span></span></code></pre></div>
+<p>Shut down the system and power it off, use the following or simply
+run the <em>poweroff</em> command:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl poweroff</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> poweroff</span></span></code></pre></div>
+<p>Shut down and reboot the system:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl reboot</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> reboot</span></span></code></pre></div>
+<p><code>halt</code>, <code>poweroff</code>, and <code>reboot</code> are symbolic links to the <em>systemctl</em> command:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -l /usr/sbin/halt /usr/sbin/poweroff  /usr/sbin/reboot</span>
+</span></span><span style="display:flex;"><span> lrwxrwxrwx. <span style="color:#a5d6ff">1</span> root root <span style="color:#a5d6ff">16</span> Aug <span style="color:#a5d6ff">22</span>  <span style="color:#a5d6ff">2023</span> /usr/sbin/halt -&gt;  ../bin/systemctl
+</span></span><span style="display:flex;"><span> lrwxrwxrwx. <span style="color:#a5d6ff">1</span> root root <span style="color:#a5d6ff">16</span> Aug <span style="color:#a5d6ff">22</span>  <span style="color:#a5d6ff">2023</span> /usr/sbin/poweroff -&gt;  ../bin/systemctl
+</span></span><span style="display:flex;"><span> lrwxrwxrwx. <span style="color:#a5d6ff">1</span> root root <span style="color:#a5d6ff">16</span> Aug <span style="color:#a5d6ff">22</span>  <span style="color:#a5d6ff">2023</span> /usr/sbin/reboot -&gt;  ../bin/systemctl</span></span></code></pre></div>
+<p><code>shutdown</code> command options:
+-H now</p>
+<ul>
+<li>Halt
+-P now</li>
+<li>poweroff
+-r now</li>
+<li>reboot</li>
+<li>broadcasts a warning message to all logged-in users</li>
+<li>blocks new user login attempts</li>
+<li>waits for the specified amount of time for users to log off</li>
+<li>stops the services</li>
+<li>shut the system down to the specified target state.</li>
+</ul>
+<h2 id="system-logging">System Logging<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Log files need to be rotated periodically to prevent the file system space from filling up.</li>
+<li>Configuration files that define the default and custom locations to direct the log messages to and to configure rotation settings.
+system log file</li>
+<li>records custom messages sent to it.</li>
+<li>systemd includes a service for viewing and managing system logs in addition to the traditional logging service.</li>
+<li>This service maintains a log of runtime activities for faster retrieval and can be configured to store the information permanently.</li>
+</ul>
+<p><em>System logging</em> (<em>syslog</em> for short)</p>
+<ul>
+<li>capture messages generated by:
+<ul>
+<li>kernel</li>
+<li>daemons</li>
+<li>commands</li>
+<li>user activities</li>
+<li>applications</li>
+<li>other events</li>
+</ul>
+</li>
+<li>Forwards messages to various log files</li>
+<li>For security auditing, service malfunctioning, system troubleshooting, or informational purposes.</li>
+</ul>
+<p><em>rsyslogd</em> daemon (<em>rocket-fast system for log processing</em>)</p>
+<ul>
+<li>Responsible for system logging</li>
+<li>Multi-threaded</li>
+<li>support for:
+<ul>
+<li>enhanced filtering</li>
+<li>encryption-protected message relaying</li>
+<li>variety of configuration options.</li>
+</ul>
+</li>
+<li>Reads its configuration file /etc/rsyslog.conf and the configuration files located in /etc/rsyslog.d/ at startup.</li>
+<li>/var/log
+<ul>
+<li>Default depository for most system log files</li>
+<li>Other services such as audit, Apache, etc. have subdirectories here as well.</li>
+</ul>
+</li>
+</ul>
+<p>rsyslog service</p>
+<ul>
+<li>modular
+<ul>
+<li>allows the modules listed in its configuration file to be dynamically loaded in the kernel when/as needed.</li>
+<li>Each module brings a new functionality to the system upon loading.</li>
+</ul>
+</li>
+</ul>
+<p><em>rsyslogd</em> daemon</p>
+<ul>
+<li>
+<p>can be stopped manually using <code>systemctl stop rsyslog</code></p>
+</li>
+<li>
+<p>start, restart, reload, and status options are also available</p>
+</li>
+<li>
+<p>A PID is assigned to the daemon at startup</p>
+</li>
+<li>
+<p>rsyslogd.pid file is created in the <em>/run</em> directory to save the PID.</p>
+</li>
+<li>
+<p>PID is stored to prevent multiple instances of this daemon.</p>
+</li>
+</ul>
+<h3 id="thesyslog-configuration-file">TheSyslog Configuration File<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>/etc/rsyslog.conf</p>
+<ul>
+<li>primary syslog configuration file</li>
+</ul>
+<p>View /etc/rsyslog.conf:
+<code>cat /etc/rsyslog.conf</code></p>
+<p>Output:
+Three sections:</p>
+<ul>
+<li>
+<p>Modules, Global Directives, and Rules.</p>
+<ul>
+<li>Modules section
+<ul>
+<li>default defines two modules imuxsock and imjournal</li>
+<li>loaded on demand.
+imuxsock module</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>furnishes support for local system logging via the <em>logger</em> command
+imjournal module</p>
+</li>
+<li>
+<p>allows access to the systemd journal.</p>
+</li>
+<li>
+<p>Global Directives section</p>
+<ul>
+<li>contains three active directives.</li>
+<li>Definitions in this section influence the overall functionality of the <em>rsyslog</em> service.
+<ul>
+<li>first directive
+<ul>
+<li>Sets the location for the storage of auxiliary files (/var/lib/rsyslog).</li>
+</ul>
+</li>
+<li>second directive
+<ul>
+<li>instructs the <em>rsyslog</em> service to save captured messages using traditional file formatting</li>
+</ul>
+</li>
+<li>third directive
+<ul>
+<li>directs the service to load additional configuration from files located in the /etc/rsyslogd.d/ directory.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Rules section</p>
+<ul>
+<li>Right field is referred to as <em>action</em>.
+selector field</li>
+<li>left field of the rules section</li>
+<li>divided into two period-separated sub-fields called
+<ul>
+<li><em>facility</em> (left)
+<ul>
+<li>representing one or more system process categories that generate messages</li>
+</ul>
+</li>
+<li><em>priority</em> (right)
+<ul>
+<li>identifying the severity associated with the messages.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>semicolon (;) is used as a distinction mark if multiple facility.priority groups are present.
+action field</li>
+<li>determines the destination to send the messages to.</li>
+<li>numerous supported facilities:
+<ul>
+<li>auth</li>
+<li>authpriv</li>
+<li>cron</li>
+<li>daemon</li>
+<li>kern</li>
+<li>lpr</li>
+<li>mail</li>
+<li>news</li>
+<li>syslog</li>
+<li>user</li>
+<li>uucp</li>
+<li>local0 throughv local7</li>
+<li>asterisk (*) character represents all of them.</li>
+</ul>
+</li>
+<li>supported priorities in the descending criticality order:
+<ul>
+<li>emerg</li>
+<li>alert</li>
+<li>crit</li>
+<li>error</li>
+<li>warning</li>
+<li>notice</li>
+<li>info</li>
+<li>debug</li>
+<li>none</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>If a lower priority is selected, the daemon logs all messages of the service at that and higher levels.</p>
+</li>
+</ul>
+<p>After modifying the syslog configuration file,  Inspect it and set the verbosity:
+<code>rsyslogd -N 1</code>  (-N inspect, 1 level 1)</p>
+<ul>
+<li>Restart or reload the rsyslog service in order for the changes to take effect.</li>
+</ul>
+<h3 id="rotating-log-files">Rotating Log Files<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Log location is defined in the rsyslog configuration file.</p>
+<p>View the /var/log/ directory:
+<code>ls -l /var/log</code></p>
+<p>systemd unit file called logrotate.timer under the /usr/lib/systemd/system directory invokes the logrotate service (/usr/lib/systemd/system/logrotate.service) on a daily basis. Here is what this file contains:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@localhost cron.daily<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># systemctl cat logrotate.timer</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#8b949e;font-style:italic"># /usr/lib/systemd/system/logrotate.timer</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>Unit<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">Description</span><span style="color:#ff7b72;font-weight:bold">=</span>Daily rotation of log files
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">Documentation</span><span style="color:#ff7b72;font-weight:bold">=</span>man:logrotate<span style="color:#ff7b72;font-weight:bold">(</span>8<span style="color:#ff7b72;font-weight:bold">)</span> man:logrotate.conf<span style="color:#ff7b72;font-weight:bold">(</span>5<span style="color:#ff7b72;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>Timer<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">OnCalendar</span><span style="color:#ff7b72;font-weight:bold">=</span>daily
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">AccuracySec</span><span style="color:#ff7b72;font-weight:bold">=</span>1h
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">Persistent</span><span style="color:#ff7b72;font-weight:bold">=</span>true
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>Install<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">WantedBy</span><span style="color:#ff7b72;font-weight:bold">=</span>timers.target</span></span></code></pre></div>
+<p>The logrotate service runs rotations as per the schedule and other parameters defined in the /etc/logrotate.conf and additional log configuration files located in the /etc/logrotate.d directory.</p>
+<h3 id="etccrondailylogrotate-script">/etc/cron.daily/logrotate script<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>invokes the <em>logrotate</em> command on a daily basis.</li>
+<li>runs a rotation as per the schedule defined in /etc/logrotate.conf and the</li>
+<li>configuration files for various services are located in /etc/logrotate.d/ The</li>
+<li>configuration files may be modified to alter the schedule or include additional tasks on log files such as:
+<ul>
+<li>removing</li>
+<li>compressing</li>
+<li>emailing</li>
+</ul>
+</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> grep -v ^$ /etc/logrotate.conf
+</span></span><span style="display:flex;"><span> <span style="color:#8b949e;font-style:italic"># see &#34;man logrotate&#34; for details</span>
+</span></span><span style="display:flex;"><span> <span style="color:#8b949e;font-style:italic"># global options do not affect preceding include directives</span>
+</span></span><span style="display:flex;"><span> <span style="color:#8b949e;font-style:italic"># rotate log files weekly</span>
+</span></span><span style="display:flex;"><span> weekly
+</span></span><span style="display:flex;"><span> <span style="color:#8b949e;font-style:italic"># keep 4 weeks worth of backlogs</span>
+</span></span><span style="display:flex;"><span> rotate <span style="color:#a5d6ff">4</span>
+</span></span><span style="display:flex;"><span> <span style="color:#8b949e;font-style:italic"># create new (empty) log files after rotating old ones</span>
+</span></span><span style="display:flex;"><span> create
+</span></span><span style="display:flex;"><span> <span style="color:#8b949e;font-style:italic"># use date as a suffix of the rotated file</span>
+</span></span><span style="display:flex;"><span> dateext
+</span></span><span style="display:flex;"><span> <span style="color:#8b949e;font-style:italic"># uncomment this if you want your log files compressed</span>
+</span></span><span style="display:flex;"><span> <span style="color:#8b949e;font-style:italic">#compress</span>
+</span></span><span style="display:flex;"><span> <span style="color:#8b949e;font-style:italic"># packages drop log rotation information into this directory</span>
+</span></span><span style="display:flex;"><span> include /etc/logrotate.d
+</span></span><span style="display:flex;"><span> <span style="color:#8b949e;font-style:italic"># system-specific logs may be also be configured here.</span></span></span></code></pre></div>
+<p>content:</p>
+<ul>
+<li>
+<p>default log rotation frequency (weekly).</p>
+</li>
+<li>
+<p>period of time (4 weeks) to retain the rotated logs before deleting them.</p>
+</li>
+<li>
+<p>Each time a log file is rotated:</p>
+<ul>
+<li>Empty replacement file is created with the date as a suffix to its name</li>
+<li><em>rsyslog</em> service is restarted</li>
+</ul>
+</li>
+<li>
+<p>script presents the option of compressing the rotated files using the <em>gzip</em> utility.</p>
+</li>
+</ul>
+<ul>
+<li>logrotate command checks for the presence of additional log configuration files in /etc/logrotate.d/ and includes them as necessary.</li>
+<li>directives defined in /etc/logrotate.conf file have a global effect on all log files</li>
+<li>can define custom settings for a specific log file in /etc/logrotate.conf/ or create a separate file in /etc/logrotate.d/</li>
+<li>settings defined in user-defined files overrides the global settings.</li>
+</ul>
+<p>The /etc/logrotate.d/ directory includes additional configuration files for other service logs:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> ls -l /etc/logrotate.d/</span></span></code></pre></div>
+<p>Show the file content for btmp (records of failed user login attempts) that is used to control the rotation behavior for  /var/log/btmp:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> cat /etc/logrotate.d/btmp
+</span></span><span style="display:flex;"><span>	<span style="color:#a5d6ff">```</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- rotation is once a month. 
+</span></span><span style="display:flex;"><span>- replacement file created will get read/write permission bits <span style="color:#ff7b72">for</span> the owner <span style="color:#ff7b72;font-weight:bold">(</span>*root*<span style="color:#ff7b72;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>- owning group will be set to *utmp*
+</span></span><span style="display:flex;"><span>- rsyslog service will maintain one rotated copy of the *btmp* log file.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">### The Boot Log File</span>
+</span></span><span style="display:flex;"><span>Logs generated during the system startup:
+</span></span><span style="display:flex;"><span>- Display the service startup sequence.
+</span></span><span style="display:flex;"><span>- Status showing whether the service was started successfully. 
+</span></span><span style="display:flex;"><span>- May help in any post-boot troubleshooting <span style="color:#ff7b72">if</span> required. 
+</span></span><span style="display:flex;"><span>- /var/log/boot.log
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>View /var/log/boot.log:</span></span></code></pre></div>
+<p>sudo head /var/log/boot.log</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>output:
+- OK or FAILED 
+   - indicates if the service was started successfully or not.
+
+### The System Log File
+/var/log/messages
+- default location for storing most system activities, as defined in the *rsyslog.conf* file
+- saves log information in plain text format 
+- may be viewed with any file display utility (*cat*, *more*, *pg*, *less*, *head*, or *tail*.) 
+- may be observed in real time using the *tail* command with the -f switch. The *messages* file 
+- captures:
+   - the date and time of the activity, 
+   - hostname of the system, 
+   - name and PID of the service
+   - short description of the event being logged.
+
+View /var/log messages:
+```bash
+tail /var/log/messages</code></pre></div>
+<h3 id="logging-custom-messages">Logging Custom Messages<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>The Modules section in the <em>rsyslog.conf</em> file</p>
+<ul>
+<li>Provides the support via the imuxsock module to record custom messages to the <em>messages</em> file using the <em>logger</em> command.</li>
+</ul>
+<h3 id="logger-command">logger command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Add a note indicating the calling user has rebooted the system:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code> logger -i &#34;System rebooted by $USER&#34;</code></pre></div>
+<p>observe the message recorded along with the timestamp, hostname, and PID:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> tail -l /var/log/messages</span></span></code></pre></div>
+<p>-p option</p>
+<ul>
+<li>specify a priority level either as a numerical value or in the facility.priority format.</li>
+<li>default priority
+<ul>
+<li>user.notice.</li>
+</ul>
+</li>
+</ul>
+<p>View logger man pages:
+<code>man logger</code></p>
+<h3 id="the-systemd-journal">The systemd Journal<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>
+<p>Systemd-based logging service for the collection and storage of logging data.</p>
+</li>
+<li>
+<p>Implemented via the <em>systemd-journald</em> daemon.</p>
+</li>
+<li>
+<p>Gather, store, and display logging events from a variety of sources such as:</p>
+<ul>
+<li>the kernel</li>
+<li><em>rsyslog</em> and other services</li>
+<li>initial RAM disk</li>
+<li>alerts generated during the early boot stage.
+journals</li>
+</ul>
+</li>
+<li>
+<p>stored in the binary format files</p>
+</li>
+<li>
+<p>located in  /run/log/journal/ (remember run is not a persistent directory)</p>
+</li>
+<li>
+<p>structured and indexed for faster and easier searches</p>
+</li>
+<li>
+<p>May be viewed and managed using the <em>journalctl</em> command.</p>
+</li>
+<li>
+<p>Can enable persistent storage for the logs if desired.</p>
+</li>
+<li>
+<p>RHEL runs both <em>rsyslogd</em> and <em>systemd-journald</em> concurrently.</p>
+</li>
+<li>
+<p>data gathered by <em>systemd-journald</em> may be forwarded to <em>rsyslogd</em> for further processing and persistent storage in text format.</p>
+</li>
+</ul>
+<p>/etc/systemd/journald.conf</p>
+<ul>
+<li>main config file for journald</li>
+<li>contains numerous default settings that affect the overall functionality of the service.</li>
+</ul>
+<h3 id="retrieving-and-viewing-messages">Retrieving and Viewing Messages<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<h3 id="journalctl-command">journalctl command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>retrieve messages from the journal for viewing in a variety of ways using different options.</li>
+</ul>
+<p>run <code>journalctl</code> without any options to see all the messages generated since the last system reboot:
+<code>journalctl</code></p>
+<ul>
+<li>format of the messages is similar to that of the events logged to /var/log/messages</li>
+<li>Each line begins with a timestamp followed by the system hostname, process name with or without a PID, and the actual message.</li>
+</ul>
+<p>Display verbose output for each entry:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> journalctl -o verbose</span></span></code></pre></div>
+<p>View all events since the last system reboot:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> journalctl -b</span></span></code></pre></div>
+<p>-0 (default, since the last system reboot),
+-1 (the previous system reboot),
+-2 (two reboots before)
+1 &amp; 2 only work if there are logs persistently stored.</p>
+<p>View only kernel-generated alerts since the last system reboot:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> journalctl -kb0</span></span></code></pre></div>
+<p>Limit the output to view 3 entries only:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> journalctl -n3</span></span></code></pre></div>
+<p>To show all alerts generated by a particular service, such as <em>crond</em>:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> journalctl /usr/sbin/crond</span></span></code></pre></div>
+<p>Retrieve all messages logged for a certain process, such as the PID associated with the <em>chronyd</em> service:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> journalctl <span style="color:#79c0ff">_PID</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#ff7b72">$(</span>pgrep chronyd<span style="color:#ff7b72">)</span></span></span></code></pre></div>
+<p>Reveal all messages for a particular system unit, such as sshd.service:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> journalctl <span style="color:#79c0ff">_SYSTEMD_UNIT</span><span style="color:#ff7b72;font-weight:bold">=</span>sshd.service</span></span></code></pre></div>
+<p>View all error messages logged between a date range, such as October 10, 2019 and October 16, 2019:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> journalctl --since 2019-10-16 --until 2019-10-16 -p err</span></span></code></pre></div>
+<p>Get all warning messages that have appeared today and display them in reverse chronological order:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> journalctl --since today -p warning -r </span></span></code></pre></div>
+<ul>
+<li>Can specify the time range in hh:mm:ss format, or yesterday, today, or tomorrow as well.</li>
+</ul>
+<p>follow option</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> journalctl -f</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> man journalctl</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code> man systemd-journald</code></pre></div>
+<h3 id="preserving-journal-information">Preserving Journal Information<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>enable a separate storage location for the journal to save all its messages there persistently.</li>
+<li>default is under /var/log/journal/</li>
+</ul>
+<p>The <em>systemd-journald</em> service supports four options with the Storage directive to control how the logging data is handled.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Option</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>volatile</td>
+          <td>Stores data in memory only</td>
+      </tr>
+      <tr>
+          <td>persistent</td>
+          <td>Stores data permanently under /var/log/journal and falls back to memory-only option if this directory does not exist or has a permission or other issue. The service creates /var/log/journal in case of its non-existence.</td>
+      </tr>
+      <tr>
+          <td>auto</td>
+          <td>Similar to &ldquo;persistent&rdquo; but does not create /var/log/journal if it does not exist. This is the default option.</td>
+      </tr>
+      <tr>
+          <td>none</td>
+          <td>Disables both volatile and persistent storage options. Not recommended.</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="journal-data-storage-options">Journal Data Storage Options<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>create the /var/log/journal/ manually and use preferred &ldquo;auto&rdquo; option.</p>
+<ul>
+<li>faster query responses from in-memory storage</li>
+<li>access to historical log data from on-disk storage.</li>
+</ul>
+<h3 id="lab-configure-persistent-storage-for-journal-information">Lab: Configure Persistent Storage for Journal Information<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Run the necessary steps to enable and confirm persistent storage for the journals.</p>
+<ol>
+<li>Create a subdirectory called <em>journal</em> under the /var/log/ directory and confirm:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  sudo mkdir /var/log/journal</span></span></code></pre></div>
+<ol start="2">
+<li>Restart the <em>systemd-journald</em> service and confirm:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl restart systemd-journald <span style="color:#ff7b72;font-weight:bold">&amp;&amp;</span> systemctl status systemd- journald</span></span></code></pre></div>
+<ol start="3">
+<li>List the new directory and observe a subdirectory matching the machine ID of the system as defined in the /etc/machine-id file is created:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> ll /var/log/journal <span style="color:#ff7b72;font-weight:bold">&amp;&amp;</span> cat /etc/machine-id</span></span></code></pre></div>
+<ul>
+<li>This log file is rotated automatically once a month based on the settings in the <em>journald.conf</em> file.</li>
+</ul>
+<p>Check the manual pages of journal.conf</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> man journald.conf</span></span></code></pre></div>
+<h2 id="system-tuning">System Tuning<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>System tuning service</p>
+<ul>
+<li>Monitor connected devices</li>
+<li>Tweak their parameters to improve performance or conserve power.</li>
+<li>Recommended tuning profile may be identified and activated for optimal performance and power saving.
+<code>tuned</code></li>
+<li>system tuning service</li>
+<li>monitor storage, networking, processor, audio, video, and a variety of other connected devices</li>
+<li>Adjusts their parameters for better performance or power saving based on a chosen profile.</li>
+<li>Several predefined tuning profiles may be activated either statically or dynamically.</li>
+</ul>
+<p><em>tuned</em> service</p>
+<ul>
+<li>
+<p>static behavior (default)</p>
+<ul>
+<li>activates a selected profile at service startup and continues to use it until it is switched to a different profile.</li>
+</ul>
+</li>
+<li>
+<p>dynamic</p>
+<ul>
+<li>adjusts the system settings based on the live activity data received from monitored system components</li>
+</ul>
+</li>
+</ul>
+<h3 id="tuned-tuning-profiles">tuned tuning Profiles<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Nine profiles to support a variety of use cases.</li>
+<li>Can create custom profiles from nothing or by using one of the existing profiles as a template.</li>
+<li>Must to store the custom profile in /etc/tuned/</li>
+</ul>
+<p>Three groups:
+(1) Performance
+(2) Power consumption
+(3) Balanced</p>
+<table>
+  <thead>
+      <tr>
+          <th><strong>Profile</strong></th>
+          <th><strong>Description</strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Performance</strong></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>Desktop</td>
+          <td>Based on the balanced profile for desktop systems. Offers improved throughput for interactive applications.</td>
+      </tr>
+      <tr>
+          <td>Latency-performance</td>
+          <td>For low-latency requirements</td>
+      </tr>
+      <tr>
+          <td>Network-latency</td>
+          <td>Based on the latency-performance for faster network throughput</td>
+      </tr>
+      <tr>
+          <td>Network-throughput</td>
+          <td>Based on the throughput-performance profile for maximum network throughput</td>
+      </tr>
+      <tr>
+          <td>Virtual-guest</td>
+          <td>Optimized for virtual machines</td>
+      </tr>
+      <tr>
+          <td>Virtual-host</td>
+          <td>Optimized for virtualized hosts</td>
+      </tr>
+      <tr>
+          <td><strong>Power Saving</strong></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>Powersave</td>
+          <td>Saves maximum power at the cost of performance</td>
+      </tr>
+      <tr>
+          <td><strong>Balanced/Max Profiles</strong></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>Balanced</td>
+          <td>Preferred choice for systems that require a balance between performance and power saving</td>
+      </tr>
+      <tr>
+          <td>Throughput-performance</td>
+          <td>Provides maximum performance and consumes maximum power</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="tuning-profiles">Tuning Profiles<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Predefined profiles are located in /usr/lib/tuned/ in subdirectories matching their names.</p>
+<p>View predefined profiles:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> ls -l /usr/lib/tuned</span></span></code></pre></div>
+<p>The default active profile set on <em>server1</em> and <em>server2</em> is the
+<em>virtual-guest</em> profile, as the two systems are hosted in a VirtualBox virtualized environment.</p>
+<h3 id="the-tuned-adm-command">The tuned-adm Command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>single profile management command that comes with tuned</li>
+<li>can list active and available profiles, query current settings, switch between profiles, and turn the tuning off.</li>
+<li>Can recommend the best profile for the system based on many system attributes.</li>
+</ul>
+<p>View the man pages:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> man tuned-adm</span></span></code></pre></div>
+<h3 id="lab-12-2-manage-tuning-profiles">Lab 12-2: Manage Tuning Profiles<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>install the <em>tuned</em> service</li>
+<li>start it now</li>
+<li>enable it for auto-restart upon future system reboots.</li>
+<li>display all available profiles and the current active profile.</li>
+<li>switch to one of the available profiles and confirm.</li>
+<li>determine the recommended profile for the system and switch to it.</li>
+<li>deactivate tuning and reactivate it.</li>
+<li>confirm the activation</li>
+</ul>
+<ol>
+<li>Install the <em>tuned</em> package if it is not already installed:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf install tuned</span></span></code></pre></div>
+<ol start="2">
+<li>Start the <em>tuned</em> service and set it to autostart at reboots:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl --now enable tuned</span></span></code></pre></div>
+<ol start="3">
+<li>Confirm the startup:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl status tuned</span></span></code></pre></div>
+<ol start="4">
+<li>Display the list of available and active tuning profiles:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> tuned-adm list</span></span></code></pre></div>
+<ol start="5">
+<li>List only the current active profile:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> tuned-adm active</span></span></code></pre></div>
+<ol start="6">
+<li>Switch to the <em>powersave</em> profile and confirm:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> tuned-adm profile powersave
+</span></span><span style="display:flex;"><span> tuned-adm active</span></span></code></pre></div>
+<ol start="7">
+<li>Determine the recommended profile for <em>server1</em> and switch to it:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># tuned-adm recommend</span>
+</span></span><span style="display:flex;"><span> virtual-guest
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># tuned-adm profile virtual-guest</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># tuned-adm active</span>
+</span></span><span style="display:flex;"><span> Current active profile: virtual-guest</span></span></code></pre></div>
+<ol start="8">
+<li>Turn off tuning:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># tuned-adm off</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># tuned-adm active</span>
+</span></span><span style="display:flex;"><span> No current active profile.</span></span></code></pre></div>
+<ol start="9">
+<li>Reactivate tuning and confirm:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># tuned-adm profile virtual-guest</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># tuned-adm active</span>
+</span></span><span style="display:flex;"><span> Current active profile: virtual-guest </span></span></code></pre></div>
+<h2 id="sysinit-logging-and-tuning-labs">Sysinit, Logging, and Tuning Labs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="lab-modify-default-boot-target">Lab: Modify Default Boot Target<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Modify the default boot target from graphical to multi-user, and reboot the system to test it.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> systemctl set-default multi-user</span></span></code></pre></div>
+<ul>
+<li>Run the <code>systemctl</code> and <code>who</code> commands after the reboot for validation.</li>
+<li>Restore the default boot target back to graphical and reboot to verify.</li>
+</ul>
+<h3 id="lab-record-custom-alerts">Lab: Record Custom Alerts<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Write the message &ldquo;This is $LOGNAME adding this marker on $(date)&rdquo; to /var/log/messages.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> logger -i <span style="color:#a5d6ff">&#34;This is </span><span style="color:#79c0ff">$LOGNAME</span><span style="color:#a5d6ff"> adding this marker on  </span><span style="color:#ff7b72">$(</span>date<span style="color:#ff7b72">)</span><span style="color:#a5d6ff">&#34;</span></span></span></code></pre></div>
+<ul>
+<li>Ensure that variable and command expansions work. Verify the entry in the file.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> tail -l /var/log/messages</span></span></code></pre></div>
+<h3 id="lab-apply-tuning-profile">Lab: Apply Tuning Profile<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>identify the current system tuning profile with the <em>tuned-adm</em> command.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> tuned-adm active</span></span></code></pre></div>
+<ul>
+<li>List all available profiles.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> tuned-adm list</span></span></code></pre></div>
+<ul>
+<li>List the recommended profile for <em>server1</em>.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> tuned-adm recommend</span></span></code></pre></div>
+<ul>
+<li>Apply the &ldquo;balanced&rdquo; profile and verify with <em>tuned-adm</em>.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> tuned-adm profile balanced</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> tuned-adm active</span></span></code></pre></div>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/the-cheat-code/"><a class="padding" href="/ansible/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/automate-kvm-vms/"><a class="padding" href="/ansible/automate-kvm-vms/">Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-documentation/"><a class="padding" href="/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/playbooks/"><a class="padding" href="/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/execution-environments/"><a class="padding" href="/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/hostname-patterns/"><a class="padding" href="/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/include-and-import-files/"><a class="padding" href="/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2/"><a class="padding" href="/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/user-and-groups/"><a class="padding" href="/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/storage-partitions-and-lvm/"><a class="padding" href="/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/services/"><a class="padding" href="/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/networking-with-ansible/"><a class="padding" href="/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/nfs-setup/"><a class="padding" href="/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimize-ansible-processing/"><a class="padding" href="/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux/"><a class="padding" href="/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/tags/"><a class="padding" href="/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/loops-and-items/"><a class="padding" href="/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/modules-for-troubleshooting/"><a class="padding" href="/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Using Variables In Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/when/"><a class="padding" href="/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5"><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="" data-nav-id="/containers/ansible-and-podman/"><a class="padding" href="/containers/ansible-and-podman/">Ansible and Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/intro-to-containers/"><a class="padding" href="/containers/intro-to-containers/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/convert-docker-compose-to-quadlets/"><a class="padding" href="/containers/convert-docker-compose-to-quadlets/">Convert Docker Compose to Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-links/"><a class="padding" href="/containers/podman-links/">Podman Links<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-quadlets/"><a class="padding" href="/containers/podman-quadlets/">Podman Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/securityenhancedlinux/"><a class="padding" href="/cyber-security/securityenhancedlinux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/learning-touch-typing-1/"><a class="padding" href="/desktop/learning-touch-typing-1/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/learning-touch-typing/"><a class="padding" href="/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup-1/"><a class="padding" href="/desktop/my-fedora-setup-1/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue-2/"><a class="padding" href="/desktop/silverblue-2/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/how-to-study-for-ccna/"><a class="padding" href="/networking/how-to-study-for-ccna/">How I Studied for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-syncronization/"><a class="padding" href="/networking/dns-and-time-syncronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/network-devices-and-connections/"><a class="padding" href="/networking/network-devices-and-connections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/resources-for-passing-ccna/"><a class="padding" href="/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/systems/"><input type="checkbox" id="R-section-859f72c55acd170304a7ecf4dceebb83" aria-controls="R-subsections-859f72c55acd170304a7ecf4dceebb83" checked><label for="R-section-859f72c55acd170304a7ecf4dceebb83"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/systems/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-859f72c55acd170304a7ecf4dceebb83" class="collapsible-menu">
+            <li class="" data-nav-id="/systems/you-need-to-learn-man-pages/"><a class="padding" href="/systems/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/advanced-file-management/"><a class="padding" href="/systems/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/advanced-package-management/"><a class="padding" href="/systems/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/advanced-user-management/"><a class="padding" href="/systems/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/autofs/"><a class="padding" href="/systems/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/file-management/"><a class="padding" href="/systems/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/basic-package-management/"><a class="padding" href="/systems/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/basic-user-management/"><a class="padding" href="/systems/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/boot-process-grub2-kernel/"><a class="padding" href="/systems/boot-process-grub2-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/installation/"><a class="padding" href="/systems/installation/">Installing RHEL Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/interaction/"><a class="padding" href="/systems/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/local-filesystems-and-swap/"><a class="padding" href="/systems/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/network-filesystem-nfs/"><a class="padding" href="/systems/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/partitioning-mbr-gpt/"><a class="padding" href="/systems/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/process-and-task-scheduling/"><a class="padding" href="/systems/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/rm-filesystem-from-partition/"><a class="padding" href="/systems/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/rhcsa-exam-environment/"><a class="padding" href="/systems/rhcsa-exam-environment/">RHCSA Exam Environment Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/rhcsa-vagrant-lab-setup-1/"><a class="padding" href="/systems/rhcsa-vagrant-lab-setup-1/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="active " data-nav-id="/systems/sys-init-logging-and-tuning/"><a class="padding" href="/systems/sys-init-logging-and-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/secure-shell-service-ssh/"><a class="padding" href="/systems/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/thin-provisioning/"><a class="padding" href="/systems/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/time-synchronization/"><a class="padding" href="/systems/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/virtual-data-optimizer-vdo/"><a class="padding" href="/systems/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/remove-formatting-from-highlights/"><a class="padding" href="/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-docker-nginx/"><a class="padding" href="/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/proxmox-pfsense-haproxy-setup/"><a class="padding" href="/tools/proxmox-pfsense-haproxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/stop-using-ai/"><a class="padding" href="/tools/stop-using-ai/">Why I Stopped Using AI so Much<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/install-ansible-using-uv/"><a class="padding" href="/tools/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/tools/new-setup/"><a class="padding" href="/tools/tools/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/tools/using-vagrant-on-linux/"><a class="padding" href="/tools/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-vagrant-on-linux/"><a class="padding" href="/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/tools/vimguide/"><a class="padding" href="/tools/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-man-pages/"><a class="padding" href="/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1772471523" defer></script>
+    <script src="/js/theme.min.js?1772471523" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

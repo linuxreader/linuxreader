@@ -7,7 +7,7 @@ Why use EEs?
 	- includes Ansible core version
 	- All desired collections
 	- Python dependencies
-	- Bindep dependencies
+	- Bind dependencies
 	- Anything you need to run a playbook
 
 A container that has a specific version of Ansible. Can test execution in a specific Ansible environment to make sure it will work with that version. 

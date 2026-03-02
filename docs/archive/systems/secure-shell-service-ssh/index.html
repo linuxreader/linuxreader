@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=32883&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="description" content="OpenSSH, system access, file transfer">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="The Secure Shell Service">
+    <meta name="twitter:description" content="OpenSSH, system access, file transfer">
+    <meta property="og:url" content="http://localhost:32883/archive/systems/secure-shell-service-ssh/">
+    <meta property="og:title" content="The Secure Shell Service">
+    <meta property="og:description" content="OpenSSH, system access, file transfer">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="">
+    <meta itemprop="name" content="The Secure Shell Service">
+    <meta itemprop="description" content="OpenSSH, system access, file transfer">
+    <meta itemprop="wordCount" content="2449">
+    <title>The Secure Shell Service</title>
+    <link href="/archive/systems/secure-shell-service-ssh/index.md" rel="alternate" type="text/markdown" title="The Secure Shell Service">
+    <link href="/images/favicon.svg?1772467050" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1772467050" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1772467050" defer></script>
+    <script src="/js/search-lunr.js?1772467050" defer></script>
+    <script src="/js/search.js?1772467050" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1772467050";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1772467050" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1772467050" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1772467050" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1772467050" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1772467050" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1772467050" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1772467050" rel="stylesheet">
+    <link href="/css/theme.css?1772467050" rel="stylesheet">
+    <link href="/css/format-html.css?1772467050" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/archive\/systems\/secure-shell-service-ssh\/';
+      window.relearn.relBasePath='..\/..\/..';
+      window.relearn.relBaseUri='..\/..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:32883';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/archive/systems/secure-shell-service-ssh/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#the-openssh-service">The OpenSSH Service</a>
+      <ul>
+        <li><a href="#common-encryption-techniques">Common Encryption Techniques</a></li>
+        <li><a href="#authentication-methods">Authentication Methods</a></li>
+        <li><a href="#openssh-protocol-version-and-algorithms">OpenSSH Protocol Version and Algorithms</a></li>
+        <li><a href="#openssh-packages">OpenSSH Packages</a></li>
+        <li><a href="#openssh-server-daemon-and-client-commands">OpenSSH Server Daemon and Client Commands</a></li>
+        <li><a href="#server-configuration-file">Server Configuration File</a></li>
+        <li><a href="#client-configuration-file">Client Configuration File</a></li>
+      </ul>
+    </li>
+    <li><a href="#system-access-and-file-transfer">System Access and File Transfer</a>
+      <ul>
+        <li><a href="#lab-access-rhel-system-from-another-rhel-system">Lab: Access RHEL System from Another RHEL System</a></li>
+        <li><a href="#lab-generate-distribute-and-use-ssh-keys">Lab: Generate, Distribute, and Use SSH Keys</a></li>
+        <li><a href="#executing-commands-remotely-using-ssh">Executing Commands Remotely Using ssh</a></li>
+        <li><a href="#sftp-command">sftp` command</a></li>
+      </ul>
+    </li>
+    <li><a href="#secure-shell-service-diy-labs">Secure Shell Service DIY Labs</a>
+      <ul>
+        <li><a href="#lab-establish-key-based-authentication">Lab: Establish Key-Based Authentication</a></li>
+        <li><a href="#lab-test-the-effect-of-permitrootlogin-directive">Lab: Test the Effect of PermitRootLogin Directive</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/archive/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/archive/systems/"><span itemprop="name">System</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">The Secure Shell Service</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive/systems/secure-shell-service-ssh/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive/systems/sys-init-logging-and-tuning/" title="System Initialization, Message Logging, and System Tuning (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive/systems/thin-provisioning/" title="Thin Provisioning and LVM (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable archive" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="the-secure-shell-service">The Secure Shell Service</h1>
+
+<h2 id="the-openssh-service">The OpenSSH Service<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p><strong>Secure Shell (SSH)</strong></p>
+<ul>
+<li>Delivers a secure mechanism for data transmission between source and destination systems over IP networks.</li>
+<li>Designed to replace the old remote login programs that transmitted user passwords in clear text and data unencrypted.</li>
+<li>Employs digital signatures for user authentication with encryption to secure a communication channel.
+<ul>
+<li>this makes it extremely hard for unauthorized people to gain access to passwords or the data in transit.</li>
+</ul>
+</li>
+<li>Monitors the data being transferred throughout a session to ensure integrity.</li>
+<li>Includes a set of utilities <code>ssh</code> and <code>sftp</code> for remote users to log in, transfer files, and execute commands securely.</li>
+</ul>
+<h3 id="common-encryption-techniques">Common Encryption Techniques<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Two common techniques: symmetric and asymetric</li>
+</ul>
+<p><strong>Symmetric Technique</strong></p>
+<ul>
+<li>Secret key encryption.</li>
+<li>Uses a single key called a secret key that is generated as a result of a negotiation process between two entities at the time of their initial contact.</li>
+<li>Both sides use the same secret key during subsequent communication for data encryption and decryption.</li>
+</ul>
+<p><strong>Asymmetric Technique</strong></p>
+<ul>
+<li>Public key encryption</li>
+<li>Combination of private and public keys
+<ul>
+<li>Randomly generated and mathematically related strings of alphanumeric characters</li>
+<li>attached to messages being exchanged.</li>
+</ul>
+</li>
+<li>The client transmutes the information with a public key and the server decrypts it with the paired private key.</li>
+<li>Private key must be kept secure since it is private to a single sender</li>
+<li>the public key is disseminated to clients.</li>
+<li>used for channel encryption and user authentication.</li>
+</ul>
+<h3 id="authentication-methods">Authentication Methods<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Encrypted channel is established between the client and server</li>
+<li>Then additional negotiations take place between the two to authenticate the user trying to access the server.</li>
+<li>Methods listed in the order in which they are attempted during the authentication process:</li>
+</ul>
+<ol>
+<li>GSSAPI-based ( Generic Security Service Application Program Interface) authentication</li>
+<li>Host-based authentication</li>
+<li>Public key-based authentication</li>
+<li>Challenge-response authentication</li>
+<li>Password-based authentication</li>
+</ol>
+<p><strong>GSSAPI-Based Authentication</strong></p>
+<ul>
+<li>Provides a standard interface that allows security mechanisms, such as Kerberos, to be plugged in.</li>
+<li>OpenSSH uses this interface and the underlying Kerberos for authentication.</li>
+<li>Exchange of tokens takes place between the client and server to validate user identity.</li>
+</ul>
+<p><strong>Host-Based Authentication</strong></p>
+<ul>
+<li>Allows a single user, a group of users, or all users on the client to be authenticated on the server.</li>
+<li>A user may be configured to log in with a matching username on the server or as a different user that already exists there.</li>
+<li>For each user that requires an automatic entry on the server, a ~/.shosts file is set up containing the client name or IP address, and, optionally, a different username.</li>
+<li>The same rule applies to a group of users or all users on the client that require access to the server.
+<ul>
+<li>In that case, the setup is done in the /etc/ssh/shosts.equiv file on the server.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Private/Public Key-Based Authentication</strong></p>
+<ul>
+<li>Uses a private/public key combination for user authentication.</li>
+<li>User on the client has a private key and the server stores the corresponding public key.</li>
+<li>At the login attempt, the server prompts the user to enter the passphrase associated with the key and logs the user in if the passphrase and key are validated.</li>
+</ul>
+<p><strong>Challenge-Response Authentication</strong></p>
+<ul>
+<li>Based on the response(s) to one or more arbitrary challenge questions that the user has to answer correctly in order to be allowed to log in to the server.</li>
+</ul>
+<p><strong>Password-Based Authentication</strong></p>
+<ul>
+<li>Last fall back option.</li>
+<li>Server prompts the user to enter their password.</li>
+<li>Checks the password against the stored entry in the shadow file and allows the user in if the password is confirmed.</li>
+</ul>
+<h3 id="openssh-protocol-version-and-algorithms">OpenSSH Protocol Version and Algorithms<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>V2</li>
+<li>Supports various algorithms for data encryption and user authentication (digital signatures) such as:</li>
+</ul>
+<p><strong>RSA</strong> (Rivest-Shamir-Adleman)</p>
+<ul>
+<li>More prevalent than the rest</li>
+<li>Supports both encryption and authentication.</li>
+</ul>
+<p><strong>DSA and ECDSA</strong> (Digital Signature Algorithm and Elliptic Curve Digital Signature Algorithm)</p>
+<ul>
+<li>Authentication only.</li>
+<li>Used to generate public and private key pairs for the asymmetric technique.</li>
+</ul>
+<h3 id="openssh-packages">OpenSSH Packages<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Installed during OS installation</li>
+</ul>
+<p><strong>openssh</strong></p>
+<ul>
+<li>provides the <code>ssh-keygen</code> command and some library routines</li>
+</ul>
+<p><strong>openssh-clients</strong></p>
+<ul>
+<li>includes commands, such as <code>sftp</code>, <code>ssh</code>, and <code>ssh-copy-id</code>, and a client configuration file <em>/etc/ssh/ssh_config</em></li>
+</ul>
+<p><strong>openssh-server</strong></p>
+<ul>
+<li>contains the sshd service daemon, server configuration file <em>/etc/ssh/sshd_config</em>, and library routines.</li>
+</ul>
+<h3 id="openssh-server-daemon-and-client-commands">OpenSSH Server Daemon and Client Commands<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>OpenSSH server program is sshd</li>
+</ul>
+<p><strong>sshd</strong></p>
+<ul>
+<li>
+<p>Preconfigured and operational on new RHEL installations</p>
+</li>
+<li>
+<p>Allows remote users to log in to the system using an ssh client program such as PuTTY or the ssh command.</p>
+</li>
+<li>
+<p>Daemon listens on TCP port 22</p>
+<ul>
+<li>Documented in the /etc/ssh/sshd_config file with the Port directive.</li>
+</ul>
+</li>
+<li>
+<p>Use sftp instead of scp do to scp security flaws.</p>
+</li>
+</ul>
+<p><code>sftp</code></p>
+<ul>
+<li>Secure remote file transfer program</li>
+</ul>
+<p><code>ssh</code></p>
+<ul>
+<li>Secure remote login command</li>
+</ul>
+<p><code>ssh-copy-id</code></p>
+<ul>
+<li>Copies public key to remote systems</li>
+</ul>
+<p><code>ssh-keygen</code></p>
+<ul>
+<li>Generates and manages private and public key pairs</li>
+</ul>
+<h3 id="server-configuration-file">Server Configuration File<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><strong>/etc/ssh/sshd_config</strong></p>
+<p><strong>/var/log/secure</strong></p>
+<ul>
+<li>log file is used to capture authentication messages.</li>
+</ul>
+<p>View directives listed in <em>/etc/ssh/sshd_config</em>:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># cat /etc/ssh/sshd_config</span></span></span></code></pre></div>
+<p><strong>Port</strong></p>
+<ul>
+<li>Port number to listen on. Default is 22.</li>
+</ul>
+<p><strong>Protocol</strong></p>
+<ul>
+<li>Default protocol version to use.</li>
+</ul>
+<p><strong>ListenAddress</strong></p>
+<ul>
+<li>Sets the local addresses the sshd service should listen on.</li>
+<li>Default is to listen on all local addresses.</li>
+</ul>
+<p><strong>SyslogFacility</strong></p>
+<ul>
+<li>Defines the facility code to be used when logging messages to the /var/log/secure file. This is based on the configuration in the /etc/rsyslog.conf file. Default is <strong>AUTHPRIV.</strong></li>
+</ul>
+<p><strong>LogLevel</strong>                         <br>
+Identifies the level of criticality for the messages to be logged. Default is <strong>INFO</strong>.</p>
+<p><strong>PermitRootLogin</strong>                  <br>
+Allows or disallows the root user to log in directly to the system. Default is yes.</p>
+<p><strong>PubKeyAuthentication</strong>             <br>
+Enables or disables public key-based authentication. Default is yes.</p>
+<p><strong>AuthorizedKeysFile</strong>               <br>
+Sets the name and location of the file containing a user&rsquo;s authorized keys. Default is ~/.ssh/authorized_keys.</p>
+<p><strong>PasswordAuthentication</strong>           <br>
+Enables or disables local password authentication. Default is yes.</p>
+<p><strong>PermitEmptyPasswords</strong>             <br>
+Allows or disallows the use of null passwords. Default is no.</p>
+<p><strong>ChallengeResponseAuthentication</strong>  <br>
+Enables or disables challenge-response authentication mechanism. Default is yes.</p>
+<p><strong>UsePAM</strong>                           <br>
+Enables or disables user authentication via PAM. If enabled, only root will be able to run the sshd daemon. Default is yes.</p>
+<p><strong>X11Forwarding</strong>                    <br>
+Allows or disallows remote access to graphical applications. Default is yes.</p>
+<h3 id="client-configuration-file">Client Configuration File<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><strong>/etc/ssh/ssh_config</strong></p>
+<ul>
+<li>Local configuration file that directs how the client should behave. This file, , is located in the /etc/ssh directory.</li>
+<li>Directives preset in this file that affect all outbound ssh communication.</li>
+</ul>
+<p>View the default directive settings:
+<code>[root@server30 tmp]# cat /etc/ssh/sshd_config</code></p>
+<p><strong>Host</strong></p>
+<ul>
+<li>Container that declares directives applicable to one host, a group of hosts, or all hosts.</li>
+<li>Ends when another occurrence of Host or Match is encountered. Default is *,  (all hosts)</li>
+</ul>
+<p><strong>ForwardX11</strong></p>
+<ul>
+<li>Enables or disables automatic redirection of X11 traffic over SSH connections.</li>
+<li>Default is no.</li>
+</ul>
+<p><strong>PasswordAuthentication</strong></p>
+<ul>
+<li>Allows or disallows password authentication.</li>
+<li>Default is yes.</li>
+</ul>
+<p><strong>StrictHostKeyChecking</strong></p>
+<ul>
+<li>
+<p>Whether to add host keys (host fingerprints) to  ~/.ssh/known_hosts when accessing a host for the first time</p>
+</li>
+<li>
+<p>What to do when the keys of a previously accessed host mismatch with what is stored in ~/.ssh/known_hosts.</p>
+</li>
+<li>
+<p>no:</p>
+<ul>
+<li>Adds new host keys and ignores changes to existing keys.</li>
+</ul>
+</li>
+<li>
+<p>yes:</p>
+<ul>
+<li>Adds new host keys and disallows connections to hosts with non-matching keys.</li>
+</ul>
+</li>
+<li>
+<p>accept-new:</p>
+<ul>
+<li>Adds new host keys and disallows connections to hosts with non-matching keys.</li>
+</ul>
+</li>
+<li>
+<p>ask (default):</p>
+<ul>
+<li>Prompts whether to add new host keys and disallows connections to hosts with non-matching keys.</li>
+</ul>
+</li>
+</ul>
+<p><strong>IdentityFile</strong></p>
+<ul>
+<li>Defines the name and location of a file that stores a user&rsquo;s private key for their identity validation.</li>
+<li>Defaults are:
+<ul>
+<li>id_rsa, id_dsa, and  id_ecdsa based on the type of algorithm used.</li>
+<li>Corresponding public key files with .pub extension are also stored at the same directory location.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Port</strong>                             <br>
+Sets the port number to listen on. Default is 22.</p>
+<p><strong>Protocol</strong>                         <br>
+Specifies the default protocol version to use</p>
+<p>~/.ssh/</p>
+<ul>
+<li>does not exist by default</li>
+<li>created when:
+<ul>
+<li>a user executes the <code>ssh-keygen</code> command for the first time to generate a key pair</li>
+<li>A user connects to a remote ssh server and accepts its host key for the first time.
+<ul>
+<li>The client stores the server&rsquo;s host key locally in a file called known_hosts along with its hostname or IP address.</li>
+<li>On subsequent access attempts, the client will use this information to verify the server&rsquo;s authenticity.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="system-access-and-file-transfer">System Access and File Transfer<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="lab-access-rhel-system-from-another-rhel-system">Lab: Access RHEL System from Another RHEL System<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>issue the ssh command as user1 on server10 to log in to server20.</li>
+<li>Run appropriate commands on server20 for validation.</li>
+<li>Log off and return to the originating system.</li>
+</ul>
+<p>1. Issue the ssh command as user1 on server10:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user1@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span>$ ssh server20</span></span></code></pre></div>
+<p>2. Issue the basic Linux commands whoami, hostname, and pwd to confirm
+that you are logged in as user1 on server20 and placed in the correct
+home directory:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user1@server40 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ whoami
+</span></span><span style="display:flex;"><span>user1
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user1@server40 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ hostname
+</span></span><span style="display:flex;"><span>server40
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user1@server40 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ pwd
+</span></span><span style="display:flex;"><span>/home/user1</span></span></code></pre></div>
+<p>3. Run the logout or the exit command or simply press the key combination Ctrl+d to log off server20 and return to server10:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user1@server40 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ exit
+</span></span><span style="display:flex;"><span>logout
+</span></span><span style="display:flex;"><span>Connection to server40 closed.</span></span></code></pre></div>
+<p>If you wish to log on as a different user such as user2 (assuming user2
+exists on the target server server20), you may run the ssh command in
+either of the following ways:</p>
+<p><code>[user1@server30 tmp]$ ssh -l user2 server40</code></p>
+<p><code>[user1@server30 tmp]$ ssh user2@server40</code></p>
+<h3 id="lab-generate-distribute-and-use-ssh-keys">Lab: Generate, Distribute, and Use SSH Keys<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Generate a passwordless ssh key pair using RSA algorithm for user1 on server10.</li>
+<li>display the private and public file contents.</li>
+<li>Distribute the public key to server20 and attempt to log on to server20 from server10.</li>
+<li>Show the log file message for the login attempt.</li>
+</ul>
+<p>1. Log on to server10 as user1.</p>
+<p>2. Generate RSA keys without a password (-N) and without detailed
+output (-q). Press Enter when prompted to provide the filename to store
+the private key.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user1@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span>$ ssh-keygen -N <span style="color:#a5d6ff">&#34;&#34;</span> -q
+</span></span><span style="display:flex;"><span>Enter file in which to save the key <span style="color:#ff7b72;font-weight:bold">(</span>/home/user1/.ssh/id_rsa<span style="color:#ff7b72;font-weight:bold">)</span>: </span></span></code></pre></div>
+<p>View the private key:
+<code>[user1@server30 tmp]$ cat ~/.ssh/id_rsa</code></p>
+<p>View the public key:
+<code>[user1@server30 tmp]$ cat ~/.ssh/id_rsa.pub</code></p>
+<p>3. Copy the public key file to server20 under /home/user1/.ssh
+directory.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>user1@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span>$ ssh-copy-id server40
+</span></span><span style="display:flex;"><span>/usr/bin/ssh-copy-id: INFO: Source of key<span style="color:#ff7b72;font-weight:bold">(</span>s<span style="color:#ff7b72;font-weight:bold">)</span> to be installed: <span style="color:#a5d6ff">&#34;/home/user1/.ssh/id_rsa.pub&#34;</span>
+</span></span><span style="display:flex;"><span>/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key<span style="color:#ff7b72;font-weight:bold">(</span>s<span style="color:#ff7b72;font-weight:bold">)</span>, to filter out any that are already installed
+</span></span><span style="display:flex;"><span>/usr/bin/ssh-copy-id: INFO: <span style="color:#a5d6ff">1</span> key<span style="color:#ff7b72;font-weight:bold">(</span>s<span style="color:#ff7b72;font-weight:bold">)</span> remain to be installed -- <span style="color:#ff7b72">if</span> you are prompted now it is to install the new keys
+</span></span><span style="display:flex;"><span>user1@server40<span style="color:#a5d6ff">&#39;s password: 
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">Number of key(s) added: 1
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">Now try logging into the machine, with:   &#34;ssh &#39;</span>server40<span style="color:#f85149">&#39;</span><span style="color:#a5d6ff">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">and check to make sure that only the key(s) you wanted were added.</span></span></span></code></pre></div>
+<ul>
+<li>This command also creates or updates the known_hosts
+file on server10 and stores the fingerprints for server20 in it.</li>
+</ul>
+<p><code>[user1@server30 tmp]$ cat ~/.ssh/known_hosts</code></p>
+<p>4. On server10, run the ssh command as user1 to connect to server20.
+You will not be prompted for a password because there was none assigned
+to the ssh keys.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user1@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span>$ ssh server40
+</span></span><span style="display:flex;"><span>Register this system with Red Hat Insights: insights-client --register
+</span></span><span style="display:flex;"><span>Create an account or view all your systems at https://red.ht/insights-dashboard
+</span></span><span style="display:flex;"><span>Last login: Sun Jul <span style="color:#a5d6ff">21</span> 01:20:17 <span style="color:#a5d6ff">2024</span> from 192.168.0.30</span></span></code></pre></div>
+<p>View this login attempt in the /var/log/secure file on server20:
+<code>[user1@server40 ~]$ sudo tail /var/log/secure</code></p>
+<h3 id="executing-commands-remotely-using-ssh">Executing Commands Remotely Using ssh<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Can use <code>ssh</code> command to run programs without remoting in:</li>
+</ul>
+<p>Execute the hostname command on server20:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user1@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span>$ ssh server40 hostname
+</span></span><span style="display:flex;"><span>server40</span></span></code></pre></div>
+<p>Run the <code>nmcli</code> command on server20 to show (s) active network connections(c):</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user1@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span>$ ssh server40 nmcli c s
+</span></span><span style="display:flex;"><span>NAME    UUID                                  TYPE      DEVICE 
+</span></span><span style="display:flex;"><span>enp0s3  1c391bb6-20a3-4eb4-b717-1e458877dbe4  ethernet  enp0s3 
+</span></span><span style="display:flex;"><span>lo      175f8a4c-1907-4006-b838-eb43438d847b  loopback  lo </span></span></code></pre></div>
+<h3 id="sftp-command">sftp` command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Interactive file transfer tool.</li>
+</ul>
+<p>On server10, to connect to server20:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user1@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span>$ sftp server40
+</span></span><span style="display:flex;"><span>Connected to server40.
+</span></span><span style="display:flex;"><span>sftp&gt; </span></span></code></pre></div>
+<p>Type ? at the prompt to list available commands along with a short description:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user1@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span>$ sftp server40
+</span></span><span style="display:flex;"><span>Connected to server40.
+</span></span><span style="display:flex;"><span>sftp&gt; ?
+</span></span><span style="display:flex;"><span>Available commands:
+</span></span><span style="display:flex;"><span>bye                                Quit sftp
+</span></span><span style="display:flex;"><span>cd path                            Change remote directory to <span style="color:#a5d6ff">&#39;path&#39;</span>
+</span></span><span style="display:flex;"><span>chgrp <span style="color:#ff7b72;font-weight:bold">[</span>-h<span style="color:#ff7b72;font-weight:bold">]</span> grp path                Change group of file <span style="color:#a5d6ff">&#39;path&#39;</span> to <span style="color:#a5d6ff">&#39;grp&#39;</span>
+</span></span><span style="display:flex;"><span>chmod <span style="color:#ff7b72;font-weight:bold">[</span>-h<span style="color:#ff7b72;font-weight:bold">]</span> mode path               Change permissions of file <span style="color:#a5d6ff">&#39;path&#39;</span> to <span style="color:#a5d6ff">&#39;mode&#39;</span>
+</span></span><span style="display:flex;"><span>chown <span style="color:#ff7b72;font-weight:bold">[</span>-h<span style="color:#ff7b72;font-weight:bold">]</span> own path                Change owner of file <span style="color:#a5d6ff">&#39;path&#39;</span> to <span style="color:#a5d6ff">&#39;own&#39;</span>
+</span></span><span style="display:flex;"><span>df <span style="color:#ff7b72;font-weight:bold">[</span>-hi<span style="color:#ff7b72;font-weight:bold">]</span> <span style="color:#ff7b72;font-weight:bold">[</span>path<span style="color:#ff7b72;font-weight:bold">]</span>                    Display statistics <span style="color:#ff7b72">for</span> current directory or
+</span></span><span style="display:flex;"><span>                                   filesystem containing <span style="color:#a5d6ff">&#39;path&#39;</span>
+</span></span><span style="display:flex;"><span>exit                               Quit sftp
+</span></span><span style="display:flex;"><span>get <span style="color:#ff7b72;font-weight:bold">[</span>-afpR<span style="color:#ff7b72;font-weight:bold">]</span> remote <span style="color:#ff7b72;font-weight:bold">[</span>local<span style="color:#ff7b72;font-weight:bold">]</span>         Download file
+</span></span><span style="display:flex;"><span>help                               Display this help text
+</span></span><span style="display:flex;"><span>lcd path                           Change local directory to <span style="color:#a5d6ff">&#39;path&#39;</span>
+</span></span><span style="display:flex;"><span>lls <span style="color:#ff7b72;font-weight:bold">[</span>ls-options <span style="color:#ff7b72;font-weight:bold">[</span>path<span style="color:#ff7b72;font-weight:bold">]]</span>            Display local directory listing
+</span></span><span style="display:flex;"><span>lmkdir path                        Create local directory
+</span></span><span style="display:flex;"><span>ln <span style="color:#ff7b72;font-weight:bold">[</span>-s<span style="color:#ff7b72;font-weight:bold">]</span> oldpath newpath            Link remote file <span style="color:#ff7b72;font-weight:bold">(</span>-s <span style="color:#ff7b72">for</span> symlink<span style="color:#ff7b72;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>lpwd                               Print local working directory
+</span></span><span style="display:flex;"><span>ls <span style="color:#ff7b72;font-weight:bold">[</span>-1afhlnrSt<span style="color:#ff7b72;font-weight:bold">]</span> <span style="color:#ff7b72;font-weight:bold">[</span>path<span style="color:#ff7b72;font-weight:bold">]</span>             Display remote directory listing
+</span></span><span style="display:flex;"><span>lumask umask                       Set local umask to <span style="color:#a5d6ff">&#39;umask&#39;</span>
+</span></span><span style="display:flex;"><span>mkdir path                         Create remote directory
+</span></span><span style="display:flex;"><span>progress                           Toggle display of progress meter
+</span></span><span style="display:flex;"><span>put <span style="color:#ff7b72;font-weight:bold">[</span>-afpR<span style="color:#ff7b72;font-weight:bold">]</span> local <span style="color:#ff7b72;font-weight:bold">[</span>remote<span style="color:#ff7b72;font-weight:bold">]</span>         Upload file
+</span></span><span style="display:flex;"><span>pwd                                Display remote working directory
+</span></span><span style="display:flex;"><span>quit                               Quit sftp
+</span></span><span style="display:flex;"><span>reget <span style="color:#ff7b72;font-weight:bold">[</span>-fpR<span style="color:#ff7b72;font-weight:bold">]</span> remote <span style="color:#ff7b72;font-weight:bold">[</span>local<span style="color:#ff7b72;font-weight:bold">]</span>        Resume download file
+</span></span><span style="display:flex;"><span>rename oldpath newpath             Rename remote file
+</span></span><span style="display:flex;"><span>reput <span style="color:#ff7b72;font-weight:bold">[</span>-fpR<span style="color:#ff7b72;font-weight:bold">]</span> local <span style="color:#ff7b72;font-weight:bold">[</span>remote<span style="color:#ff7b72;font-weight:bold">]</span>        Resume upload file
+</span></span><span style="display:flex;"><span>rm path                            Delete remote file
+</span></span><span style="display:flex;"><span>rmdir path                         Remove remote directory
+</span></span><span style="display:flex;"><span>symlink oldpath newpath            Symlink remote file
+</span></span><span style="display:flex;"><span>version                            Show SFTP version
+</span></span><span style="display:flex;"><span>!command                           Execute <span style="color:#a5d6ff">&#39;command&#39;</span> in local shell
+</span></span><span style="display:flex;"><span>!                                  Escape to local shell
+</span></span><span style="display:flex;"><span>?                                  Synonym <span style="color:#ff7b72">for</span> help</span></span></code></pre></div>
+<p>Example:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sftp&gt; ls
+</span></span><span style="display:flex;"><span>sftp&gt; mkdir /tmp/dir10-20
+</span></span><span style="display:flex;"><span>sftp&gt; cd /tmp/dir10-20
+</span></span><span style="display:flex;"><span>sftp&gt; pwd
+</span></span><span style="display:flex;"><span>Remote working directory: /tmp/dir10-20
+</span></span><span style="display:flex;"><span>sftp&gt; put /etc/group
+</span></span><span style="display:flex;"><span>Uploading /etc/group to /tmp/dir10-20/group
+</span></span><span style="display:flex;"><span>group                                       100% <span style="color:#a5d6ff">1118</span>     1.0MB/s   00:00    
+</span></span><span style="display:flex;"><span>sftp&gt; ls -l
+</span></span><span style="display:flex;"><span>-rw-r--r--    <span style="color:#a5d6ff">1</span> user1    user1        <span style="color:#a5d6ff">1118</span> Jul <span style="color:#a5d6ff">21</span> 01:41 group
+</span></span><span style="display:flex;"><span>sftp&gt; cd ..
+</span></span><span style="display:flex;"><span>sftp&gt; pwd
+</span></span><span style="display:flex;"><span>Remote working directory: /tmp
+</span></span><span style="display:flex;"><span>sftp&gt; cd /home/user1
+</span></span><span style="display:flex;"><span>sftp&gt; get /usr/bin/gzip
+</span></span><span style="display:flex;"><span>Fetching /usr/bin/gzip to gzip
+</span></span><span style="display:flex;"><span>gzip                                        100%   90KB  23.0MB/s   00:00    
+</span></span><span style="display:flex;"><span>sftp&gt; </span></span></code></pre></div>
+<ul>
+<li><code>lcd</code>, <code>lls</code>, <code>lpwd</code>, and <code>lmkdir</code> are run on the source server.</li>
+<li>Other commands are also available. (See man pages)</li>
+</ul>
+<p>Type quit at the sftp&gt; prompt to exit the program when you&rsquo;re done:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sftp&gt; quit
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user1@server30 tmp<span style="color:#ff7b72;font-weight:bold">]</span>$ </span></span></code></pre></div>
+<h2 id="secure-shell-service-diy-labs">Secure Shell Service DIY Labs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="lab-establish-key-based-authentication">Lab: Establish Key-Based Authentication<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Create user account user20 on both systems and assign a password.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server40 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># adduser user20</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server40 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># passwd user20</span>
+</span></span><span style="display:flex;"><span>Changing password <span style="color:#ff7b72">for</span> user user20.
+</span></span><span style="display:flex;"><span>New password: 
+</span></span><span style="display:flex;"><span>BAD PASSWORD: The password is shorter than <span style="color:#a5d6ff">8</span> characters
+</span></span><span style="display:flex;"><span>Retype new password: 
+</span></span><span style="display:flex;"><span>passwd: all authentication tokens updated successfully.</span></span></code></pre></div>
+<ul>
+<li>As user20 on server40, generate a private/public key pair without a passphrase using the ssh-keygen command.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user20@server40 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ssh-keygen -N &#34;&#34; -q</span>
+</span></span><span style="display:flex;"><span>Enter file in which to save the key <span style="color:#ff7b72;font-weight:bold">(</span>/root/.ssh/id_rsa<span style="color:#ff7b72;font-weight:bold">)</span>: </span></span></code></pre></div>
+<ul>
+<li>Distribute the public key to server30 with the ssh-copy-id command.
+<code>[user20@server40 ~]# ssh-copy-id server30</code></li>
+<li>Log on to server30 as user20 and accept the fingerprints for the server if presented.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user20@server40 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ssh server30</span>
+</span></span><span style="display:flex;"><span>Activate the web console with: systemctl enable --now cockpit.socket
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Register this system with Red Hat Insights: insights-client --register
+</span></span><span style="display:flex;"><span>Create an account or view all your systems at https://red.ht/insights-dashboard
+</span></span><span style="display:flex;"><span>Last login: Fri Jul <span style="color:#a5d6ff">19</span> 14:09:22 <span style="color:#a5d6ff">2024</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user20@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># </span></span></span></code></pre></div>
+<ul>
+<li>On subsequent log in attempts from server40 to server30, user20 should not be prompted for their password.</li>
+</ul>
+<h3 id="lab-test-the-effect-of-permitrootlogin-directive">Lab: Test the Effect of PermitRootLogin Directive<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>
+<p>As user1 with sudo on server30, edit the /etc/ssh/sshd_config file and change the value of the directive PermitRootLogin to &ldquo;no&rdquo;.
+<code>[user1@server30 ~]$ sudo vim /etc/ssh/sshd_config</code></p>
+</li>
+<li>
+<p>Use the systemctl command to activate the change.</p>
+</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user1@server30 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ systemctl restart <span style="color:#79c0ff">sshd</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">====</span> AUTHENTICATING FOR org.freedesktop.systemd1.manage-units <span style="color:#ff7b72;font-weight:bold">====</span>
+</span></span><span style="display:flex;"><span>Authentication is required to restart <span style="color:#a5d6ff">&#39;sshd.service&#39;</span>.
+</span></span><span style="display:flex;"><span>Authenticating as: root
+</span></span><span style="display:flex;"><span>Password: 
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">====</span> AUTHENTICATION <span style="color:#79c0ff">COMPLETE</span> <span style="color:#ff7b72;font-weight:bold">====</span></span></span></code></pre></div>
+<ul>
+<li>As root on server40, run ssh server40 (or use its IP). You&rsquo;ll get permission denied message.</li>
+</ul>
+<p>(this didn&rsquo;t work, I think it&rsquo;s because I configured passwordless authentication on here)</p>
+<ul>
+<li>Reverse the change on server40 and retry ssh server40. You should be able to log in.</li>
+</ul>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/the-cheat-code/"><a class="padding" href="/ansible/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/automate-kvm-vms/"><a class="padding" href="/ansible/automate-kvm-vms/">Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-documentation/"><a class="padding" href="/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/playbooks/"><a class="padding" href="/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/execution-environments/"><a class="padding" href="/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/hostname-patterns/"><a class="padding" href="/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/include-and-import-files/"><a class="padding" href="/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2/"><a class="padding" href="/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/user-and-groups/"><a class="padding" href="/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/storage-partitions-and-lvm/"><a class="padding" href="/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/services/"><a class="padding" href="/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/networking-with-ansible/"><a class="padding" href="/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/nfs-setup/"><a class="padding" href="/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimize-ansible-processing/"><a class="padding" href="/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux/"><a class="padding" href="/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/tags/"><a class="padding" href="/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/loops-and-items/"><a class="padding" href="/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/modules-for-troubleshooting/"><a class="padding" href="/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Using Variables In Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/when/"><a class="padding" href="/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5"><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="" data-nav-id="/containers/containers-1/"><a class="padding" href="/containers/containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/securityenhancedlinux/"><a class="padding" href="/cyber-security/securityenhancedlinux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/learning-touch-typing-1/"><a class="padding" href="/desktop/learning-touch-typing-1/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/learning-touch-typing/"><a class="padding" href="/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup-1/"><a class="padding" href="/desktop/my-fedora-setup-1/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue-2/"><a class="padding" href="/desktop/silverblue-2/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA? Some Ideas<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-ccna-exam/">How I Studied for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-synchronization/"><a class="padding" href="/networking/dns-and-time-synchronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns/"><a class="padding" href="/networking/dns/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networkdevicesandconnections/"><a class="padding" href="/networking/networkdevicesandconnections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/resources-for-passing-ccna/"><a class="padding" href="/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/systems/"><input type="checkbox" id="R-section-859f72c55acd170304a7ecf4dceebb83" aria-controls="R-subsections-859f72c55acd170304a7ecf4dceebb83"><label for="R-section-859f72c55acd170304a7ecf4dceebb83"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/systems/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-859f72c55acd170304a7ecf4dceebb83" class="collapsible-menu">
+            <li class="" data-nav-id="/systems/you-need-to-learn-man-pages/"><a class="padding" href="/systems/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/advanced-file-management/"><a class="padding" href="/systems/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/advanced-package-management/"><a class="padding" href="/systems/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/advanced-user-management/"><a class="padding" href="/systems/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/autofs/"><a class="padding" href="/systems/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/file-management/"><a class="padding" href="/systems/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/basic-package-management/"><a class="padding" href="/systems/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/basic-user-management/"><a class="padding" href="/systems/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/boot-process-grub2-kernel/"><a class="padding" href="/systems/boot-process-grub2-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/installation/"><a class="padding" href="/systems/installation/">Installing RHEL Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/interaction/"><a class="padding" href="/systems/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/local-filesystems-and-swap/"><a class="padding" href="/systems/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/network-filesystem-nfs/"><a class="padding" href="/systems/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/partitioning-mbr-gpt/"><a class="padding" href="/systems/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/process-and-task-scheduling/"><a class="padding" href="/systems/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/rm-filesystem-from-partition/"><a class="padding" href="/systems/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/rhcsa-exam-environment/"><a class="padding" href="/systems/rhcsa-exam-environment/">RHCSA Exam Environment Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/rhcsa-vagrant-lab-setup-1/"><a class="padding" href="/systems/rhcsa-vagrant-lab-setup-1/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/sys-init-logging-and-tuning/"><a class="padding" href="/systems/sys-init-logging-and-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/secure-shell-service-ssh/"><a class="padding" href="/systems/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/thin-provisioning/"><a class="padding" href="/systems/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/time-synchronization/"><a class="padding" href="/systems/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/virtual-data-optimizer-vdo/"><a class="padding" href="/systems/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/remove-formatting-from-highlights/"><a class="padding" href="/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-docker-nginx/"><a class="padding" href="/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/proxmox-pfsense-haproxy-setup/"><a class="padding" href="/tools/proxmox-pfsense-haproxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/stop-using-ai/"><a class="padding" href="/tools/stop-using-ai/">Why I Stopped Using AI so Much<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/install-ansible-using-uv/"><a class="padding" href="/tools/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-vagrant-on-linux/"><a class="padding" href="/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-man-pages/"><a class="padding" href="/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent hidden " data-nav-id="/archive/"><input type="checkbox" id="R-section-3efae3733ab07a14aa0bb0bbf1f8e3dd" aria-controls="R-subsections-3efae3733ab07a14aa0bb0bbf1f8e3dd" checked><label for="R-section-3efae3733ab07a14aa0bb0bbf1f8e3dd"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Linux Reader</span></label><a class="padding default-animation" href="/archive/">Linux Reader<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-3efae3733ab07a14aa0bb0bbf1f8e3dd" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/ansible/"><input type="checkbox" id="R-section-2da59b953fd922cc24bbcc833598ec18" aria-controls="R-subsections-2da59b953fd922cc24bbcc833598ec18"><label for="R-section-2da59b953fd922cc24bbcc833598ec18"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/archive/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-2da59b953fd922cc24bbcc833598ec18" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/"><input type="checkbox" id="R-section-e5951e8bf2f82dfe42bf49de8b6e015a" aria-controls="R-subsections-e5951e8bf2f82dfe42bf49de8b6e015a"><label for="R-section-e5951e8bf2f82dfe42bf49de8b6e015a"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu 45 Days to RHCE</span></label><a class="padding default-animation" href="/archive/ansible/45-days-to-rhce-1/">45 Days to RHCE<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5951e8bf2f82dfe42bf49de8b6e015a" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/ansible-navigator/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/crash-and-burn/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/crash-and-burn/">Crash and Burn<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/the-cheat-code/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/getting-ready/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/getting-ready/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-navigator/"><a class="padding" href="/archive/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/the-cheat-code/"><a class="padding" href="/archive/ansible/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/getting-ready-for-rhce/"><a class="padding" href="/archive/ansible/getting-ready-for-rhce/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/automate-kvm-vms/"><a class="padding" href="/archive/ansible/automate-kvm-vms/">Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ad-hoc-ansible-commands/"><a class="padding" href="/archive/ansible/ad-hoc-ansible-commands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/adhoccommands/"><a class="padding" href="/archive/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-documentation/"><a class="padding" href="/archive/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-facts/"><a class="padding" href="/archive/ansible/ansible-facts/">Ansible Facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-galaxy-roles/"><a class="padding" href="/archive/ansible/ansible-galaxy-roles/">Ansible Galaxy Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-inventory/"><a class="padding" href="/archive/ansible/ansible-inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/inventory/"><a class="padding" href="/archive/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-playbooks/"><a class="padding" href="/archive/ansible/ansible-playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/playbooks/"><a class="padding" href="/archive/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/roles/"><a class="padding" href="/archive/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-ansible-roles/"><a class="padding" href="/archive/ansible/using-ansible-roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-vault/"><a class="padding" href="/archive/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-inventory-command/"><a class="padding" href="/archive/ansible/ansible-inventory-command/">Ansible-inventory command<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible.cfg/"><a class="padding" href="/archive/ansible/ansible.cfg/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansibleconfig/"><a class="padding" href="/archive/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/boot-process/"><a class="padding" href="/archive/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/building-an-ansible-lab-with-ansible/"><a class="padding" href="/archive/ansible/building-an-ansible-lab-with-ansible/">Building an Ansible lab with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/common-modules-with-examples/"><a class="padding" href="/archive/ansible/common-modules-with-examples/">Common modules with examples<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/deploying-files/"><a class="padding" href="/archive/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/discovering-storage-related-facts/"><a class="padding" href="/archive/ansible/discovering-storage-related-facts/">Discovering storage related facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/dynamic-inventory/"><a class="padding" href="/archive/ansible/dynamic-inventory/">Dynamic Inventory<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/encrypted-passwords/"><a class="padding" href="/archive/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/execution-environments/"><a class="padding" href="/archive/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/handlers/"><a class="padding" href="/archive/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/host-name-patterns/"><a class="padding" href="/archive/ansible/host-name-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/hostname-patterns/"><a class="padding" href="/archive/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/include-and-import-files/"><a class="padding" href="/archive/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/including-and-importing-files/"><a class="padding" href="/archive/ansible/including-and-importing-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/jinja2-templates/"><a class="padding" href="/archive/ansible/jinja2-templates/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/jinja2/"><a class="padding" href="/archive/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/user-and-groups/"><a class="padding" href="/archive/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-ansible-errors-and-logs/"><a class="padding" href="/archive/ansible/managing-ansible-errors-and-logs/">Managing Ansible Errors and Logs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-packages/"><a class="padding" href="/archive/ansible/managing-packages/">Managing Packages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/archive/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-partitions-and-lvm/"><a class="padding" href="/archive/ansible/managing-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/storage-partitions-and-lvm/"><a class="padding" href="/archive/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-services/"><a class="padding" href="/archive/ansible/managing-services/">Managing Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/services/"><a class="padding" href="/archive/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/networking-with-ansible/"><a class="padding" href="/archive/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/nfs-setup/"><a class="padding" href="/archive/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/optimize-ansible-processing/"><a class="padding" href="/archive/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/optimizing-ansible-processing/"><a class="padding" href="/archive/ansible/optimizing-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/repositories-and-subscriptions/"><a class="padding" href="/archive/ansible/repositories-and-subscriptions/">Repositories and subscriptions<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/selinux-file-properties/"><a class="padding" href="/archive/ansible/selinux-file-properties/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/selinux/"><a class="padding" href="/archive/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/setting-up-an-ansible-lab/"><a class="padding" href="/archive/ansible/setting-up-an-ansible-lab/">Setting up an Ansible Lab<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ssh-connections/"><a class="padding" href="/archive/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/troubleshooting-common-scenarios/"><a class="padding" href="/archive/ansible/troubleshooting-common-scenarios/">Troubleshooting Common Scenarios<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/users-and-groups/"><a class="padding" href="/archive/ansible/users-and-groups/">Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/tags/"><a class="padding" href="/archive/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/loops-and-items/"><a class="padding" href="/archive/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-loops-and-items/"><a class="padding" href="/archive/ansible/using-loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/modules-for-troubleshooting/"><a class="padding" href="/archive/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-modules-for-troubleshooting-and-testing/"><a class="padding" href="/archive/ansible/using-modules-for-troubleshooting-and-testing/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-multiple-inventories/"><a class="padding" href="/archive/ansible/using-multiple-inventories/">Using Multiple Inventories<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-rhel-system-roles/"><a class="padding" href="/archive/ansible/using-rhel-system-roles/">Using RHEL System roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-tags/"><a class="padding" href="/archive/ansible/using-tags/">Using Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-when-to-run-tasks-conditionally/"><a class="padding" href="/archive/ansible/using-when-to-run-tasks-conditionally/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/when/"><a class="padding" href="/archive/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/variables/"><a class="padding" href="/archive/ansible/variables/">Variables<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/bash/"><input type="checkbox" id="R-section-0007e539b2afbfa1d415742d840f3a8d" aria-controls="R-subsections-0007e539b2afbfa1d415742d840f3a8d"><label for="R-section-0007e539b2afbfa1d415742d840f3a8d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/archive/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-0007e539b2afbfa1d415742d840f3a8d" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/bash/bash-shell/"><a class="padding" href="/archive/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/bash/shell-scripting/"><a class="padding" href="/archive/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/boot/"><input type="checkbox" id="R-section-23ba0690f68cd095a84a225cf8506d0a" aria-controls="R-subsections-23ba0690f68cd095a84a225cf8506d0a"><label for="R-section-23ba0690f68cd095a84a225cf8506d0a"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Boot</span></label><a class="padding default-animation" href="/archive/boot/"><i class="fa-solid fa-hourglass-start"></i> Boot<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-23ba0690f68cd095a84a225cf8506d0a" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/boot/boot-process-grub2-and-kernel/"><a class="padding" href="/archive/boot/boot-process-grub2-and-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/boot/system-initialization-message-logging-and-system-tuning/"><a class="padding" href="/archive/boot/system-initialization-message-logging-and-system-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/containers/"><input type="checkbox" id="R-section-4a0553f27d25d8da325eb0e27d262c20" aria-controls="R-subsections-4a0553f27d25d8da325eb0e27d262c20"><label for="R-section-4a0553f27d25d8da325eb0e27d262c20"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/archive/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4a0553f27d25d8da325eb0e27d262c20" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/containers/containers-1/"><a class="padding" href="/archive/containers/containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/cyber-security/"><input type="checkbox" id="R-section-22d3475420d0c69262f1eaf35f3954e1" aria-controls="R-subsections-22d3475420d0c69262f1eaf35f3954e1"><label for="R-section-22d3475420d0c69262f1eaf35f3954e1"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/archive/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-22d3475420d0c69262f1eaf35f3954e1" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/cyber-security/security-enhanced-linux/"><a class="padding" href="/archive/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/cyber-security/securityenhancedlinux/"><a class="padding" href="/archive/cyber-security/securityenhancedlinux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/cyber-security/the-linux-firewall/"><a class="padding" href="/archive/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/cyber-security/the-secure-shell-service/"><a class="padding" href="/archive/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/desktop/"><input type="checkbox" id="R-section-f15fd7be41155db115964722da6b0d03" aria-controls="R-subsections-f15fd7be41155db115964722da6b0d03"><label for="R-section-f15fd7be41155db115964722da6b0d03"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/archive/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f15fd7be41155db115964722da6b0d03" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/desktop/new-setup/"><a class="padding" href="/archive/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/learning-touch-typing-1/"><a class="padding" href="/archive/desktop/learning-touch-typing-1/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/learning-touch-typing/"><a class="padding" href="/archive/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/my-fedora-setup-1/"><a class="padding" href="/archive/desktop/my-fedora-setup-1/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/my-fedora-setup/"><a class="padding" href="/archive/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/silverblue-2/"><a class="padding" href="/archive/desktop/silverblue-2/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/silverblue/"><a class="padding" href="/archive/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/files/"><input type="checkbox" id="R-section-35cbfba2aaa3dc53d47351d0737b957f" aria-controls="R-subsections-35cbfba2aaa3dc53d47351d0737b957f"><label for="R-section-35cbfba2aaa3dc53d47351d0737b957f"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Files</span></label><a class="padding default-animation" href="/archive/files/"><i class="fa-solid fa-copy"></i> Files<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-35cbfba2aaa3dc53d47351d0737b957f" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/files/advanced-file-management/"><a class="padding" href="/archive/files/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/files/file-management/"><a class="padding" href="/archive/files/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/networking/"><input type="checkbox" id="R-section-571da5e9c8cc7c2f921ff81d669260db" aria-controls="R-subsections-571da5e9c8cc7c2f921ff81d669260db"><label for="R-section-571da5e9c8cc7c2f921ff81d669260db"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/archive/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-571da5e9c8cc7c2f921ff81d669260db" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/networking/what-to-learn-after-ccna/"><a class="padding" href="/archive/networking/what-to-learn-after-ccna/">What to Learn After CCNA? Some Ideas<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/how-to-study-for-ccna-exam/"><a class="padding" href="/archive/networking/how-to-study-for-ccna-exam/">How I Studied for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/archive/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/dns-and-time-synchronization/"><a class="padding" href="/archive/networking/dns-and-time-synchronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/dns/"><a class="padding" href="/archive/networking/dns/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/archive/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/juniper_cli_basics/"><a class="padding" href="/archive/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/archive/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/networkdevicesandconnections/"><a class="padding" href="/archive/networking/networkdevicesandconnections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/archive/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/resources-for-passing-ccna/"><a class="padding" href="/archive/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/time-synchronization/"><a class="padding" href="/archive/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/toggle_poe/"><a class="padding" href="/archive/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/packages/"><input type="checkbox" id="R-section-ffbf85f24cd2239219afa8b9cbe18b38" aria-controls="R-subsections-ffbf85f24cd2239219afa8b9cbe18b38"><label for="R-section-ffbf85f24cd2239219afa8b9cbe18b38"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/archive/packages/"><i class="fa-solid fa-box-open"></i> Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ffbf85f24cd2239219afa8b9cbe18b38" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/packages/advanced-package-management/"><a class="padding" href="/archive/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/packages/basic-package-management/"><a class="padding" href="/archive/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/storage/"><input type="checkbox" id="R-section-5b321d96a2a369eec97e1394accb14fb" aria-controls="R-subsections-5b321d96a2a369eec97e1394accb14fb"><label for="R-section-5b321d96a2a369eec97e1394accb14fb"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/archive/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-5b321d96a2a369eec97e1394accb14fb" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/storage/autofs/"><a class="padding" href="/archive/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/local-file-systems-and-swap/"><a class="padding" href="/archive/storage/local-file-systems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/network-file-system-nfs/"><a class="padding" href="/archive/storage/network-file-system-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/partitioning-mbr-and-gpt/"><a class="padding" href="/archive/storage/partitioning-mbr-and-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/remove-a-filesystem-from-a-partition/"><a class="padding" href="/archive/storage/remove-a-filesystem-from-a-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/thin-provisioning/"><a class="padding" href="/archive/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/archive/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/archive/systems/"><input type="checkbox" id="R-section-1dd2726e68c35ec062a2cfe2c1df58df" aria-controls="R-subsections-1dd2726e68c35ec062a2cfe2c1df58df" checked><label for="R-section-1dd2726e68c35ec062a2cfe2c1df58df"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/archive/systems/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-1dd2726e68c35ec062a2cfe2c1df58df" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/systems/you-need-to-learn-man-pages/"><a class="padding" href="/archive/systems/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/advanced-file-management/"><a class="padding" href="/archive/systems/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/advanced-package-management/"><a class="padding" href="/archive/systems/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/advanced-user-management/"><a class="padding" href="/archive/systems/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/autofs/"><a class="padding" href="/archive/systems/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/file-management/"><a class="padding" href="/archive/systems/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/basic-package-management/"><a class="padding" href="/archive/systems/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/basic-user-management/"><a class="padding" href="/archive/systems/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/boot-process-grub2-kernel/"><a class="padding" href="/archive/systems/boot-process-grub2-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/installation/"><a class="padding" href="/archive/systems/installation/">Installing RHEL Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/interaction/"><a class="padding" href="/archive/systems/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/local-filesystems-and-swap/"><a class="padding" href="/archive/systems/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/network-filesystem-nfs/"><a class="padding" href="/archive/systems/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/partitioning-mbr-gpt/"><a class="padding" href="/archive/systems/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/process-and-task-scheduling/"><a class="padding" href="/archive/systems/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/rm-filesystem-from-partition/"><a class="padding" href="/archive/systems/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/rhcsa-exam-environment/"><a class="padding" href="/archive/systems/rhcsa-exam-environment/">RHCSA Exam Environment Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/rhcsa-vagrant-lab-setup-1/"><a class="padding" href="/archive/systems/rhcsa-vagrant-lab-setup-1/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/sys-init-logging-and-tuning/"><a class="padding" href="/archive/systems/sys-init-logging-and-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="active " data-nav-id="/archive/systems/secure-shell-service-ssh/"><a class="padding" href="/archive/systems/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/thin-provisioning/"><a class="padding" href="/archive/systems/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/time-synchronization/"><a class="padding" href="/archive/systems/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/virtual-data-optimizer-vdo/"><a class="padding" href="/archive/systems/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/system/"><input type="checkbox" id="R-section-d52ce8aee0f4ac02a6f02a34de71d1c0" aria-controls="R-subsections-d52ce8aee0f4ac02a6f02a34de71d1c0"><label for="R-section-d52ce8aee0f4ac02a6f02a34de71d1c0"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/archive/system/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d52ce8aee0f4ac02a6f02a34de71d1c0" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/system/installation/"><a class="padding" href="/archive/system/installation/">Installation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/system/interaction/"><a class="padding" href="/archive/system/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/system/process-and-task-scheduling/"><a class="padding" href="/archive/system/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/tools/"><input type="checkbox" id="R-section-b320e1715e16e5d512ba5b82e27cc64b" aria-controls="R-subsections-b320e1715e16e5d512ba5b82e27cc64b"><label for="R-section-b320e1715e16e5d512ba5b82e27cc64b"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/archive/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-b320e1715e16e5d512ba5b82e27cc64b" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/tools/remove-formatting-from-highlights/"><a class="padding" href="/archive/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/calibre-web-docker-nginx/"><a class="padding" href="/archive/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/proxmox-pfsense-haproxy-setup/"><a class="padding" href="/archive/tools/proxmox-pfsense-haproxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/stop-using-ai/"><a class="padding" href="/archive/tools/stop-using-ai/">Why I Stopped Using AI so Much<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/install-ansible-using-uv/"><a class="padding" href="/archive/tools/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/archive/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/new-setup/"><a class="padding" href="/archive/tools/tools/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/archive/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/archive/tools/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/process-bookfusion-highlights/"><a class="padding" href="/archive/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/archive/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/archive/tools/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/archive/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/archive/tools/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/archive/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/archive/tools/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/using-vagrant-on-linux/"><a class="padding" href="/archive/tools/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/using-vagrant-on-linux/"><a class="padding" href="/archive/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/vimguide/"><a class="padding" href="/archive/tools/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/vimguide/"><a class="padding" href="/archive/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/using-man-pages/"><a class="padding" href="/archive/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/users-and-groups/"><input type="checkbox" id="R-section-db70fad5de90fe8fb545112d40b3bd47" aria-controls="R-subsections-db70fad5de90fe8fb545112d40b3bd47"><label for="R-section-db70fad5de90fe8fb545112d40b3bd47"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users and Groups</span></label><a class="padding default-animation" href="/archive/users-and-groups/"><i class="fa-solid fa-users"></i> Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-db70fad5de90fe8fb545112d40b3bd47" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/users-and-groups/advanced-user-management/"><a class="padding" href="/archive/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/users-and-groups/basic-user-management/"><a class="padding" href="/archive/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/virtualization/"><input type="checkbox" id="R-section-d0028714f8460f5888066e750cbc5914" aria-controls="R-subsections-d0028714f8460f5888066e750cbc5914"><label for="R-section-d0028714f8460f5888066e750cbc5914"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualization</span></label><a class="padding default-animation" href="/archive/virtualization/"><i class="fa-solid fa-microchip"></i> Virtualization<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d0028714f8460f5888066e750cbc5914" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/virtualization/rhcsa-vagrant-lab-setup/"><a class="padding" href="/archive/virtualization/rhcsa-vagrant-lab-setup/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1772467050" defer></script>
+    <script src="/js/theme.js?1772467050" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

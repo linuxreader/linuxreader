@@ -8,12 +8,12 @@ When it asks for the name of the key, give it a unique name to use for this acco
 
 Then, grab your public key from ~/.ssh/id_ed25519_example.pub and add it in github under settings > SSH and GPG Keys > New SSH Key
 
-![](../../images/Pasted%20image%2020251019034622.png)
+![](../images/Pasted%20image%2020251019034622.png)
 
 
 Next, go to your github homepage and select "Create repository". The repository name needs to match your github account name from earlier. It also must have public visibility:
 
-![](../../images/Pasted%20image%2020251019053206.png)
+![](../images/Pasted%20image%2020251019053206.png)
 
 From your desktop, create a directory with {{ reponame.github.io }}. You must use this format for this to work:
 `mkdir everythingelsexyz.github.io && cd everythingelsexyz.github.io`

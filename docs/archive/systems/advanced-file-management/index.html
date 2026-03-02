@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=32883&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="description" content="File permissions, ACLs, and finding things">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Advanced File Management">
+    <meta name="twitter:description" content="File permissions, ACLs, and finding things">
+    <meta property="og:url" content="http://localhost:32883/archive/systems/advanced-file-management/">
+    <meta property="og:title" content="Advanced File Management">
+    <meta property="og:description" content="File permissions, ACLs, and finding things">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="">
+    <meta itemprop="name" content="Advanced File Management">
+    <meta itemprop="description" content="File permissions, ACLs, and finding things">
+    <meta itemprop="wordCount" content="3417">
+    <title>Advanced File Management</title>
+    <link href="/archive/systems/advanced-file-management/index.md" rel="alternate" type="text/markdown" title="Advanced File Management">
+    <link href="/images/favicon.svg?1772467050" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1772467050" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1772467050" defer></script>
+    <script src="/js/search-lunr.js?1772467050" defer></script>
+    <script src="/js/search.js?1772467050" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1772467050";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1772467050" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1772467050" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1772467050" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1772467050" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1772467050" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1772467050" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1772467050" rel="stylesheet">
+    <link href="/css/theme.css?1772467050" rel="stylesheet">
+    <link href="/css/format-html.css?1772467050" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/archive\/systems\/advanced-file-management\/';
+      window.relearn.relBasePath='..\/..\/..';
+      window.relearn.relBaseUri='..\/..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:32883';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/archive/systems/advanced-file-management/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#permission-classes-and-types">Permission Classes and Types</a>
+      <ul>
+        <li><a href="#ls-results-permissions-groupings">ls results permissions groupings</a></li>
+        <li><a href="#ls-results-first-character-meaning">ls results first character meaning</a></li>
+        <li><a href="#modifying-access-permission-bits">Modifying Access Permission Bits</a></li>
+        <li><a href="#chmod--command"><code>chmod</code> command</a></li>
+        <li><a href="#symbolic-notation">Symbolic notation</a></li>
+        <li><a href="#octal-notation">Octal Notation</a></li>
+        <li><a href="#default-permissions">Default Permissions</a></li>
+        <li><a href="#umask-command">umask command</a></li>
+        <li><a href="#special-permission-bits">Special Permission Bits</a></li>
+      </ul>
+    </li>
+    <li><a href="#access-control-lists-acls">Access Control Lists (ACLs)</a>
+      <ul>
+        <li><a href="#acl-commands">ACL Commands</a></li>
+        <li><a href="#mask-value">Mask Value</a></li>
+      </ul>
+    </li>
+    <li><a href="#find-command">Find Command</a></li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#lab-find-stuff">Lab: find stuff</a></li>
+        <li><a href="#lab-display-acl-and-give-permissions">Lab: Display ACL and give permissions</a></li>
+        <li><a href="#lab-identify-apply-and-erase-access-acls">Lab: Identify, Apply, and Erase Access ACLs</a></li>
+        <li><a href="#lab-apply-identify-and-erase-default-acls">Lab: Apply, Identify, and erase default ACLs</a></li>
+        <li><a href="#lab-modify-permission-bits-using-symbolic-form">Lab: Modify Permission Bits Using Symbolic Form</a></li>
+        <li><a href="#lab-modify-permission-bits-using-octal-form">Lab: Modify Permission Bits Using Octal Form</a></li>
+        <li><a href="#lab--view-suid-bit-on-su-command">Lab:  View suid bit on su command</a></li>
+        <li><a href="#lab-test-the-effect-of-setuid-bit-on-executable-files">Lab: Test the Effect of setuid Bit on Executable Files</a></li>
+        <li><a href="#lab-test-the-effect-of-setgid-bit-on-executable-files">Lab: Test the Effect of setgid Bit on Executable Files</a></li>
+        <li><a href="#lab-set-up-shared-directory-for-group-collaboration">Lab: Set up Shared Directory for Group Collaboration</a></li>
+        <li><a href="#lab-view-t-in-permissions-for-sticky-bit">Lab: View &ldquo;t&rdquo; in permissions for sticky bit</a></li>
+        <li><a href="#lab-test-the-effect-of-sticky-bit">Lab: Test the effect of Sticky Bit</a></li>
+        <li><a href="#lab-manipulate-file-permissions-user1">Lab: Manipulate File Permissions (user1)</a></li>
+        <li><a href="#lab-configure-group-collaboration-and-prevent-file-deletion-root">Lab: Configure Group Collaboration and Prevent File Deletion (root)</a></li>
+        <li><a href="#lab-find-files-root">Lab: Find Files (root)</a></li>
+        <li><a href="#lab-find-files-using-different-criteria-root">Lab: Find Files Using Different Criteria (root)</a></li>
+        <li><a href="#lab-apply-acl-settings-root">Lab: Apply ACL Settings (root)</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/archive/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/archive/systems/"><span itemprop="name">System</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">Advanced File Management</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive/systems/advanced-file-management/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive/systems/you-need-to-learn-man-pages/" title="You Need to Learn Man Pages (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive/systems/advanced-package-management/" title="Advanced Package Management (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable archive" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="advanced-file-management">Advanced File Management</h1>
+
+<h2 id="permission-classes-and-types">Permission Classes and Types<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p><strong>Permission classes</strong></p>
+<ul>
+<li>user (u)</li>
+<li>group (g)</li>
+<li>other (o) (public)</li>
+<li>all (a) &lt;- all combined</li>
+</ul>
+<p><strong>Permission types</strong></p>
+<ul>
+<li>r,w,x</li>
+<li>works differently on files and directories</li>
+<li>hyphen (-) represents no permissions set</li>
+</ul>
+<h3 id="ls-results-permissions-groupings">ls results permissions groupings<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>
+<ul>
+<li>rwx rw- r&ndash;
+<ul>
+<li>user (owner), group, and other (public)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="ls-results-first-character-meaning">ls results first character meaning<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>regular file
+d directory
+l symbolic link
+c character device file
+b block device file
+p named pipe
+s socket</li>
+</ul>
+<h3 id="modifying-access-permission-bits">Modifying Access Permission Bits<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<h3 id="chmod--command"><code>chmod</code>  command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Modify permissions using symbolic or octal notation.</li>
+<li>Used by root or the file owner.</li>
+</ul>
+<p>Flags
+chmod -v ::: Verbose.</p>
+<h3 id="symbolic-notation">Symbolic notation<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Letters (ugo/rwx) and symbols (+, -, =) used to add, revoke, or assign permission bits.</li>
+</ul>
+<h3 id="octal-notation">Octal Notation<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Three-digit numbering system ranging from 0 to 7.
+0 &mdash;
+1 &ndash;x
+2 -w-
+3 -wx
+4 r&ndash;
+5 r-x
+6 rw-
+7 rwx</p>
+<h3 id="default-permissions">Default Permissions<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Calculated based on the umask (user mask) value subtracted from the initial permissions value.</li>
+</ul>
+<h4 id="umask">umask<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<ul>
+<li>Three-digit value (octal or symbolic) that refers to read, write, and execute permissions for owner, group, and public.</li>
+<li>Default umask value is 0022 for the root user and 0002 normal users.</li>
+<li>The left-most 0 has no significance.</li>
+<li>If umask is set to 000 files will get max of 666</li>
+<li>If the initial permissions are 666 and the umask is 002 then the default permissions are 664. (666-002)</li>
+<li>Any new files or directories created after changing the umask will have the new default permissions set.</li>
+<li>umask settings are lost when you log off. Add it to the appropriate startup file to make it permanent.</li>
+</ul>
+<p>Defaults</p>
+<ul>
+<li>files 666 rw-rw-rw-</li>
+<li>directories 777 rwxrwxrwx</li>
+</ul>
+<h3 id="umask-command">umask command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Options</p>
+<ul>
+<li>-S symbolic form</li>
+</ul>
+<h3 id="special-permission-bits">Special Permission Bits<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<hr>
+<ul>
+<li>3 types of special permission bits for executable files or directories for non root users
+<ul>
+<li>setuid</li>
+<li>setgid</li>
+<li>sticky</li>
+</ul>
+</li>
+<li>setuid
+<ul>
+<li>set on exe&rsquo;s to provide non-owners the ability to run them with the privileges of the owning user</li>
+<li>may be set on directories and files but will have no effect.</li>
+<li>example: the su command</li>
+<li>shows an &rsquo;s&rsquo; in ls -l listing at the end of owners permissions</li>
+<li>If the file already has the “x” bit set for the user, the long listing will show a lowercase “s”, otherwise it will list it with an uppercase “S”.</li>
+</ul>
+</li>
+<li>setgid
+<ul>
+<li>set on exe&rsquo;s to provide non-group members the ability to run them with the privileges of the owning group.</li>
+<li>May be set on shared directories
+<ul>
+<li>allow files and subdirectories created underneath to automatically inherit the directory’s owning group.</li>
+<li>saves group members who are sharing the directory contents from changing the group ID for every new file and subdirectory that they add.</li>
+</ul>
+</li>
+<li>write command has this set by default so a member of the tty group can run it. If the file already has the “x” bit set for the group, the long listing will show a lowercase “s”, otherwise it will list it with an uppercase “S”.</li>
+</ul>
+</li>
+<li>Sticky bit
+<ul>
+<li>may be set on public directories for inhibiting file deletion by non-owners</li>
+<li>may be set on directories and files but will have no effect.</li>
+<li>Set on /tmp and /var/tmp by default</li>
+<li>Letter &ldquo;t&rdquo; in other permission feild</li>
+<li>If the directory already has the “x” bit set for public, the long listing will show a lowercase “t”, otherwise it will list it with an uppercase “T”.</li>
+</ul>
+</li>
+</ul>
+<h2 id="access-control-lists-acls">Access Control Lists (ACLs)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>
+<p>Setting a default ACL on a directory allows content sharing among user&rsquo;s without having to modify access on each new file and subdirectory.</p>
+</li>
+<li>
+<p>Extra permissions that can be set on files and directories.</p>
+</li>
+<li>
+<p>Define permissions for named user and named groups.</p>
+</li>
+<li>
+<p>Configured the same way on both files and directories.</p>
+</li>
+<li>
+<p>Named Users</p>
+<ul>
+<li>May or may not be a part of the same group.</li>
+</ul>
+</li>
+<li>
+<p>2 different groups of ACLs. Default ACLs and Access ACLs.</p>
+<ul>
+<li>Access ACLs
+<ul>
+<li>Set on individual files and directories</li>
+</ul>
+</li>
+<li>Default ACLs
+<ul>
+<li>Applied on directories</li>
+<li>files and subdirectories inherit the ACL</li>
+<li>Execute bit must be set on the directory for public.</li>
+<li>Files receive the shared directory&rsquo;s default ACLs as their access ACLs - what the mask limits.</li>
+<li>Subdirectories receive both default ACLs and access ACLs as they are.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>A &ldquo;+&rdquo; at the end of ls -l listing indicates ACL is set</p>
+<ul>
+<li>-rw-rw-r&ndash;+</li>
+</ul>
+</li>
+</ul>
+<h3 id="acl-commands">ACL Commands<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><code>getfacl</code></p>
+<ul>
+<li>Display ACL settings
+<ul>
+<li>Displays:</li>
+<li>name of file</li>
+<li>owner</li>
+<li>owning group</li>
+<li>Permissions
+<ul>
+<li>colon characters save space for named user/group (or UID/GID) when extended Permissions are set.</li>
+<li>Example: user:1000:r&ndash;
+<ul>
+<li>the named user with UID 1000, who is neither the file owner nor a member of the owning group, is allowed read-only access to this file.</li>
+</ul>
+</li>
+<li>Example: group:dba:rw-
+<ul>
+<li>give the named group (dba) read and write access to the file.
+<code>setfacl</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>set, modify, substitute, or delete ACL settings</li>
+<li>If you want to give read and write permissions to a specific user (user1) and change the mask to read-only at the same time, the setfacl command will allocate the permissions as mentioned; however, the effective permissions for the named user will only be read-only.</li>
+</ul>
+</li>
+</ul>
+<p>u:UID:perms</p>
+<ul>
+<li>named user must exist in /etc/passwd</li>
+<li>if no user specified, permissions are given to the owner of the file/directory</li>
+</ul>
+<p>g:GID:perms</p>
+<ul>
+<li>Named group must exist in /etc/group</li>
+<li>If no group specified, permissions are given to the owning group of the file/directory</li>
+</ul>
+<p>o:perms</p>
+<ul>
+<li>Neither owner or owning group</li>
+</ul>
+<p>m:perms</p>
+<ul>
+<li>Maximum permissions for named user or named group</li>
+</ul>
+<p>Switches</p>
+<table>
+  <thead>
+      <tr>
+          <th>Switch</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>-b</td>
+          <td>Remove all Access ACLs</td>
+      </tr>
+      <tr>
+          <td>-d</td>
+          <td>Applies to default ACLs</td>
+      </tr>
+      <tr>
+          <td>-k</td>
+          <td>Removes all default ACLs</td>
+      </tr>
+      <tr>
+          <td>-m</td>
+          <td>Sets or modifies ACLs</td>
+      </tr>
+      <tr>
+          <td>-n</td>
+          <td>Prevent auto mask recalculation</td>
+      </tr>
+      <tr>
+          <td>-R</td>
+          <td>Apply Recursively to directory</td>
+      </tr>
+      <tr>
+          <td>-x</td>
+          <td>Remove Access ACL</td>
+      </tr>
+      <tr>
+          <td>-c</td>
+          <td>Display output without header</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="mask-value">Mask Value<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Determine maximum allowable permissions for named user or named group</li>
+<li>Mask value displayed on separate line in getfacl output</li>
+<li>Mask is recalculated every time an ACL is modified unless value is manually entered.</li>
+<li>Overrides the set ACL value.</li>
+</ul>
+<h2 id="find-command">Find Command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Search files and display the full path.</li>
+<li>Execute command on search results.</li>
+<li>Different search criteria
+<ul>
+<li>name</li>
+<li>part name</li>
+<li>ownership</li>
+<li>owning group</li>
+<li>permissions</li>
+<li>inode number</li>
+<li>last access</li>
+<li>modification time in days or minutes</li>
+<li>size</li>
+<li>file type</li>
+</ul>
+</li>
+<li>Command syntax
+<ul>
+<li>{find} + {path} + {search option} + {action}</li>
+</ul>
+</li>
+<li>Options
+<ul>
+<li>-name / -iname (search by name)</li>
+<li>-user / -group (UID / GID)</li>
+<li>-perm (permissions)</li>
+<li>-inum (inode)</li>
+<li>-atime/amin (access time)</li>
+<li>-mtime/amin (modification time)</li>
+<li>-size / -type (size / type)</li>
+<li></li>
+</ul>
+</li>
+<li>Action
+<ul>
+<li>copy, erase, rename, change ownership, modify permissions
+<ul>
+<li>-exec  {} \;
+<ul>
+<li>replaces {} for each filename as it is found. The semicolon character (;) marks the termination of the command and it is escaped with the backslash character (\).</li>
+</ul>
+</li>
+<li>-ok  {} \;
+<ul>
+<li>same as exec but requires confirmation.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>-delete</li>
+<li>-print &lt;- default</li>
+</ul>
+</li>
+</ul>
+<h1 id="advanced-file-management-labs">Advanced File Management Labs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<h3 id="lab-find-stuff">Lab: find stuff<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Create file 10 and search for it.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ sudo touch /root/file10
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ sudo find / -name file10 -print
+</span></span><span style="display:flex;"><span>/root/file10</span></span></code></pre></div>
+<ol start="2">
+<li>Perform a case insensitive search for files and directories in /dev that begin with &ldquo;usb&rdquo; followed by any characters.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ find /dev -iname usb*
+</span></span><span style="display:flex;"><span>/dev/usbmon0</span></span></code></pre></div>
+<ol start="3">
+<li>Find files smaller than 1MB (-1M) in size (-size) in the root user’s home directory (~).</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 etc<span style="color:#ff7b72;font-weight:bold">]</span>$ find ~ -size -1M</span></span></code></pre></div>
+<ol start="4">
+<li>Search for files larger than 40MB (+40M) in size (-size) in the /usr directory:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 etc<span style="color:#ff7b72;font-weight:bold">]</span>$ sudo find /usr -size +40M
+</span></span><span style="display:flex;"><span>/usr/share/GeoIP/GeoLite2-City.b</span></span></code></pre></div>
+<ol start="5">
+<li>Find files in the entire root file system (/) with ownership (-user) set to user daemon and owning group (-group) set to any group other than (-not or ! for negation) user1:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 etc<span style="color:#ff7b72;font-weight:bold">]</span>$ sudo find / -user daemon -not -group user1</span></span></code></pre></div>
+<ol start="6">
+<li>Search for directories (-type) by the name “src” (-name) in /usr at a maximum of two subdirectory levels below (-maxdepth):</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 etc<span style="color:#ff7b72;font-weight:bold">]</span>$ sudo find /usr -maxdepth <span style="color:#a5d6ff">2</span> -type d -name src
+</span></span><span style="display:flex;"><span>/usr/local/src
+</span></span><span style="display:flex;"><span>/usr/src</span></span></code></pre></div>
+<ol start="7">
+<li>Run the above search but at least three subdirectory levels beneath /usr, substitute -maxdepth 2 with -mindepth 3.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 etc<span style="color:#ff7b72;font-weight:bold">]</span>$ sudo find /usr -mindepth <span style="color:#a5d6ff">3</span> -type d -name src
+</span></span><span style="display:flex;"><span>/usr/src/kernels/4.18.0-425.3.1.el8.x86_64/drivers/gpu/drm//display/dmub/src
+</span></span><span style="display:flex;"><span>/usr/src/kernels/4.18.0-425.3.1.el8.x86_64/tools/usb/usbip/src</span></span></code></pre></div>
+<ol start="8">
+<li>Find files in the /etc directory that were modified (-mtime) more than (the + sign) 2000 days ago:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 etc<span style="color:#ff7b72;font-weight:bold">]</span>$ sudo find /etc -mtime +2000
+</span></span><span style="display:flex;"><span>/etc/libuser.conf
+</span></span><span style="display:flex;"><span>/etc/xattr.conf
+</span></span><span style="display:flex;"><span>/etc/whois.conf</span></span></code></pre></div>
+<ol start="9">
+<li>Run the above search for files that were modified exactly 12 days ago, replace “+2000” with “12”.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 etc<span style="color:#ff7b72;font-weight:bold">]</span>$ sudo find /etc -mtime <span style="color:#a5d6ff">12</span></span></span></code></pre></div>
+<ol start="10">
+<li>To find files in the /var/log directory that have been modified (-mmin) in the past (the - sign) 100 minutes:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 etc<span style="color:#ff7b72;font-weight:bold">]</span>$ sudo find /var/log -mmin -100
+</span></span><span style="display:flex;"><span>/var/log/rhsm/rhsmcertd.log
+</span></span><span style="display:flex;"><span>/var/log/rhsm/rhsm.log
+</span></span><span style="display:flex;"><span>/var/log/audit/audit.log
+</span></span><span style="display:flex;"><span>/var/log/dnf.librepo.log
+</span></span><span style="display:flex;"><span>/var/log/dnf.rpm.log
+</span></span><span style="display:flex;"><span>/var/log/sa
+</span></span><span style="display:flex;"><span>/var/log/sa/sa16
+</span></span><span style="display:flex;"><span>/var/log/sa/sar15
+</span></span><span style="display:flex;"><span>/var/log/dnf.log
+</span></span><span style="display:flex;"><span>/var/log/hawkey.log
+</span></span><span style="display:flex;"><span>/var/log/cron
+</span></span><span style="display:flex;"><span>/var/log/messages
+</span></span><span style="display:flex;"><span>/var/log/secure</span></span></code></pre></div>
+<ol start="11">
+<li>Run the above search for files that have been modified exactly 25 minutes ago, replace “-100” with “25”.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 etc<span style="color:#ff7b72;font-weight:bold">]</span>$ sudo find /var/log -mmin <span style="color:#a5d6ff">25</span></span></span></code></pre></div>
+<ol start="12">
+<li>To search for block device files (-type) in the /dev directory with permissions (-perm) set to exactly 660:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 etc<span style="color:#ff7b72;font-weight:bold">]</span>$ sudo find /dev -type b -perm <span style="color:#a5d6ff">660</span>
+</span></span><span style="display:flex;"><span>/dev/dm-1
+</span></span><span style="display:flex;"><span>/dev/dm-0
+</span></span><span style="display:flex;"><span>/dev/sda2
+</span></span><span style="display:flex;"><span>/dev/sda1
+</span></span><span style="display:flex;"><span>/dev/sda</span></span></code></pre></div>
+<ol start="13">
+<li>Search for character device files (-type) in the /dev directory with at least (-222) world writable permissions (this example would ignore checking the write and execute permissions):</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 etc<span style="color:#ff7b72;font-weight:bold">]</span>$ sudo find /dev -type c -perm -222</span></span></code></pre></div>
+<ol start="14">
+<li>Find files in the /etc/systemd directory that are executable by at least their owner or group members:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 etc<span style="color:#ff7b72;font-weight:bold">]</span>$ sudo find /etc/systemd -perm /110</span></span></code></pre></div>
+<ol start="15">
+<li>Search for symlinked files (-type) in /usr with permissions (-perm) set to read and write for the owner and owning group:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo find /usr -type l -perm -ug<span style="color:#ff7b72;font-weight:bold">=</span>rw</span></span></code></pre></div>
+<ol start="16">
+<li>Search for directories in the entire directory tree (/) by the name “core” (-name) and list them (ls-ld) as they are discovered without prompting for user confirmation (-exec):</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 etc<span style="color:#ff7b72;font-weight:bold">]</span>$ sudo find / -name core -exec ls -ld <span style="color:#ff7b72;font-weight:bold">{}</span> <span style="color:#79c0ff">\;</span></span></span></code></pre></div>
+<ol start="17">
+<li>Use the -ok switch to prompt for confirmation before it copies each matched file (-name) in /etc/sysconfig to /tmp:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo find /etc/sysconfig -name <span style="color:#a5d6ff">&#39;*.conf&#39;</span> -ok  cp <span style="color:#ff7b72;font-weight:bold">{}</span> /tmp <span style="color:#79c0ff">\;</span></span></span></code></pre></div>
+<h3 id="lab-display-acl-and-give-permissions">Lab: Display ACL and give permissions<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Create and empty file aclfile1 in /tmp and display ACLs on it:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> cd /tmp
+</span></span><span style="display:flex;"><span> touch aclfile1
+</span></span><span style="display:flex;"><span> getfacl aclfile1</span></span></code></pre></div>
+<ol start="2">
+<li>Give rw permission to user 1 but with a mask of read only and view the results.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> setfacl -m u:user1:rw,m:r aclfile1</span></span></code></pre></div>
+<ol start="3">
+<li>Promote the mask value to include write bit and verify:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> setfacl -m m:rw aclfile1
+</span></span><span style="display:flex;"><span> getfacl -c aclfile1</span></span></code></pre></div>
+<h3 id="lab-identify-apply-and-erase-access-acls">Lab: Identify, Apply, and Erase Access ACLs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Switch to user1 and create file acluser1 in /tmp:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> su - user1
+</span></span><span style="display:flex;"><span> cd /tmp
+</span></span><span style="display:flex;"><span> touch acluser1</span></span></code></pre></div>
+<ol start="2">
+<li>Use ls and getfacl to check existing acl entries:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> ls -l acluser1
+</span></span><span style="display:flex;"><span> getfacl acluser1 -c</span></span></code></pre></div>
+<ol start="3">
+<li>Allocate rw permissions to user100 with setfacl in octal form:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> setfacl -m u:user100:6 acluser1</span></span></code></pre></div>
+<ol start="4">
+<li>Run ls (+) and getfacl to verify:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> ls -l acluser1
+</span></span><span style="display:flex;"><span> getfacl -c acluser1</span></span></code></pre></div>
+<ol start="5">
+<li>
+<p>Open another terminal as user100 and open the file and edit it.</p>
+</li>
+<li>
+<p>Add user200 with full rwx permissions to acluser1 using the symbolic notation and then show the updated ACL settings:</p>
+</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> setfacl -m u:user200:rwx acluser1
+</span></span><span style="display:flex;"><span> getfacl -c acluser1</span></span></code></pre></div>
+<ol start="7">
+<li>Delete the ACL entries set for user200 and validate:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> setfacl -x u:user200 acluser1
+</span></span><span style="display:flex;"><span> getfacl acluser1 -c</span></span></code></pre></div>
+<ol start="8">
+<li>Delete the rest of the ACLs:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> setfacl -b acluser1</span></span></code></pre></div>
+<ol start="9">
+<li>Use the ls and getfacl commands and confirm for the ACLs removal:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> ls -l acluser1
+</span></span><span style="display:flex;"><span> getfacl acluser1 -c</span></span></code></pre></div>
+<ol start="10">
+<li>create group aclgroup1</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> groupadd -g <span style="color:#a5d6ff">8000</span> aclgroup1</span></span></code></pre></div>
+<ol start="11">
+<li>add this group as a named group along with the two named users (user100 and user200).</li>
+</ol>
+<h3 id="lab-apply-identify-and-erase-default-acls">Lab: Apply, Identify, and erase default ACLs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Switch or log in as user1 and create a directory projects in /tmp:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> su - user1
+</span></span><span style="display:flex;"><span> cd /tmp
+</span></span><span style="display:flex;"><span> mkdir projects</span></span></code></pre></div>
+<ol start="2">
+<li>Use the getfacl command for an initial look at the permissions on the directory:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> getfacl -c projects</span></span></code></pre></div>
+<ol start="3">
+<li>Allocate default read, write, and execute permissions to user100 and user200 on the directory. Use both octal and symbolic notations and the -d (default) option with the setfacl command.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> setfacl -dm u:user100:7,u:user200:rwx projects/
+</span></span><span style="display:flex;"><span> getfacl -c projects/</span></span></code></pre></div>
+<ol start="4">
+<li>Create a subdirectory prjdir1 under projects and observe the ACL inheritance:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> mkdir prjdir1
+</span></span><span style="display:flex;"><span> getfacl -c prjdir1</span></span></code></pre></div>
+<ol start="5">
+<li>Create a file prjfile1 under projects and observe the ACL inheritance:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> touch prjfile1
+</span></span><span style="display:flex;"><span> getfacl -c prjfilel</span></span></code></pre></div>
+<ol start="6">
+<li>log in as one of the named users, change directory into /tmp/projects, and edit prjfile1 (add some random text). Then change into the prjdir1 and create file file100.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> su - user100
+</span></span><span style="display:flex;"><span> cd /tmp/projects
+</span></span><span style="display:flex;"><span> vim prjfile1
+</span></span><span style="display:flex;"><span> ls -l prjfile1
+</span></span><span style="display:flex;"><span> cd prjdir1
+</span></span><span style="display:flex;"><span> touch file100
+</span></span><span style="display:flex;"><span> pwd</span></span></code></pre></div>
+<ol start="7">
+<li>Delete all the default ACLs from the projects directory as user1 and confirm:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> exit
+</span></span><span style="display:flex;"><span> su - user1
+</span></span><span style="display:flex;"><span> cd /tmp
+</span></span><span style="display:flex;"><span> setfacl -k projects
+</span></span><span style="display:flex;"><span> getfacl -c projects</span></span></code></pre></div>
+<ol start="8">
+<li>create a group such as aclgroup2 by running groupadd -g 9000 aclgroup2 as the root user and repeat this exercise by adding this group as a named group along with the two named users (user100 and user200).</li>
+</ol>
+<h3 id="lab-modify-permission-bits-using-symbolic-form">Lab: Modify Permission Bits Using Symbolic Form<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Add an execute bit for the owner and a write bit for group and public</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ chmod u+x permfile1 -v
+</span></span><span style="display:flex;"><span> mode of <span style="color:#a5d6ff">&#39;permfile1&#39;</span> changed from <span style="color:#a5d6ff">0444</span> <span style="color:#ff7b72;font-weight:bold">(</span>r--r--r--<span style="color:#ff7b72;font-weight:bold">)</span> to <span style="color:#a5d6ff">0544</span> <span style="color:#ff7b72;font-weight:bold">(</span>r-xr--r--<span style="color:#ff7b72;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ chmod -v go+w permfile1
+</span></span><span style="display:flex;"><span> mode of <span style="color:#a5d6ff">&#39;permfile1&#39;</span> changed from <span style="color:#a5d6ff">0544</span> <span style="color:#ff7b72;font-weight:bold">(</span>r-xr--r--<span style="color:#ff7b72;font-weight:bold">)</span> to <span style="color:#a5d6ff">0566</span> <span style="color:#ff7b72;font-weight:bold">(</span>r-xrw-rw-<span style="color:#ff7b72;font-weight:bold">)</span></span></span></code></pre></div>
+<ol start="2">
+<li>Revoke the write bit from public</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ chmod -v o-w permfile1
+</span></span><span style="display:flex;"><span> mode of <span style="color:#a5d6ff">&#39;permfile1&#39;</span> changed from <span style="color:#a5d6ff">0566</span> <span style="color:#ff7b72;font-weight:bold">(</span>r-xrw-rw-<span style="color:#ff7b72;font-weight:bold">)</span> to <span style="color:#a5d6ff">0564</span> <span style="color:#ff7b72;font-weight:bold">(</span>r-xrw-r--<span style="color:#ff7b72;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ chmod -v <span style="color:#79c0ff">a</span><span style="color:#ff7b72;font-weight:bold">=</span>rwx permfile1
+</span></span><span style="display:flex;"><span> mode of <span style="color:#a5d6ff">&#39;permfile1&#39;</span> changed from <span style="color:#a5d6ff">0564</span> <span style="color:#ff7b72;font-weight:bold">(</span>r-xrw-r--<span style="color:#ff7b72;font-weight:bold">)</span> to <span style="color:#a5d6ff">0777</span> <span style="color:#ff7b72;font-weight:bold">(</span>rwxrwxrwx<span style="color:#ff7b72;font-weight:bold">)</span></span></span></code></pre></div>
+<ol start="3">
+<li>Revoke write from the owning group and write and execute bits from public.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ chmod g-w,o-wx permfile1 -v
+</span></span><span style="display:flex;"><span> mode of <span style="color:#a5d6ff">&#39;permfile1&#39;</span> changed from <span style="color:#a5d6ff">0777</span> <span style="color:#ff7b72;font-weight:bold">(</span>rwxrwxrwx<span style="color:#ff7b72;font-weight:bold">)</span> to <span style="color:#a5d6ff">0754</span> <span style="color:#ff7b72;font-weight:bold">(</span>rwxr-xr--<span style="color:#ff7b72;font-weight:bold">)</span></span></span></code></pre></div>
+<h3 id="lab-modify-permission-bits-using-octal-form">Lab: Modify Permission Bits Using Octal Form<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Read only for user, group, and other:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ touch permfile2
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ chmod <span style="color:#a5d6ff">444</span> permfile2
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ ls -l permfile2
+</span></span><span style="display:flex;"><span> -r--r--r--. <span style="color:#a5d6ff">1</span> vagrant vagrant <span style="color:#a5d6ff">0</span> Feb  <span style="color:#a5d6ff">4</span> 12:22 permfile2</span></span></code></pre></div>
+<ol start="2">
+<li>Add an execute bit for the owner:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ chmod -v <span style="color:#a5d6ff">544</span> permfile2
+</span></span><span style="display:flex;"><span> mode of <span style="color:#a5d6ff">&#39;permfile2&#39;</span> changed from <span style="color:#a5d6ff">0444</span> <span style="color:#ff7b72;font-weight:bold">(</span>r--r--r--<span style="color:#ff7b72;font-weight:bold">)</span> to <span style="color:#a5d6ff">0544</span> <span style="color:#ff7b72;font-weight:bold">(</span>r-xr--r--<span style="color:#ff7b72;font-weight:bold">)</span></span></span></code></pre></div>
+<ol start="3">
+<li>Add a write permission bit for group and public:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ chmod -v <span style="color:#a5d6ff">566</span> permfile2
+</span></span><span style="display:flex;"><span> mode of <span style="color:#a5d6ff">&#39;permfile2&#39;</span> changed from <span style="color:#a5d6ff">0544</span> <span style="color:#ff7b72;font-weight:bold">(</span>r-xr--r--<span style="color:#ff7b72;font-weight:bold">)</span> to <span style="color:#a5d6ff">0566</span> <span style="color:#ff7b72;font-weight:bold">(</span>r-xrw-rw-<span style="color:#ff7b72;font-weight:bold">)</span></span></span></code></pre></div>
+<ol start="4">
+<li>Revoke the write bit for public:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ chmod -v <span style="color:#a5d6ff">564</span> permfile2
+</span></span><span style="display:flex;"><span> mode of <span style="color:#a5d6ff">&#39;permfile2&#39;</span> changed from <span style="color:#a5d6ff">0566</span> <span style="color:#ff7b72;font-weight:bold">(</span>r-xrw-rw-<span style="color:#ff7b72;font-weight:bold">)</span> to <span style="color:#a5d6ff">0564</span> <span style="color:#ff7b72;font-weight:bold">(</span>r-xrw-r--<span style="color:#ff7b72;font-weight:bold">)</span></span></span></code></pre></div>
+<ol start="5">
+<li>Assign read, write, and execute permission bits to all three user categories:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ chmod -v <span style="color:#a5d6ff">777</span> permfile2
+</span></span><span style="display:flex;"><span> mode of <span style="color:#a5d6ff">&#39;permfile2&#39;</span> changed from <span style="color:#a5d6ff">0564</span> <span style="color:#ff7b72;font-weight:bold">(</span>r-xrw-r--<span style="color:#ff7b72;font-weight:bold">)</span> to <span style="color:#a5d6ff">0777</span> <span style="color:#ff7b72;font-weight:bold">(</span>rwxrwxrwx<span style="color:#ff7b72;font-weight:bold">)</span></span></span></code></pre></div>
+<ol start="6">
+<li>Run the umask command without any options and it will display the current umask value in octal notation:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ umask
+</span></span><span style="display:flex;"><span> <span style="color:#a5d6ff">0002</span></span></span></code></pre></div>
+<ol start="7">
+<li>Symbolic form</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ umask -S
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">u</span><span style="color:#ff7b72;font-weight:bold">=</span>rwx,g<span style="color:#ff7b72;font-weight:bold">=</span>rwx,o<span style="color:#ff7b72;font-weight:bold">=</span>rx</span></span></code></pre></div>
+<ol start="8">
+<li>Set all new files and directories to get 640 and 750 permissions,</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> umask <span style="color:#a5d6ff">027</span>
+</span></span><span style="display:flex;"><span> umask <span style="color:#79c0ff">u</span><span style="color:#ff7b72;font-weight:bold">=</span>rwx,g<span style="color:#ff7b72;font-weight:bold">=</span>rx,o<span style="color:#ff7b72;font-weight:bold">=</span></span></span></code></pre></div>
+<ol start="9">
+<li>Test new umask (666-027=640) (777-027=750)</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ touch tempfile1
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ ls -l tempfile1
+</span></span><span style="display:flex;"><span> -rw-r-----. <span style="color:#a5d6ff">1</span> vagrant vagrant <span style="color:#a5d6ff">0</span> Feb  <span style="color:#a5d6ff">5</span> 12:09 tempfile1
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ mkdir tempdir1
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ ls -ld tempdir1
+</span></span><span style="display:flex;"><span> drwxr-x---. <span style="color:#a5d6ff">2</span> vagrant vagrant <span style="color:#a5d6ff">6</span> Feb  <span style="color:#a5d6ff">5</span> 12:10 tempdir1</span></span></code></pre></div>
+<h3 id="lab--view-suid-bit-on-su-command">Lab:  View suid bit on su command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ ls -l /usr/bin/su
+</span></span><span style="display:flex;"><span> -rwsr-xr-x. <span style="color:#a5d6ff">1</span> root root <span style="color:#a5d6ff">50152</span> Aug <span style="color:#a5d6ff">22</span> 10:08 /usr/bin/su</span></span></code></pre></div>
+<h3 id="lab-test-the-effect-of-setuid-bit-on-executable-files">Lab: Test the Effect of setuid Bit on Executable Files<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Open 2 terminal windows. Switch to user1 in terminal1</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ su - user1
+</span></span><span style="display:flex;"><span> Password:
+</span></span><span style="display:flex;"><span> Last login: Sun Feb  <span style="color:#a5d6ff">5</span> 12:37:12 UTC <span style="color:#a5d6ff">2023</span> on pts/1</span></span></code></pre></div>
+<ol start="2">
+<li>Switch to root on terminal2</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo su - root</span></span></code></pre></div>
+<ol start="3">
+<li>T1 Revoke the setuid bit from /usr/bin/su</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> chmod -v u-s /usr/bin/su</span></span></code></pre></div>
+<ol start="4">
+<li>T2 log off as root</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> ctrl+d</span></span></code></pre></div>
+<ol start="5">
+<li>Try to log in has root from both terminals</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>user1@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ su - root
+</span></span><span style="display:flex;"><span> Password:
+</span></span><span style="display:flex;"><span> su: Authentication failure</span></span></code></pre></div>
+<ol start="6">
+<li>T1 restore the setuid bit</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ sudo chmod -v +4000 /usr/bin/su
+</span></span><span style="display:flex;"><span> mode of <span style="color:#a5d6ff">&#39;/usr/bin/su&#39;</span> changed from <span style="color:#a5d6ff">0755</span> <span style="color:#ff7b72;font-weight:bold">(</span>rwxr-xr-x<span style="color:#ff7b72;font-weight:bold">)</span> to <span style="color:#a5d6ff">4755</span> <span style="color:#ff7b72;font-weight:bold">(</span>rwsr-xr-x<span style="color:#ff7b72;font-weight:bold">)</span></span></span></code></pre></div>
+<h3 id="lab-test-the-effect-of-setgid-bit-on-executable-files">Lab: Test the Effect of setgid Bit on Executable Files<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>
+<p>Log into two terminals
+T1 root
+T2 user1
+Opened with ssh</p>
+</li>
+<li>
+<p>T2 list users currently logged in</p>
+</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>who</span></span></code></pre></div>
+<ol start="3">
+<li>T2 send a message to root</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>write root</span></span></code></pre></div>
+<ol start="3">
+<li>T1 revoke setgid from /usr/bin/write</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>chmod g-s /usr/bin/write -v</span></span></code></pre></div>
+<ol start="4">
+<li>Try to write root</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user1@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ write root
+</span></span><span style="display:flex;"><span>write: effective gid does not match group of /dev/pts/0</span></span></code></pre></div>
+<ol start="5">
+<li>Restore the setgid bit on /usr/bin/write:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># sudo chmod -v +2000 /usr/bin/write</span>
+</span></span><span style="display:flex;"><span>mode of <span style="color:#a5d6ff">&#39;/usr/bin/write&#39;</span> changed from <span style="color:#a5d6ff">0755</span> <span style="color:#ff7b72;font-weight:bold">(</span>rwxr-xr-x<span style="color:#ff7b72;font-weight:bold">)</span> to <span style="color:#a5d6ff">2755</span> <span style="color:#ff7b72;font-weight:bold">(</span>rwxr-sr-x<span style="color:#ff7b72;font-weight:bold">)</span></span></span></code></pre></div>
+<ol start="6">
+<li>Test</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>write root</span></span></code></pre></div>
+<h3 id="lab-set-up-shared-directory-for-group-collaboration">Lab: Set up Shared Directory for Group Collaboration<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>set up 2 test users</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># adduser user100</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># adduser user200</span></span></span></code></pre></div>
+<ol start="2">
+<li>Add group sgrp with GID 9999 with the groupadd command:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># groupadd -g 9999 sgrp</span></span></span></code></pre></div>
+<ol start="3">
+<li>Add user100 and user200 as members to sgrp using the usermod command:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># usermod -aG sgrp user100</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># usermod -aG sgrp user200</span></span></span></code></pre></div>
+<ol start="4">
+<li>Create /sdir directory</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># mkdir /sdir</span></span></span></code></pre></div>
+<ol start="5">
+<li>Set ownership and owning group on /sdir to root and sgrp, using the chown command:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># chown root:sgrp /sdir</span></span></span></code></pre></div>
+<ol start="6">
+<li>Set the setgid bit on /sdir using the chmod command:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ sudo chmod g+s /sdir</span></span></code></pre></div>
+<ol start="7">
+<li>Add write permission to the group members on /sdir and revoke all permissions from public:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># chmod g+w,o-rx /sdir</span></span></span></code></pre></div>
+<ol start="8">
+<li>Verify</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># ls -ld /sdir</span>
+</span></span><span style="display:flex;"><span> drwxrws---. <span style="color:#a5d6ff">2</span> root sgrp <span style="color:#a5d6ff">6</span> Feb <span style="color:#a5d6ff">13</span> 15:49 /sdir</span></span></code></pre></div>
+<ol start="9">
+<li>Switch or log in as user100 and change to the /sdir directory:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># su - user100</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>user100@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ cd /sdir</span></span></code></pre></div>
+<ol start="10">
+<li>Create a file and check the owner and owning group on it:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>user100@server1 sdir<span style="color:#ff7b72;font-weight:bold">]</span>$ touch file100
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>user100@server1 sdir<span style="color:#ff7b72;font-weight:bold">]</span>$ ls -l file100
+</span></span><span style="display:flex;"><span> -rw-rw-r--. <span style="color:#a5d6ff">1</span> user100 sgrp <span style="color:#a5d6ff">0</span> Feb <span style="color:#a5d6ff">10</span> 22:41 file100</span></span></code></pre></div>
+<ol start="11">
+<li>Log out as user100, and switch or log in as user200 and change to the /sdir directory:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>root@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># su - user200</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>user200@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ cd /sdir</span></span></code></pre></div>
+<ol start="12">
+<li>Create a file and check the owner and owning group on it:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>user200@server1 sdir<span style="color:#ff7b72;font-weight:bold">]</span>$ touch file200
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>user200@server1 sdir<span style="color:#ff7b72;font-weight:bold">]</span>$ ls -l file200
+</span></span><span style="display:flex;"><span> -rw-rw-r--. <span style="color:#a5d6ff">1</span> user200 sgrp <span style="color:#a5d6ff">0</span> Feb <span style="color:#a5d6ff">13</span> 16:01 file200</span></span></code></pre></div>
+<h3 id="lab-view-t-in-permissions-for-sticky-bit">Lab: View &ldquo;t&rdquo; in permissions for sticky bit<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>user200@server1 sdir<span style="color:#ff7b72;font-weight:bold">]</span>$ ls -l /tmp /var/tmp -d
+</span></span><span style="display:flex;"><span> drwxrwxrwt. <span style="color:#a5d6ff">8</span> root root <span style="color:#a5d6ff">185</span> Feb <span style="color:#a5d6ff">13</span> 16:12 /tmp
+</span></span><span style="display:flex;"><span> drwxrwxrwt. <span style="color:#a5d6ff">4</span> root root <span style="color:#a5d6ff">113</span> Feb <span style="color:#a5d6ff">13</span> 16:00 /var/tmp</span></span></code></pre></div>
+<h3 id="lab-test-the-effect-of-sticky-bit">Lab: Test the effect of Sticky Bit<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Switch to user100 and change to the /tmp directory</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user100@server1 sdir<span style="color:#ff7b72;font-weight:bold">]</span>$ cd /tmp</span></span></code></pre></div>
+<ol start="2">
+<li>Create file called stckyfile</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user100@server1 tmp<span style="color:#ff7b72;font-weight:bold">]</span>$ touch stickyfile</span></span></code></pre></div>
+<ol start="3">
+<li>Try to delete the file as user200</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>user200@server1 tmp<span style="color:#ff7b72;font-weight:bold">]</span>$ rm stickyfile
+</span></span><span style="display:flex;"><span>rm: remove write-protected regular empty file <span style="color:#a5d6ff">&#39;stickyfile&#39;</span>? y
+</span></span><span style="display:flex;"><span>rm: cannot remove <span style="color:#a5d6ff">&#39;stickyfile&#39;</span>: Operation not permitted</span></span></code></pre></div>
+<ol start="4">
+<li>Revoke the /tmp stickybit and confirm</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ sudo chmod o-t /tmp
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>vagrant@server1 ~<span style="color:#ff7b72;font-weight:bold">]</span>$ ls -ld /tmp
+</span></span><span style="display:flex;"><span>drwxrwxrwx. <span style="color:#a5d6ff">8</span> root root <span style="color:#a5d6ff">4096</span> Feb <span style="color:#a5d6ff">13</span> 22:00 /tmp</span></span></code></pre></div>
+<ol start="5">
+<li>Retry the removal as user200</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>rm stickyfile</span></span></code></pre></div>
+<ol start="6">
+<li>Restore the sticky bit on /tmp</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo chmod -v +1000 /tmp</span></span></code></pre></div>
+<h3 id="lab-manipulate-file-permissions-user1">Lab: Manipulate File Permissions (user1)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Create file file11 and directory dir11 in the home directory. Make a note of the permissions on them.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> touch file11
+</span></span><span style="display:flex;"><span> mkdir dir11</span></span></code></pre></div>
+<ol start="2">
+<li>Run the umask command to determine the current umask.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> umask</span></span></code></pre></div>
+<ol start="3">
+<li>Change the umask value to 0035 using symbolic notation.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> umask <span style="color:#79c0ff">g</span><span style="color:#ff7b72;font-weight:bold">=</span>r,0<span style="color:#ff7b72;font-weight:bold">=</span>w</span></span></code></pre></div>
+<ol start="4">
+<li>Create file22 and directory dir22 in the home directory.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> touch file22
+</span></span><span style="display:flex;"><span> mkdir dir22</span></span></code></pre></div>
+<ol start="5">
+<li>Observe the permissions on file22 and dir22, and compare them with the permissions on file11 and dir11.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> ls -l</span></span></code></pre></div>
+<ol start="6">
+<li>Use the chmod command and modify the permissions on file11 to match those on file22.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> chmod g-w,o-r,o+w file11</span></span></code></pre></div>
+<ol start="7">
+<li>Use the chmod command and modify the permissions on dir22 to match those on dir11. Do not remove file11, file22, dir11, and dir22 yet.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> chmod g-wx,o-rx,o+w dir11</span></span></code></pre></div>
+<h3 id="lab-configure-group-collaboration-and-prevent-file-deletion-root">Lab: Configure Group Collaboration and Prevent File Deletion (root)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>create directory /sdir. Create group sgrp and create user1000 and user2000 and add them to the group:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> mkdir /sdir
+</span></span><span style="display:flex;"><span> groupadd sgrp
+</span></span><span style="display:flex;"><span> adduser user1000 <span style="color:#ff7b72;font-weight:bold">&amp;&amp;</span> adduser user2000
+</span></span><span style="display:flex;"><span> usermod -a -G sgrp user1000
+</span></span><span style="display:flex;"><span> usermod -a -G sgrp user2000</span></span></code></pre></div>
+<ol start="2">
+<li>Set up appropriate ownership (root), owning group (sgrp), and permissions (rwx for group, &mdash; for public, s for group, and t for public) on the directory to support group collaboration and ensure non-owners cannot delete files.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> chgrp sgrp sdir
+</span></span><span style="display:flex;"><span> chmod <span style="color:#79c0ff">g</span><span style="color:#ff7b72;font-weight:bold">=</span>rwx,o<span style="color:#ff7b72;font-weight:bold">=</span>--- sdir
+</span></span><span style="display:flex;"><span> chmod o+t sdir
+</span></span><span style="display:flex;"><span> chmod g+s sdir</span></span></code></pre></div>
+<ol start="3">
+<li>Log on as user1000 and create a file under /sdir.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> su - user1000
+</span></span><span style="display:flex;"><span> cd /sdir
+</span></span><span style="display:flex;"><span> touch testfile</span></span></code></pre></div>
+<ol start="4">
+<li>Log on as user2000 and try to edit that file. You should be able to edit the file successfully.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> su - user200
+</span></span><span style="display:flex;"><span> cd /sdir
+</span></span><span style="display:flex;"><span> vim testfile
+</span></span><span style="display:flex;"><span> cat testfile</span></span></code></pre></div>
+<ol start="5">
+<li>As user2000 try to delete the file. You should not be able to.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> rm testfile</span></span></code></pre></div>
+<h3 id="lab-find-files-root">Lab: Find Files (root)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Search for all files in the entire directory structure that have been modified in the last 300 minutes and display their type.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> find /sdir -mtime -300 -exec file <span style="color:#ff7b72;font-weight:bold">{}</span> <span style="color:#79c0ff">\;</span></span></span></code></pre></div>
+<ol start="2">
+<li>Search for named pipe and socket files.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> find / -type p
+</span></span><span style="display:flex;"><span> find / -type s</span></span></code></pre></div>
+<h3 id="lab-find-files-using-different-criteria-root">Lab: Find Files Using Different Criteria (root)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Search for regular files under /usr that were accessed more than 100 days ago, are not bigger than 5MB in size, and are owned by the user root.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> find /usr -type f -mtime +100 -size -5M -user root</span></span></code></pre></div>
+<h3 id="lab-apply-acl-settings-root">Lab: Apply ACL Settings (root)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Create file testfile under /tmp.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> touch /tmp/testfile</span></span></code></pre></div>
+<ol start="2">
+<li>Create users.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> adduser user2000
+</span></span><span style="display:flex;"><span> adduser user3000
+</span></span><span style="display:flex;"><span> adduser user4000</span></span></code></pre></div>
+<ol start="3">
+<li>Apply ACL settings on the file so that user2000 gets 7, user3000 gets 6, and user4000 gets 4 permissions.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> setfacl -m u:user2000:7 testfile
+</span></span><span style="display:flex;"><span> setfacl -m u:user3000:6 testfile
+</span></span><span style="display:flex;"><span> setfacl -m u:user4000:4 testfile</span></span></code></pre></div>
+<ol start="4">
+<li>Remove the ACLs for user2000, and verify.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> setfacl -x user2000 testfile
+</span></span><span style="display:flex;"><span> getfacl testfile</span></span></code></pre></div>
+<ol start="5">
+<li>Erase all remaining ACLs at once, and confirm.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> setfacl -b testfile
+</span></span><span style="display:flex;"><span> getfacl testfile</span></span></code></pre></div>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/the-cheat-code/"><a class="padding" href="/ansible/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/automate-kvm-vms/"><a class="padding" href="/ansible/automate-kvm-vms/">Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-documentation/"><a class="padding" href="/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/playbooks/"><a class="padding" href="/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/execution-environments/"><a class="padding" href="/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/hostname-patterns/"><a class="padding" href="/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/include-and-import-files/"><a class="padding" href="/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2/"><a class="padding" href="/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/user-and-groups/"><a class="padding" href="/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/storage-partitions-and-lvm/"><a class="padding" href="/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/services/"><a class="padding" href="/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/networking-with-ansible/"><a class="padding" href="/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/nfs-setup/"><a class="padding" href="/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimize-ansible-processing/"><a class="padding" href="/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux/"><a class="padding" href="/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/tags/"><a class="padding" href="/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/loops-and-items/"><a class="padding" href="/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/modules-for-troubleshooting/"><a class="padding" href="/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Using Variables In Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/when/"><a class="padding" href="/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5"><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="" data-nav-id="/containers/containers-1/"><a class="padding" href="/containers/containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/securityenhancedlinux/"><a class="padding" href="/cyber-security/securityenhancedlinux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/learning-touch-typing-1/"><a class="padding" href="/desktop/learning-touch-typing-1/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/learning-touch-typing/"><a class="padding" href="/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup-1/"><a class="padding" href="/desktop/my-fedora-setup-1/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue-2/"><a class="padding" href="/desktop/silverblue-2/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA? Some Ideas<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-ccna-exam/">How I Studied for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-synchronization/"><a class="padding" href="/networking/dns-and-time-synchronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns/"><a class="padding" href="/networking/dns/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networkdevicesandconnections/"><a class="padding" href="/networking/networkdevicesandconnections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/resources-for-passing-ccna/"><a class="padding" href="/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/systems/"><input type="checkbox" id="R-section-859f72c55acd170304a7ecf4dceebb83" aria-controls="R-subsections-859f72c55acd170304a7ecf4dceebb83"><label for="R-section-859f72c55acd170304a7ecf4dceebb83"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/systems/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-859f72c55acd170304a7ecf4dceebb83" class="collapsible-menu">
+            <li class="" data-nav-id="/systems/you-need-to-learn-man-pages/"><a class="padding" href="/systems/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/advanced-file-management/"><a class="padding" href="/systems/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/advanced-package-management/"><a class="padding" href="/systems/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/advanced-user-management/"><a class="padding" href="/systems/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/autofs/"><a class="padding" href="/systems/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/file-management/"><a class="padding" href="/systems/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/basic-package-management/"><a class="padding" href="/systems/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/basic-user-management/"><a class="padding" href="/systems/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/boot-process-grub2-kernel/"><a class="padding" href="/systems/boot-process-grub2-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/installation/"><a class="padding" href="/systems/installation/">Installing RHEL Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/interaction/"><a class="padding" href="/systems/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/local-filesystems-and-swap/"><a class="padding" href="/systems/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/network-filesystem-nfs/"><a class="padding" href="/systems/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/partitioning-mbr-gpt/"><a class="padding" href="/systems/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/process-and-task-scheduling/"><a class="padding" href="/systems/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/rm-filesystem-from-partition/"><a class="padding" href="/systems/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/rhcsa-exam-environment/"><a class="padding" href="/systems/rhcsa-exam-environment/">RHCSA Exam Environment Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/rhcsa-vagrant-lab-setup-1/"><a class="padding" href="/systems/rhcsa-vagrant-lab-setup-1/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/sys-init-logging-and-tuning/"><a class="padding" href="/systems/sys-init-logging-and-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/secure-shell-service-ssh/"><a class="padding" href="/systems/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/thin-provisioning/"><a class="padding" href="/systems/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/time-synchronization/"><a class="padding" href="/systems/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/virtual-data-optimizer-vdo/"><a class="padding" href="/systems/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/remove-formatting-from-highlights/"><a class="padding" href="/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-docker-nginx/"><a class="padding" href="/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/proxmox-pfsense-haproxy-setup/"><a class="padding" href="/tools/proxmox-pfsense-haproxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/stop-using-ai/"><a class="padding" href="/tools/stop-using-ai/">Why I Stopped Using AI so Much<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/install-ansible-using-uv/"><a class="padding" href="/tools/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-vagrant-on-linux/"><a class="padding" href="/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-man-pages/"><a class="padding" href="/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent hidden " data-nav-id="/archive/"><input type="checkbox" id="R-section-3efae3733ab07a14aa0bb0bbf1f8e3dd" aria-controls="R-subsections-3efae3733ab07a14aa0bb0bbf1f8e3dd" checked><label for="R-section-3efae3733ab07a14aa0bb0bbf1f8e3dd"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Linux Reader</span></label><a class="padding default-animation" href="/archive/">Linux Reader<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-3efae3733ab07a14aa0bb0bbf1f8e3dd" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/ansible/"><input type="checkbox" id="R-section-2da59b953fd922cc24bbcc833598ec18" aria-controls="R-subsections-2da59b953fd922cc24bbcc833598ec18"><label for="R-section-2da59b953fd922cc24bbcc833598ec18"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/archive/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-2da59b953fd922cc24bbcc833598ec18" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/"><input type="checkbox" id="R-section-e5951e8bf2f82dfe42bf49de8b6e015a" aria-controls="R-subsections-e5951e8bf2f82dfe42bf49de8b6e015a"><label for="R-section-e5951e8bf2f82dfe42bf49de8b6e015a"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu 45 Days to RHCE</span></label><a class="padding default-animation" href="/archive/ansible/45-days-to-rhce-1/">45 Days to RHCE<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5951e8bf2f82dfe42bf49de8b6e015a" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/ansible-navigator/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/crash-and-burn/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/crash-and-burn/">Crash and Burn<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/the-cheat-code/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/getting-ready/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/getting-ready/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-navigator/"><a class="padding" href="/archive/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/the-cheat-code/"><a class="padding" href="/archive/ansible/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/getting-ready-for-rhce/"><a class="padding" href="/archive/ansible/getting-ready-for-rhce/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/automate-kvm-vms/"><a class="padding" href="/archive/ansible/automate-kvm-vms/">Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ad-hoc-ansible-commands/"><a class="padding" href="/archive/ansible/ad-hoc-ansible-commands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/adhoccommands/"><a class="padding" href="/archive/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-documentation/"><a class="padding" href="/archive/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-facts/"><a class="padding" href="/archive/ansible/ansible-facts/">Ansible Facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-galaxy-roles/"><a class="padding" href="/archive/ansible/ansible-galaxy-roles/">Ansible Galaxy Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-inventory/"><a class="padding" href="/archive/ansible/ansible-inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/inventory/"><a class="padding" href="/archive/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-playbooks/"><a class="padding" href="/archive/ansible/ansible-playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/playbooks/"><a class="padding" href="/archive/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/roles/"><a class="padding" href="/archive/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-ansible-roles/"><a class="padding" href="/archive/ansible/using-ansible-roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-vault/"><a class="padding" href="/archive/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-inventory-command/"><a class="padding" href="/archive/ansible/ansible-inventory-command/">Ansible-inventory command<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible.cfg/"><a class="padding" href="/archive/ansible/ansible.cfg/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansibleconfig/"><a class="padding" href="/archive/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/boot-process/"><a class="padding" href="/archive/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/building-an-ansible-lab-with-ansible/"><a class="padding" href="/archive/ansible/building-an-ansible-lab-with-ansible/">Building an Ansible lab with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/common-modules-with-examples/"><a class="padding" href="/archive/ansible/common-modules-with-examples/">Common modules with examples<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/deploying-files/"><a class="padding" href="/archive/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/discovering-storage-related-facts/"><a class="padding" href="/archive/ansible/discovering-storage-related-facts/">Discovering storage related facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/dynamic-inventory/"><a class="padding" href="/archive/ansible/dynamic-inventory/">Dynamic Inventory<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/encrypted-passwords/"><a class="padding" href="/archive/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/execution-environments/"><a class="padding" href="/archive/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/handlers/"><a class="padding" href="/archive/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/host-name-patterns/"><a class="padding" href="/archive/ansible/host-name-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/hostname-patterns/"><a class="padding" href="/archive/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/include-and-import-files/"><a class="padding" href="/archive/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/including-and-importing-files/"><a class="padding" href="/archive/ansible/including-and-importing-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/jinja2-templates/"><a class="padding" href="/archive/ansible/jinja2-templates/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/jinja2/"><a class="padding" href="/archive/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/user-and-groups/"><a class="padding" href="/archive/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-ansible-errors-and-logs/"><a class="padding" href="/archive/ansible/managing-ansible-errors-and-logs/">Managing Ansible Errors and Logs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-packages/"><a class="padding" href="/archive/ansible/managing-packages/">Managing Packages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/archive/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-partitions-and-lvm/"><a class="padding" href="/archive/ansible/managing-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/storage-partitions-and-lvm/"><a class="padding" href="/archive/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-services/"><a class="padding" href="/archive/ansible/managing-services/">Managing Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/services/"><a class="padding" href="/archive/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/networking-with-ansible/"><a class="padding" href="/archive/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/nfs-setup/"><a class="padding" href="/archive/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/optimize-ansible-processing/"><a class="padding" href="/archive/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/optimizing-ansible-processing/"><a class="padding" href="/archive/ansible/optimizing-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/repositories-and-subscriptions/"><a class="padding" href="/archive/ansible/repositories-and-subscriptions/">Repositories and subscriptions<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/selinux-file-properties/"><a class="padding" href="/archive/ansible/selinux-file-properties/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/selinux/"><a class="padding" href="/archive/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/setting-up-an-ansible-lab/"><a class="padding" href="/archive/ansible/setting-up-an-ansible-lab/">Setting up an Ansible Lab<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ssh-connections/"><a class="padding" href="/archive/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/troubleshooting-common-scenarios/"><a class="padding" href="/archive/ansible/troubleshooting-common-scenarios/">Troubleshooting Common Scenarios<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/users-and-groups/"><a class="padding" href="/archive/ansible/users-and-groups/">Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/tags/"><a class="padding" href="/archive/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/loops-and-items/"><a class="padding" href="/archive/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-loops-and-items/"><a class="padding" href="/archive/ansible/using-loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/modules-for-troubleshooting/"><a class="padding" href="/archive/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-modules-for-troubleshooting-and-testing/"><a class="padding" href="/archive/ansible/using-modules-for-troubleshooting-and-testing/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-multiple-inventories/"><a class="padding" href="/archive/ansible/using-multiple-inventories/">Using Multiple Inventories<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-rhel-system-roles/"><a class="padding" href="/archive/ansible/using-rhel-system-roles/">Using RHEL System roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-tags/"><a class="padding" href="/archive/ansible/using-tags/">Using Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-when-to-run-tasks-conditionally/"><a class="padding" href="/archive/ansible/using-when-to-run-tasks-conditionally/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/when/"><a class="padding" href="/archive/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/variables/"><a class="padding" href="/archive/ansible/variables/">Variables<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/bash/"><input type="checkbox" id="R-section-0007e539b2afbfa1d415742d840f3a8d" aria-controls="R-subsections-0007e539b2afbfa1d415742d840f3a8d"><label for="R-section-0007e539b2afbfa1d415742d840f3a8d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/archive/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-0007e539b2afbfa1d415742d840f3a8d" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/bash/bash-shell/"><a class="padding" href="/archive/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/bash/shell-scripting/"><a class="padding" href="/archive/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/boot/"><input type="checkbox" id="R-section-23ba0690f68cd095a84a225cf8506d0a" aria-controls="R-subsections-23ba0690f68cd095a84a225cf8506d0a"><label for="R-section-23ba0690f68cd095a84a225cf8506d0a"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Boot</span></label><a class="padding default-animation" href="/archive/boot/"><i class="fa-solid fa-hourglass-start"></i> Boot<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-23ba0690f68cd095a84a225cf8506d0a" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/boot/boot-process-grub2-and-kernel/"><a class="padding" href="/archive/boot/boot-process-grub2-and-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/boot/system-initialization-message-logging-and-system-tuning/"><a class="padding" href="/archive/boot/system-initialization-message-logging-and-system-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/containers/"><input type="checkbox" id="R-section-4a0553f27d25d8da325eb0e27d262c20" aria-controls="R-subsections-4a0553f27d25d8da325eb0e27d262c20"><label for="R-section-4a0553f27d25d8da325eb0e27d262c20"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/archive/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4a0553f27d25d8da325eb0e27d262c20" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/containers/containers-1/"><a class="padding" href="/archive/containers/containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/cyber-security/"><input type="checkbox" id="R-section-22d3475420d0c69262f1eaf35f3954e1" aria-controls="R-subsections-22d3475420d0c69262f1eaf35f3954e1"><label for="R-section-22d3475420d0c69262f1eaf35f3954e1"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/archive/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-22d3475420d0c69262f1eaf35f3954e1" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/cyber-security/security-enhanced-linux/"><a class="padding" href="/archive/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/cyber-security/securityenhancedlinux/"><a class="padding" href="/archive/cyber-security/securityenhancedlinux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/cyber-security/the-linux-firewall/"><a class="padding" href="/archive/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/cyber-security/the-secure-shell-service/"><a class="padding" href="/archive/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/desktop/"><input type="checkbox" id="R-section-f15fd7be41155db115964722da6b0d03" aria-controls="R-subsections-f15fd7be41155db115964722da6b0d03"><label for="R-section-f15fd7be41155db115964722da6b0d03"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/archive/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f15fd7be41155db115964722da6b0d03" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/desktop/new-setup/"><a class="padding" href="/archive/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/learning-touch-typing-1/"><a class="padding" href="/archive/desktop/learning-touch-typing-1/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/learning-touch-typing/"><a class="padding" href="/archive/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/my-fedora-setup-1/"><a class="padding" href="/archive/desktop/my-fedora-setup-1/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/my-fedora-setup/"><a class="padding" href="/archive/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/silverblue-2/"><a class="padding" href="/archive/desktop/silverblue-2/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/silverblue/"><a class="padding" href="/archive/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/files/"><input type="checkbox" id="R-section-35cbfba2aaa3dc53d47351d0737b957f" aria-controls="R-subsections-35cbfba2aaa3dc53d47351d0737b957f"><label for="R-section-35cbfba2aaa3dc53d47351d0737b957f"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Files</span></label><a class="padding default-animation" href="/archive/files/"><i class="fa-solid fa-copy"></i> Files<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-35cbfba2aaa3dc53d47351d0737b957f" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/files/advanced-file-management/"><a class="padding" href="/archive/files/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/files/file-management/"><a class="padding" href="/archive/files/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/networking/"><input type="checkbox" id="R-section-571da5e9c8cc7c2f921ff81d669260db" aria-controls="R-subsections-571da5e9c8cc7c2f921ff81d669260db"><label for="R-section-571da5e9c8cc7c2f921ff81d669260db"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/archive/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-571da5e9c8cc7c2f921ff81d669260db" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/networking/what-to-learn-after-ccna/"><a class="padding" href="/archive/networking/what-to-learn-after-ccna/">What to Learn After CCNA? Some Ideas<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/how-to-study-for-ccna-exam/"><a class="padding" href="/archive/networking/how-to-study-for-ccna-exam/">How I Studied for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/archive/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/dns-and-time-synchronization/"><a class="padding" href="/archive/networking/dns-and-time-synchronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/dns/"><a class="padding" href="/archive/networking/dns/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/archive/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/juniper_cli_basics/"><a class="padding" href="/archive/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/archive/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/networkdevicesandconnections/"><a class="padding" href="/archive/networking/networkdevicesandconnections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/archive/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/resources-for-passing-ccna/"><a class="padding" href="/archive/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/time-synchronization/"><a class="padding" href="/archive/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/toggle_poe/"><a class="padding" href="/archive/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/packages/"><input type="checkbox" id="R-section-ffbf85f24cd2239219afa8b9cbe18b38" aria-controls="R-subsections-ffbf85f24cd2239219afa8b9cbe18b38"><label for="R-section-ffbf85f24cd2239219afa8b9cbe18b38"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/archive/packages/"><i class="fa-solid fa-box-open"></i> Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ffbf85f24cd2239219afa8b9cbe18b38" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/packages/advanced-package-management/"><a class="padding" href="/archive/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/packages/basic-package-management/"><a class="padding" href="/archive/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/storage/"><input type="checkbox" id="R-section-5b321d96a2a369eec97e1394accb14fb" aria-controls="R-subsections-5b321d96a2a369eec97e1394accb14fb"><label for="R-section-5b321d96a2a369eec97e1394accb14fb"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/archive/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-5b321d96a2a369eec97e1394accb14fb" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/storage/autofs/"><a class="padding" href="/archive/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/local-file-systems-and-swap/"><a class="padding" href="/archive/storage/local-file-systems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/network-file-system-nfs/"><a class="padding" href="/archive/storage/network-file-system-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/partitioning-mbr-and-gpt/"><a class="padding" href="/archive/storage/partitioning-mbr-and-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/remove-a-filesystem-from-a-partition/"><a class="padding" href="/archive/storage/remove-a-filesystem-from-a-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/thin-provisioning/"><a class="padding" href="/archive/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/archive/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/archive/systems/"><input type="checkbox" id="R-section-1dd2726e68c35ec062a2cfe2c1df58df" aria-controls="R-subsections-1dd2726e68c35ec062a2cfe2c1df58df" checked><label for="R-section-1dd2726e68c35ec062a2cfe2c1df58df"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/archive/systems/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-1dd2726e68c35ec062a2cfe2c1df58df" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/systems/you-need-to-learn-man-pages/"><a class="padding" href="/archive/systems/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="active " data-nav-id="/archive/systems/advanced-file-management/"><a class="padding" href="/archive/systems/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/advanced-package-management/"><a class="padding" href="/archive/systems/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/advanced-user-management/"><a class="padding" href="/archive/systems/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/autofs/"><a class="padding" href="/archive/systems/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/file-management/"><a class="padding" href="/archive/systems/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/basic-package-management/"><a class="padding" href="/archive/systems/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/basic-user-management/"><a class="padding" href="/archive/systems/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/boot-process-grub2-kernel/"><a class="padding" href="/archive/systems/boot-process-grub2-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/installation/"><a class="padding" href="/archive/systems/installation/">Installing RHEL Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/interaction/"><a class="padding" href="/archive/systems/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/local-filesystems-and-swap/"><a class="padding" href="/archive/systems/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/network-filesystem-nfs/"><a class="padding" href="/archive/systems/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/partitioning-mbr-gpt/"><a class="padding" href="/archive/systems/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/process-and-task-scheduling/"><a class="padding" href="/archive/systems/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/rm-filesystem-from-partition/"><a class="padding" href="/archive/systems/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/rhcsa-exam-environment/"><a class="padding" href="/archive/systems/rhcsa-exam-environment/">RHCSA Exam Environment Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/rhcsa-vagrant-lab-setup-1/"><a class="padding" href="/archive/systems/rhcsa-vagrant-lab-setup-1/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/sys-init-logging-and-tuning/"><a class="padding" href="/archive/systems/sys-init-logging-and-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/secure-shell-service-ssh/"><a class="padding" href="/archive/systems/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/thin-provisioning/"><a class="padding" href="/archive/systems/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/time-synchronization/"><a class="padding" href="/archive/systems/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/virtual-data-optimizer-vdo/"><a class="padding" href="/archive/systems/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/system/"><input type="checkbox" id="R-section-d52ce8aee0f4ac02a6f02a34de71d1c0" aria-controls="R-subsections-d52ce8aee0f4ac02a6f02a34de71d1c0"><label for="R-section-d52ce8aee0f4ac02a6f02a34de71d1c0"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/archive/system/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d52ce8aee0f4ac02a6f02a34de71d1c0" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/system/installation/"><a class="padding" href="/archive/system/installation/">Installation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/system/interaction/"><a class="padding" href="/archive/system/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/system/process-and-task-scheduling/"><a class="padding" href="/archive/system/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/tools/"><input type="checkbox" id="R-section-b320e1715e16e5d512ba5b82e27cc64b" aria-controls="R-subsections-b320e1715e16e5d512ba5b82e27cc64b"><label for="R-section-b320e1715e16e5d512ba5b82e27cc64b"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/archive/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-b320e1715e16e5d512ba5b82e27cc64b" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/tools/remove-formatting-from-highlights/"><a class="padding" href="/archive/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/calibre-web-docker-nginx/"><a class="padding" href="/archive/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/proxmox-pfsense-haproxy-setup/"><a class="padding" href="/archive/tools/proxmox-pfsense-haproxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/stop-using-ai/"><a class="padding" href="/archive/tools/stop-using-ai/">Why I Stopped Using AI so Much<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/install-ansible-using-uv/"><a class="padding" href="/archive/tools/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/archive/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/new-setup/"><a class="padding" href="/archive/tools/tools/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/archive/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/archive/tools/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/process-bookfusion-highlights/"><a class="padding" href="/archive/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/archive/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/archive/tools/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/archive/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/archive/tools/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/archive/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/archive/tools/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/using-vagrant-on-linux/"><a class="padding" href="/archive/tools/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/using-vagrant-on-linux/"><a class="padding" href="/archive/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/vimguide/"><a class="padding" href="/archive/tools/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/vimguide/"><a class="padding" href="/archive/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/using-man-pages/"><a class="padding" href="/archive/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/users-and-groups/"><input type="checkbox" id="R-section-db70fad5de90fe8fb545112d40b3bd47" aria-controls="R-subsections-db70fad5de90fe8fb545112d40b3bd47"><label for="R-section-db70fad5de90fe8fb545112d40b3bd47"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users and Groups</span></label><a class="padding default-animation" href="/archive/users-and-groups/"><i class="fa-solid fa-users"></i> Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-db70fad5de90fe8fb545112d40b3bd47" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/users-and-groups/advanced-user-management/"><a class="padding" href="/archive/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/users-and-groups/basic-user-management/"><a class="padding" href="/archive/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/virtualization/"><input type="checkbox" id="R-section-d0028714f8460f5888066e750cbc5914" aria-controls="R-subsections-d0028714f8460f5888066e750cbc5914"><label for="R-section-d0028714f8460f5888066e750cbc5914"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualization</span></label><a class="padding default-animation" href="/archive/virtualization/"><i class="fa-solid fa-microchip"></i> Virtualization<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d0028714f8460f5888066e750cbc5914" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/virtualization/rhcsa-vagrant-lab-setup/"><a class="padding" href="/archive/virtualization/rhcsa-vagrant-lab-setup/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1772467050" defer></script>
+    <script src="/js/theme.js?1772467050" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

@@ -8,7 +8,7 @@
 
 Metro Ethernet
 
-![](../../../../../images/Pasted%20image%2020231205144234.png)
+![](../../../images/Pasted%20image%2020231205144234.png)
 
 Customers connect to a Metro Ethernet service with either routers or Layer 3 switches.
 
@@ -16,7 +16,7 @@ Customers connect to a Metro Ethernet service with either routers or Layer 3 swi
 
 A device physically near to customer sites is called a point of presence (PoP).
 
-![](../../../../../images/Pasted%20image%2020231205144543.png)
+![](../../../images/Pasted%20image%2020231205144543.png)
 
 The physical link between the customer and the SP is called an access link.
 
@@ -24,7 +24,7 @@ When using Ethernet specifically, an Ethernet access link. Everything that happe
 
 The switch will look at the Ethernet header’s MAC address fields and at 802.1Q trunking headers for VLAN tags, but the details inside the network remain hidden.
 
-![](../../../../../images/Pasted%20image%2020231205144839.png)
+![](../../../images/Pasted%20image%2020231205144839.png)
 ##### Ethernet WAN Services and Topologies
 
 E-Line (point-to-point), E-LAN (full mesh), and E-Tree (point-to-multipoint, hub and spoke).
@@ -34,7 +34,7 @@ Virtual Private Wire Service (VPWS) used for what MEF defines as E-line service 
 
 The customer connects two sites with access links. Then the MetroE service allows the two customer devices to send Ethernet frames to each other.
 
-![](../../../../../images/Pasted%20image%2020231205145351.png)
+![](../../../images/Pasted%20image%2020231205145351.png)
 
 ▪ The routers would use physical Ethernet interfaces.
 ▪ The routers would configure IP addresses in the same subnet as each other.
@@ -44,7 +44,7 @@ Ethernet Virtual Connection, or EVC, to define which user (customer) devices can
 
 Creates a point-to-point EVC, meaning that the service allows two endpoints to communicate.
 
-![](../../../../../images/Pasted%20image%2020231205145520.png)
+![](../../../images/Pasted%20image%2020231205145520.png)
 
 Designs like Figure 14-4, with multiple E-Line services on a single access link, use 802.1Q trunking, with a different VLAN ID for each E-Line service. As a result, the router configuration can use a typical router configuration with trunking and subinterfaces.
 

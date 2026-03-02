@@ -1,7 +1,6 @@
 # Shell Scripting
 
-## Shell Scripts 
-
+## Shell Scripts  
 - A group of Linux commands along with control structures and optional comments stored in a text file. 
 - Can be executed directly at the Linux command prompt. 
 - Do not need to be compiled as they are interpreted by the shell line by line.
@@ -234,7 +233,7 @@ The kernel version is 5.14.0-362.24.1.el9_3.x86_64
 	- Positional parameters beyond 9 are to be enclosed in curly brackets. 
 
 
-![](../../images/image-G1VF6C4I%201.jpg)
+![](../../../images/image-G1VF6C4I%201%201.jpg)
 
 - Just like the variable and command substitutions, the shell uses the dollar (\$) sign for special and positional parameter expansions as well.
 
@@ -416,7 +415,7 @@ man test
 - Begins with an `if` and ends with a `fi`
 - Can execute an action only if the specified condition is true. It quits the statement if the condition is untrue.
 
-![](../../images/image-7FX8FVMW%201.jpg)
+![](../../../images/image-7FX8FVMW%201%201.jpg)
 
 The general syntax of this statement is as follows:
 
@@ -475,7 +474,7 @@ Script terminated
 
 - Can execute an action if the condition is true and another action if the condition is false. 
 
-![](../../images/image-CMLV644G%201.jpg)
+![](../../../images/image-CMLV644G%201%201.jpg)
 
 The general syntax of this statement is as follows:
 
@@ -523,7 +522,7 @@ a is a negative integer value
 - Can define multiple conditions and associate an action with each one of them. 
 - The action corresponding to the true condition is performed. 
 
-![](../../images/image-TNYN7SP2%201.jpg)
+![](../../../images/image-TNYN7SP2%201%201.jpg)
 
 The general syntax of this statement is as follows:
 
@@ -678,7 +677,7 @@ Operators used in test conditions
 - Executed on an array of elements until all the elements in the array are consumed. 
 - Each element is assigned to a variable one after the other for processing. 
 
-![](../../images/image-BPQ7RWER%201.jpg)
+![](../../../images/image-BPQ7RWER%201%201.jpg)
 
 
 The general syntax of this construct is as follows:

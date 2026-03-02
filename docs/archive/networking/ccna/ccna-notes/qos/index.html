@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=32883&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    <meta name="description" content="4.0 IP Services
+4.7 Explain the forwarding per-hop behavior (PHB) for QoS such as classification, marking, queuing, congestion, policing, shaping
+QoS defines these actions as per-hop behaviors (PHBs), which is a formal term to refer to actions other than storing and forwarding a message.
+QoS: Managing Bandwidth, Delay, Jitter, and Loss four characteristics of network traffic:">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="4.0 IP Services
+4.7 Explain the forwarding per-hop behavior (PHB) for QoS such as classification, marking, queuing, congestion, policing, shaping
+QoS defines these actions as per-hop behaviors (PHBs), which is a formal term to refer to actions other than storing and forwarding a message.
+QoS: Managing Bandwidth, Delay, Jitter, and Loss four characteristics of network traffic:">
+    <meta property="og:url" content="http://localhost:32883/archive/networking/ccna/ccna-notes/qos/">
+    <meta property="og:description" content="4.0 IP Services
+4.7 Explain the forwarding per-hop behavior (PHB) for QoS such as classification, marking, queuing, congestion, policing, shaping
+QoS defines these actions as per-hop behaviors (PHBs), which is a formal term to refer to actions other than storing and forwarding a message.
+QoS: Managing Bandwidth, Delay, Jitter, and Loss four characteristics of network traffic:">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="">
+    <meta itemprop="description" content="4.0 IP Services
+4.7 Explain the forwarding per-hop behavior (PHB) for QoS such as classification, marking, queuing, congestion, policing, shaping
+QoS defines these actions as per-hop behaviors (PHBs), which is a formal term to refer to actions other than storing and forwarding a message.
+QoS: Managing Bandwidth, Delay, Jitter, and Loss four characteristics of network traffic:">
+    <meta itemprop="wordCount" content="3618">
+    <title></title>
+    <link href="/archive/networking/ccna/ccna-notes/qos/index.md" rel="alternate" type="text/markdown" title="">
+    <link href="/images/favicon.svg?1772467047" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1772467047" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1772467047" defer></script>
+    <script src="/js/search-lunr.js?1772467047" defer></script>
+    <script src="/js/search.js?1772467047" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1772467047";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1772467047" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1772467047" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1772467047" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1772467047" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1772467047" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1772467047" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1772467047" rel="stylesheet">
+    <link href="/css/theme.css?1772467047" rel="stylesheet">
+    <link href="/css/format-html.css?1772467047" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/archive\/networking\/ccna\/ccna-notes\/qos\/';
+      window.relearn.relBasePath='..\/..\/..\/..\/..';
+      window.relearn.relBaseUri='..\/..\/..\/..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:32883';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/archive/networking/ccna/ccna-notes/qos/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#qos-managing-bandwidth-delay-jitter-and-loss">QoS: Managing Bandwidth, Delay, Jitter, and Loss</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#policing">Policing</a></li>
+    <li><a href="#shaping">Shaping</a>
+      <ul>
+        <li><a href="#setting-a-good-shaping-time-interval-for-voice-and-video">Setting a Good Shaping Time Interval for Voice and Video</a></li>
+      </ul>
+    </li>
+    <li><a href="#congestion-avoidance">Congestion Avoidance</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/archive/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/archive/networking/"><span itemprop="name">Networking</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive/networking/ccna/ccna-notes/qos/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive/networking/how-to-study-for-ccna-exam/" title="How I Studied for the CCNA Exam (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive/networking/consoling_in_to_mx80_from_linux/" title="Consoling in to MX80 from linux (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable archive" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id=""></h1>
+
+<p>4.0 IP Services</p>
+<p>4.7 Explain the forwarding per-hop behavior (PHB) for QoS such as classification, marking, queuing, congestion, policing, shaping</p>
+<p>QoS defines these actions as per-hop behaviors (PHBs), which is a formal term to refer to actions other than storing and forwarding a message.</p>
+<h2 id="qos-managing-bandwidth-delay-jitter-and-loss">QoS: Managing Bandwidth, Delay, Jitter, and Loss<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>four characteristics of network traffic:</p>
+<p>Bandwidth</p>
+<p>refers to the speed of a link, in bits per second (bps)</p>
+<p>helps to also think of bandwidth as the capacity of the link, in terms of how many bits can be sent over the link per second.</p>
+<p>Delay</p>
+<p>the time between sending one packet and that same packet arriving at the destination host</p>
+<p>Round-trip delay</p>
+<p>the time it takes to send one packet between two hosts and receive one back</p>
+<p>Jitter</p>
+<p>variation in one-way delay between consecutive packets sent by the same application</p>
+<p>Loss</p>
+<p>the number of lost messages, usually as a percentage of packets sent.</p>
+<p>people think of loss as something caused by faulty cabling or poor WAN services. That is one cause. However, more loss happens because of the normal operation of the networking devices, in which the devices’ queues get too full, so the device has nowhere to put new packets, and it discards the packet.</p>
+<p>Types of Traffic</p>
+<p>Data Applications</p>
+<p>HTTP GET
+500 Packets
+Figure 11-1 Concept of Disproportionate Packet/Byte Volumes with HTTP Traffic &ldquo;&gt;</p>
+<p>Quality of Experience (QoE) - users’ perception of their use of the application on the network.</p>
+<p>Voice and Video Applications</p>
+<p>A flow is all the data moving from one application to another over the network, with one flow for each direction</p>
+<p>For example, if you open a website and connect to a web server, the web page content that moves from the server to the client is one flow.</p>
+<p>From a voice perspective, a phone call between two IP phones would create a flow for each direction</p>
+<p>Step 1. The phone user makes a phone call and begins speaking.</p>
+<p>Step 2. A chip called a codec processes (digitizes) the sound to create a binary code (160 bytes with the G.711 codec, for example) for a certain time period (usually 20 ms).</p>
+<p>Step 3. The phone places the data into an IP packet.</p>
+<p>Step 4. The phone sends the packet to the destination IP phone.</p>
+<p>CODEC
+Voice Bytes
+IP UDP ATP Voice Bytes
+Figure 11-2 Creating VolP Packets with an IP Phone and a G.711 Codec &ldquo;&gt;</p>
+<p>guidelines for interactive voice:</p>
+<p>Delay (one-way): 150 ms or less</p>
+<p>Jitter: 30 ms or less</p>
+<p>Loss: 1% or less</p>
+<p>requirements for video</p>
+<p>Bandwidth: 384 Kbps to 20+ Mbps</p>
+<p>Delay (one-way): 200–400 ms</p>
+<p>Jitter: 30–50 ms</p>
+<p>Loss: 0.1%–1%</p>
+<p>QoS as Mentioned in This Book</p>
+<p>“Classification and Marking” is about the marking of packets and the definition of trust boundaries.</p>
+<p>“Queuing” describes the scheduling of packets to give one type of packet priority over another.</p>
+<p>“Shaping and Policing” explains these two tools together because they are often used on opposite ends of a link.</p>
+<p>“Congestion Avoidance” addresses how to manage the packet loss that occurs when network devices get too busy.</p>
+<p>Classification and Marking</p>
+<p>a type of QoS tool that classifies packets based on their header contents then marks the message by changing some bits in specific header fields</p>
+<p>Classification Basics</p>
+<p>QoS tools sit in the path that packets take when being forwarded through a router or switch, much like the positioning of ACLs. Like ACLs, QoS tools are enabled on an interface. Also like ACLs, QoS tools are enabled for a direction: packets entering the interface (before the forwarding decision) or for messages exiting the interface (after the forwarding decision).</p>
+<p>classification refers to the process of matching the fields in a message to make a choice to take some QoS action</p>
+<p>QoS tools perform classification (matching of header fields) to decide which packets to take certain QoS actions against. Those actions include the other types of QoS tools discussed in this chapter, such as queuing, shaping, policing, and so on.</p>
+<p>Forward
+RI
+Classify
+Queue
+Scheduling
+(Prioritization)
+Transmit
+Figure 11-3 Big Idea: Classification for Queuing in a Router &ldquo;&gt;</p>
+<p>Matching (Classification) Basics</p>
+<p>Cisco and by RFCs, suggests doing complex matching early in the life of a packet and then marking the packet. Marking means that the QoS tool changes one or more header fields, setting a value in the header.</p>
+<p>Differentiated Services Code Point (DSCP)</p>
+<p>a 6-bit field in the IP header meant for QoS marking</p>
+<p>Mark DSCP
+at Ingress
+SWI
+Less Complex Matching
+DSCP=X? CLASS 1.
+DSCP=Y? CLASS 2.
+WAN
+SW2
+F igure 11-4 Systematic Classification and Markingfor the Enterprise &ldquo;&gt;</p>
+<p>Classification on Routers with ACLs and NBAR</p>
+<p>many QoS tools support the ability to simply refer to an IP ACL, with this kind of logic:</p>
+<p>For any packet matched by the ACL with a permit action, consider that packet a match for QoS, so do a particular QoS action.</p>
+<p>All these fields are matchable for QoS classification.</p>
+<p>IP Header
+4
+TCP Header
+9
+Miscellaneous
+Header
+Fields
+4
+Variable
+2
+2
+16+
+Rest
+Protocol Header
+6 (TCP) Checksum
+6 = TCP
+Source IP Destination IP
+Address Address
+Source Dest.
+Options
+of
+Port Port
+TCP
+Figure 11-5 Classification with Five Fields Used by Extended ACLs &ldquo;&gt;</p>
+<p>not every classification can be easily made by matching with an ACL. In more challenging cases, Cisco Network Based Application Recognition (NBAR) can be used. NBAR is basically in its second major version, called NBAR2, or next-generation NBAR. In short, NBAR2 matches packets for classification in a large variety of ways that are very useful for QoS.</p>
+<p>NBAR2 looks far beyond what an ACL can examine in a message</p>
+<p>Cisco also organizes what NBAR can match in ways that make it easy to separate the traffic into different classes.</p>
+<p>you might classify WebEx traffic and give it a unique DSCP marking. NBAR provides easy built-in matching ability for WebEx, plus more than 1000 different subcategories of applications.</p>
+<p>NBAR refers to this idea of defining the characteristics of different applications as application signatures.)</p>
+<p>Rl#(config)# class-map matchingexample
+RI (config-cmap)# match protocol attribute category voice-and-video ?
+! output heavily edited for length
+amazon-instant-video
+cisco-ip-camera
+cisco-phone
+espn-video
+facetime
+! Output snipped.
+VOD service by Amazon
+Cisco video surveillance camera
+Cisco IP Phones and PC-based Unified Com
+ESPN related websites and mobile applica
+Facetime video calling software &ldquo;&gt;</p>
+<p>Marking IP DSCP and Ethernet CoS</p>
+<p>example plan</p>
+<p>Classify all voice payload traffic that is used for business purposes as IP DSCP EF and CoS 5.</p>
+<p>Classify all video conferencing and other interactive video for business purposes as IP DSCP AF41 and CoS 4.</p>
+<p>Classify all business-critical data application traffic as IP DSCP AF21 and CoS 2</p>
+<p>Marking the IP Header</p>
+<p>Marking a QoS field in the IP header works well with QoS because the IP header exists for the entire trip from the source host to the destination host.</p>
+<p>IPv4 defines a Type of Service (ToS) byte in the IPv4 header, as shown in Figure 11-6. The original RFC defined a 3-bit IP Precedence (IPP) field for QoS marking. That field gave us eight separate values—binary 000, 001, 010, and so on, through 111—which when converted to decimal are decimals 0 through 7.</p>
+<p>IPP
+Type of
+Service
+DSCP
+RFC 2474
+Unused
+ECN
+Old Use
+IP Header
+(Rest of IP Header&hellip;)
+Current Use
+RFC 3168
+Figure 11-6 IP Precedence and Differentiated Services Code Point Fields &ldquo;&gt;</p>
+<p>Those last 5 bits of the ToS byte per RFC 791 were mostly defined for some purpose but were not used in practice to any significant extent.</p>
+<p>DSCP increased the number of marking bits to 6 bits, allowing for 64 unique values that can be marked. The DiffServ RFCs, which became RFCs back in the late 1990s, have become accepted as the most common method to use when doing QoS, and using the DSCP field for marking has become quite common.</p>
+<p>IPv6 has a similar field to mark as well. The 6-bit field also goes by the name DSCP, with the byte in the IPv6 header being called the IPv6 Traffic Class byte.</p>
+<p>Marking the Ethernet 802.1Q Header</p>
+<p>marking field exists in the 802.1Q header</p>
+<p>It goes by two different names: Class of Service, or CoS, and Priority Code Point, or PCP.</p>
+<p>sits in the third byte of the 4-byte 802.1Q header, as a 3-bit field, supplying eight possible values to mark (see Figure 11-7). It goes by two different names: Class of Service, or CoS, and Priority Code Point, or PCP.</p>
+<p>Ethernet
+8021 Q
+Type
+Data
+Trailer
+Class of Service (COS) (3 Bits)
+Priority Code Point (PCP)
+Figure 11-7 Class ofService Field in 802.1Q/p Header &ldquo;&gt;</p>
+<p>802.1Q header is not included in all Ethernet frames</p>
+<p>only exists when 802.1Q trunking is used on a link</p>
+<p>only for QoS features enabled on interfaces that use trunking, as shown</p>
+<p>WAN
+SWI
+Trunk
+SW2
+can Use COS
+Figure 11-8 Useful Life of COS Marking &ldquo;&gt;</p>
+<p>Other Marking Fields</p>
+<p>Field Name
+DSCP
+IPP
+cos
+TID
+EXP
+Header(s)
+IPv4, IPv6
+IPv4, IPv6
+802.1Q
+802.11
+MPLS Label
+Length (bits)
+6
+3
+3
+3
+3
+Where Used
+End-to-end packet
+End-to-end packet
+Over VLAN trunk
+over Wi-Fi
+over MPLS WAN &ldquo;&gt;</p>
+<p>Defining Trust Boundaries</p>
+<p>most voice traffic is marked with a DSCP called Expedited Forwarding (EF), which has a decimal value of 46</p>
+<p>trust boundary</p>
+<p>the point in the path of a packet flowing through the network at which the networking devices can trust the current QoS markings</p>
+<p>Set DSCP and
+COS Inbound
+SWI
+Trust Boundary
+WAN
+SW2
+Figure 11-9 Trusting Devices—PC &ldquo;&gt;</p>
+<p>when the access layer includes an IP Phone, the phone is typically the trust boundary</p>
+<p>IP Phones can set the CoS and DSCP fields of the messages created by the phone, as well as those forwarded from the PC through the phone. The specific marking values are actually configured on the attached access switch</p>
+<p>Set Phone DSCP and COS
+SWI
+Trust Boundary
+WAN
+SW2
+Figure 11-10 Trusting Devices—IP Phone &ldquo;&gt;</p>
+<p>DiffServ Suggested Marking Values</p>
+<p>DiffServ architecture as defined originally by RFC 2475</p>
+<p>three sets of DSCP values as used in DiffServ.</p>
+<p>Expedited Forwarding (EF)</p>
+<p>Expedited Forwarding (EF) DSCP value—a single value</p>
+<p>use for packets that need low latency (delay), low jitter, and low loss.</p>
+<p>decimal 46</p>
+<p>Most often QoS plans use EF to mark voice payload packets. With voice calls, some packets carry voice payload, and other packets carry call signaling messages. Call signaling messages set up (create) the voice call between two devices, and they do not require low delay, jitter, and loss.</p>
+<p>By default, Cisco IP Phones mark voice pay-load with EF, and mark voice signaling packets sent by the phone with another value called CS3.</p>
+<p>Assured Forwarding (AF)</p>
+<p>The Assured Forwarding (AF) DiffServ RFC (2597) defines a set of 12 DSCP values meant to be used in concert with each other</p>
+<p>defines the concept of four separate queues in a queuing system. Additionally, it defines three levels of drop priority within each queue for use with congestion avoidance tools. With four queues, and three drop priority classes per queue, you need 12 different DSCP markings, one for each combination of queue and drop priority. (Queuing and congestion avoidance mechanisms are discussed later in this chapter.)</p>
+<p>The text names follow a format of AFXY, with X referring to the queue (1 through 4) and Y referring to the drop priority (1 through 3).</p>
+<p>Best Queue
+Worst Queue
+AF41
+(34)
+AF31
+(26)
+AF21
+(18)
+AFII
+(10)
+AF42
+(36)
+AF32
+(28)
+AF22
+(20)
+AF12
+(12)
+AF43
+(38)
+AF33
+(30)
+AF23
+(22)
+AF13
+14)
+11-11 Differentiated Services Assured Forwarding Values and Meaning &ldquo;&gt;</p>
+<p>Class Selector (CS)</p>
+<p>eight DSCP values for backward compatibility with IPP values.</p>
+<p>The DSCP values have the same first 3 bits as the IPP field, and with binary 0s for the last 3 bits, as shown on the left side of the figure. CSx represents the text names, where x is the matching IPP value (0 through 7).</p>
+<p>o
+1
+2
+3
+4
+5
+6
+7
+CSO
+CSI
+CS2
+CS3
+CS4
+CS5
+CS6
+CS7
+Decimal
+DSCP
+16
+24
+32
+40
+56
+Figure 11-12 Class Selector &ldquo;&gt;</p>
+<p>Guidelines for DSCP Marking Values</p>
+<p>how all devices should mark data</p>
+<p>DSCP EF: Voice payload</p>
+<p>AF4x: Interactive video (for example, videoconferencing)</p>
+<p>AF3x: Streaming video</p>
+<p>AF2x: High priority (low latency) data</p>
+<p>CS0: Standard data</p>
+<p>Queuing</p>
+<p>the QoS toolset for managing the queues that hold packets while they wait their turn to exit an interface</p>
+<p>Router Internals
+ingress
+services
+Output Queue
+Forwarding
+Transmit
+Figure 11-13 Output Queuing in a Router: Last Output Action Before Transmission &ldquo;&gt;</p>
+<p>To use multiple queues, the queuing system needs a classifier function to choose which packets are placed into which queue</p>
+<p>The queuing system needs a scheduler as well, to decide which message to take next when the interface becomes available</p>
+<p>Queues
+Scheduler
+Transmit
+Figure 11-14 Queuing Components &ldquo;&gt;</p>
+<p>Prioritization refers to the concept of giving priority to one queue over another</p>
+<p>Round-Robin Scheduling (Prioritization) (Two Types)</p>
+<p>weighting</p>
+<p>the scheduler takes a different number of packets (or bytes) from each queue, giving more preference to one queue over another.</p>
+<p>Class-Based Weighted Fair Queuing (CBWFQ)</p>
+<p>Each class receives at least the amount of bandwidth configured during times of congestion, but maybe more</p>
+<p>Queues
+02
+03
+Scheduler
+20%
+30%
+50%
+Round Robin
+Transmit
+Figure 11-15 CBWFQ Round-Robin Scheduling &ldquo;&gt;</p>
+<p>Low Latency Queuing</p>
+<p>Bandwidth/call
+30-320 Kbps
+One-way Delay (max) Jitter (max)
+Loss (max)
+150 ms
+30 ms &ldquo;&gt;</p>
+<p>Queues
+data 2
+default
+Scheduler
+50%
+10%
+Round Robin
+Transmit
+Figure 11-16 Round Robin Not Goodfor Voice Delay (Latency) and Jitter &ldquo;&gt;</p>
+<p>tells the scheduler to treat one or more queues as special priority queues</p>
+<p>Scheduler
+LLQ
+voice
+data 1
+data 2
+default
+—Always Next
+Transmit
+Round Robin
+Figure 11-17 LLQ Always Schedules Voice Packet Next &ldquo;&gt;</p>
+<p>if the speed of the interface is X bits per second, but more than X bits per second come into the voice queue? The scheduler never services the other queues (called queue starvation).</p>
+<p>limit the amount of traffic placed into the priority queue, using a feature called policing</p>
+<p>a cap on the bandwidth used by the priority queue</p>
+<p>Call Admission Control (CAC) tools</p>
+<p>Find a way to limit the amount of voice and video that the network routes out this link, so that the policer never discards any of the traffic</p>
+<p>CAC tools did not get a mention in the exam topics, so this chapter leaves those tools at a brief mention</p>
+<p>A Prioritization Strategy for Data, Voice, and Video</p>
+<p>approach queuing in their QoS plans:</p>
+<p>Key Topic.</p>
+<p>Use a round-robin queuing method like CBWFQ for data classes and for noninteractive voice and video.</p>
+<p>If faced with too little bandwidth compared to the typical amount of traffic, give data classes that support business-critical applications much more guaranteed bandwidth than is given to less important data classes.</p>
+<p>Use a priority queue with LLQ scheduling for interactive voice and video, to achieve low delay, jitter, and loss.</p>
+<p>Put voice in a separate queue from video so that the policing function applies separately to each.</p>
+<p>Define enough bandwidth for each priority queue so that the built-in policer should not discard any messages from the priority queues.</p>
+<p>Use Call Admission Control (CAC) tools to avoid adding too much voice or video to the network, which would trigger the policer function.</p>
+<h1 id="shaping-and-policing">Shaping and Policing<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>not found in as many locations in a typical enterprise</p>
+<p>often used at the WAN edge in an enterprise network design.</p>
+<p>monitor the bit rate of the combined messages that flow through a device.</p>
+<p>notes each packet that passes and measures the number of bits per second over time</p>
+<p>attempt to keep the bit rate at or below the configured speed</p>
+<p>policers discard packets, and shapers hold packets in queues to delay the packets.</p>
+<p>Does this next packet push the measured rate past the configured shaping rate or policing rate?</p>
+<p>If no:</p>
+<p>Let the packet keep moving through the normal path and do nothing extra to the packet.</p>
+<p>If yes:</p>
+<p>If shaping, delay the message by queuing it.</p>
+<p>If policing, either discard the message or mark it differently.</p>
+<p>policing, which discards or re-marks messages that exceed the policing rate, followed by shaping, which slows down messages that exceed the shaping rate.</p>
+<h2 id="policing">Policing<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Traffic Rate
+Outgoing Measured
+Traffic Rate
+Burst
+Policing
+Rate
+Figure 11-18 Effect ofa Policer and Shaper on an Offered Traffic Load &ldquo;&gt;</p>
+<p>Policers allow for a burst beyond the policing rate for a short time, after a period of low activity.</p>
+<p>Where to Use Policing</p>
+<p>Policing makes sense only in certain cases, and as a general tool, it can be best used at the edge between two networks.</p>
+<p>200 Mb s CIR
+sw
+Police to
+200 Mbps
+GO/2
+GO/2
+sw
+Police to
+200 Mbps
+Figure 11-19 Ethernet WAN: Link Speed Versus CIR &ldquo;&gt;</p>
+<p>a 200-Mbps committed information rate (CIR).</p>
+<p>the SP providing the WAN service agrees to allow the enterprise to send 200 Mbps of traffic in each direction. However, remember that the enterprise routers transmit the data at the speed of the access link, or 1 Gbps in this case.</p>
+<p>The SP can police incoming packets, setting the policing rate to match the CIR that the customer chooses for that link.</p>
+<p>Policers can also re-mark packets.</p>
+<p>SP could mark the messages with a new marking value, with this strategy:</p>
+<p>Re-mark packets that exceed the policing rate, but let them into the SP’s network.</p>
+<p>If other SP network devices are experiencing congestion when they process the packet, the different marking means that device can discard the packet. However…</p>
+<p>…if no other SP network devices are experiencing congestion when forwarding that re-marked packet, it gets through the SP network anyway.</p>
+<p>SP can treat their customers a little better by discarding less traffic, while still protecting the SP’s network during times of stress.</p>
+<p>key features of policing:</p>
+<p>Key Topic.</p>
+<p>It measures the traffic rate over time for comparison to the configured policing rate.</p>
+<p>It allows for a burst of data after a period of inactivity.</p>
+<p>It is enabled on an interface, in either direction, but typically at ingress.</p>
+<p>It can discard excess messages but can also re-mark the message so that it is a candidate for more aggressive discard later in its journey.</p>
+<h2 id="shaping">Shaping<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Use a shaper to slow down the traffic</p>
+<p>shaping before sending data to an SP that is policing—is one of the typical uses of a shaper</p>
+<p>slows messages down by queuing the messages.</p>
+<p>then services the shaping queues, but not based on when the physical interface is available</p>
+<p>schedules messages from the shaping queues based on the shaping rate</p>
+<p>the shaper queues packets so that the sending rate through the shaper does not exceed the shaping rate; and then output queuing works as normal, if needed.</p>
+<p>Forwarding
+Shaper
+LLQ
+At
+Shape
+Rate
+Output
+Queuing
+Transmit
+Figure 11-20 Shaping Queues: Scheduling with LLQ and CBWFQ &ldquo;&gt;</p>
+<p>apply the round-robin and priority queuing features of CBWFQ and LLQ, respectively, to the shaping queues</p>
+<h3 id="setting-a-good-shaping-time-interval-for-voice-and-video">Setting a Good Shaping Time Interval for Voice and Video<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>you can (and should) configure a shaper’s setting that changes the internal operation of the shaper, which then reduces the delay and jitter caused to voice and video traffic.</p>
+<p>A shaper’s time interval refers to its internal logic and how a shaper averages, over time, sending at a particular rate</p>
+<p>Because the interface transmits bits at 1 Gbps, it takes just .2 seconds, or 200 ms, to send all 200 million bits. Then the shaper must wait for the rest of the time interval, another 800 ms, before beginning the next time interval.</p>
+<p>Send:
+200 ms
+200
+Million
+Bits
+Sent
+wait: 800 ms
+1 Second Тле lnterval
+Send:
+200 ms
+200
+Million
+wait: 800 ms
+Bits
+Sent
+Т: 1 sec
+Т: 2 sec
+Figure 11-21 Опе Second (1000 ms) Shaping Time Intewal, Shaping at 20 Percent ofLine Rate &ldquo;&gt;</p>
+<p>configure a short time interval so there is less wait time</p>
+<p>Tc = 1 second (1000 ms): Send at 1 Gbps for 200 ms, rest for 800 ms</p>
+<p>Tc = .1 second (100 ms): Send at 1 Gbps for 20 ms, rest for 80 ms</p>
+<p>Tc = .01 second (10 ms): Send at 1 Gbps for 2 ms, rest for 8 ms</p>
+<p>When shaping, use a short time interval. By recommendation, use a 10-ms time interval to support voice and video.</p>
+<p>key features of shapers:</p>
+<p>Key Topic.</p>
+<p>Shapers measure the traffic rate over time for comparison to the configured shaping rate.</p>
+<p>Shapers allow for bursting after a period of inactivity.</p>
+<p>Shapers are enabled on an interface for egress (outgoing packets).</p>
+<p>Shapers slow down packets by queuing them and over time releasing them from the queue at the shaping rate.</p>
+<p>Shapers use queuing tools to create and schedule the shaping queues, which is very important for the same reasons discussed for output queuing.</p>
+<h2 id="congestion-avoidance">Congestion Avoidance<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>attempts to reduce overall packet loss by preemptively discarding some packets used in TCP connections</p>
+<p>TCP Windowing Basics</p>
+<p>tail drop</p>
+<p>one queue being totally full. Any new packets that arrive for that queue right now will be dropped because there is no room at the tail of the queue (tail drop).</p>
+<p>@Medium Congestion
+Tail Drop
+Much Congestion
+Tail Drop
+Figure 11-22 Tail Drop Concepts with Three Different Scenarios &ldquo;&gt;</p>
+<p>Congestion Avoidance Tools</p>
+<p>discard some TCP segments before the queues fill, hoping that enough TCP connections will slow down, reducing congestion, and avoiding tail drop</p>
+<p>monitor the average queue depth over time, triggering more severe actions the deeper the queue</p>
+<p>the queue depth passes the maximum threshold, the tool drops all packets, in an action called full drop.</p>
+<p>congestion avoidance tools can classify messages to treat some packets better than others</p>
+<p>Maximum Threshold
+% Drops
+Minimum Threshold
+NO Drops
+Queue Empty
+Figure 11-23 Mechanisms ofCongestion Avoidance &ldquo;&gt;</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="parent hidden " data-nav-id="/archive/"><input type="checkbox" id="R-section-3efae3733ab07a14aa0bb0bbf1f8e3dd" aria-controls="R-subsections-3efae3733ab07a14aa0bb0bbf1f8e3dd" checked><label for="R-section-3efae3733ab07a14aa0bb0bbf1f8e3dd"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Linux Reader</span></label><a class="padding default-animation" href="/archive/">Linux Reader<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-3efae3733ab07a14aa0bb0bbf1f8e3dd" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/ansible/"><input type="checkbox" id="R-section-2da59b953fd922cc24bbcc833598ec18" aria-controls="R-subsections-2da59b953fd922cc24bbcc833598ec18"><label for="R-section-2da59b953fd922cc24bbcc833598ec18"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/archive/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-2da59b953fd922cc24bbcc833598ec18" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/"><input type="checkbox" id="R-section-e5951e8bf2f82dfe42bf49de8b6e015a" aria-controls="R-subsections-e5951e8bf2f82dfe42bf49de8b6e015a"><label for="R-section-e5951e8bf2f82dfe42bf49de8b6e015a"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu 45 Days to RHCE</span></label><a class="padding default-animation" href="/archive/ansible/45-days-to-rhce-1/">45 Days to RHCE<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5951e8bf2f82dfe42bf49de8b6e015a" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/ansible-navigator/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/crash-and-burn/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/crash-and-burn/">Crash and Burn<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/the-cheat-code/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/getting-ready/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/getting-ready/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-navigator/"><a class="padding" href="/archive/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/the-cheat-code/"><a class="padding" href="/archive/ansible/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/getting-ready-for-rhce/"><a class="padding" href="/archive/ansible/getting-ready-for-rhce/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/automate-kvm-vms/"><a class="padding" href="/archive/ansible/automate-kvm-vms/">Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ad-hoc-ansible-commands/"><a class="padding" href="/archive/ansible/ad-hoc-ansible-commands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/adhoccommands/"><a class="padding" href="/archive/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-documentation/"><a class="padding" href="/archive/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-facts/"><a class="padding" href="/archive/ansible/ansible-facts/">Ansible Facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-galaxy-roles/"><a class="padding" href="/archive/ansible/ansible-galaxy-roles/">Ansible Galaxy Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-inventory/"><a class="padding" href="/archive/ansible/ansible-inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/inventory/"><a class="padding" href="/archive/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-playbooks/"><a class="padding" href="/archive/ansible/ansible-playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/playbooks/"><a class="padding" href="/archive/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/roles/"><a class="padding" href="/archive/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-ansible-roles/"><a class="padding" href="/archive/ansible/using-ansible-roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-vault/"><a class="padding" href="/archive/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-inventory-command/"><a class="padding" href="/archive/ansible/ansible-inventory-command/">Ansible-inventory command<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible.cfg/"><a class="padding" href="/archive/ansible/ansible.cfg/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansibleconfig/"><a class="padding" href="/archive/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/boot-process/"><a class="padding" href="/archive/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/building-an-ansible-lab-with-ansible/"><a class="padding" href="/archive/ansible/building-an-ansible-lab-with-ansible/">Building an Ansible lab with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/common-modules-with-examples/"><a class="padding" href="/archive/ansible/common-modules-with-examples/">Common modules with examples<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/deploying-files/"><a class="padding" href="/archive/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/discovering-storage-related-facts/"><a class="padding" href="/archive/ansible/discovering-storage-related-facts/">Discovering storage related facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/dynamic-inventory/"><a class="padding" href="/archive/ansible/dynamic-inventory/">Dynamic Inventory<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/encrypted-passwords/"><a class="padding" href="/archive/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/execution-environments/"><a class="padding" href="/archive/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/handlers/"><a class="padding" href="/archive/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/host-name-patterns/"><a class="padding" href="/archive/ansible/host-name-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/hostname-patterns/"><a class="padding" href="/archive/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/include-and-import-files/"><a class="padding" href="/archive/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/including-and-importing-files/"><a class="padding" href="/archive/ansible/including-and-importing-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/jinja2-templates/"><a class="padding" href="/archive/ansible/jinja2-templates/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/jinja2/"><a class="padding" href="/archive/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/user-and-groups/"><a class="padding" href="/archive/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-ansible-errors-and-logs/"><a class="padding" href="/archive/ansible/managing-ansible-errors-and-logs/">Managing Ansible Errors and Logs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-packages/"><a class="padding" href="/archive/ansible/managing-packages/">Managing Packages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/archive/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-partitions-and-lvm/"><a class="padding" href="/archive/ansible/managing-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/storage-partitions-and-lvm/"><a class="padding" href="/archive/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-services/"><a class="padding" href="/archive/ansible/managing-services/">Managing Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/services/"><a class="padding" href="/archive/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/networking-with-ansible/"><a class="padding" href="/archive/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/nfs-setup/"><a class="padding" href="/archive/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/optimize-ansible-processing/"><a class="padding" href="/archive/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/optimizing-ansible-processing/"><a class="padding" href="/archive/ansible/optimizing-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/repositories-and-subscriptions/"><a class="padding" href="/archive/ansible/repositories-and-subscriptions/">Repositories and subscriptions<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/selinux-file-properties/"><a class="padding" href="/archive/ansible/selinux-file-properties/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/selinux/"><a class="padding" href="/archive/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/setting-up-an-ansible-lab/"><a class="padding" href="/archive/ansible/setting-up-an-ansible-lab/">Setting up an Ansible Lab<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ssh-connections/"><a class="padding" href="/archive/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/troubleshooting-common-scenarios/"><a class="padding" href="/archive/ansible/troubleshooting-common-scenarios/">Troubleshooting Common Scenarios<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/users-and-groups/"><a class="padding" href="/archive/ansible/users-and-groups/">Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/tags/"><a class="padding" href="/archive/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/loops-and-items/"><a class="padding" href="/archive/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-loops-and-items/"><a class="padding" href="/archive/ansible/using-loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/modules-for-troubleshooting/"><a class="padding" href="/archive/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-modules-for-troubleshooting-and-testing/"><a class="padding" href="/archive/ansible/using-modules-for-troubleshooting-and-testing/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-multiple-inventories/"><a class="padding" href="/archive/ansible/using-multiple-inventories/">Using Multiple Inventories<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-rhel-system-roles/"><a class="padding" href="/archive/ansible/using-rhel-system-roles/">Using RHEL System roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-tags/"><a class="padding" href="/archive/ansible/using-tags/">Using Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-when-to-run-tasks-conditionally/"><a class="padding" href="/archive/ansible/using-when-to-run-tasks-conditionally/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/when/"><a class="padding" href="/archive/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/variables/"><a class="padding" href="/archive/ansible/variables/">Variables<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/bash/"><input type="checkbox" id="R-section-0007e539b2afbfa1d415742d840f3a8d" aria-controls="R-subsections-0007e539b2afbfa1d415742d840f3a8d"><label for="R-section-0007e539b2afbfa1d415742d840f3a8d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/archive/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-0007e539b2afbfa1d415742d840f3a8d" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/bash/bash-shell/"><a class="padding" href="/archive/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/bash/shell-scripting/"><a class="padding" href="/archive/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/boot/"><input type="checkbox" id="R-section-23ba0690f68cd095a84a225cf8506d0a" aria-controls="R-subsections-23ba0690f68cd095a84a225cf8506d0a"><label for="R-section-23ba0690f68cd095a84a225cf8506d0a"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Boot</span></label><a class="padding default-animation" href="/archive/boot/"><i class="fa-solid fa-hourglass-start"></i> Boot<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-23ba0690f68cd095a84a225cf8506d0a" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/boot/boot-process-grub2-and-kernel/"><a class="padding" href="/archive/boot/boot-process-grub2-and-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/boot/system-initialization-message-logging-and-system-tuning/"><a class="padding" href="/archive/boot/system-initialization-message-logging-and-system-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/containers/"><input type="checkbox" id="R-section-4a0553f27d25d8da325eb0e27d262c20" aria-controls="R-subsections-4a0553f27d25d8da325eb0e27d262c20"><label for="R-section-4a0553f27d25d8da325eb0e27d262c20"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/archive/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4a0553f27d25d8da325eb0e27d262c20" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/containers/containers-1/"><a class="padding" href="/archive/containers/containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/cyber-security/"><input type="checkbox" id="R-section-22d3475420d0c69262f1eaf35f3954e1" aria-controls="R-subsections-22d3475420d0c69262f1eaf35f3954e1"><label for="R-section-22d3475420d0c69262f1eaf35f3954e1"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/archive/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-22d3475420d0c69262f1eaf35f3954e1" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/cyber-security/security-enhanced-linux/"><a class="padding" href="/archive/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/cyber-security/securityenhancedlinux/"><a class="padding" href="/archive/cyber-security/securityenhancedlinux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/cyber-security/the-linux-firewall/"><a class="padding" href="/archive/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/cyber-security/the-secure-shell-service/"><a class="padding" href="/archive/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/desktop/"><input type="checkbox" id="R-section-f15fd7be41155db115964722da6b0d03" aria-controls="R-subsections-f15fd7be41155db115964722da6b0d03"><label for="R-section-f15fd7be41155db115964722da6b0d03"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/archive/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f15fd7be41155db115964722da6b0d03" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/desktop/new-setup/"><a class="padding" href="/archive/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/learning-touch-typing-1/"><a class="padding" href="/archive/desktop/learning-touch-typing-1/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/learning-touch-typing/"><a class="padding" href="/archive/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/my-fedora-setup-1/"><a class="padding" href="/archive/desktop/my-fedora-setup-1/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/my-fedora-setup/"><a class="padding" href="/archive/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/silverblue-2/"><a class="padding" href="/archive/desktop/silverblue-2/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/silverblue/"><a class="padding" href="/archive/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/files/"><input type="checkbox" id="R-section-35cbfba2aaa3dc53d47351d0737b957f" aria-controls="R-subsections-35cbfba2aaa3dc53d47351d0737b957f"><label for="R-section-35cbfba2aaa3dc53d47351d0737b957f"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Files</span></label><a class="padding default-animation" href="/archive/files/"><i class="fa-solid fa-copy"></i> Files<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-35cbfba2aaa3dc53d47351d0737b957f" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/files/advanced-file-management/"><a class="padding" href="/archive/files/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/files/file-management/"><a class="padding" href="/archive/files/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/archive/networking/"><input type="checkbox" id="R-section-571da5e9c8cc7c2f921ff81d669260db" aria-controls="R-subsections-571da5e9c8cc7c2f921ff81d669260db" checked><label for="R-section-571da5e9c8cc7c2f921ff81d669260db"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/archive/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-571da5e9c8cc7c2f921ff81d669260db" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/networking/what-to-learn-after-ccna/"><a class="padding" href="/archive/networking/what-to-learn-after-ccna/">What to Learn After CCNA? Some Ideas<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/how-to-study-for-ccna-exam/"><a class="padding" href="/archive/networking/how-to-study-for-ccna-exam/">How I Studied for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="active hidden " data-nav-id="/archive/networking/ccna/ccna-notes/qos/"><a class="padding" href="/archive/networking/ccna/ccna-notes/qos/"><i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/archive/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/dns-and-time-synchronization/"><a class="padding" href="/archive/networking/dns-and-time-synchronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/dns/"><a class="padding" href="/archive/networking/dns/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/archive/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/juniper_cli_basics/"><a class="padding" href="/archive/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/archive/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/networkdevicesandconnections/"><a class="padding" href="/archive/networking/networkdevicesandconnections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/archive/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/resources-for-passing-ccna/"><a class="padding" href="/archive/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/time-synchronization/"><a class="padding" href="/archive/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/toggle_poe/"><a class="padding" href="/archive/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/packages/"><input type="checkbox" id="R-section-ffbf85f24cd2239219afa8b9cbe18b38" aria-controls="R-subsections-ffbf85f24cd2239219afa8b9cbe18b38"><label for="R-section-ffbf85f24cd2239219afa8b9cbe18b38"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/archive/packages/"><i class="fa-solid fa-box-open"></i> Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ffbf85f24cd2239219afa8b9cbe18b38" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/packages/advanced-package-management/"><a class="padding" href="/archive/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/packages/basic-package-management/"><a class="padding" href="/archive/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/storage/"><input type="checkbox" id="R-section-5b321d96a2a369eec97e1394accb14fb" aria-controls="R-subsections-5b321d96a2a369eec97e1394accb14fb"><label for="R-section-5b321d96a2a369eec97e1394accb14fb"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/archive/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-5b321d96a2a369eec97e1394accb14fb" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/storage/autofs/"><a class="padding" href="/archive/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/local-file-systems-and-swap/"><a class="padding" href="/archive/storage/local-file-systems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/network-file-system-nfs/"><a class="padding" href="/archive/storage/network-file-system-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/partitioning-mbr-and-gpt/"><a class="padding" href="/archive/storage/partitioning-mbr-and-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/remove-a-filesystem-from-a-partition/"><a class="padding" href="/archive/storage/remove-a-filesystem-from-a-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/thin-provisioning/"><a class="padding" href="/archive/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/archive/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/systems/"><input type="checkbox" id="R-section-1dd2726e68c35ec062a2cfe2c1df58df" aria-controls="R-subsections-1dd2726e68c35ec062a2cfe2c1df58df"><label for="R-section-1dd2726e68c35ec062a2cfe2c1df58df"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/archive/systems/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-1dd2726e68c35ec062a2cfe2c1df58df" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/systems/you-need-to-learn-man-pages/"><a class="padding" href="/archive/systems/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/advanced-file-management/"><a class="padding" href="/archive/systems/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/advanced-package-management/"><a class="padding" href="/archive/systems/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/advanced-user-management/"><a class="padding" href="/archive/systems/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/autofs/"><a class="padding" href="/archive/systems/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/file-management/"><a class="padding" href="/archive/systems/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/basic-package-management/"><a class="padding" href="/archive/systems/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/basic-user-management/"><a class="padding" href="/archive/systems/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/boot-process-grub2-kernel/"><a class="padding" href="/archive/systems/boot-process-grub2-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/installation/"><a class="padding" href="/archive/systems/installation/">Installing RHEL Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/interaction/"><a class="padding" href="/archive/systems/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/local-filesystems-and-swap/"><a class="padding" href="/archive/systems/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/network-filesystem-nfs/"><a class="padding" href="/archive/systems/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/partitioning-mbr-gpt/"><a class="padding" href="/archive/systems/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/process-and-task-scheduling/"><a class="padding" href="/archive/systems/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/rm-filesystem-from-partition/"><a class="padding" href="/archive/systems/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/rhcsa-exam-environment/"><a class="padding" href="/archive/systems/rhcsa-exam-environment/">RHCSA Exam Environment Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/rhcsa-vagrant-lab-setup-1/"><a class="padding" href="/archive/systems/rhcsa-vagrant-lab-setup-1/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/sys-init-logging-and-tuning/"><a class="padding" href="/archive/systems/sys-init-logging-and-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/secure-shell-service-ssh/"><a class="padding" href="/archive/systems/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/thin-provisioning/"><a class="padding" href="/archive/systems/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/time-synchronization/"><a class="padding" href="/archive/systems/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/virtual-data-optimizer-vdo/"><a class="padding" href="/archive/systems/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/system/"><input type="checkbox" id="R-section-d52ce8aee0f4ac02a6f02a34de71d1c0" aria-controls="R-subsections-d52ce8aee0f4ac02a6f02a34de71d1c0"><label for="R-section-d52ce8aee0f4ac02a6f02a34de71d1c0"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/archive/system/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d52ce8aee0f4ac02a6f02a34de71d1c0" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/system/installation/"><a class="padding" href="/archive/system/installation/">Installation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/system/interaction/"><a class="padding" href="/archive/system/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/system/process-and-task-scheduling/"><a class="padding" href="/archive/system/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/tools/"><input type="checkbox" id="R-section-b320e1715e16e5d512ba5b82e27cc64b" aria-controls="R-subsections-b320e1715e16e5d512ba5b82e27cc64b"><label for="R-section-b320e1715e16e5d512ba5b82e27cc64b"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/archive/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-b320e1715e16e5d512ba5b82e27cc64b" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/tools/remove-formatting-from-highlights/"><a class="padding" href="/archive/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/calibre-web-docker-nginx/"><a class="padding" href="/archive/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/proxmox-pfsense-haproxy-setup/"><a class="padding" href="/archive/tools/proxmox-pfsense-haproxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/stop-using-ai/"><a class="padding" href="/archive/tools/stop-using-ai/">Why I Stopped Using AI so Much<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/install-ansible-using-uv/"><a class="padding" href="/archive/tools/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/archive/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/new-setup/"><a class="padding" href="/archive/tools/tools/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/archive/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/archive/tools/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/process-bookfusion-highlights/"><a class="padding" href="/archive/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/archive/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/archive/tools/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/archive/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/archive/tools/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/archive/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/archive/tools/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/using-vagrant-on-linux/"><a class="padding" href="/archive/tools/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/using-vagrant-on-linux/"><a class="padding" href="/archive/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/vimguide/"><a class="padding" href="/archive/tools/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/vimguide/"><a class="padding" href="/archive/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/using-man-pages/"><a class="padding" href="/archive/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/users-and-groups/"><input type="checkbox" id="R-section-db70fad5de90fe8fb545112d40b3bd47" aria-controls="R-subsections-db70fad5de90fe8fb545112d40b3bd47"><label for="R-section-db70fad5de90fe8fb545112d40b3bd47"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users and Groups</span></label><a class="padding default-animation" href="/archive/users-and-groups/"><i class="fa-solid fa-users"></i> Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-db70fad5de90fe8fb545112d40b3bd47" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/users-and-groups/advanced-user-management/"><a class="padding" href="/archive/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/users-and-groups/basic-user-management/"><a class="padding" href="/archive/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/virtualization/"><input type="checkbox" id="R-section-d0028714f8460f5888066e750cbc5914" aria-controls="R-subsections-d0028714f8460f5888066e750cbc5914"><label for="R-section-d0028714f8460f5888066e750cbc5914"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualization</span></label><a class="padding default-animation" href="/archive/virtualization/"><i class="fa-solid fa-microchip"></i> Virtualization<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d0028714f8460f5888066e750cbc5914" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/virtualization/rhcsa-vagrant-lab-setup/"><a class="padding" href="/archive/virtualization/rhcsa-vagrant-lab-setup/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1772467047" defer></script>
+    <script src="/js/theme.js?1772467047" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

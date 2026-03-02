@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=32883&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="description" content="Managing package groups, application streams, modules, and DNF">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Advanced Package Management">
+    <meta name="twitter:description" content="Managing package groups, application streams, modules, and DNF">
+    <meta property="og:url" content="http://localhost:32883/archive/systems/advanced-package-management/">
+    <meta property="og:title" content="Advanced Package Management">
+    <meta property="og:description" content="Managing package groups, application streams, modules, and DNF">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="">
+    <meta itemprop="name" content="Advanced Package Management">
+    <meta itemprop="description" content="Managing package groups, application streams, modules, and DNF">
+    <meta itemprop="wordCount" content="4221">
+    <title>Advanced Package Management</title>
+    <link href="/archive/systems/advanced-package-management/index.md" rel="alternate" type="text/markdown" title="Advanced Package Management">
+    <link href="/images/favicon.svg?1772467050" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1772467050" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1772467050" defer></script>
+    <script src="/js/search-lunr.js?1772467050" defer></script>
+    <script src="/js/search.js?1772467050" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1772467050";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1772467050" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1772467050" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1772467050" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1772467050" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1772467050" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1772467050" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1772467050" rel="stylesheet">
+    <link href="/css/theme.css?1772467050" rel="stylesheet">
+    <link href="/css/format-html.css?1772467050" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/archive\/systems\/advanced-package-management\/';
+      window.relearn.relBasePath='..\/..\/..';
+      window.relearn.relBaseUri='..\/..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:32883';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/archive/systems/advanced-package-management/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#packagegroups">Package Groups</a>
+      <ul>
+        <li><a href="#package-group">package group</a></li>
+      </ul>
+    </li>
+    <li><a href="#individual-packages-package-groups-and-modules">Individual packages, package groups, and modules:</a>
+      <ul>
+        <li><a href="#individual-package-management">Individual Package Management</a></li>
+        <li><a href="#lab-list-all-packages-available-for-installation-from-all-enabled-repos">Lab: list all packages available for installation from all enabled repos,</a></li>
+        <li><a href="#lab-list-of-packages-that-are-available-only-from-a-specific-repo">Lab: list of packages that are available only from a specific repo:</a></li>
+        <li><a href="#lab-grep-for-an-expression-to-narrow-down-your-search">Lab: grep for an expression to narrow down your search.</a></li>
+        <li><a href="#lab-list-all-installed-packages-on-the-system">Lab: list all installed packages on the system:</a></li>
+        <li><a href="#installing-and-updating-packages">Installing and Updating Packages</a></li>
+        <li><a href="#exhibiting-package-information">Exhibiting Package Information</a></li>
+        <li><a href="#removing-packages">Removing Packages</a></li>
+        <li><a href="#lab-manipulate-individual-packages">Lab: Manipulate Individual Packages</a></li>
+        <li><a href="#determining-provider-and-searching-package-metadata">Determining Provider and Searching Package Metadata</a></li>
+        <li><a href="#package-group-management">Package Group Management</a></li>
+        <li><a href="#listing-available-and-installed-package-groups">Listing Available and Installed Package Groups</a></li>
+        <li><a href="#installing-and-updating-package-groups">Installing and Updating Package Groups</a></li>
+        <li><a href="#removing-package-groups">Removing Package Groups</a></li>
+        <li><a href="#lab-manipulate-package-groups">Lab: Manipulate Package Groups</a></li>
+      </ul>
+    </li>
+    <li><a href="#application-streams-and-modules">Application Streams and Modules</a>
+      <ul>
+        <li></li>
+        <li><a href="#module-streams">Module Streams</a></li>
+        <li><a href="#module-profiles">Module Profiles</a></li>
+        <li><a href="#module-management">Module Management</a></li>
+        <li><a href="#listing-available-and-installed-modules">Listing Available and Installed Modules</a></li>
+        <li><a href="#installing-and-updating-modules">Installing and Updating Modules</a></li>
+        <li><a href="#displaying-module-information">Displaying Module Information</a></li>
+        <li><a href="#removing-modules">Removing Modules</a></li>
+        <li><a href="#lab-manipulate-modules">Lab: Manipulate Modules</a></li>
+        <li><a href="#switching-module-streams">Switching Module Streams</a></li>
+        <li><a href="#lab-install-a-module-from-an-alternative-stream">Lab: Install a Module from an Alternative Stream</a></li>
+      </ul>
+    </li>
+    <li><a href="#the-dnf-command">The dnf Command</a>
+      <ul>
+        <li><a href="#lab-configure-access-to-pre-built-repositories">Lab: Configure Access to Pre-Built Repositories</a></li>
+        <li><a href="#dnf-yum-repository">dnf yum Repository</a></li>
+        <li><a href="#repository-definition-file">Repository Definition File</a></li>
+        <li><a href="#software-management-with-dnf">Software Management with dnf</a></li>
+      </ul>
+    </li>
+    <li><a href="#advanced-package-management-diy-labs">Advanced Package Management DIY Labs</a>
+      <ul>
+        <li><a href="#lab--install-and-manage-individual-packages">Lab:  Install and Manage Individual Packages</a></li>
+        <li><a href="#lab-install-and-manage-package-groups">Lab Install and Manage Package Groups</a></li>
+        <li><a href="#lab-install-and-manage-modules">Lab: Install and Manage Modules</a></li>
+        <li><a href="#lab-switch-module-streams-and-install-software">Lab Switch Module Streams and Install Software</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/archive/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/archive/systems/"><span itemprop="name">System</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">Advanced Package Management</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive/systems/advanced-package-management/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive/systems/advanced-file-management/" title="Advanced File Management (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive/systems/advanced-user-management/" title="Advanced User Management (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable archive" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="advanced-package-management">Advanced Package Management</h1>
+
+<h2 id="packagegroups">Package Groups<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="package-group">package group<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Group of packages that serve a common purpose.</li>
+<li>Can query, install, and delete as a single unit rather than dealing with packages individually.</li>
+<li>Two types of package groups: <em>environment groups</em> and <em>package groups</em>.</li>
+</ul>
+<p><strong>environment groups</strong> available in RHEL 9:</p>
+<ul>
+<li>server, server with GUI, minimal install, workstation, virtualization host, and custom operating system.</li>
+<li>Listed on the software selection window during RHEL 9 installation.</li>
+</ul>
+<p><strong>Package groups</strong> include:</p>
+<ul>
+<li>container management, smart card support, security tools, system tools, network servers, etc.</li>
+</ul>
+<h2 id="individual-packages-package-groups-and-modules">Individual packages, package groups, and modules:<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="individual-package-management">Individual Package Management<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>List, install, query, and remove packages.</p>
+<h4 id="listing-available-and-installed-packages">Listing Available and Installed Packages<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<ul>
+<li>dnf lists available packages as well as installed packages.</li>
+</ul>
+<h3 id="lab-list-all-packages-available-for-installation-from-all-enabled-repos">Lab: list all packages available for installation from all enabled repos,<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf repoquery</span></span></code></pre></div>
+<h3 id="lab-list-of-packages-that-are-available-only-from-a-specific-repo">Lab: list of packages that are available only from a specific repo:<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf repoquery --repo <span style="color:#a5d6ff">&#34;BaseOS&#34;</span></span></span></code></pre></div>
+<h3 id="lab-grep-for-an-expression-to-narrow-down-your-search">Lab: grep for an expression to narrow down your search.<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>For example, to find whether the BaseOS repo includes the <em>zsh</em> package.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf repoquery --repo BaseOS | grep zsh</span></span></code></pre></div>
+<h3 id="lab-list-all-installed-packages-on-the-system">Lab: list all installed packages on the system:<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf list installed</span></span></code></pre></div>
+<p>Three columns:
+- package name
+- package version
+- repo it was installed from.
+- @anaconda means the package was installed at the time of RHEL installation.</p>
+<p>List all installed packages and all packages available for installation from all enabled repositories:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf list</span></span></code></pre></div>
+<ul>
+<li>@ sign identifies the package as installed.</li>
+</ul>
+<p>List all packages available from all enabled repositories that should be able to update:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf list updates</span></span></code></pre></div>
+<p>List whether a package (<em>bc</em>, for instance) is installed or available for installation from any enabled repository:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf list bc</span></span></code></pre></div>
+<p>List all installed packages whose names begin with the string &ldquo;gnome&rdquo; followed by any number of characters:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf list installed ^gnome*</span></span></code></pre></div>
+<p>List recently added packages:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf list recent</span></span></code></pre></div>
+<p>Refer to the <em>repoquery</em> and <em>list</em> subsections of the <em>dnf</em> command manual pages for more options and examples.</p>
+<h3 id="installing-and-updating-packages">Installing and Updating Packages<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Installing a package:</p>
+<ul>
+<li>creates the necessary directory structure</li>
+<li>installs the required files</li>
+<li>runs any post-installation steps.</li>
+<li>If already installed, <em>dnf</em> command updates it to the latest available version.</li>
+</ul>
+<p>Attempt to install a package called <em>ypbind</em>, proceed to update if it detects the presence of an older version:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf install ypbind</span></span></code></pre></div>
+<p>Install or update a package called <em>dcraw</em> located locally at /mnt/AppStream/Packages/</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf localinstall /mnt/AppStream/Packages/dcraw*</span></span></code></pre></div>
+<p>Update an installed package (<em>autofs</em>, for example) to the latest available version. Dnf will fail if the specified package is not already installed:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf update autofs</span></span></code></pre></div>
+<p>Update all installed packages to the latest available versions:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf -y update</span></span></code></pre></div>
+<p>Refer to the <em>install</em> and <em>update</em> subsections of the <em>dnf</em> command manual pages for more options and examples.</p>
+<h3 id="exhibiting-package-information">Exhibiting Package Information<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Show:</p>
+<ul>
+<li>release</li>
+<li>size</li>
+<li>whether it is installed or available for installation</li>
+<li>repo name it was installed or is available from</li>
+<li>short and long descriptions</li>
+<li>license</li>
+<li>so on</li>
+</ul>
+<p>dnf info subcommand</p>
+<p>View information about a package called <em>autofs</em>:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf info autofs</span></span></code></pre></div>
+<ul>
+<li>Determines whether the specified package is installed or
+not.</li>
+</ul>
+<p>Refer to the <em>info</em> subsection of the <em>dnf</em> command manual pages.</p>
+<h3 id="removing-packages">Removing Packages<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Removing a package:</p>
+<ul>
+<li>uninstalls it and removes all associated files and directory structure.</li>
+<li>erases any dependencies as part of the deletion process.</li>
+</ul>
+<p>Remove a package called <em>ypbind</em>:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf remove ypbind</span></span></code></pre></div>
+<p>Output</p>
+<ul>
+<li>Resolved dependencies</li>
+<li>List of the packages that it would remove.</li>
+<li>Disk space that their removal would free up.</li>
+<li>After confirmation, it erased the identified packages and verified their removal.</li>
+<li>List of the removed packages</li>
+</ul>
+<p>Refer to the <em>remove</em> subsection of the <em>dnf</em> command manual pages for more options and examples available for removing packages.</p>
+<h3 id="lab-manipulate-individual-packages">Lab: Manipulate Individual Packages<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Perform management operations on a package called <code>cifs-utils</code>. Determine if this package is already installed and if it is available for installation. Display its information before installing it. Install the package and exhibit its information. Erase the package along with
+its dependencies and confirm the removal.</p>
+<ol>
+<li>Check whether the <em>cifs-utils</em> package is already installed:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf list installed | grep cifs-utils</span></span></code></pre></div>
+<ol start="2">
+<li>Determine if the <em>cifs-utils</em> package is available for installation:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf repoquery cifs-utils</span></span></code></pre></div>
+<ol start="3">
+<li>Display detailed information about the package:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf info cifs-utils</span></span></code></pre></div>
+<ol start="4">
+<li>Install the package:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf install -y cifs-utils</span></span></code></pre></div>
+<ol start="5">
+<li>Display the package information again:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf info cifs-utils</span></span></code></pre></div>
+<ol start="6">
+<li>Remove the package:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf remove -y cifs-utils</span></span></code></pre></div>
+<ol start="7">
+<li>Confirm the removal:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf list installed | grep cif</span></span></code></pre></div>
+<h3 id="determining-provider-and-searching-package-metadata">Determining Provider and Searching Package Metadata<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>You can determine what package a specific file belongs to or which package comprises a certain string.</li>
+</ul>
+<p>Search for packages that contain a specific file such as /etc/passwd/, use the <em>provides</em> or the <em>whatprovides</em> subcommand with dnf:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf provides /etc/passwd</span></span></code></pre></div>
+<ul>
+<li>
+<p>Indicates file is part of a package called <em>setup</em>, installed during RHEL installation.</p>
+</li>
+<li>
+<p>Second instance, setup package is part of the BaseOS repository.</p>
+</li>
+<li>
+<p>Can also use a wildcard character for filename expansion.</p>
+</li>
+</ul>
+<p>List all packages that contain filenames beginning with &ldquo;system-config&rdquo; followed by any number of characters:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf whatprovides /usr/bin/system-config*</span></span></code></pre></div>
+<p>To search for all the packages that match the specified string in their
+name or summary:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf search system-config</span></span></code></pre></div>
+<h3 id="package-group-management">Package Group Management<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><code>group</code> subcommand</li>
+<li>list, install, query, and remove groups of packages.</li>
+</ul>
+<h3 id="listing-available-and-installed-package-groups">Listing Available and Installed Package Groups<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><code>group list</code> subcommand:</p>
+<ul>
+<li>list the package groups available for installation from either or both repos</li>
+<li>list the package groups that are already installed on the system.</li>
+</ul>
+<p>List all available and installed package groups from all repositories:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf group list</span></span></code></pre></div>
+<p>output:</p>
+<ul>
+<li>two categories of package groups:
+<ul>
+<li>Environment group</li>
+<li>Package groups</li>
+</ul>
+</li>
+</ul>
+<p>Environment group:</p>
+<ul>
+<li>Larger collection of RHEL packages that provides all necessary software to build the operating system foundation for a desired purpose.</li>
+</ul>
+<p>Package group</p>
+<ul>
+<li>Small bunch of RHEL packages that serve a common purpose.</li>
+<li>Saves time on the deployment of individual and dependent packages.</li>
+<li>Output shows installed and available package groups.</li>
+</ul>
+<p>Display the number of installed and available package groups:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf group summary</span></span></code></pre></div>
+<p>List all installed and available package groups including those that
+are hidden:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf group list hidden</span></span></code></pre></div>
+<p>Try <em>group list</em> with --installed and --available options to narrow
+down the output list.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf group list --installed</span></span></code></pre></div>
+<p>List all packages that a specific package group such as Base contains:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf group info Base</span></span></code></pre></div>
+<p>-v option with the group info subcommand for more
+information.</p>
+<p>Review group list and group info subsections of the <code>dnf</code> man pages.</p>
+<h3 id="installing-and-updating-package-groups">Installing and Updating Package Groups<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Creates the necessary directory structure for all the packages included in the group and all dependent packages.</li>
+<li>Installs the required files.</li>
+<li>Runs any post-installation steps.</li>
+<li>Attempts to update all the packages included in the group to the latest available versions.</li>
+</ul>
+<p>Install a package group called Emacs. Update if it detects an older version.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf -y groupinstall emacs</span></span></code></pre></div>
+<p>Update the <em>smart card support</em> package group to the latest version:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf groupupdate <span style="color:#a5d6ff">&#34;Smart Card Support&#34;</span></span></span></code></pre></div>
+<p>Refer to the <em>group install</em> and <em>group update</em> subsections of the <em>dnf</em> command manual pages for more details.</p>
+<h3 id="removing-package-groups">Removing Package Groups<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Uninstalls all the included packages and deletes all associated files and directory structure.</li>
+<li>Erases any dependencies</li>
+</ul>
+<p>Erase the <em>smart card support</em> package group that was installed:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf -y groupremove <span style="color:#a5d6ff">&#39;smart card support&#39;</span></span></span></code></pre></div>
+<p>Refer to the <em>remove</em> subsection of the <em>dnf</em> command manual pages for
+more details.</p>
+<h3 id="lab-manipulate-package-groups">Lab: Manipulate Package Groups<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Perform management operations on a package group called <em>system tools</em>. Determine if this group is already installed and if it is available for installation. List the packages it contains and install it. Remove the group along with its dependencies and confirm the removal.</p>
+<ol>
+<li>Check whether the <em>system tools</em> package group is already installed:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf group list installed</span></span></code></pre></div>
+<ol start="2">
+<li>Determine if the <em>system tools</em> group is available for installation:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf group list available</span></span></code></pre></div>
+<p>The group name is exhibited at the bottom of the list under the
+available groups.</p>
+<ol start="3">
+<li>Display the list of packages this group contains:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf group info <span style="color:#a5d6ff">&#39;system tools&#39;</span></span></span></code></pre></div>
+<ul>
+<li>All of the packages will be installed as part of the group installation.</li>
+</ul>
+<ol start="4">
+<li>Install the group:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf group install <span style="color:#a5d6ff">&#39;system tools&#39;</span></span></span></code></pre></div>
+<ol start="5">
+<li>Remove the group:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf group remove <span style="color:#a5d6ff">&#39;system tools&#39;</span> -y</span></span></code></pre></div>
+<ol start="6">
+<li>Confirm the removal:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf group list installed</span></span></code></pre></div>
+<h2 id="application-streams-and-modules">Application Streams and Modules<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p><strong>Application Streams</strong></p>
+<ul>
+<li>Introduced in RHEL 8.</li>
+<li>Employs a modular approach to organize multiple versions of a software application alongside its dependencies to be available for installation from a single repository.</li>
+</ul>
+<p><strong>module</strong></p>
+<ul>
+<li>Logical set of application packages that includes everything required to install it, including the executables, libraries, documentation, tools, and utilities as well as dependent components.</li>
+<li>Modularity gives the flexibility to choose the version of software based on need.</li>
+</ul>
+<ul>
+<li>In older RHEL releases, each version of a package would have to come from a separate repository. (This has changed in RHEL 8.)</li>
+<li>Now modules of a single application with different versions can be stored and made available for installation from a common repository.</li>
+<li>The package management tool has also been enhanced to manipulate modules.</li>
+</ul>
+<ul>
+<li>RHEL 9 is shipped with two core repositories called <em>BaseOS</em> and <em>Application Stream</em> (AppStream).</li>
+</ul>
+<p><strong>BaseOS</strong> repository</p>
+<ul>
+<li>Includes the core set of RHEL 9 components</li>
+<li>kernel, modules, bootloader, and other foundational software packages.</li>
+<li>Lays the foundation to install and run software applications and programs.</li>
+<li>Available in the traditional rpm format.</li>
+</ul>
+<p><strong>AppStream</strong> repository</p>
+<ul>
+<li>Comes standard with core applications,</li>
+<li>Plus several add-on applications</li>
+<li>Rpm and modular format</li>
+<li>Include web server software, development languages, database software, etc.</li>
+</ul>
+<h4 id="benefits-of-segregation">Benefits of Segregation<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Why separate BaseOS components from other applications?</p>
+<p>(1) Separates application components from the core operating system elements.<br>
+(2) Allows publishers to deliver and administrators to apply application updates more frequently.</p>
+<p>In previous RHEL versions, an OS update would update all installed components including the kernel, service, and application components to the latest versions by default.</p>
+<p>This could result in an unstable system or a misbehaving application due to an unwanted upgrade of one or more packages.</p>
+<p>By detaching the base OS components from the applications, either of the two can be updated independent of the other.</p>
+<p>This provides enhanced flexibility in tailoring the system components and application workloads without impacting the underlying stability of the system.</p>
+<h3 id="module-streams">Module Streams<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Collection of packages organized by version</li>
+<li>Each module can have multiple streams</li>
+<li>Each stream receives updates independent of the other streams</li>
+<li>Stream can be enabled or disabled.</li>
+</ul>
+<p><strong>enabled</strong> stream</p>
+<ul>
+<li>Allows the packages it contains to be queried or installed</li>
+<li>Only one stream of a specific module can be enabled at a time</li>
+<li>Each module has a default stream, which provides the latest or the recommended version.</li>
+</ul>
+<h3 id="module-profiles">Module Profiles<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>List of recommended packages organized for purpose-built, convenient deployments to support a variety of use cases
+such as:</li>
+<li>Minimal, development, common, client, server, etc.</li>
+<li>A profile may also include packages from the BaseOS repository or the dependencies of the stream</li>
+<li>Each module stream can have zero, one, or more profiles associated with it with only one of them marked as the default.</li>
+</ul>
+<h3 id="module-management">Module Management<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><strong>Modules</strong> are special package groups usually representing an application, a language runtime, or a set of tools. They are available in one or <strong>multiple streams</strong> which usually represent a major version of a piece of software, They are available in one or <strong>multiple streams</strong> which give you an option to choose what versions of packages you want to consume.
+<a href="https://docs.fedoraproject.org/en-US/modularity/using-modules/" rel="external" target="_blank">https://docs.fedoraproject.org/en-US/modularity/using-modules/</a></p>
+<p>Modules are a way to deliver different versions of software (such as programming languages, databases, or web servers) independently of the base operating system&rsquo;s release cycle.</p>
+<p>Each module can contain multiple streams, representing different versions or configurations of the software. For example, a module for Python might have streams for Python 2 and Python 3.</p>
+<p><code>module</code> dnf subcommand</p>
+<ul>
+<li>list, enable, install, query, remove, and disable
+modules.</li>
+</ul>
+<h3 id="listing-available-and-installed-modules">Listing Available and Installed Modules<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>List all modules along with their stream, profile, and summary
+information available from all configured repos:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module list</span></span></code></pre></div>
+<p>Limit the output to a list of modules available from a specific
+repo such as AppStream by adding --repo AppStream:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module list --repo AppStream</span></span></code></pre></div>
+<p>Output:</p>
+<ul>
+<li>default (d)</li>
+<li>enabled (e)</li>
+<li>disabled (x)</li>
+<li>installed (i)</li>
+</ul>
+<p>List all the streams for a specific module such as <code>ruby</code> and display their status:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module list ruby</span></span></code></pre></div>
+<p>Modify the above and list only the specified stream 3.3 for the module <code>ruby</code></p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module list ruby:3.3</span></span></code></pre></div>
+<p>List all enabled module streams:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module list --enabled</span></span></code></pre></div>
+<p>Similarly, you can use the --installed and --disabled options with <code>dnf module list</code> to output only the installed or the disabled streams.</p>
+<p>Refer to the <em>module list</em> subsection of the <em>dnf</em> command manual pages.</p>
+<h3 id="installing-and-updating-modules">Installing and Updating Modules<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Installing a module</p>
+<ul>
+<li>Creates directory tree for all packages included in the module and all dependent packages.</li>
+<li>Installs required files for the selected profile.</li>
+<li>Runs any post-installation steps.</li>
+<li>If module being loaded or a part of it is already present, the command attempts to update all the packages included in the profile to the latest available versions.</li>
+</ul>
+<p>Install the <em>perl</em> module using its default stream and default
+profile:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf -y module install perl</span></span></code></pre></div>
+<p>Update a module called <em>squid</em> to the latest version:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf module update squid -y</span></span></code></pre></div>
+<p>Install the profile &ldquo;common&rdquo; with stream &ldquo;rhel9&rdquo; for the <em>container-tools</em> module: (module:stream/profile)</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf module install container-tools:rhel9/common</span></span></code></pre></div>
+<h3 id="displaying-module-information">Displaying Module Information<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Shows
+<ul>
+<li>Name, stream, version, list of profiles, default profile, repo name module was installed or is available from</li>
+<li>Summary, description, and artifacts.</li>
+</ul>
+</li>
+<li>Can be viewed by supplying module info with dnf.</li>
+</ul>
+<p>List all profiles available for the module ruby:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module info --profile ruby</span></span></code></pre></div>
+<p>Limit the output to a particular stream such as 3.1:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module info --profile ruby:3.1</span></span></code></pre></div>
+<p>Refer to the <em>module info</em> subsection of the <em>dnf</em> command manual pages for more details.</p>
+<h3 id="removing-modules">Removing Modules<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Removing a module will:</p>
+<ul>
+<li>Uninstall all the included packages and</li>
+<li>Delete all associated files and directory structure.</li>
+<li>Erases any dependencies as part of the deletion process.</li>
+</ul>
+<p>Remove the ruby module with &ldquo;3.1&rdquo; stream:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf module remove ruby:3.1</span></span></code></pre></div>
+<p>Refer to the <em>module remove</em> subsection of the <em>dnf</em> command manual pages:</p>
+<h3 id="lab-manipulate-modules">Lab: Manipulate Modules<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Perform management operations on a module called <em>postgresql</em>.</li>
+<li>Determine if this module is already installed and if it is available for installation.</li>
+<li>Show its information and install the default profile for stream &ldquo;10&rdquo;.</li>
+<li>Remove the module profile along with any dependencies</li>
+<li>confirm the removal.</li>
+</ul>
+<ol>
+<li>Check whether the <em>postgresql</em> module is already installed(i):</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module list postgresql</span></span></code></pre></div>
+<ol start="2">
+<li>Display detailed information about the default stream of the module:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module info postgresql:15</span></span></code></pre></div>
+<ol start="3">
+<li>Install the module with default profile for stream &ldquo;15&rdquo;:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf -y module install --profile postgresql:15</span></span></code></pre></div>
+<ol start="4">
+<li>Display the module information again:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module info postgresql:15</span></span></code></pre></div>
+<ol start="5">
+<li>Erase the module profile for the stream:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module remove -y postgresql:15</span></span></code></pre></div>
+<ol start="6">
+<li>Confirm the removal (back to (d)):</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module info postgresql:15</span></span></code></pre></div>
+<h3 id="switching-module-streams">Switching Module Streams<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Typically performed to upgrade or downgrade the version of an installed module.</li>
+</ul>
+<p>process:</p>
+<ul>
+<li>
+<p>uninstall the existing version provided by a stream alongside any dependencies that it has,</p>
+</li>
+<li>
+<p>switch to the other stream</p>
+</li>
+<li>
+<p>install the desired version.</p>
+</li>
+<li>
+<p>Installing a module from a stream automatically enables the stream if it was previously disabled</p>
+</li>
+<li>
+<p>you can manually enable or disable it with the <em>dnf</em> command.</p>
+</li>
+<li>
+<p>Only one stream of a given module enabled at a time.</p>
+</li>
+<li>
+<p>Attempting to enable another one for the same module automatically
+disables the current enabled stream.</p>
+</li>
+<li>
+<p>dnf module list and dnf module info expose the enable/disable status of the module stream.</p>
+</li>
+</ul>
+<h3 id="lab-install-a-module-from-an-alternative-stream">Lab: Install a Module from an Alternative Stream<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Downgrade a module to a lower version.</li>
+<li>Remove the stream <code>ruby</code> 3.3 and</li>
+<li>Confirm its removal.</li>
+<li>manually enable the stream <em>perl</em> 5.24 and confirm its new status.</li>
+<li>install the new version of the module and display its information.</li>
+</ul>
+<ol>
+<li>Check the current state of all <em>perl</em> streams:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module list perl</span></span></code></pre></div>
+<ol start="2">
+<li>Remove perl 5.26:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf module remove perl -y</span></span></code></pre></div>
+<ol>
+<li>Confirm the removal:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module list ruby</span></span></code></pre></div>
+<ol start="2">
+<li>Reset the module so that neither stream is enabled or disabled. This will remove the enabled (e) indication from ruby 3.3</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf module reset ruby</span></span></code></pre></div>
+<ol start="3">
+<li>Install the non-default profile &ldquo;minimal&rdquo; for ruby stream 3.1. This will auto-enable the stream.</li>
+</ol>
+<p>&ndash;allowerasing</p>
+<ul>
+<li>Will instruct the command to remove installed packages for dependency resolution.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf module install ruby:3.1 --allowerasing</span></span></code></pre></div>
+<ol start="4">
+<li>Check the status of the module:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module list perl</span></span></code></pre></div>
+<h2 id="the-dnf-command">The dnf Command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Introduced in RHEL 8</li>
+<li>Can use interchangeably with yum in RHEL
+<ul>
+<li><code>yum</code> is a soft link to the <em>dnf</em> utility.</li>
+</ul>
+</li>
+<li>Requires the system to have access to either:
+<ul>
+<li>a local or remote software repository</li>
+<li>a local installable package file.</li>
+</ul>
+</li>
+</ul>
+<p>Subscription Management* (RHSM) service</p>
+<ul>
+<li>
+<p>Available in the Red Hat Customer Portal</p>
+</li>
+<li>
+<p>Offers access to official Red Hat software repositories.</p>
+</li>
+<li>
+<p>Other web-based repositories that host packages are available</p>
+</li>
+<li>
+<p>You can also set up a local, custom repository on your system and add packages of your choice to it.</p>
+</li>
+</ul>
+<p>Primary benefit of using <code>dnf</code> over <code>rpm</code>:</p>
+<ul>
+<li>
+<p>Resolve dependencies automatically</p>
+<ul>
+<li>By identifying and installing any additional required packages</li>
+</ul>
+</li>
+<li>
+<p>With multiple repositories set up, <code>dnf</code> extracts the software from wherever it finds it.</p>
+</li>
+<li>
+<p>Perform abundant software administration tasks.</p>
+</li>
+<li>
+<p>Invokes the <code>rpm</code> utility in the background</p>
+</li>
+<li>
+<p>Can perform a number of operations on individual packages, package groups, and modules:</p>
+<ul>
+<li>listing</li>
+<li>querying</li>
+<li>installing</li>
+<li>removing</li>
+<li>enabling and disabling specific module streams.</li>
+</ul>
+</li>
+</ul>
+<p>Software handling tasks that dnf can perform on packages:</p>
+<ul>
+<li>Clean and repolist are specific to repositories.</li>
+<li>Refer to the manual pages of <em>dnf</em> for additional subcommands, operators, options, examples, and other details.</li>
+</ul>
+<table>
+  <thead>
+      <tr>
+          <th><strong>Subcommand</strong></th>
+          <th><strong>Description</strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>check-update</td>
+          <td>Checks if updates are available for installed packages</td>
+      </tr>
+      <tr>
+          <td>clean</td>
+          <td>Removes cached data</td>
+      </tr>
+      <tr>
+          <td>history</td>
+          <td>Display previous dnf activities as recorded in /var/lib/dnf/history/</td>
+      </tr>
+      <tr>
+          <td>info</td>
+          <td>Show details for a package</td>
+      </tr>
+      <tr>
+          <td>install</td>
+          <td>Install or update a package</td>
+      </tr>
+      <tr>
+          <td>list</td>
+          <td>List installed and available packages</td>
+      </tr>
+      <tr>
+          <td>provides</td>
+          <td>Search for packages that contain the specified file or feature</td>
+      </tr>
+      <tr>
+          <td>reinstall</td>
+          <td>Reinstall the exact version of an installed package</td>
+      </tr>
+      <tr>
+          <td>remove</td>
+          <td>Remove a package and its dependencies</td>
+      </tr>
+      <tr>
+          <td>repolist</td>
+          <td>List enabled repositories</td>
+      </tr>
+      <tr>
+          <td>repoquery</td>
+          <td>Runs queries on available packages</td>
+      </tr>
+      <tr>
+          <td>search</td>
+          <td>Searches package metadata for the specified string</td>
+      </tr>
+      <tr>
+          <td>upgrade</td>
+          <td>Updates each installed package to the latest version</td>
+      </tr>
+  </tbody>
+</table>
+<p>dnf subcommands that are intended for operations on package
+groups and modules:</p>
+<table>
+  <thead>
+      <tr>
+          <th><strong>Subcommand</strong></th>
+          <th><strong>Description</strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>group install</td>
+          <td>Install or updates a package group</td>
+      </tr>
+      <tr>
+          <td>group info</td>
+          <td>Return details for a package group</td>
+      </tr>
+      <tr>
+          <td>group list</td>
+          <td>List available package groups</td>
+      </tr>
+      <tr>
+          <td>group remove</td>
+          <td>Remove a package group</td>
+      </tr>
+      <tr>
+          <td>module disable</td>
+          <td>Disable a module along with all the streams it contains</td>
+      </tr>
+      <tr>
+          <td>module enable</td>
+          <td>Enable a module along with all the streams it contains</td>
+      </tr>
+      <tr>
+          <td>module install</td>
+          <td>Install a module profile including its packages</td>
+      </tr>
+      <tr>
+          <td>module info</td>
+          <td>Show details for a module</td>
+      </tr>
+      <tr>
+          <td>module list</td>
+          <td>Lists all available module streams along with their profiles and status</td>
+      </tr>
+      <tr>
+          <td>module remove</td>
+          <td>Removes a module profile including its packages</td>
+      </tr>
+      <tr>
+          <td>module reset</td>
+          <td>Resets a module so that it is neither in enable nor in disable state</td>
+      </tr>
+      <tr>
+          <td>module update</td>
+          <td>Updates packages in a module profile</td>
+      </tr>
+  </tbody>
+</table>
+<p>For labs, you&rsquo;ll need to create a definition file and configure access to the two repositories available on the RHEL 8 ISO
+image.</p>
+<h3 id="lab-configure-access-to-pre-built-repositories">Lab: Configure Access to Pre-Built Repositories<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Set up access to the two dnf repositories that are available on RHEL 9 image. (You should have already configured an automatic mounting of RHEL 9 image on <em>/mnt</em>.) Create a definition file for the repositories and confirm.</p>
+<ol>
+<li>Verify that the image is currently mounted:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> df -h | grep mnt</span></span></code></pre></div>
+<ol start="2">
+<li>Create a definition file called local.repo in /etc/yum.repos.d/ using the <em>vim</em> editor and define the following data for both repositories in it:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>BaseOS<span style="color:#ff7b72;font-weight:bold">]</span> 
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">name</span><span style="color:#ff7b72;font-weight:bold">=</span>BaseOS 
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">baseurl</span><span style="color:#ff7b72;font-weight:bold">=</span>file:///mnt/BaseOS 
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">gpgcheck</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>AppStream<span style="color:#ff7b72;font-weight:bold">]</span> 
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">name</span><span style="color:#ff7b72;font-weight:bold">=</span>AppStream 
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">baseurl</span><span style="color:#ff7b72;font-weight:bold">=</span>file:///mnt/AppStream 
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">gpgcheck</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span></span></span></code></pre></div>
+<ol start="3">
+<li>Confirm access to the repositories:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf repolist </span></span></code></pre></div>
+<ul>
+<li>Ignore lines 1-4 in the output that are related to subscription and
+system registration.</li>
+<li>Lines 5 and 6 show the rate at which the command read the repo data.</li>
+<li>Line 7 displays the timestamp of the last metadata check.</li>
+<li>last two lines show the repo IDs, repo names, and a count of packages they hold.</li>
+<li>AppStream repo consists of 4,672 packages</li>
+<li>BaseOS repo contains 1,658 packages.</li>
+<li>Both repos are enabled by default and are ready for use.</li>
+</ul>
+<h3 id="dnf-yum-repository">dnf yum Repository<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><strong>dnf repository</strong> (<em>yum repository</em> or a <em>repo</em>)</p>
+<ul>
+<li>
+<p>Digital library for storing software packages</p>
+</li>
+<li>
+<p>Repository is accessed for package retrieval, query, update, and installation</p>
+</li>
+<li>
+<p>The two repositories</p>
+<ul>
+<li>BaseOS and AppStream
+<ul>
+<li>come preconfigured with the RHEL 9 ISO image.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Number of other repositories available on the Internet that are maintained by software publishers such as Red Hat and CentOS.</p>
+</li>
+<li>
+<p>Can build private custom repositories for internal IT use for stocking and delivering software.</p>
+<ul>
+<li>Good practice for an organization with a large Linux server base, as it manages dependencies automatically and aids in maintaining software consistency across the board.</li>
+</ul>
+</li>
+<li>
+<p>Can also be used to store in-house developed packages.</p>
+</li>
+<li>
+<p>It is important to obtain software packages from authentic and reliable sources such as Red Hat to prevent potential damage to your system and to circumvent possible software corruption.</p>
+</li>
+<li>
+<p>There is a process to create repositories and to access preconfigured repositories.</p>
+</li>
+<li>
+<p>There are two pre-set repositories available on the RHEL 9 image. You will configure access to them via a definition file to support the exercises and lab environment.</p>
+</li>
+</ul>
+<h3 id="repository-definition-file">Repository Definition File<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Repo definition files are located in /etc/yum.repos.d/</li>
+<li>Can create local.repo file in this directory to specify local repos</li>
+<li>See dnf.conf man page</li>
+</ul>
+<p>Sample repo definition file and key directives:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>BaseOS_RHEL_9<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">name</span><span style="color:#ff7b72;font-weight:bold">=</span> RHEL <span style="color:#a5d6ff">9</span> base operating system components
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">baseurl</span><span style="color:#ff7b72;font-weight:bold">=</span>file://*mnt*BaseOS
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">enabled</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">1</span>
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">gpgcheck</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span></span></span></code></pre></div>
+<p><strong>EXAM TIP:</strong></p>
+<ul>
+<li>Knowing how to configure a dnf/yum repository using a URL plays an important role in completing some of the RHCSA exam tasks successfully.</li>
+<li>Use two forward slash characters (//) with the baseurl directive for an FTP, HTTP, or HTTPS source.</li>
+</ul>
+<p>Five lines from a sample repo file:
+Line 1 defines an exclusive ID within the square brackets.
+Line 2 is a brief description of the repo with the &ldquo;name&rdquo; directive.
+Line 3 is the location of the repodata directory with the &ldquo;baseurl&rdquo; directive.
+Line 4 shows whether this repository is active.
+Line 5 shows if packages are to be GPGchecked for authenticity.</p>
+<ul>
+<li>
+<p>Each repository definition file must have:</p>
+<ul>
+<li>Unique ID</li>
+<li>Description</li>
+<li>Baseurl directive defined</li>
+<li>Other directives are set as required.</li>
+</ul>
+</li>
+<li>
+<p>The baseurl directive for a local directory path is defined as file:///local_path</p>
+<ul>
+<li>The first two forward slash characters represent the URL convention, and the third forward slash is for the absolute path to the destination directory)</li>
+<li>FTP and
+<ul>
+<li>\ftp://hostname/network_path</li>
+</ul>
+</li>
+<li>HTTP(S)
+<ul>
+<li>http(s)://hostname/network_path</li>
+</ul>
+</li>
+<li>network path must include a resolvable hostname or an IP address.</li>
+</ul>
+</li>
+</ul>
+<h3 id="software-management-with-dnf">Software Management with dnf<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Tools are available to work with individual packages as well as package groups and modules.</li>
+<li><code>rpm</code> command is limited to managing one package at a time.</li>
+<li><code>dnf</code> has an associated configuration file that can define settings to control its behavior.</li>
+</ul>
+<h4 id="dnf-configuration-file">dnf Configuration File<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<ul>
+<li>Key configuration file: /etc/dnf/dnf.conf</li>
+<li>&ldquo;main&rdquo; section
+- Sets directives that have a global effect on dnf operations.</li>
+<li>Can define separate sections for each custom repository that you plan to set up on the system.</li>
+<li>Preferred location to store configuration for each custom repository in their own definition files is in /etc/yum.repos.d
+<ul>
+<li>default location created for this purpose.</li>
+</ul>
+</li>
+</ul>
+<p>Default content of this configuration file:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> cat /etc/dnf/dnf.conf</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>main<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">gpgcheck</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">1</span>
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">installonly_limit</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">3</span>
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">clean_requirements_on_remove</span><span style="color:#ff7b72;font-weight:bold">=</span>True
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">best</span><span style="color:#ff7b72;font-weight:bold">=</span>True
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">skip_if_unavailable</span><span style="color:#ff7b72;font-weight:bold">=</span>False</span></span></code></pre></div>
+<p>The above and a few other directives that you may define in the file:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Directive</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>best</td>
+          <td>Whether to install (or upgrade to) the latest available version.</td>
+      </tr>
+      <tr>
+          <td>clean_requirements_on_remove</td>
+          <td>Whether to remove dependencies during a package removal process that are no longer in use.</td>
+      </tr>
+      <tr>
+          <td>debuglevel</td>
+          <td>Sets debug from 1 (minimum) and 10 (maximum). Default is 2. A value of 0 disables this feature.</td>
+      </tr>
+      <tr>
+          <td>gpgcheck</td>
+          <td>Whether to check the GPG signature for package authenticity. Default is 1 (enabled).</td>
+      </tr>
+      <tr>
+          <td>installonly_limit</td>
+          <td>Count of packages that can be installed concurrently. Default is 3.</td>
+      </tr>
+      <tr>
+          <td>keepcache</td>
+          <td>Defines whether to store the package and header cache following a successful installation. Default is 0 (disabled).</td>
+      </tr>
+      <tr>
+          <td>logdir</td>
+          <td>Sets the directory location to store the log files. Default is /var/log/</td>
+      </tr>
+      <tr>
+          <td>obsoletes</td>
+          <td>Checks and removes any obsolete dependent packages during installs and updates. Default is 1 (enabled).</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<p>For other directives: <code>man 5 dnf.conf</code></p>
+<h2 id="advanced-package-management-diy-labs">Advanced Package Management DIY Labs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ol>
+<li>Configure Access to RHEL 8 Repositories (Make sure the RHEL 8 ISO image is attached to the VM and mounted.)  Create a definition file under <em>/etc/yum.repos.d/</em>, and define two blocks (one for BaseOS and another for AppStream).</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  vim /etc/yum.repos.d/local.repo</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>BaseOS<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">name</span><span style="color:#ff7b72;font-weight:bold">=</span>BaseOS 
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">baseurl</span><span style="color:#ff7b72;font-weight:bold">=</span>file:///mnt/BaseOS 
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">gpgcheck</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff7b72;font-weight:bold">[</span>AppStrean<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">name</span><span style="color:#ff7b72;font-weight:bold">=</span>AppStream 
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">baseurl</span><span style="color:#ff7b72;font-weight:bold">=</span>file:///mnt/AppStream 
+</span></span><span style="display:flex;"><span> <span style="color:#79c0ff">gpgcheck</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span></span></span></code></pre></div>
+<ol start="4">
+<li>Verify the configuration with dnf repolist. You should see numbers in thousands under the Status column for both repositories.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf repolist -v</span></span></code></pre></div>
+<h3 id="lab--install-and-manage-individual-packages">Lab:  Install and Manage Individual Packages<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>List all installed and available packages separately.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf list --available <span style="color:#ff7b72;font-weight:bold">&amp;&amp;</span> dnf list --installed</span></span></code></pre></div>
+<ol start="2">
+<li>Show which package contains the /etc/group file.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf provides /etc/group</span></span></code></pre></div>
+<ol start="3">
+<li>Install the package <em>httpd</em>.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf -y install httpd</span></span></code></pre></div>
+<ol start="4">
+<li>Review /var/log/yum.log/ for confirmation. (/var/lib/dnf/history)</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  dnf history</span></span></code></pre></div>
+<ol start="5">
+<li>Perform the following on the httpd package:</li>
+<li>Show information</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf info httpd</span></span></code></pre></div>
+<ol start="2">
+<li>List dependencies</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf repoquery --requires httpd</span></span></code></pre></div>
+<ol start="3">
+<li>Remove it</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf remove httpd</span></span></code></pre></div>
+<h3 id="lab-install-and-manage-package-groups">Lab Install and Manage Package Groups<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>List all installed and available package groups separately.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf group list available <span style="color:#ff7b72;font-weight:bold">&amp;&amp;</span> dnf group list installed</span></span></code></pre></div>
+<ol>
+<li>Install package groups <em>Security Tools</em> and <em>Scientific Support.</em></li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf group install <span style="color:#a5d6ff">&#39;Security Tools&#39;</span></span></span></code></pre></div>
+<ol start="2">
+<li>Review /var/log/yum.log for confirmation.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf history</span></span></code></pre></div>
+<ol start="3">
+<li>Show the packages included in the Scientific Support package group, and delete this group.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf group info <span style="color:#a5d6ff">&#39;Scientific Support&#39;</span> <span style="color:#ff7b72;font-weight:bold">&amp;&amp;</span> dnf group  remove <span style="color:#a5d6ff">&#39;Scientific Support&#39;</span></span></span></code></pre></div>
+<h3 id="lab-install-and-manage-modules">Lab: Install and Manage Modules<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol start="4">
+<li>List all modules. Identify which modules, streams and profiles are installed, default, disabled, and enabled from the output.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module list</span></span></code></pre></div>
+<ol start="5">
+<li>Install the default stream of the development profile for module <em>php</em>, and verify.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module install php <span style="color:#ff7b72;font-weight:bold">&amp;&amp;</span> dnf module list</span></span></code></pre></div>
+<ol start="6">
+<li>Remove the module.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module remove php</span></span></code></pre></div>
+<h3 id="lab-switch-module-streams-and-install-software">Lab Switch Module Streams and Install Software<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol start="7">
+<li>List <em>postgresql</em> module. This will display the streams and profiles, and their status.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module list postgresql</span></span></code></pre></div>
+<ol start="8">
+<li>Reset both streams</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module reset postgresql</span></span></code></pre></div>
+<ol start="9">
+<li>enable the stream for the older version, and install its client profile.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf module install postgresql:15</span></span></code></pre></div>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/the-cheat-code/"><a class="padding" href="/ansible/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/automate-kvm-vms/"><a class="padding" href="/ansible/automate-kvm-vms/">Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-documentation/"><a class="padding" href="/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/playbooks/"><a class="padding" href="/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/execution-environments/"><a class="padding" href="/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/hostname-patterns/"><a class="padding" href="/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/include-and-import-files/"><a class="padding" href="/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2/"><a class="padding" href="/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/user-and-groups/"><a class="padding" href="/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/storage-partitions-and-lvm/"><a class="padding" href="/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/services/"><a class="padding" href="/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/networking-with-ansible/"><a class="padding" href="/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/nfs-setup/"><a class="padding" href="/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimize-ansible-processing/"><a class="padding" href="/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux/"><a class="padding" href="/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/tags/"><a class="padding" href="/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/loops-and-items/"><a class="padding" href="/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/modules-for-troubleshooting/"><a class="padding" href="/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Using Variables In Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/when/"><a class="padding" href="/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5"><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="" data-nav-id="/containers/containers-1/"><a class="padding" href="/containers/containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/securityenhancedlinux/"><a class="padding" href="/cyber-security/securityenhancedlinux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/learning-touch-typing-1/"><a class="padding" href="/desktop/learning-touch-typing-1/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/learning-touch-typing/"><a class="padding" href="/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup-1/"><a class="padding" href="/desktop/my-fedora-setup-1/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue-2/"><a class="padding" href="/desktop/silverblue-2/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA? Some Ideas<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-ccna-exam/">How I Studied for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-synchronization/"><a class="padding" href="/networking/dns-and-time-synchronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns/"><a class="padding" href="/networking/dns/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networkdevicesandconnections/"><a class="padding" href="/networking/networkdevicesandconnections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/resources-for-passing-ccna/"><a class="padding" href="/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/systems/"><input type="checkbox" id="R-section-859f72c55acd170304a7ecf4dceebb83" aria-controls="R-subsections-859f72c55acd170304a7ecf4dceebb83"><label for="R-section-859f72c55acd170304a7ecf4dceebb83"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/systems/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-859f72c55acd170304a7ecf4dceebb83" class="collapsible-menu">
+            <li class="" data-nav-id="/systems/you-need-to-learn-man-pages/"><a class="padding" href="/systems/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/advanced-file-management/"><a class="padding" href="/systems/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/advanced-package-management/"><a class="padding" href="/systems/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/advanced-user-management/"><a class="padding" href="/systems/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/autofs/"><a class="padding" href="/systems/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/file-management/"><a class="padding" href="/systems/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/basic-package-management/"><a class="padding" href="/systems/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/basic-user-management/"><a class="padding" href="/systems/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/boot-process-grub2-kernel/"><a class="padding" href="/systems/boot-process-grub2-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/installation/"><a class="padding" href="/systems/installation/">Installing RHEL Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/interaction/"><a class="padding" href="/systems/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/local-filesystems-and-swap/"><a class="padding" href="/systems/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/network-filesystem-nfs/"><a class="padding" href="/systems/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/partitioning-mbr-gpt/"><a class="padding" href="/systems/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/process-and-task-scheduling/"><a class="padding" href="/systems/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/rm-filesystem-from-partition/"><a class="padding" href="/systems/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/rhcsa-exam-environment/"><a class="padding" href="/systems/rhcsa-exam-environment/">RHCSA Exam Environment Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/rhcsa-vagrant-lab-setup-1/"><a class="padding" href="/systems/rhcsa-vagrant-lab-setup-1/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/sys-init-logging-and-tuning/"><a class="padding" href="/systems/sys-init-logging-and-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/secure-shell-service-ssh/"><a class="padding" href="/systems/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/thin-provisioning/"><a class="padding" href="/systems/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/time-synchronization/"><a class="padding" href="/systems/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/virtual-data-optimizer-vdo/"><a class="padding" href="/systems/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/remove-formatting-from-highlights/"><a class="padding" href="/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-docker-nginx/"><a class="padding" href="/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/proxmox-pfsense-haproxy-setup/"><a class="padding" href="/tools/proxmox-pfsense-haproxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/stop-using-ai/"><a class="padding" href="/tools/stop-using-ai/">Why I Stopped Using AI so Much<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/install-ansible-using-uv/"><a class="padding" href="/tools/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-vagrant-on-linux/"><a class="padding" href="/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-man-pages/"><a class="padding" href="/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent hidden " data-nav-id="/archive/"><input type="checkbox" id="R-section-3efae3733ab07a14aa0bb0bbf1f8e3dd" aria-controls="R-subsections-3efae3733ab07a14aa0bb0bbf1f8e3dd" checked><label for="R-section-3efae3733ab07a14aa0bb0bbf1f8e3dd"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Linux Reader</span></label><a class="padding default-animation" href="/archive/">Linux Reader<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-3efae3733ab07a14aa0bb0bbf1f8e3dd" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/ansible/"><input type="checkbox" id="R-section-2da59b953fd922cc24bbcc833598ec18" aria-controls="R-subsections-2da59b953fd922cc24bbcc833598ec18"><label for="R-section-2da59b953fd922cc24bbcc833598ec18"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/archive/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-2da59b953fd922cc24bbcc833598ec18" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/"><input type="checkbox" id="R-section-e5951e8bf2f82dfe42bf49de8b6e015a" aria-controls="R-subsections-e5951e8bf2f82dfe42bf49de8b6e015a"><label for="R-section-e5951e8bf2f82dfe42bf49de8b6e015a"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu 45 Days to RHCE</span></label><a class="padding default-animation" href="/archive/ansible/45-days-to-rhce-1/">45 Days to RHCE<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5951e8bf2f82dfe42bf49de8b6e015a" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/ansible-navigator/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/crash-and-burn/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/crash-and-burn/">Crash and Burn<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/the-cheat-code/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/getting-ready/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/getting-ready/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-navigator/"><a class="padding" href="/archive/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/the-cheat-code/"><a class="padding" href="/archive/ansible/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/getting-ready-for-rhce/"><a class="padding" href="/archive/ansible/getting-ready-for-rhce/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/automate-kvm-vms/"><a class="padding" href="/archive/ansible/automate-kvm-vms/">Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ad-hoc-ansible-commands/"><a class="padding" href="/archive/ansible/ad-hoc-ansible-commands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/adhoccommands/"><a class="padding" href="/archive/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-documentation/"><a class="padding" href="/archive/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-facts/"><a class="padding" href="/archive/ansible/ansible-facts/">Ansible Facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-galaxy-roles/"><a class="padding" href="/archive/ansible/ansible-galaxy-roles/">Ansible Galaxy Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-inventory/"><a class="padding" href="/archive/ansible/ansible-inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/inventory/"><a class="padding" href="/archive/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-playbooks/"><a class="padding" href="/archive/ansible/ansible-playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/playbooks/"><a class="padding" href="/archive/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/roles/"><a class="padding" href="/archive/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-ansible-roles/"><a class="padding" href="/archive/ansible/using-ansible-roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-vault/"><a class="padding" href="/archive/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-inventory-command/"><a class="padding" href="/archive/ansible/ansible-inventory-command/">Ansible-inventory command<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible.cfg/"><a class="padding" href="/archive/ansible/ansible.cfg/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansibleconfig/"><a class="padding" href="/archive/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/boot-process/"><a class="padding" href="/archive/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/building-an-ansible-lab-with-ansible/"><a class="padding" href="/archive/ansible/building-an-ansible-lab-with-ansible/">Building an Ansible lab with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/common-modules-with-examples/"><a class="padding" href="/archive/ansible/common-modules-with-examples/">Common modules with examples<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/deploying-files/"><a class="padding" href="/archive/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/discovering-storage-related-facts/"><a class="padding" href="/archive/ansible/discovering-storage-related-facts/">Discovering storage related facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/dynamic-inventory/"><a class="padding" href="/archive/ansible/dynamic-inventory/">Dynamic Inventory<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/encrypted-passwords/"><a class="padding" href="/archive/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/execution-environments/"><a class="padding" href="/archive/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/handlers/"><a class="padding" href="/archive/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/host-name-patterns/"><a class="padding" href="/archive/ansible/host-name-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/hostname-patterns/"><a class="padding" href="/archive/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/include-and-import-files/"><a class="padding" href="/archive/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/including-and-importing-files/"><a class="padding" href="/archive/ansible/including-and-importing-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/jinja2-templates/"><a class="padding" href="/archive/ansible/jinja2-templates/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/jinja2/"><a class="padding" href="/archive/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/user-and-groups/"><a class="padding" href="/archive/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-ansible-errors-and-logs/"><a class="padding" href="/archive/ansible/managing-ansible-errors-and-logs/">Managing Ansible Errors and Logs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-packages/"><a class="padding" href="/archive/ansible/managing-packages/">Managing Packages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/archive/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-partitions-and-lvm/"><a class="padding" href="/archive/ansible/managing-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/storage-partitions-and-lvm/"><a class="padding" href="/archive/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-services/"><a class="padding" href="/archive/ansible/managing-services/">Managing Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/services/"><a class="padding" href="/archive/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/networking-with-ansible/"><a class="padding" href="/archive/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/nfs-setup/"><a class="padding" href="/archive/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/optimize-ansible-processing/"><a class="padding" href="/archive/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/optimizing-ansible-processing/"><a class="padding" href="/archive/ansible/optimizing-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/repositories-and-subscriptions/"><a class="padding" href="/archive/ansible/repositories-and-subscriptions/">Repositories and subscriptions<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/selinux-file-properties/"><a class="padding" href="/archive/ansible/selinux-file-properties/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/selinux/"><a class="padding" href="/archive/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/setting-up-an-ansible-lab/"><a class="padding" href="/archive/ansible/setting-up-an-ansible-lab/">Setting up an Ansible Lab<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ssh-connections/"><a class="padding" href="/archive/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/troubleshooting-common-scenarios/"><a class="padding" href="/archive/ansible/troubleshooting-common-scenarios/">Troubleshooting Common Scenarios<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/users-and-groups/"><a class="padding" href="/archive/ansible/users-and-groups/">Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/tags/"><a class="padding" href="/archive/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/loops-and-items/"><a class="padding" href="/archive/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-loops-and-items/"><a class="padding" href="/archive/ansible/using-loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/modules-for-troubleshooting/"><a class="padding" href="/archive/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-modules-for-troubleshooting-and-testing/"><a class="padding" href="/archive/ansible/using-modules-for-troubleshooting-and-testing/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-multiple-inventories/"><a class="padding" href="/archive/ansible/using-multiple-inventories/">Using Multiple Inventories<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-rhel-system-roles/"><a class="padding" href="/archive/ansible/using-rhel-system-roles/">Using RHEL System roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-tags/"><a class="padding" href="/archive/ansible/using-tags/">Using Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-when-to-run-tasks-conditionally/"><a class="padding" href="/archive/ansible/using-when-to-run-tasks-conditionally/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/when/"><a class="padding" href="/archive/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/variables/"><a class="padding" href="/archive/ansible/variables/">Variables<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/bash/"><input type="checkbox" id="R-section-0007e539b2afbfa1d415742d840f3a8d" aria-controls="R-subsections-0007e539b2afbfa1d415742d840f3a8d"><label for="R-section-0007e539b2afbfa1d415742d840f3a8d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/archive/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-0007e539b2afbfa1d415742d840f3a8d" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/bash/bash-shell/"><a class="padding" href="/archive/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/bash/shell-scripting/"><a class="padding" href="/archive/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/boot/"><input type="checkbox" id="R-section-23ba0690f68cd095a84a225cf8506d0a" aria-controls="R-subsections-23ba0690f68cd095a84a225cf8506d0a"><label for="R-section-23ba0690f68cd095a84a225cf8506d0a"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Boot</span></label><a class="padding default-animation" href="/archive/boot/"><i class="fa-solid fa-hourglass-start"></i> Boot<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-23ba0690f68cd095a84a225cf8506d0a" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/boot/boot-process-grub2-and-kernel/"><a class="padding" href="/archive/boot/boot-process-grub2-and-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/boot/system-initialization-message-logging-and-system-tuning/"><a class="padding" href="/archive/boot/system-initialization-message-logging-and-system-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/containers/"><input type="checkbox" id="R-section-4a0553f27d25d8da325eb0e27d262c20" aria-controls="R-subsections-4a0553f27d25d8da325eb0e27d262c20"><label for="R-section-4a0553f27d25d8da325eb0e27d262c20"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/archive/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4a0553f27d25d8da325eb0e27d262c20" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/containers/containers-1/"><a class="padding" href="/archive/containers/containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/cyber-security/"><input type="checkbox" id="R-section-22d3475420d0c69262f1eaf35f3954e1" aria-controls="R-subsections-22d3475420d0c69262f1eaf35f3954e1"><label for="R-section-22d3475420d0c69262f1eaf35f3954e1"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/archive/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-22d3475420d0c69262f1eaf35f3954e1" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/cyber-security/security-enhanced-linux/"><a class="padding" href="/archive/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/cyber-security/securityenhancedlinux/"><a class="padding" href="/archive/cyber-security/securityenhancedlinux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/cyber-security/the-linux-firewall/"><a class="padding" href="/archive/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/cyber-security/the-secure-shell-service/"><a class="padding" href="/archive/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/desktop/"><input type="checkbox" id="R-section-f15fd7be41155db115964722da6b0d03" aria-controls="R-subsections-f15fd7be41155db115964722da6b0d03"><label for="R-section-f15fd7be41155db115964722da6b0d03"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/archive/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f15fd7be41155db115964722da6b0d03" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/desktop/new-setup/"><a class="padding" href="/archive/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/learning-touch-typing-1/"><a class="padding" href="/archive/desktop/learning-touch-typing-1/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/learning-touch-typing/"><a class="padding" href="/archive/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/my-fedora-setup-1/"><a class="padding" href="/archive/desktop/my-fedora-setup-1/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/my-fedora-setup/"><a class="padding" href="/archive/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/silverblue-2/"><a class="padding" href="/archive/desktop/silverblue-2/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/silverblue/"><a class="padding" href="/archive/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/files/"><input type="checkbox" id="R-section-35cbfba2aaa3dc53d47351d0737b957f" aria-controls="R-subsections-35cbfba2aaa3dc53d47351d0737b957f"><label for="R-section-35cbfba2aaa3dc53d47351d0737b957f"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Files</span></label><a class="padding default-animation" href="/archive/files/"><i class="fa-solid fa-copy"></i> Files<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-35cbfba2aaa3dc53d47351d0737b957f" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/files/advanced-file-management/"><a class="padding" href="/archive/files/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/files/file-management/"><a class="padding" href="/archive/files/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/networking/"><input type="checkbox" id="R-section-571da5e9c8cc7c2f921ff81d669260db" aria-controls="R-subsections-571da5e9c8cc7c2f921ff81d669260db"><label for="R-section-571da5e9c8cc7c2f921ff81d669260db"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/archive/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-571da5e9c8cc7c2f921ff81d669260db" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/networking/what-to-learn-after-ccna/"><a class="padding" href="/archive/networking/what-to-learn-after-ccna/">What to Learn After CCNA? Some Ideas<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/how-to-study-for-ccna-exam/"><a class="padding" href="/archive/networking/how-to-study-for-ccna-exam/">How I Studied for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/archive/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/dns-and-time-synchronization/"><a class="padding" href="/archive/networking/dns-and-time-synchronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/dns/"><a class="padding" href="/archive/networking/dns/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/archive/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/juniper_cli_basics/"><a class="padding" href="/archive/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/archive/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/networkdevicesandconnections/"><a class="padding" href="/archive/networking/networkdevicesandconnections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/archive/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/resources-for-passing-ccna/"><a class="padding" href="/archive/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/time-synchronization/"><a class="padding" href="/archive/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/toggle_poe/"><a class="padding" href="/archive/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/packages/"><input type="checkbox" id="R-section-ffbf85f24cd2239219afa8b9cbe18b38" aria-controls="R-subsections-ffbf85f24cd2239219afa8b9cbe18b38"><label for="R-section-ffbf85f24cd2239219afa8b9cbe18b38"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/archive/packages/"><i class="fa-solid fa-box-open"></i> Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ffbf85f24cd2239219afa8b9cbe18b38" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/packages/advanced-package-management/"><a class="padding" href="/archive/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/packages/basic-package-management/"><a class="padding" href="/archive/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/storage/"><input type="checkbox" id="R-section-5b321d96a2a369eec97e1394accb14fb" aria-controls="R-subsections-5b321d96a2a369eec97e1394accb14fb"><label for="R-section-5b321d96a2a369eec97e1394accb14fb"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/archive/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-5b321d96a2a369eec97e1394accb14fb" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/storage/autofs/"><a class="padding" href="/archive/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/local-file-systems-and-swap/"><a class="padding" href="/archive/storage/local-file-systems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/network-file-system-nfs/"><a class="padding" href="/archive/storage/network-file-system-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/partitioning-mbr-and-gpt/"><a class="padding" href="/archive/storage/partitioning-mbr-and-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/remove-a-filesystem-from-a-partition/"><a class="padding" href="/archive/storage/remove-a-filesystem-from-a-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/thin-provisioning/"><a class="padding" href="/archive/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/archive/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/archive/systems/"><input type="checkbox" id="R-section-1dd2726e68c35ec062a2cfe2c1df58df" aria-controls="R-subsections-1dd2726e68c35ec062a2cfe2c1df58df" checked><label for="R-section-1dd2726e68c35ec062a2cfe2c1df58df"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/archive/systems/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-1dd2726e68c35ec062a2cfe2c1df58df" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/systems/you-need-to-learn-man-pages/"><a class="padding" href="/archive/systems/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/advanced-file-management/"><a class="padding" href="/archive/systems/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="active " data-nav-id="/archive/systems/advanced-package-management/"><a class="padding" href="/archive/systems/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/advanced-user-management/"><a class="padding" href="/archive/systems/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/autofs/"><a class="padding" href="/archive/systems/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/file-management/"><a class="padding" href="/archive/systems/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/basic-package-management/"><a class="padding" href="/archive/systems/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/basic-user-management/"><a class="padding" href="/archive/systems/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/boot-process-grub2-kernel/"><a class="padding" href="/archive/systems/boot-process-grub2-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/installation/"><a class="padding" href="/archive/systems/installation/">Installing RHEL Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/interaction/"><a class="padding" href="/archive/systems/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/local-filesystems-and-swap/"><a class="padding" href="/archive/systems/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/network-filesystem-nfs/"><a class="padding" href="/archive/systems/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/partitioning-mbr-gpt/"><a class="padding" href="/archive/systems/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/process-and-task-scheduling/"><a class="padding" href="/archive/systems/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/rm-filesystem-from-partition/"><a class="padding" href="/archive/systems/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/rhcsa-exam-environment/"><a class="padding" href="/archive/systems/rhcsa-exam-environment/">RHCSA Exam Environment Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/rhcsa-vagrant-lab-setup-1/"><a class="padding" href="/archive/systems/rhcsa-vagrant-lab-setup-1/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/sys-init-logging-and-tuning/"><a class="padding" href="/archive/systems/sys-init-logging-and-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/secure-shell-service-ssh/"><a class="padding" href="/archive/systems/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/thin-provisioning/"><a class="padding" href="/archive/systems/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/time-synchronization/"><a class="padding" href="/archive/systems/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/virtual-data-optimizer-vdo/"><a class="padding" href="/archive/systems/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/system/"><input type="checkbox" id="R-section-d52ce8aee0f4ac02a6f02a34de71d1c0" aria-controls="R-subsections-d52ce8aee0f4ac02a6f02a34de71d1c0"><label for="R-section-d52ce8aee0f4ac02a6f02a34de71d1c0"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/archive/system/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d52ce8aee0f4ac02a6f02a34de71d1c0" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/system/installation/"><a class="padding" href="/archive/system/installation/">Installation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/system/interaction/"><a class="padding" href="/archive/system/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/system/process-and-task-scheduling/"><a class="padding" href="/archive/system/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/tools/"><input type="checkbox" id="R-section-b320e1715e16e5d512ba5b82e27cc64b" aria-controls="R-subsections-b320e1715e16e5d512ba5b82e27cc64b"><label for="R-section-b320e1715e16e5d512ba5b82e27cc64b"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/archive/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-b320e1715e16e5d512ba5b82e27cc64b" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/tools/remove-formatting-from-highlights/"><a class="padding" href="/archive/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/calibre-web-docker-nginx/"><a class="padding" href="/archive/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/proxmox-pfsense-haproxy-setup/"><a class="padding" href="/archive/tools/proxmox-pfsense-haproxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/stop-using-ai/"><a class="padding" href="/archive/tools/stop-using-ai/">Why I Stopped Using AI so Much<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/install-ansible-using-uv/"><a class="padding" href="/archive/tools/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/archive/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/new-setup/"><a class="padding" href="/archive/tools/tools/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/archive/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/archive/tools/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/process-bookfusion-highlights/"><a class="padding" href="/archive/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/archive/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/archive/tools/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/archive/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/archive/tools/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/archive/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/archive/tools/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/using-vagrant-on-linux/"><a class="padding" href="/archive/tools/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/using-vagrant-on-linux/"><a class="padding" href="/archive/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/vimguide/"><a class="padding" href="/archive/tools/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/vimguide/"><a class="padding" href="/archive/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/using-man-pages/"><a class="padding" href="/archive/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/users-and-groups/"><input type="checkbox" id="R-section-db70fad5de90fe8fb545112d40b3bd47" aria-controls="R-subsections-db70fad5de90fe8fb545112d40b3bd47"><label for="R-section-db70fad5de90fe8fb545112d40b3bd47"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users and Groups</span></label><a class="padding default-animation" href="/archive/users-and-groups/"><i class="fa-solid fa-users"></i> Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-db70fad5de90fe8fb545112d40b3bd47" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/users-and-groups/advanced-user-management/"><a class="padding" href="/archive/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/users-and-groups/basic-user-management/"><a class="padding" href="/archive/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/virtualization/"><input type="checkbox" id="R-section-d0028714f8460f5888066e750cbc5914" aria-controls="R-subsections-d0028714f8460f5888066e750cbc5914"><label for="R-section-d0028714f8460f5888066e750cbc5914"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualization</span></label><a class="padding default-animation" href="/archive/virtualization/"><i class="fa-solid fa-microchip"></i> Virtualization<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d0028714f8460f5888066e750cbc5914" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/virtualization/rhcsa-vagrant-lab-setup/"><a class="padding" href="/archive/virtualization/rhcsa-vagrant-lab-setup/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1772467050" defer></script>
+    <script src="/js/theme.js?1772467050" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

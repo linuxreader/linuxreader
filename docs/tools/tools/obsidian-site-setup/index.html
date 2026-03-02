@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    <meta name="description" content="Sync obsidian dirs to hugo dirs: rsync -av --delete source destination –delete flag deletes files in the destination directory if they do not exist in the source
+#!/bin/bash rsync -av --delete ~/Documents/content/booknotes ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/&#39;health and fitness&#39; ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/images ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/linux ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/networking ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/now ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/philosophy ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/python ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/Recipes ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/Recommended ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/tools ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/writing ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/_index.md ~/Documents/blog/content/ cd /home/david/Documents/blog &amp;&amp; hugo &amp;&amp; if ! nmcli connection show --active | grep -q &#34;Primary&#34;; then echo &#34;Starting VPN...&#34; nmcli connection up id &#34;Primary&#34; sleep 5 fi rsync -rtvzP ~/Documents/blog/docs/ {username}@{ip-address}:/var/www/public Using inotify to monitor obsidian and run the update script whenever there are changes: sudo dnf -y install inotify-tools">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="Sync obsidian dirs to hugo dirs: rsync -av --delete source destination –delete flag deletes files in the destination directory if they do not exist in the source
+#!/bin/bash rsync -av --delete ~/Documents/content/booknotes ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/&#39;health and fitness&#39; ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/images ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/linux ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/networking ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/now ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/philosophy ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/python ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/Recipes ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/Recommended ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/tools ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/writing ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/_index.md ~/Documents/blog/content/ cd /home/david/Documents/blog &amp;&amp; hugo &amp;&amp; if ! nmcli connection show --active | grep -q &#34;Primary&#34;; then echo &#34;Starting VPN...&#34; nmcli connection up id &#34;Primary&#34; sleep 5 fi rsync -rtvzP ~/Documents/blog/docs/ {username}@{ip-address}:/var/www/public Using inotify to monitor obsidian and run the update script whenever there are changes: sudo dnf -y install inotify-tools">
+    <meta property="og:url" content="https://www.linuxreader.com/tools/tools/obsidian-site-setup/">
+    <meta property="og:description" content="Sync obsidian dirs to hugo dirs: rsync -av --delete source destination –delete flag deletes files in the destination directory if they do not exist in the source
+#!/bin/bash rsync -av --delete ~/Documents/content/booknotes ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/&#39;health and fitness&#39; ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/images ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/linux ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/networking ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/now ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/philosophy ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/python ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/Recipes ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/Recommended ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/tools ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/writing ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/_index.md ~/Documents/blog/content/ cd /home/david/Documents/blog &amp;&amp; hugo &amp;&amp; if ! nmcli connection show --active | grep -q &#34;Primary&#34;; then echo &#34;Starting VPN...&#34; nmcli connection up id &#34;Primary&#34; sleep 5 fi rsync -rtvzP ~/Documents/blog/docs/ {username}@{ip-address}:/var/www/public Using inotify to monitor obsidian and run the update script whenever there are changes: sudo dnf -y install inotify-tools">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Tools">
+    <meta itemprop="description" content="Sync obsidian dirs to hugo dirs: rsync -av --delete source destination –delete flag deletes files in the destination directory if they do not exist in the source
+#!/bin/bash rsync -av --delete ~/Documents/content/booknotes ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/&#39;health and fitness&#39; ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/images ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/linux ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/networking ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/now ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/philosophy ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/python ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/Recipes ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/Recommended ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/tools ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/writing ~/Documents/blog/content/ rsync -av --delete ~/Documents/content/_index.md ~/Documents/blog/content/ cd /home/david/Documents/blog &amp;&amp; hugo &amp;&amp; if ! nmcli connection show --active | grep -q &#34;Primary&#34;; then echo &#34;Starting VPN...&#34; nmcli connection up id &#34;Primary&#34; sleep 5 fi rsync -rtvzP ~/Documents/blog/docs/ {username}@{ip-address}:/var/www/public Using inotify to monitor obsidian and run the update script whenever there are changes: sudo dnf -y install inotify-tools">
+    <meta itemprop="wordCount" content="669">
+    <title></title>
+    <link href="/tools/tools/obsidian-site-setup/index.md" rel="alternate" type="text/markdown" title="">
+    <link href="/images/favicon.svg?1772471523" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1772471523" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1772471523" defer></script>
+    <script src="/js/search-lunr.min.js?1772471523" defer></script>
+    <script src="/js/search.min.js?1772471523" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1772471523";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1772471523" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1772471523" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1772471523" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1772471523" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1772471523" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1772471523" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1772471523" rel="stylesheet">
+    <link href="/css/theme.min.css?1772471523" rel="stylesheet">
+    <link href="/css/format-html.min.css?1772471523" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = `.min`;
+      window.relearn.path='\/tools\/tools\/obsidian-site-setup\/';
+      window.relearn.relBasePath='..\/..\/..';
+      window.relearn.relBaseUri='..\/..\/..';
+      window.relearn.absBaseUri='https:\/\/www.linuxreader.com';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/tools/tools/obsidian-site-setup/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#using-inotify-to-monitor-obsidian-and-run-the-update-script-whenever-there-are-changes">Using inotify to monitor obsidian and run the update script whenever there are changes:</a></li>
+        <li><a href="#on-the-server">On the server</a></li>
+        <li><a href="#firewall-permissions">Firewall Permissions</a></li>
+        <li><a href="#setting-up-the-apache-server">Setting up the Apache Server</a></li>
+        <li><a href="#set-up-a-cronjob-to-automatically-renew-certbot-certs">Set Up a Cronjob to automatically Renew certbot certs</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/tools/"><span itemprop="name">Tools</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/tools/tools/obsidian-site-setup/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/tools/install-ansible-using-uv/" title="How to Install Ansible Using uv (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/tools/calibre-web-with-docker-and-nginx/" title="Calibre Web with Docker and NGINX (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable tools" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id=""></h1>
+
+<p>Sync obsidian dirs to hugo dirs:
+<code>rsync -av --delete source destination</code>
+&ndash;delete flag deletes files in the destination directory if they do not exist in the source</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>#!/bin/bash
+rsync -av --delete ~/Documents/content/booknotes ~/Documents/blog/content/
+rsync -av --delete ~/Documents/content/&#39;health and fitness&#39; ~/Documents/blog/content/
+rsync -av --delete ~/Documents/content/images ~/Documents/blog/content/
+rsync -av --delete ~/Documents/content/linux ~/Documents/blog/content/
+rsync -av --delete ~/Documents/content/networking ~/Documents/blog/content/
+rsync -av --delete ~/Documents/content/now ~/Documents/blog/content/
+rsync -av --delete ~/Documents/content/philosophy ~/Documents/blog/content/
+rsync -av --delete ~/Documents/content/python ~/Documents/blog/content/
+rsync -av --delete ~/Documents/content/Recipes ~/Documents/blog/content/
+rsync -av --delete ~/Documents/content/Recommended ~/Documents/blog/content/
+rsync -av --delete ~/Documents/content/tools ~/Documents/blog/content/
+rsync -av --delete ~/Documents/content/writing ~/Documents/blog/content/
+rsync -av --delete ~/Documents/content/_index.md ~/Documents/blog/content/
+
+cd /home/david/Documents/blog &amp;&amp;
+hugo &amp;&amp;
+if ! nmcli connection show --active | grep -q &#34;Primary&#34;; 
+	then
+		echo &#34;Starting VPN...&#34;
+		nmcli connection up id &#34;Primary&#34;
+  sleep 5
+fi
+
+rsync -rtvzP ~/Documents/blog/docs/ {username}@{ip-address}:/var/www/public</code></pre></div>
+<h3 id="using-inotify-to-monitor-obsidian-and-run-the-update-script-whenever-there-are-changes">Using inotify to monitor obsidian and run the update script whenever there are changes:<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><code>sudo dnf -y install inotify-tools</code></p>
+<p>Script to monitor the folder:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vim ~/Documents/Scripts/obsidian_monitor.sh</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#8b949e;font-weight:bold;font-style:italic">#!/bin/bash
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>inotifywait -m -r -e modify,create,delete <span style="color:#a5d6ff">&#34;~/Documents/content/&#34;</span> | <span style="color:#ff7b72">while</span> read path action file; <span style="color:#ff7b72">do</span>
+</span></span><span style="display:flex;"><span>  echo <span style="color:#a5d6ff">&#34;Change detected: </span><span style="color:#79c0ff">$action</span><span style="color:#a5d6ff"> on </span><span style="color:#79c0ff">$file</span><span style="color:#a5d6ff">&#34;</span>
+</span></span><span style="display:flex;"><span>  ~/Documents/Scripts/hugoupdate.sh
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">done</span></span></span></code></pre></div>
+<p>Make script executable:
+<code>chmod +x ~/Documents/Scripts/obsidian_monitor.sh</code></p>
+<p>Create startup script ~/.config/systemd/user/obsidian-monitor.service</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vim ~/.config/systemd/user/obsidian-monitor.service </span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>Unit<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">Description</span><span style="color:#ff7b72;font-weight:bold">=</span>Obsidian Monitor
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">After</span><span style="color:#ff7b72;font-weight:bold">=</span>network.target
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>Service<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">ExecStart</span><span style="color:#ff7b72;font-weight:bold">=</span>/home/david/Documents/Scripts/obsidian_monitor.sh
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">Restart</span><span style="color:#ff7b72;font-weight:bold">=</span>always
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#User=david</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>Install<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">WantedBy</span><span style="color:#ff7b72;font-weight:bold">=</span>multi-user.target</span></span></code></pre></div>
+<p>Reload systemd, enable, and start the service:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl --user daemon-reload
+</span></span><span style="display:flex;"><span>systemctl --user enable obsidian-monitor.service
+</span></span><span style="display:flex;"><span>systemctl --user start obsidian-monitor.service</span></span></code></pre></div>
+<p>Run <code>hugo</code> to build the html</p>
+<h3 id="on-the-server">On the server<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Create the directory for the html files:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir -p /var/www/public</span></span></code></pre></div>
+<p>From your laptop, yeet the files over to the /var/www directory on the server:
+`rsync -rtvzP ~/Documents/blog/docs/ {username}@{servername or ip}:/var/www/public</p>
+<p>Update file owner and permissions:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo find /var/www/public -type d -exec chmod +x <span style="color:#ff7b72;font-weight:bold">{}</span> <span style="color:#79c0ff">\;</span>
+</span></span><span style="display:flex;"><span>sudo find /var/www/public -type f -exec chmod <span style="color:#a5d6ff">644</span> <span style="color:#ff7b72;font-weight:bold">{}</span> <span style="color:#79c0ff">\;</span>
+</span></span><span style="display:flex;"><span>sudo chown -R apache:apache /var/www/public</span></span></code></pre></div>
+<p>Check active vhosts:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>httpd -D DUMP_VHOSTS  </span></span></code></pre></div>
+<h3 id="firewall-permissions">Firewall Permissions<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>You will need to make sure your firewall allows port 80 and 443. Vultr installs the ufw program by default. But your can install it if you used a different provider. Beware, enabling a firewalll could block you from accessing your vm, so do your research before tinkering outside of these instructions.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo firewall-cmd --add-service https --permanent
+</span></span><span style="display:flex;"><span>sudo firewall-cmd --add-service http --permanent</span></span></code></pre></div>
+<h3 id="setting-up-the-apache-server">Setting up the Apache Server<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Install apache:
+<code>sudo dnf -y install httpd</code></p>
+<p>Comment out <code>ServerName</code> and <code>DocumentRoot</code> directives in /etc/httpd/conf/httpd.conf file.</p>
+<p>Get rid of userdir.conf
+<code>sudo mv /etc/httpd/conf.d/userdir.conf /etc/httpd/conf.d/userdir.conf.old</code></p>
+<p>Comment out /etc/httpd/conf.d/welcome.conf:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># </span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># This configuration file enables the default &#34;Welcome&#34; page if there</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># is no default index page present for the root URL.  To disable the</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># Welcome page, comment out all the lines below. </span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># NOTE: if this file is removed, it will be restored on upgrades.</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#&lt;LocationMatch &#34;^/+$&#34;&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#    Options -Indexes</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#    ErrorDocument 403 /.noindex.html</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#&lt;/LocationMatch&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#&lt;Directory /usr/share/httpd/noindex&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#    AllowOverride None</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#    Require all granted</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#&lt;/Directory&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#Alias /.noindex.html /usr/share/httpd/noindex/index.html</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#Alias /poweredby.png /usr/share/httpd/icons/apache_pb3.png</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#Alias /system_noindex_logo.png /usr/share/httpd/icons/system_noindex_logo.png</span></span></span></code></pre></div>
+<p>Create vhost file:
+<code>sudo vim /etc/httpd/conf.d/vhost_{sitename}.com</code></p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>&lt;VirtualHost *:80&gt;
+    ServerAdmin webmaster@{sitename}.com
+    DocumentRoot /var/www/public
+    ServerName {sitename}.com
+    ServerAlias www.{sitename}.com
+    Redirect permanent / https://{sitename}.com/
+    ErrorLog logs/{sitename}_error.log
+    CustomLog logs/{sitename}_access.log combined
+&lt;/VirtualHost&gt;</code></pre></div>
+<p>Enable the apache service now and at startup:
+<code>sudo systemctl enable --now httpd</code></p>
+<h4 id="use-certbot-to-generate-certs-for-ssltls">Use certbot to generate certs for SSL/TLS:<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Install certbot:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Sudo dnf -y install epel-release
+</span></span><span style="display:flex;"><span>sudo dnf install certbot python3-certbot-apache -y</span></span></code></pre></div>
+<p>Restore selinux contexts:
+<code>sudo restorecon -Rv /var/www/public</code></p>
+<p>Restart the httpd service:
+<code>sudo systemctl restart httpd</code></p>
+<h3 id="set-up-a-cronjob-to-automatically-renew-certbot-certs">Set Up a Cronjob to automatically Renew certbot certs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>crontab -e</code></pre></div>
+<p>Select a text editor and add this line to the end of the file. Then save and exit the file:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>0 0 1 * * certbot --httpd renew</code></pre></div>
+<p>You now have a running website. Just make new posts locally, the run &ldquo;hugo&rdquo; to rebuild the site. And use the rsync alias to update the folder on your server. I will soon be making tutorials on making an email address for your domain, such as <a href="mailto:david@perfectdarkmode.com" rel="external" target="_blank">david@perfectdarkmode.com</a> on my site. I will also be adding a comments section, RSS feed, email subscription, sidebar, and more.</p>
+<p>Feel free to reach out with any questions if you get stuck. This is meant to be an all encompassing guide. So I want it to work.</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/the-cheat-code/"><a class="padding" href="/ansible/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/automate-kvm-vms/"><a class="padding" href="/ansible/automate-kvm-vms/">Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-documentation/"><a class="padding" href="/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/playbooks/"><a class="padding" href="/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/execution-environments/"><a class="padding" href="/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/hostname-patterns/"><a class="padding" href="/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/include-and-import-files/"><a class="padding" href="/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2/"><a class="padding" href="/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/user-and-groups/"><a class="padding" href="/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/storage-partitions-and-lvm/"><a class="padding" href="/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/services/"><a class="padding" href="/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/networking-with-ansible/"><a class="padding" href="/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/nfs-setup/"><a class="padding" href="/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimize-ansible-processing/"><a class="padding" href="/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux/"><a class="padding" href="/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/tags/"><a class="padding" href="/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/loops-and-items/"><a class="padding" href="/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/modules-for-troubleshooting/"><a class="padding" href="/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Using Variables In Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/when/"><a class="padding" href="/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5"><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="" data-nav-id="/containers/ansible-and-podman/"><a class="padding" href="/containers/ansible-and-podman/">Ansible and Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/intro-to-containers/"><a class="padding" href="/containers/intro-to-containers/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/convert-docker-compose-to-quadlets/"><a class="padding" href="/containers/convert-docker-compose-to-quadlets/">Convert Docker Compose to Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-links/"><a class="padding" href="/containers/podman-links/">Podman Links<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-quadlets/"><a class="padding" href="/containers/podman-quadlets/">Podman Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/securityenhancedlinux/"><a class="padding" href="/cyber-security/securityenhancedlinux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/learning-touch-typing-1/"><a class="padding" href="/desktop/learning-touch-typing-1/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/learning-touch-typing/"><a class="padding" href="/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup-1/"><a class="padding" href="/desktop/my-fedora-setup-1/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue-2/"><a class="padding" href="/desktop/silverblue-2/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/how-to-study-for-ccna/"><a class="padding" href="/networking/how-to-study-for-ccna/">How I Studied for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-syncronization/"><a class="padding" href="/networking/dns-and-time-syncronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/network-devices-and-connections/"><a class="padding" href="/networking/network-devices-and-connections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/resources-for-passing-ccna/"><a class="padding" href="/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/systems/"><input type="checkbox" id="R-section-859f72c55acd170304a7ecf4dceebb83" aria-controls="R-subsections-859f72c55acd170304a7ecf4dceebb83"><label for="R-section-859f72c55acd170304a7ecf4dceebb83"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/systems/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-859f72c55acd170304a7ecf4dceebb83" class="collapsible-menu">
+            <li class="" data-nav-id="/systems/you-need-to-learn-man-pages/"><a class="padding" href="/systems/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/advanced-file-management/"><a class="padding" href="/systems/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/advanced-package-management/"><a class="padding" href="/systems/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/advanced-user-management/"><a class="padding" href="/systems/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/autofs/"><a class="padding" href="/systems/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/file-management/"><a class="padding" href="/systems/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/basic-package-management/"><a class="padding" href="/systems/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/basic-user-management/"><a class="padding" href="/systems/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/boot-process-grub2-kernel/"><a class="padding" href="/systems/boot-process-grub2-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/installation/"><a class="padding" href="/systems/installation/">Installing RHEL Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/interaction/"><a class="padding" href="/systems/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/local-filesystems-and-swap/"><a class="padding" href="/systems/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/network-filesystem-nfs/"><a class="padding" href="/systems/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/partitioning-mbr-gpt/"><a class="padding" href="/systems/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/process-and-task-scheduling/"><a class="padding" href="/systems/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/rm-filesystem-from-partition/"><a class="padding" href="/systems/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/rhcsa-exam-environment/"><a class="padding" href="/systems/rhcsa-exam-environment/">RHCSA Exam Environment Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/rhcsa-vagrant-lab-setup-1/"><a class="padding" href="/systems/rhcsa-vagrant-lab-setup-1/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/sys-init-logging-and-tuning/"><a class="padding" href="/systems/sys-init-logging-and-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/secure-shell-service-ssh/"><a class="padding" href="/systems/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/thin-provisioning/"><a class="padding" href="/systems/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/time-synchronization/"><a class="padding" href="/systems/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/systems/virtual-data-optimizer-vdo/"><a class="padding" href="/systems/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86" checked><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/remove-formatting-from-highlights/"><a class="padding" href="/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-docker-nginx/"><a class="padding" href="/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/proxmox-pfsense-haproxy-setup/"><a class="padding" href="/tools/proxmox-pfsense-haproxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/stop-using-ai/"><a class="padding" href="/tools/stop-using-ai/">Why I Stopped Using AI so Much<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/install-ansible-using-uv/"><a class="padding" href="/tools/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="hidden " data-nav-id="/tools/tools/"><a class="padding" href="/tools/tools/"><i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="active hidden " data-nav-id="/tools/tools/obsidian-site-setup/"><a class="padding" href="/tools/tools/obsidian-site-setup/"><i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/tools/new-setup/"><a class="padding" href="/tools/tools/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/tools/using-vagrant-on-linux/"><a class="padding" href="/tools/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-vagrant-on-linux/"><a class="padding" href="/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/tools/vimguide/"><a class="padding" href="/tools/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/using-man-pages/"><a class="padding" href="/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1772471523" defer></script>
+    <script src="/js/theme.min.js?1772471523" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

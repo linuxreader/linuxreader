@@ -149,7 +149,7 @@ Or merge the current file with new file:
 From any machine, you can pull and apply changes from your repo:
 `chezmoi update -v`
 
-![](../../images/Pasted%20image%2020240904141728.png)
+![](../images/Pasted%20image%2020240904141728.png)
 
 Add the justfile:
 `chezmoi add .justfile`

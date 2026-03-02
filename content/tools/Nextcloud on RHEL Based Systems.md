@@ -301,7 +301,7 @@ Now log into nextcloud with your admin account using the DNS name you set earlie
 
 I recommend setting up a normal user account instead of doing everything as "admin". Just hit the "A" icon at the top right and go to "Accounts". Then just select "New Account" and create a user account with whatever privileges you want. 
 
-![](../../images/Pasted%20image%2020241229051101.png)
+![](../images/Pasted%20image%2020241229051101.png)
 
 I may make a post about which Nextcloud apps I recommend and customize the setup a bit. Let me know if that's something you'd like to see. That's all for now. 
 

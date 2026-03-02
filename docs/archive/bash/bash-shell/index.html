@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=32883&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="description" content="Bash variables, redirections, history substitution, metacharacters, startup files, etc.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Bash">
+    <meta name="twitter:description" content="Bash variables, redirections, history substitution, metacharacters, startup files, etc.">
+    <meta property="og:url" content="http://localhost:32883/archive/bash/bash-shell/">
+    <meta property="og:title" content="Bash">
+    <meta property="og:description" content="Bash variables, redirections, history substitution, metacharacters, startup files, etc.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="">
+    <meta itemprop="name" content="Bash">
+    <meta itemprop="description" content="Bash variables, redirections, history substitution, metacharacters, startup files, etc.">
+    <meta itemprop="wordCount" content="3677">
+    <title>Bash</title>
+    <link href="/archive/bash/bash-shell/index.md" rel="alternate" type="text/markdown" title="Bash">
+    <link href="/images/favicon.svg?1772467047" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1772467047" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1772467047" defer></script>
+    <script src="/js/search-lunr.js?1772467047" defer></script>
+    <script src="/js/search.js?1772467047" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1772467047";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1772467047" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1772467047" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1772467047" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1772467047" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1772467047" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1772467047" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1772467047" rel="stylesheet">
+    <link href="/css/theme.css?1772467047" rel="stylesheet">
+    <link href="/css/format-html.css?1772467047" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/archive\/bash\/bash-shell\/';
+      window.relearn.relBasePath='..\/..\/..';
+      window.relearn.relBaseUri='..\/..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:32883';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/archive/bash/bash-shell/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#my-name-is-marcel-and-im-partially-a-shell">My name is Marcel and I&rsquo;m partially a shell..</a></li>
+    <li><a href="#terminator-emulators">Terminator emulators..</a>
+      <ul>
+        <li><a href="#setting-and-unsetting-variables">Setting and unsetting variables</a></li>
+        <li><a href="#echo-command">echo command</a></li>
+        <li><a href="#env-command">env command</a></li>
+        <li><a href="#printenv-command">printenv command</a></li>
+        <li><a href="#set-command">set command</a></li>
+        <li><a href="#command-and-variable-substitutions">Command and Variable substitutions</a></li>
+      </ul>
+    </li>
+    <li><a href="#input-output-and-error-redirections">Input, Output, and Error Redirections</a></li>
+    <li><a href="#history-substitution">History Substitution</a>
+      <ul>
+        <li><a href="#history-command"><code>history</code> command</a></li>
+      </ul>
+    </li>
+    <li><a href="#editing-at-the-command-line">Editing at the Command line</a>
+      <ul>
+        <li><a href="#common-key-combinations">Common key combinations:</a></li>
+        <li><a href="#tab-completion">Tab completion</a></li>
+        <li><a href="#tilde-substitution-tilde-expansion">Tilde Substitution (tilde expansion)</a></li>
+        <li><a href="#alias-substitution-command-aliasing-or-alias">Alias Substitution (command aliasing or alias)</a></li>
+        <li><a href="#alias-command">alias command</a></li>
+        <li><a href="#unalias-command">unalias command</a></li>
+      </ul>
+    </li>
+    <li><a href="#metacharacters-and-wildcard">Metacharacters and Wildcard</a>
+      <ul>
+        <li><a href="#quoting-mechanisms">Quoting Mechanisms</a></li>
+        <li><a href="#regular-expressions-regexp-or-regex">Regular expressions (regexp or regex)</a></li>
+        <li><a href="#grep-command"><code>grep</code> command</a></li>
+      </ul>
+    </li>
+    <li><a href="#jobs">Jobs</a>
+      <ul>
+        <li><a href="#jobs-command">jobs command</a></li>
+      </ul>
+    </li>
+    <li><a href="#shell-startup-files">Shell Startup Files</a></li>
+    <li><a href="#bash-labs">Bash Labs</a>
+      <ul>
+        <li><a href="#lab-view-environment-variables">Lab: View environment variables</a></li>
+        <li><a href="#lab-viewing-environment-variable-values">Lab: Viewing Environment variable values</a></li>
+        <li><a href="#lab-setting-and-unsetting-variables">Lab: Setting and Unsetting Variables</a></li>
+        <li><a href="#lab-modify-primary-command-prompt">Lab: Modify Primary Command Prompt</a></li>
+        <li><a href="#lab-redirecting-standard-input">Lab: Redirecting Standard Input</a></li>
+        <li><a href="#lab-redirecting-standard-output">Lab: Redirecting Standard Output</a></li>
+        <li><a href="#lab-redirecting-standard-error">Lab: Redirecting Standard Error</a></li>
+        <li><a href="#lab-show-history-variables">Lab: Show History Variables</a></li>
+        <li><a href="#lab-history-command">Lab: History command</a></li>
+        <li><a href="#lab-tilde-expansion">Lab: Tilde expansion</a></li>
+        <li><a href="#lab-command-aliasing">Lab: Command Aliasing</a></li>
+        <li><a href="#lab-wildcards-and-metacharacters">Lab: Wildcards and Metacharacters</a></li>
+        <li><a href="#lab-piping">Lab: Piping</a></li>
+        <li><a href="#lab-quoting-mechanisms">Lab: Quoting Mechanisms</a></li>
+        <li><a href="#lab-grep-and-regex">Lab: grep and regex</a></li>
+        <li><a href="#lab-managing-jobs">Lab: Managing jobs</a></li>
+        <li><a href="#lab-shell-startup-files">Lab: Shell Startup Files</a></li>
+        <li><a href="#lab--customize-the-command-prompt-user1">Lab:  Customize the Command Prompt (user1)</a></li>
+        <li><a href="#lab-7-2-redirect-the-standard-input-output-and-error-user1">Lab 7-2: Redirect the Standard Input, Output, and Error (user1)</a></li>
+      </ul>
+    </li>
+    <li><a href="#notes">Notes</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/archive/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/archive/bash/"><span itemprop="name">Bash</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">Bash</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive/bash/bash-shell/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive/bash/" title="Bash (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive/bash/shell-scripting/" title="Shell Scripting (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable archive" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="bash">Bash</h1>
+
+<h2 id="my-name-is-marcel-and-im-partially-a-shell">My name is Marcel and I&rsquo;m partially a shell..<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p><a href="#R-image-6644961de5c4edc00f25005348031a14" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020250316051144.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-6644961de5c4edc00f25005348031a14"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020250316051144.png"></a></p>
+<p>A shell is a program that takes commands and passes them to the operating system.^1^ This is done via <strong>terminal emulator</strong> with keyboard commands or by using scripts ran on the system. There are many shell programs that you can use on Linux. Almost all Linux distributions come with a shell called <strong>Bash</strong>. Some others include <strong>zsh</strong>, <strong>fsh</strong>, <strong>ksh</strong>, and <strong>Tcsh</strong>. (But not limited to)</p>
+<p>Shells have different features such as built in commands, job control, alias definitions, history substitution, PATH searching, command completion, and more. Each shell has it&rsquo;s own syntax, hotkeys, way of doing things. Most of them follow a standard called &ldquo;POSIX&rdquo; that help with script portability between shells.</p>
+<p>You can see a list of more shells and a comparison of their features on this <a href="https://en.wikipedia.org/wiki/Comparison_of_command_shells" rel="external" target="_blank">Wikipedia page</a>.</p>
+<h2 id="terminator-emulators">Terminator emulators..<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p><a href="#R-image-8ba86b261592ead86e5e327e8688db8d" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020250316051955.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-8ba86b261592ead86e5e327e8688db8d"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020250316051955.png"></a></p>
+<p>I meant Terminal Emulators! Silly me..</p>
+<p>The <strong>Current shell</strong></p>
+<ul>
+<li>Where a program is executed.</li>
+</ul>
+<p><strong>Sub-shell (child shell)</strong></p>
+<ul>
+<li>created within a shell to run a program.</li>
+</ul>
+<p>There are two types of variables. <strong>Local variables</strong> are private variables to the shell that creates it. And they are only used by programs started in the shell that created them. <strong>Environment variables</strong> are passed to any sub-shells created by the current shell. As well as any programs ran in the current and sub shells.</p>
+<pre><code>- Value stored in an environment variable is accessible to the program, as well as any sub-programs that it spawns during its lifecycle. 
+- Any environment variable set in a sub-shell is lost when the sub-shell terminates.
+- `env` or the `printenv` command to view predefined environment variables.
+- Common predefined environment variables:
+	- **DISPLAY** 
+		- Stores the hostname or IP address for graphical terminal sessions 
+	- **HISTFILE** 
+		- Defines the file for storing the history of executed commands 
+	- **HISTSIZE** 
+		- Defines the maximum size for the HISTFILE 
+	- **HOME** 
+		- Sets the home directory path LOGNAME Retains the login name 
+	- **MAIL** 
+		- Contains the path to the user mail directory
+	- **PATH** 
+		- Directories to be searched when executing a command. Eliminates the need to specify the absolute path of a command to run it. 
+	- **PPID** 
+		- Holds the identifier number for the parent program 
+	- **PS1** 
+		- Defines the primary command prompt PS2 Defines the secondary command prompt 
+	- **PWD** 
+		- Stores the current directory location 
+	- **SHELL** 
+		- Holds the absolute path to the primary primary shell file
+	- **TERM** 
+		- Holds the terminal type value 
+	- **UID** 
+		- Holds the logged-in user’s UID 
+	- **USER** 
+		- Retains the name of the logged-in user
+</code></pre>
+<h3 id="setting-and-unsetting-variables">Setting and unsetting variables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><code>export</code>, <code>unset</code>, and <code>echo</code> to define and undefine environment variables</li>
+<li>Use uppercase for variables</li>
+</ul>
+<h3 id="echo-command">echo command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Restricted to showing the value of a specific variable</li>
+</ul>
+<h3 id="env-command">env command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Displays the environment variables only.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># env</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">SHELL</span><span style="color:#ff7b72;font-weight:bold">=</span>/bin/bash
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">HISTCONTROL</span><span style="color:#ff7b72;font-weight:bold">=</span>ignoredups
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">HISTSIZE</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">1000</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">HOSTNAME</span><span style="color:#ff7b72;font-weight:bold">=</span>localhost
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">PWD</span><span style="color:#ff7b72;font-weight:bold">=</span>/root
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">LOGNAME</span><span style="color:#ff7b72;font-weight:bold">=</span>root
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">XDG_SESSION_TYPE</span><span style="color:#ff7b72;font-weight:bold">=</span>tty
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">MOTD_SHOWN</span><span style="color:#ff7b72;font-weight:bold">=</span>pam
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">HOME</span><span style="color:#ff7b72;font-weight:bold">=</span>/root
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">LANG</span><span style="color:#ff7b72;font-weight:bold">=</span>en_US.UTF-8
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">LS_COLORS</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#79c0ff">rs</span><span style="color:#ff7b72;font-weight:bold">=</span>0:di<span style="color:#ff7b72;font-weight:bold">=</span>01;34:ln<span style="color:#ff7b72;font-weight:bold">=</span>01;36:mh<span style="color:#ff7b72;font-weight:bold">=</span>00:pi<span style="color:#ff7b72;font-weight:bold">=</span>40;33:so<span style="color:#ff7b72;font-weight:bold">=</span>01;35:do<span style="color:#ff7b72;font-weight:bold">=</span>01;35:bd<span style="color:#ff7b72;font-weight:bold">=</span>40;33;01:cd<span style="color:#ff7b72;font-weight:bold">=</span>40;33;01:or<span style="color:#ff7b72;font-weight:bold">=</span>40;31;01:mi<span style="color:#ff7b72;font-weight:bold">=</span>01;37;41:su<span style="color:#ff7b72;font-weight:bold">=</span>37;41:sg<span style="color:#ff7b72;font-weight:bold">=</span>30;43:ca<span style="color:#ff7b72;font-weight:bold">=</span>30;41:tw<span style="color:#ff7b72;font-weight:bold">=</span>30;42:ow<span style="color:#ff7b72;font-weight:bold">=</span>34;42:st<span style="color:#ff7b72;font-weight:bold">=</span>37;44:ex<span style="color:#ff7b72;font-weight:bold">=</span>01;32:*.tar<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.tgz<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.arc<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.arj<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.taz<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.lha<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.lz4<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.lzh<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.lzma<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.tlz<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.txz<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.tzo<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.t7z<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.zip<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.z<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.dz<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.gz<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.lrz<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.lz<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.lzo<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.xz<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.zst<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.tzst<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.bz2<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.bz<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.tbz<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.tbz2<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.tz<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.deb<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.rpm<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.jar<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.war<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.ear<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.sar<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.rar<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.alz<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.ace<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.zoo<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.cpio<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.7z<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.rz<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.cab<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.wim<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.swm<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.dwm<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.esd<span style="color:#ff7b72;font-weight:bold">=</span>01;31:*.jpg<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.jpeg<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.mjpg<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.mjpeg<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.gif<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.bmp<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.pbm<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.pgm<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.ppm<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.tga<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.xbm<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.xpm<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.tif<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.tiff<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.png<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.svg<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.svgz<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.mng<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.pcx<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.mov<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.mpg<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.mpeg<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.m2v<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.mkv<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.webm<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.webp<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.ogm<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.mp4<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.m4v<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.mp4v<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.vob<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.qt<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.nuv<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.wmv<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.asf<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.rm<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.rmvb<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.flc<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.avi<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.fli<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.flv<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.gl<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.dl<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.xcf<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.xwd<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.yuv<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.cgm<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.emf<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.ogv<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.ogx<span style="color:#ff7b72;font-weight:bold">=</span>01;35:*.aac<span style="color:#ff7b72;font-weight:bold">=</span>01;36:*.au<span style="color:#ff7b72;font-weight:bold">=</span>01;36:*.flac<span style="color:#ff7b72;font-weight:bold">=</span>01;36:*.m4a<span style="color:#ff7b72;font-weight:bold">=</span>01;36:*.mid<span style="color:#ff7b72;font-weight:bold">=</span>01;36:*.midi<span style="color:#ff7b72;font-weight:bold">=</span>01;36:*.mka<span style="color:#ff7b72;font-weight:bold">=</span>01;36:*.mp3<span style="color:#ff7b72;font-weight:bold">=</span>01;36:*.mpc<span style="color:#ff7b72;font-weight:bold">=</span>01;36:*.ogg<span style="color:#ff7b72;font-weight:bold">=</span>01;36:*.ra<span style="color:#ff7b72;font-weight:bold">=</span>01;36:*.wav<span style="color:#ff7b72;font-weight:bold">=</span>01;36:*.oga<span style="color:#ff7b72;font-weight:bold">=</span>01;36:*.opus<span style="color:#ff7b72;font-weight:bold">=</span>01;36:*.spx<span style="color:#ff7b72;font-weight:bold">=</span>01;36:*.xspf<span style="color:#ff7b72;font-weight:bold">=</span>01;36:
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">SSH_CONNECTION</span><span style="color:#ff7b72;font-weight:bold">=</span>192.168.0.233 <span style="color:#a5d6ff">56990</span> 192.168.0.169 <span style="color:#a5d6ff">22</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">XDG_SESSION_CLASS</span><span style="color:#ff7b72;font-weight:bold">=</span>user
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">SELINUX_ROLE_REQUESTED</span><span style="color:#ff7b72;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">TERM</span><span style="color:#ff7b72;font-weight:bold">=</span>xterm-256color
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">LESSOPEN</span><span style="color:#ff7b72;font-weight:bold">=||</span>/usr/bin/lesspipe.sh %s
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">USER</span><span style="color:#ff7b72;font-weight:bold">=</span>root
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">SELINUX_USE_CURRENT_RANGE</span><span style="color:#ff7b72;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">SHLVL</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">XDG_SESSION_ID</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">XDG_RUNTIME_DIR</span><span style="color:#ff7b72;font-weight:bold">=</span>/run/user/0
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">SSH_CLIENT</span><span style="color:#ff7b72;font-weight:bold">=</span>192.168.0.233 <span style="color:#a5d6ff">56990</span> <span style="color:#a5d6ff">22</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">which_declare</span><span style="color:#ff7b72;font-weight:bold">=</span>declare -f
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">PATH</span><span style="color:#ff7b72;font-weight:bold">=</span>/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">SELINUX_LEVEL_REQUESTED</span><span style="color:#ff7b72;font-weight:bold">=</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">DBUS_SESSION_BUS_ADDRESS</span><span style="color:#ff7b72;font-weight:bold">=</span>unix:path<span style="color:#ff7b72;font-weight:bold">=</span>/run/user/0/bus
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">MAIL</span><span style="color:#ff7b72;font-weight:bold">=</span>/var/spool/mail/root
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">SSH_TTY</span><span style="color:#ff7b72;font-weight:bold">=</span>/dev/pts/0
+</span></span><span style="display:flex;"><span>BASH_FUNC_which%%<span style="color:#ff7b72;font-weight:bold">=()</span> <span style="color:#ff7b72;font-weight:bold">{</span>  <span style="color:#ff7b72;font-weight:bold">(</span> alias;
+</span></span><span style="display:flex;"><span> eval <span style="color:#a5d6ff">${</span><span style="color:#79c0ff">which_declare</span><span style="color:#a5d6ff">}</span> <span style="color:#ff7b72;font-weight:bold">)</span> | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot <span style="color:#79c0ff">$@</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">_</span><span style="color:#ff7b72;font-weight:bold">=</span>/usr/bin/env
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">OLDPWD</span><span style="color:#ff7b72;font-weight:bold">=</span>/dev/vg200</span></span></code></pre></div>
+<h3 id="printenv-command">printenv command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Displays the environment variables only.</li>
+</ul>
+<h3 id="set-command">set command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>View both local and environment variables.</li>
+</ul>
+<h3 id="command-and-variable-substitutions">Command and Variable substitutions<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>PS1 Environment variable sets what the prompt looks like.</li>
+<li>Default value is \u@\h \W\$
+<ul>
+<li>\u
+<ul>
+<li>logged-in user name</li>
+</ul>
+</li>
+<li>\h
+<ul>
+<li>System hostname</li>
+</ul>
+</li>
+<li>\W
+<ul>
+<li>Working directory</li>
+</ul>
+</li>
+<li>\$
+<ul>
+<li>End of command prompt</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Command whose output you want assigned to a variable must be encapsulated within either backticks <code>hostname</code> or parentheses $(hostname).</li>
+</ul>
+<h2 id="input-output-and-error-redirections">Input, Output, and Error Redirections<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Input, output, and error character streams:
+<ul>
+<li><strong>standard input (or stdin)</strong>
+<ul>
+<li>Input redirection</li>
+<li>&lt;</li>
+</ul>
+</li>
+<li><strong>standard output (or stdout)</strong>
+<ul>
+<li>
+<blockquote>
+</blockquote>
+</li>
+<li>
+<blockquote>
+<blockquote>
+</blockquote>
+</blockquote>
+<ul>
+<li>Append instead of overwrite</li>
+</ul>
+</li>
+<li>&amp;&gt;
+<ul>
+<li>Redirect standard error and output</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>standard error (or stderr)</strong>
+<ul>
+<li>2&gt;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>File descriptors:
+<ul>
+<li>0, 1, and 2
+<ul>
+<li>1
+<ul>
+<li>Represents standard output location</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Can use these to represent character streams instead of &lt;, and &gt;</li>
+</ul>
+</li>
+<li><strong>noclobber</strong> feature
+<ul>
+<li>prevent overwriting of the output file</li>
+<li><code>set -o noclobber</code>
+<ul>
+<li>activates the feature</li>
+</ul>
+</li>
+<li><code>set +o noclobber</code>
+<ul>
+<li>deactivate the feature</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># vim test.txt</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># set -o noclobber</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># echo &#34;Hello&#34; &gt; test.txt</span>
+</span></span><span style="display:flex;"><span>-bash: test.txt: cannot overwrite existing file
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># set +o noclobber</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># echo &#34;Hello&#34; &gt; test.txt</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># cat test.txt</span>
+</span></span><span style="display:flex;"><span>Hello</span></span></code></pre></div>
+<h2 id="history-substitution">History Substitution<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Command history or history expansion.</li>
+<li>Can disable and re-enable if required.</li>
+<li>Values may be altered for individual users by editing <em>.bashrc</em> or <em>.bash_profile</em> in the user&rsquo;s home directory.</li>
+<li>Three variables
+<ul>
+<li><strong>HISTFILE</strong>
+<ul>
+<li>Defines the name and location of the history file to be used to store command history,</li>
+<li>Default is .bash_history in the user’s home directory.</li>
+</ul>
+</li>
+<li><strong>HISTSIZE</strong>
+<ul>
+<li>Size of the history buffer for the current shell.</li>
+</ul>
+</li>
+<li><strong>HISTFILESIZE</strong>
+<ul>
+<li>Sets the maximum number of commands allowed for storage in the history file at the beginning of the current session and are written to the HISTFILE from memory at the end of the current terminal session.</li>
+<li>Usually, HISTSIZE and HISTFILESIZE are set to a common value.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="history-command"><code>history</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Displays or reruns previously executed commands.</li>
+<li>Gets the history data from the system memory as well as from the .bash_history file.</li>
+<li>Shows all entries by default.</li>
+<li><code>set +o history</code>
+<ul>
+<li>disable history expansion</li>
+</ul>
+</li>
+<li><code>set -o history</code>
+<ul>
+<li>re-enable history expansion</li>
+</ul>
+</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># set +o history</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># history | tail </span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">126</span>  ls
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">127</span>  vim test.txt
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">128</span>  set -o noclobber
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">129</span>  echo <span style="color:#a5d6ff">&#34;Hello&#34;</span> &gt; test.txt
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">130</span>  set +o noclobber
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">131</span>  echo <span style="color:#a5d6ff">&#34;Hello&#34;</span> &gt; test.txt
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">132</span>  cat test.txt
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">133</span>  history | tail 
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">134</span>  set +0 history
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">135</span>  set +o history
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># vim test2.txt</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># history | tail </span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">126</span>  ls
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">127</span>  vim test.txt
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">128</span>  set -o noclobber
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">129</span>  echo <span style="color:#a5d6ff">&#34;Hello&#34;</span> &gt; test.txt
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">130</span>  set +o noclobber
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">131</span>  echo <span style="color:#a5d6ff">&#34;Hello&#34;</span> &gt; test.txt
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">132</span>  cat test.txt
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">133</span>  history | tail 
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">134</span>  set +0 history
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">135</span>  set +o history
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># set -o history</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># vim test2.txt</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># history | tail </span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">128</span>  set -o noclobber
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">129</span>  echo <span style="color:#a5d6ff">&#34;Hello&#34;</span> &gt; test.txt
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">130</span>  set +o noclobber
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">131</span>  echo <span style="color:#a5d6ff">&#34;Hello&#34;</span> &gt; test.txt
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">132</span>  cat test.txt
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">133</span>  history | tail 
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">134</span>  set +0 history
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">135</span>  set +o history
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">136</span>  vim test2.txt
+</span></span><span style="display:flex;"><span>  <span style="color:#a5d6ff">137</span>  history | tail </span></span></code></pre></div>
+<p>Add timestamps to history output system wide:
+<code>echo &quot;export HISTTIMEFORMAT='%F %T '&quot; &gt;&gt; /etc/profile &amp;&amp; source /etc/profile</code></p>
+<h2 id="editing-at-the-command-line">Editing at the Command line<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="common-key-combinations">Common key combinations:<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li><strong>Ctrl+a / Home</strong>
+<ul>
+<li>Moves the cursor to the beginning of the command line</li>
+</ul>
+</li>
+<li><strong>Ctrl+e / End</strong>
+<ul>
+<li>Moves the cursor to the end of the command line</li>
+</ul>
+</li>
+<li><strong>Ctrl+u</strong>
+<ul>
+<li>Erase everything at and before cursor</li>
+</ul>
+</li>
+<li><strong>Ctrl+k</strong>
+<ul>
+<li>Erase Everything at cursor and after</li>
+</ul>
+</li>
+<li><strong>Alt+f</strong>
+<ul>
+<li>Moves the cursor to the right one word at a time</li>
+</ul>
+</li>
+<li><strong>Alt+b</strong>
+<ul>
+<li>Moves the cursor to the left one word at a time</li>
+</ul>
+</li>
+<li><strong>Ctrl+f / Right arrow</strong>
+<ul>
+<li>Moves the cursor to the right one character at a time</li>
+</ul>
+</li>
+<li><strong>Ctrl+b / Left arrow</strong>
+<ul>
+<li>Moves the cursor to the left one character at a time</li>
+</ul>
+</li>
+</ul>
+<h3 id="tab-completion">Tab completion<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Hitting the Tab key twice automatically completes the entire name.</li>
+<li>In case of multiple possibilities matching the entered characters, it completes up to the point they have in common and prints the rest of the possibilities on the screen.</li>
+</ul>
+<h3 id="tilde-substitution-tilde-expansion">Tilde Substitution (tilde expansion)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Performed on words that begin with the tilde character (~).
+~
+<ul>
+<li>refers to user&rsquo;s home directory.</li>
+</ul>
+</li>
+</ul>
+<p>~+
+- refers to current directory</p>
+<p>~-
+- Refers to previous working directory.</p>
+<p>~USER
+- Refers to specific user&rsquo;s home directory.</p>
+<h3 id="alias-substitution-command-aliasing-or-alias">Alias Substitution (command aliasing or alias)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Define shortcuts for commands.</li>
+<li>Bash shell includes several predefined aliases that are set during user login.</li>
+<li>Shell gives precedent to an alias if an alias matches a command or program.
+<ul>
+<li>can still run the command without using the alias but preceding command with a backslash. \</li>
+</ul>
+</li>
+</ul>
+<h3 id="alias-command">alias command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Set an alias.</li>
+<li>Internal shell command.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># alias</span>
+</span></span><span style="display:flex;"><span>alias <span style="color:#79c0ff">cp</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#39;cp -i&#39;</span>
+</span></span><span style="display:flex;"><span>alias <span style="color:#79c0ff">egrep</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#39;egrep --color=auto&#39;</span>
+</span></span><span style="display:flex;"><span>alias <span style="color:#79c0ff">fgrep</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#39;fgrep --color=auto&#39;</span>
+</span></span><span style="display:flex;"><span>alias <span style="color:#79c0ff">grep</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#39;grep --color=auto&#39;</span>
+</span></span><span style="display:flex;"><span>alias l.<span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#39;ls -d .* --color=auto&#39;</span>
+</span></span><span style="display:flex;"><span>alias <span style="color:#79c0ff">ll</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#39;ls -l --color=auto&#39;</span>
+</span></span><span style="display:flex;"><span>alias <span style="color:#79c0ff">ls</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#39;ls --color=auto&#39;</span>
+</span></span><span style="display:flex;"><span>alias <span style="color:#79c0ff">mv</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#39;mv -i&#39;</span>
+</span></span><span style="display:flex;"><span>alias <span style="color:#79c0ff">rm</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#39;rm -i&#39;</span>
+</span></span><span style="display:flex;"><span>alias <span style="color:#79c0ff">xzegrep</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#39;xzegrep --color=auto&#39;</span>
+</span></span><span style="display:flex;"><span>alias <span style="color:#79c0ff">xzfgrep</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#39;xzfgrep --color=auto&#39;</span>
+</span></span><span style="display:flex;"><span>alias <span style="color:#79c0ff">xzgrep</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#39;xzgrep --color=auto&#39;</span>
+</span></span><span style="display:flex;"><span>alias <span style="color:#79c0ff">zegrep</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#39;zegrep --color=auto&#39;</span>
+</span></span><span style="display:flex;"><span>alias <span style="color:#79c0ff">zfgrep</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#39;zfgrep --color=auto&#39;</span>
+</span></span><span style="display:flex;"><span>alias <span style="color:#79c0ff">zgrep</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#39;zgrep --color=auto&#39;</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>[root@localhost ~]# alias frog=&#39;pwd&#39;
+[root@localhost ~]# frog
+/root</code></pre></div>
+<h3 id="unalias-command">unalias command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Unset an alias.</li>
+<li>Internal shell command.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># unalias frog</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@localhost ~<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># frog</span>
+</span></span><span style="display:flex;"><span>-bash: frog: command not found</span></span></code></pre></div>
+<h2 id="metacharacters-and-wildcard">Metacharacters and Wildcard<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Metacharacters
+<ul>
+<li>Special characters that possess special meaning to the shell.</li>
+<li>Used in pattern matching (a.k.a. filename expansion or file globbing) and regular expressions.
+<strong>dollar sign ($)</strong></li>
+</ul>
+</li>
+<li>mark the end of a line</li>
+<li>Used in regular expressions</li>
+</ul>
+<p><strong>caret (^)</strong></p>
+<ul>
+<li>mark the beginning of a line</li>
+<li>Used in regular expressions</li>
+</ul>
+<p><strong>period (.)</strong></p>
+<ul>
+<li>Match a single position</li>
+<li>Used in regular expressions</li>
+</ul>
+<p><strong>asterisk (*)</strong></p>
+<ul>
+<li>used in pattern matching</li>
+<li>wildcard character</li>
+<li>Matches zero to an unlimited number of characters except for the leading period (.) in a hidden filename.</li>
+<li>Used in regular expressions</li>
+</ul>
+<p><strong>question mark (?)</strong></p>
+<ul>
+<li>Used in pattern matching</li>
+<li>Wildcard character</li>
+<li>Matches exactly one character except for the leading period in a hidden filename.</li>
+<li>Used in regular expressions</li>
+</ul>
+<p><strong>pipe (|)</strong></p>
+<ul>
+<li>Send the output of one command as input to the next.</li>
+<li>Also used to define alternations in regular expressions.</li>
+<li>Can use as many times in a command as you need. (pipeline)	- Can be used as an OR operator (alternation)
+<ul>
+<li>this|that|other</li>
+</ul>
+</li>
+</ul>
+<p><strong>angle brackets (&lt; &gt;)</strong></p>
+<ul>
+<li>Redirections</li>
+</ul>
+<p><strong>curly brackets ({})</strong></p>
+<ul>
+<li>Used in regular expressions</li>
+<li>Match an element a specific number of times</li>
+</ul>
+<p><strong>square brackets ([])</strong></p>
+<ul>
+<li>Used in pattern matching</li>
+<li>Wildcard character</li>
+<li>Match either a set of characters or a range of characters for a single character position.</li>
+<li>Order in which they are listed has no importance.</li>
+<li>Range of characters must be specified in a proper sequence such as [a-z] or [0-9].</li>
+<li>Used in regular expressions</li>
+</ul>
+<p><strong>parentheses (())</strong></p>
+<ul>
+<li>Create a sub shell</li>
+</ul>
+<p><strong>plus (+)</strong></p>
+<ul>
+<li>Match a character one or more time</li>
+</ul>
+<p><strong>exclamation mark (!)</strong></p>
+<ul>
+<li>inverse matches</li>
+</ul>
+<p><strong>semicolon (;)</strong></p>
+<ul>
+<li>Run a second command after the ;</li>
+</ul>
+<h3 id="quoting-mechanisms">Quoting Mechanisms<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Disable special meaning of metacharacters</li>
+</ul>
+<p><strong>Backslash (\)</strong></p>
+<ul>
+<li>Escape character</li>
+<li>Cancel out a special character&rsquo;s meaning.</li>
+</ul>
+<p><strong>single quotation (‘’)</strong></p>
+<ul>
+<li>Mask the meaning of all encapsulated special characters.</li>
+</ul>
+<p><strong>double quotation (“”)</strong></p>
+<ul>
+<li>Mask the meaning of all but the backslash (), dollar sign ($), and single quotes (‘’).</li>
+</ul>
+<h3 id="regular-expressions-regexp-or-regex">Regular expressions (regexp or regex)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Text pattern or an expression that is matched against a string of characters in a file or supplied input in a search operation.</li>
+<li>Pattern may include a single character, multiple random characters, a range of characters, word, phrase, or an entire sentence.</li>
+<li>Any pattern containing one or more white spaces must be surrounded by quotation marks.</li>
+</ul>
+<h3 id="grep-command"><code>grep</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Searches the contents of one or more text files or input supplied for a match.</li>
+</ul>
+<p>Flags
+-i</p>
+<ul>
+<li>case insensitive search</li>
+</ul>
+<p>-n</p>
+<ul>
+<li>number the lines</li>
+</ul>
+<p>-v</p>
+<ul>
+<li>exclude these lines</li>
+</ul>
+<p>-w</p>
+<ul>
+<li>find an exact match for a word</li>
+</ul>
+<p>-E</p>
+<ul>
+<li>match one or the other</li>
+</ul>
+<p>-e</p>
+<ul>
+<li>-Use patterns for matching</li>
+</ul>
+<h2 id="jobs">Jobs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>job
+<ul>
+<li>Process that is started in the background and controlled by the terminal where it is spawned.</li>
+<li>Assigned a PID (process identifier) by the kernel and, additionally, a job ID by the shell.</li>
+<li>Does not hold the terminal window where it is initiated.</li>
+<li>Can run multiple job simultaneously.</li>
+<li>Can be brought to foreground, returned to the background, suspended, or stopped.</li>
+</ul>
+</li>
+<li>job control
+<ul>
+<li>management of multiple jobs within a shell environment</li>
+</ul>
+</li>
+</ul>
+<p>commands and control sequences for administering the jobs.</p>
+<ul>
+<li><code>jobs</code>
+<ul>
+<li>Shell built-in command</li>
+<li>display jobs.</li>
+</ul>
+</li>
+<li><code>bg </code>
+<ul>
+<li>Shell built-in command</li>
+<li>Move a job to the background or restart a job in the background that was suspended with <code>Ctrl+z</code>.</li>
+</ul>
+</li>
+<li><code>fg </code>
+<ul>
+<li>Shell built-in command</li>
+<li>Move a job to the foreground</li>
+</ul>
+</li>
+<li><code>Ctrl+z </code>
+<ul>
+<li>Suspends a foreground job and allows the terminal window to be used for other purposes</li>
+</ul>
+</li>
+</ul>
+<h3 id="jobs-command">jobs command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>output
+plus sign (+)
+- indicates the current background job
+minus sign (-)
+- signifies the previous job.
+Stopped
+- currently suspended
+- can be signaled to continue their execution with bg or fg</p>
+<h2 id="shell-startup-files">Shell Startup Files<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Sourced by the shell following user authentication at the time of logging in and before the command prompt appears.</li>
+<li>Aliases, functions, and scripts can be added to these files as well.</li>
+<li>two types of startup files:
+<ul>
+<li><strong>system-wide</strong>
+<ul>
+<li>Set the general environment for all users at the time of their login to the system.</li>
+<li>Located in the /etc directory</li>
+<li>Maintained by the Linux admin.</li>
+<li>System-wide startup files for bash shell users:
+<ul>
+<li><em>/etc/bashrc</em>
+<ul>
+<li>Defines functions and aliases, sets umask for user accounts with a non-login shell, establishes the command prompt, etc.</li>
+<li>May include settings from the shell scripts located in the <em>/etc/profile.d</em> directory.</li>
+</ul>
+</li>
+<li><em>/etc/profile</em>
+<ul>
+<li>Sets common environment variables such as <strong>PATH</strong>, <strong>USER</strong>, <strong>LOGNAME</strong>, <strong>MAIL</strong>, <strong>HOSTNAME</strong>, <strong>HISTSIZE</strong>, and <strong>HISTCONTROL</strong> for all users, establishes umask for user accounts with a login shell, processes the shell scripts located in the <em>/etc/profile.d</em> directory, and so on.</li>
+</ul>
+</li>
+<li><em>/etc/profile.d</em>
+<ul>
+<li>Contains scripts for bash shell users that are executed by the <em>/etc/profile</em> file.</li>
+<li>Files can be edited and updated.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>per-user</strong>
+<ul>
+<li>Override or modify system default definitions set by the system-wide startup files.</li>
+<li>By default, two files, in addition to the <em>.bash_logout file</em>, are located in the skeleton directory <em>/etc/skel</em> and are copied into user home directories at the time of user creation.</li>
+<li><em>.bashrc</em>
+<ul>
+<li>Defines functions and aliases. This file sources global definitions from the <em>/etc/bashrc</em> file.</li>
+</ul>
+</li>
+<li><em>.bash_profile</em>
+<ul>
+<li>Sets environment variables and sources the <em>.bashrc</em> file to set functions and aliases.</li>
+</ul>
+</li>
+<li><em>.gnome2/</em>
+<ul>
+<li>Directory that holds environment settings when GNOME desktop is started. Only available if GNOME is installed.</li>
+</ul>
+</li>
+<li><em>.bash_logout</em>
+<ul>
+<li>Executed when the user leaves the shell or logs off.</li>
+<li>May be customized</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Startup file order:
+<ul>
+<li><em>/etc/profile</em> &gt; <em>.bash_profile</em> &gt; <em>.bashrc</em> &gt; <em>/etc/bashrc</em></li>
+</ul>
+</li>
+<li>Per user settings must be added to the appropriate file for persistence.</li>
+</ul>
+<h2 id="bash-labs">Bash Labs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="lab-view-environment-variables">Lab: View environment variables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>env
+printenv</code></pre></div>
+<h3 id="lab-viewing-environment-variable-values">Lab: Viewing Environment variable values<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>View the value for the PATH variable</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>echo $PATH</code></pre></div>
+<ol start="2">
+<li>View the value for the HOME variable</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>echo $HOME</code></pre></div>
+<ol start="3">
+<li>View the value for the SHELL variable</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>echo $SHELL</code></pre></div>
+<ol start="4">
+<li>View the value for the TERM variable</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>echo $TERM</code></pre></div>
+<ol start="5">
+<li>View the value for the PPID variable</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>echo $PPID</code></pre></div>
+<ol start="6">
+<li>View the value for the PS1 variable</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>echo $PS1</code></pre></div>
+<ol start="7">
+<li>View the value for the USER variable</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>echo $USER</code></pre></div>
+<h3 id="lab-setting-and-unsetting-variables">Lab: Setting and Unsetting Variables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Define a local variable called VR1:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>VR1=RHEL9</code></pre></div>
+<ol start="2">
+<li>View the value of VR1:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>echo $VR1</code></pre></div>
+<ol start="3">
+<li>Type bash at the command prompt to enter a sub-shell and then run echo $VR1 to check whether the variable is visible in the sub-shell.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>echo $VR1</code></pre></div>
+<ol start="4">
+<li>Exit out of the subshell:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>exit</code></pre></div>
+<ol start="5">
+<li>Turn VR1 into an environment variable:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>export VR1</code></pre></div>
+<ol start="6">
+<li>Type bash at the command prompt to enter a sub-shell and then run echo $VR1 to check whether the variable is visible in the sub-shell.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>echo $VR1</code></pre></div>
+<ol start="7">
+<li>Undefine this variable and erase it from the shell environment:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>unset VR1</code></pre></div>
+<ol start="8">
+<li>Define a local variable that contains a value with one or more white spaces:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>VR2=&#34;I love RHEL 9&#34;</code></pre></div>
+<ol start="9">
+<li>Define and make the variable an environment variable at the same time:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>export VR3=&#34;I love RHEL 9&#34;</code></pre></div>
+<ol start="10">
+<li>View local and environment variables:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>set</code></pre></div>
+<h3 id="lab-modify-primary-command-prompt">Lab: Modify Primary Command Prompt<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Change the value of the variable PS1 to reflect the desired information:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>export PS1=&#34;&lt; $LOGNAME on $HOSTNAME in \$PWD &gt; &#34; </code></pre></div>
+<ol start="2">
+<li>Edit the .bash_profile file for user1 and define the value exactly as it was run in Step 1.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>vim .bash_profile</code></pre></div>
+<ol start="3">
+<li>Test by logging off as user1 and logging back in. The new command prompt will be displayed.</li>
+</ol>
+<h3 id="lab-redirecting-standard-input">Lab: Redirecting Standard Input<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Have the cat command read the <em>/etc/redhat-release</em> file and display its content on the standard output (terminal screen):</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>cat &lt; /etc/redhat-release</code></pre></div>
+<h3 id="lab-redirecting-standard-output">Lab: Redirecting Standard Output<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Direct the ls command output to a file called ls.out:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ls &gt; ls.out</code></pre></div>
+<ol start="2">
+<li>Do the same thing but using file descriptors:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ls 1&gt; ls.out</code></pre></div>
+<ol start="3">
+<li>Activate the noclobber feature then try the redirect feature again:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>set -o noclobber
+ls &gt; ls.out</code></pre></div>
+<ol start="4">
+<li>Deactivate noclobber</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>set +o noclobber</span></span></code></pre></div>
+<ol start="5">
+<li>Direct the ls command to append the output to the ls.out file instead of overwriting it:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls &gt;&gt; ls.out
+</span></span><span style="display:flex;"><span>or
+</span></span><span style="display:flex;"><span>ls 1&gt;&gt; ls.out</span></span></code></pre></div>
+<h3 id="lab-redirecting-standard-error">Lab: Redirecting Standard Error<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Direct the find command issued as a normal user to search for all occurrences of files by the name core in the entire directory tree and sends any error messages produced to /dev/null</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>find / -name core -print 2&gt; /dev/null</span></span></code></pre></div>
+<ol start="2">
+<li>Redirect both standard output and error:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls /usr /cdr &amp;&gt; outerr.out
+</span></span><span style="display:flex;"><span>or
+</span></span><span style="display:flex;"><span>ls /usr /cdr 1&gt; outerr.out 2&gt;&amp;<span style="color:#a5d6ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#79c0ff">\#</span> means to redirect file descriptor <span style="color:#a5d6ff">1</span> to file outerr.out as well as to file descriptor 2.</span></span></code></pre></div>
+<ol start="3">
+<li>Same as above but append to file:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls /usr/cdr &amp;&gt;&gt; outerr.out</span></span></code></pre></div>
+<h3 id="lab-show-history-variables">Lab: Show History Variables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>View HISTFILE Variable:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo <span style="color:#79c0ff">$HISTFILE</span></span></span></code></pre></div>
+<ol start="2">
+<li>View HISTSIZE variable:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo <span style="color:#79c0ff">$HISTSIZE</span></span></span></code></pre></div>
+<ol start="3">
+<li>View HISTFILESIZE variable:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo <span style="color:#79c0ff">$HISTFILESIZE</span></span></span></code></pre></div>
+<h3 id="lab-history-command">Lab: History command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Rune history without any options:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>history</span></span></code></pre></div>
+<ol start="2">
+<li>Display 10 entries:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>history <span style="color:#a5d6ff">10</span></span></span></code></pre></div>
+<ol start="3">
+<li>Run the 15th command in history:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>!15</span></span></code></pre></div>
+<ol start="4">
+<li>re-execute the most recent occurrence of a command that started with a particular letter or series of letters (ch for example):</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>!ch</span></span></code></pre></div>
+<ol start="5">
+<li>Issue the most recent command that contained “grep”:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>!?grep?</span></span></code></pre></div>
+<ol start="6">
+<li>Remove entry 24 from history:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>history -d <span style="color:#a5d6ff">24</span></span></span></code></pre></div>
+<ol start="7">
+<li>Repeat the last command executed:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>!!</span></span></code></pre></div>
+<h3 id="lab-tilde-expansion">Lab: Tilde expansion<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Display user&rsquo;s home directory:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo ~</span></span></code></pre></div>
+<ol start="2">
+<li>Display the current directory:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo ~+</span></span></code></pre></div>
+<ol start="3">
+<li>Display the previous working directory:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo ~-</span></span></code></pre></div>
+<ol start="4">
+<li>Display user1&rsquo;s home directory:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo ~user1</span></span></code></pre></div>
+<ol start="5">
+<li>cd into the home directory of user1 and confirm:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd ~user1
+</span></span><span style="display:flex;"><span>pwd</span></span></code></pre></div>
+<ol start="6">
+<li>cd into a subdirectory:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd ~/Documents/</span></span></code></pre></div>
+<ol start="7">
+<li>View directory information of the root user&rsquo;s desktop:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls -ld ~root/Desktop</span></span></code></pre></div>
+<h3 id="lab-command-aliasing">Lab: Command Aliasing<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>shows all aliases that are currently set for user1:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>su - user1
+</span></span><span style="display:flex;"><span>alias</span></span></code></pre></div>
+<ol start="2">
+<li>Run alias as root:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>alias</span></span></code></pre></div>
+<ol start="3">
+<li>Create an alias “search” to abbreviate the find command with several switches and arguments. Enclose the entire command within single quotation marks (‘’) to ensure white spaces are taken care of. Do not leave any spaces before and after the equal sign (=).</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>alias <span style="color:#79c0ff">search</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#39;find / -name core -exec ls -l {} \;&#39;</span></span></span></code></pre></div>
+<ol start="4">
+<li>Search with the new alias:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>search</span></span></code></pre></div>
+<ol start="5">
+<li>Create and alias by the same name as rm command but adding the -i flag:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>alias <span style="color:#79c0ff">rm</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#39;rm -i&#39;</span></span></span></code></pre></div>
+<ol start="6">
+<li>Run rm without using the alias:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>rm file1</span></span></code></pre></div>
+<ol start="7">
+<li>Remove the two aliases we just created:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>unalias search rm</span></span></code></pre></div>
+<h3 id="lab-wildcards-and-metacharacters">Lab: Wildcards and Metacharacters<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>List all files in the <em>/etc</em> directory that begin with letters “ma” and followed by any characters:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls /etc/ma*</span></span></code></pre></div>
+<ol start="2">
+<li>List all hidden files and directories in /home/user1:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls -d .*</span></span></code></pre></div>
+<ol start="3">
+<li>List all files in the <em>/var/log</em> directory that end in “.log”:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls /var/log/*.log</span></span></code></pre></div>
+<ol start="4">
+<li>List all files and directories under <em>/var/log</em> with exactly four characters in their names:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls -d /var/log/????</span></span></code></pre></div>
+<ol start="5">
+<li>Include all files and directories that begin with either of the two characters and followed by any number of characters.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls /usr/bin/<span style="color:#ff7b72;font-weight:bold">[</span>yw<span style="color:#ff7b72;font-weight:bold">]</span>*</span></span></code></pre></div>
+<ol start="6">
+<li>Match all directory names that begin with any letter between “m” and “o” in the <em>/etc/systemd/system</em> directory:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls -d /etc/systemd/system/<span style="color:#ff7b72;font-weight:bold">[</span>m-o<span style="color:#ff7b72;font-weight:bold">]</span>*</span></span></code></pre></div>
+<ol start="6">
+<li>Inverse results of the previous:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls -d /etc/systemd/system/<span style="color:#ff7b72;font-weight:bold">[</span>!m-o<span style="color:#ff7b72;font-weight:bold">]</span>*</span></span></code></pre></div>
+<h3 id="lab-piping">Lab: Piping<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Pipe the output to the less command in order to view the directory listing one screenful at a time:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls -l /etc | less</span></span></code></pre></div>
+<ol start="2">
+<li>Run the last command and pipe the output to nl to number each line:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>last | nl</span></span></code></pre></div>
+<ol start="3">
+<li>Send the output of ls to grep for the lines that do not contain the pattern “root”.  Piped again for a case-insensitive selection of all lines that exclude the pattern “dec”. Number the output, and show the last four lines on the display:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls -l /proc | grep -v root | grep -iv dec | nl | tail -4</span></span></code></pre></div>
+<h3 id="lab-quoting-mechanisms">Lab: Quoting Mechanisms<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Remove a file called * without deleting everything in the directory:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>rm <span style="color:#79c0ff">\*</span></span></span></code></pre></div>
+<ol start="2">
+<li>Display $LOGNAME without expanding the LOGNAME variable:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#39;$LOGNAME&#39;</span></span></span></code></pre></div>
+<ol start="3">
+<li>Run the following with double quotes and without:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;</span><span style="color:#79c0ff">$SHELL</span><span style="color:#a5d6ff">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;\$PWD&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;&#39;\&#39;&#34;</span></span></span></code></pre></div>
+<h3 id="lab-grep-and-regex">Lab: grep and regex<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Search for the pattern “operator” in the <em>/etc/passwd</em> file:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>grep operator /etc/passwd</span></span></code></pre></div>
+<ol start="2">
+<li>Search for the space-separated pattern “aliases and functions” in the <em>$HOME/.bashrc</em> file:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>grep <span style="color:#a5d6ff">&#39;aliases and functions&#39;</span> .bashrc</span></span></code></pre></div>
+<ol start="3">
+<li>Search for the pattern “nologin” in the passwd file and exclude (-v) the lines in the output that contain this pattern. Add the -n switch to show the line numbers associated with the matched lines.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>grep -nv nologin /etc/passwd</span></span></code></pre></div>
+<ol start="4">
+<li>Find any duplicate entries for the root user in the passwd file. Prepend the caret sign (^) to the pattern “root” to mark the beginning of a line.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>grep ^root /etc/passwd</span></span></code></pre></div>
+<ol start="5">
+<li>Identify all users in the passwd file with bash as their primary shell.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>grep bash$ /etc/passwd</span></span></code></pre></div>
+<ol start="6">
+<li>Show the entire login.defs file but exclude all the empty lines:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>grep -v ^$ /etc/login.defs</span></span></code></pre></div>
+<ol start="7">
+<li>Perform a case-insensitive search (-i) for all the lines in the /etc/bashrc file that match the pattern “path.”</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>grep -i path /etc/bashrc</span></span></code></pre></div>
+<ol start="8">
+<li>Print all the lines from the <em>/etc/lvm/lvm.conf</em> file that contain an exact match for a word (-w) “acce” followed by exactly two characters:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>grep -w acce.. /etc/lvm/lvm.conf</span></span></code></pre></div>
+<ol start="9">
+<li>Print all the lines from the <code>ls</code> command output that include either (-E) the pattern “cron” or “ly”.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls -l /etc | grep -E <span style="color:#a5d6ff">&#39;cron|ly&#39;</span></span></span></code></pre></div>
+<ol start="10">
+<li>Show all the lines from the <em>/etc/ssh/sshd_config</em> file but exclude (-v) the empty lines and commented lines. Use the -e flag multiple times instead of | for either or.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo grep -ve ^$ -ve ^# /etc/ssh/sshd_config</span></span></code></pre></div>
+<ol start="11">
+<li>Learn more about regex:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>man <span style="color:#a5d6ff">7</span> regex</span></span></code></pre></div>
+<ol start="12">
+<li>Consult the grep man pages:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>man grep</span></span></code></pre></div>
+<h3 id="lab-managing-jobs">Lab: Managing jobs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Issue the jobs command with the -l switch to view all the jobs running in the background:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>jobs -l</span></span></code></pre></div>
+<ol start="2">
+<li>bring job ID 1 to the foreground and start running it:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>fg %1</code></pre></div>
+<ol start="3">
+<li>Suspend job 1 with ctrl+z and then let it run in the background:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>bg %1</code></pre></div>
+<ol start="4">
+<li>Terminate job ID 1, supply its PID (31726) to the kill command:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>kill 31726</code></pre></div>
+<h3 id="lab-shell-startup-files">Lab: Shell Startup Files<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>View the first 10 lines of /etc/bashrc:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>head /etc/bashrc</span></span></code></pre></div>
+<ol start="2">
+<li>View the first 10 lines of /etc/profile:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>head /etc/profile</span></span></code></pre></div>
+<ol start="3">
+<li>View the directory /etc/profile.d</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls -l /etc/profile.d/</span></span></code></pre></div>
+<ol start="4">
+<li>View .bashrc</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat ~/.bashrc</span></span></code></pre></div>
+<ol start="5">
+<li>View .bash_profile</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat ~/.bash_profile</span></span></code></pre></div>
+<h3 id="lab--customize-the-command-prompt-user1">Lab:  Customize the Command Prompt (user1)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Permanently customize the primary shell prompt to display “&lt;user1@server1 in /etc &gt;:” when this user switches into the /etc directory. The prompt should always reflect the current directory directory path.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vim ~/.bash_profile
+</span></span><span style="display:flex;"><span>export <span style="color:#79c0ff">PS1</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">&#39;$USERNAME $PWD&#39;</span></span></span></code></pre></div>
+<h3 id="lab-7-2-redirect-the-standard-input-output-and-error-user1">Lab 7-2: Redirect the Standard Input, Output, and Error (user1)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Run the <code>ls</code> command on <em>/etc</em>, <em>/dvd</em>, and <em>/var</em>. Have the output printed on the screen and the errors forwarded to file <em>/tmp/ioerror</em>.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls /etc /dvd /var 2&gt; /tmp/ioerror</span></span></code></pre></div>
+<ol start="2">
+<li>Check the file after the command execution and analyze the results:</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat /tmp/ioerror</span></span></code></pre></div>
+<h2 id="notes">Notes<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ol>
+<li>It is NOT, a hard, protective outer layer usually created by an animal or organism that lives in the sea.</li>
+</ol>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="parent hidden " data-nav-id="/archive/"><input type="checkbox" id="R-section-3efae3733ab07a14aa0bb0bbf1f8e3dd" aria-controls="R-subsections-3efae3733ab07a14aa0bb0bbf1f8e3dd" checked><label for="R-section-3efae3733ab07a14aa0bb0bbf1f8e3dd"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Linux Reader</span></label><a class="padding default-animation" href="/archive/">Linux Reader<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-3efae3733ab07a14aa0bb0bbf1f8e3dd" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/ansible/"><input type="checkbox" id="R-section-2da59b953fd922cc24bbcc833598ec18" aria-controls="R-subsections-2da59b953fd922cc24bbcc833598ec18"><label for="R-section-2da59b953fd922cc24bbcc833598ec18"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/archive/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-2da59b953fd922cc24bbcc833598ec18" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/"><input type="checkbox" id="R-section-e5951e8bf2f82dfe42bf49de8b6e015a" aria-controls="R-subsections-e5951e8bf2f82dfe42bf49de8b6e015a"><label for="R-section-e5951e8bf2f82dfe42bf49de8b6e015a"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu 45 Days to RHCE</span></label><a class="padding default-animation" href="/archive/ansible/45-days-to-rhce-1/">45 Days to RHCE<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5951e8bf2f82dfe42bf49de8b6e015a" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/ansible-navigator/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/crash-and-burn/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/crash-and-burn/">Crash and Burn<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/the-cheat-code/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/getting-ready/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/getting-ready/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-navigator/"><a class="padding" href="/archive/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/the-cheat-code/"><a class="padding" href="/archive/ansible/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/getting-ready-for-rhce/"><a class="padding" href="/archive/ansible/getting-ready-for-rhce/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/automate-kvm-vms/"><a class="padding" href="/archive/ansible/automate-kvm-vms/">Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ad-hoc-ansible-commands/"><a class="padding" href="/archive/ansible/ad-hoc-ansible-commands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/adhoccommands/"><a class="padding" href="/archive/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-documentation/"><a class="padding" href="/archive/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-facts/"><a class="padding" href="/archive/ansible/ansible-facts/">Ansible Facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-galaxy-roles/"><a class="padding" href="/archive/ansible/ansible-galaxy-roles/">Ansible Galaxy Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-inventory/"><a class="padding" href="/archive/ansible/ansible-inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/inventory/"><a class="padding" href="/archive/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-playbooks/"><a class="padding" href="/archive/ansible/ansible-playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/playbooks/"><a class="padding" href="/archive/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/roles/"><a class="padding" href="/archive/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-ansible-roles/"><a class="padding" href="/archive/ansible/using-ansible-roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-vault/"><a class="padding" href="/archive/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-inventory-command/"><a class="padding" href="/archive/ansible/ansible-inventory-command/">Ansible-inventory command<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible.cfg/"><a class="padding" href="/archive/ansible/ansible.cfg/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansibleconfig/"><a class="padding" href="/archive/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/boot-process/"><a class="padding" href="/archive/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/building-an-ansible-lab-with-ansible/"><a class="padding" href="/archive/ansible/building-an-ansible-lab-with-ansible/">Building an Ansible lab with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/common-modules-with-examples/"><a class="padding" href="/archive/ansible/common-modules-with-examples/">Common modules with examples<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/deploying-files/"><a class="padding" href="/archive/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/discovering-storage-related-facts/"><a class="padding" href="/archive/ansible/discovering-storage-related-facts/">Discovering storage related facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/dynamic-inventory/"><a class="padding" href="/archive/ansible/dynamic-inventory/">Dynamic Inventory<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/encrypted-passwords/"><a class="padding" href="/archive/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/execution-environments/"><a class="padding" href="/archive/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/handlers/"><a class="padding" href="/archive/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/host-name-patterns/"><a class="padding" href="/archive/ansible/host-name-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/hostname-patterns/"><a class="padding" href="/archive/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/include-and-import-files/"><a class="padding" href="/archive/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/including-and-importing-files/"><a class="padding" href="/archive/ansible/including-and-importing-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/jinja2-templates/"><a class="padding" href="/archive/ansible/jinja2-templates/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/jinja2/"><a class="padding" href="/archive/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/user-and-groups/"><a class="padding" href="/archive/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-ansible-errors-and-logs/"><a class="padding" href="/archive/ansible/managing-ansible-errors-and-logs/">Managing Ansible Errors and Logs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-packages/"><a class="padding" href="/archive/ansible/managing-packages/">Managing Packages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/archive/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-partitions-and-lvm/"><a class="padding" href="/archive/ansible/managing-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/storage-partitions-and-lvm/"><a class="padding" href="/archive/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-services/"><a class="padding" href="/archive/ansible/managing-services/">Managing Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/services/"><a class="padding" href="/archive/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/networking-with-ansible/"><a class="padding" href="/archive/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/nfs-setup/"><a class="padding" href="/archive/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/optimize-ansible-processing/"><a class="padding" href="/archive/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/optimizing-ansible-processing/"><a class="padding" href="/archive/ansible/optimizing-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/repositories-and-subscriptions/"><a class="padding" href="/archive/ansible/repositories-and-subscriptions/">Repositories and subscriptions<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/selinux-file-properties/"><a class="padding" href="/archive/ansible/selinux-file-properties/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/selinux/"><a class="padding" href="/archive/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/setting-up-an-ansible-lab/"><a class="padding" href="/archive/ansible/setting-up-an-ansible-lab/">Setting up an Ansible Lab<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ssh-connections/"><a class="padding" href="/archive/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/troubleshooting-common-scenarios/"><a class="padding" href="/archive/ansible/troubleshooting-common-scenarios/">Troubleshooting Common Scenarios<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/users-and-groups/"><a class="padding" href="/archive/ansible/users-and-groups/">Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/tags/"><a class="padding" href="/archive/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/loops-and-items/"><a class="padding" href="/archive/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-loops-and-items/"><a class="padding" href="/archive/ansible/using-loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/modules-for-troubleshooting/"><a class="padding" href="/archive/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-modules-for-troubleshooting-and-testing/"><a class="padding" href="/archive/ansible/using-modules-for-troubleshooting-and-testing/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-multiple-inventories/"><a class="padding" href="/archive/ansible/using-multiple-inventories/">Using Multiple Inventories<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-rhel-system-roles/"><a class="padding" href="/archive/ansible/using-rhel-system-roles/">Using RHEL System roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-tags/"><a class="padding" href="/archive/ansible/using-tags/">Using Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-when-to-run-tasks-conditionally/"><a class="padding" href="/archive/ansible/using-when-to-run-tasks-conditionally/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/when/"><a class="padding" href="/archive/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/variables/"><a class="padding" href="/archive/ansible/variables/">Variables<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/archive/bash/"><input type="checkbox" id="R-section-0007e539b2afbfa1d415742d840f3a8d" aria-controls="R-subsections-0007e539b2afbfa1d415742d840f3a8d" checked><label for="R-section-0007e539b2afbfa1d415742d840f3a8d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/archive/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-0007e539b2afbfa1d415742d840f3a8d" class="collapsible-menu">
+            <li class="active " data-nav-id="/archive/bash/bash-shell/"><a class="padding" href="/archive/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/bash/shell-scripting/"><a class="padding" href="/archive/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/boot/"><input type="checkbox" id="R-section-23ba0690f68cd095a84a225cf8506d0a" aria-controls="R-subsections-23ba0690f68cd095a84a225cf8506d0a"><label for="R-section-23ba0690f68cd095a84a225cf8506d0a"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Boot</span></label><a class="padding default-animation" href="/archive/boot/"><i class="fa-solid fa-hourglass-start"></i> Boot<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-23ba0690f68cd095a84a225cf8506d0a" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/boot/boot-process-grub2-and-kernel/"><a class="padding" href="/archive/boot/boot-process-grub2-and-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/boot/system-initialization-message-logging-and-system-tuning/"><a class="padding" href="/archive/boot/system-initialization-message-logging-and-system-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/containers/"><input type="checkbox" id="R-section-4a0553f27d25d8da325eb0e27d262c20" aria-controls="R-subsections-4a0553f27d25d8da325eb0e27d262c20"><label for="R-section-4a0553f27d25d8da325eb0e27d262c20"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/archive/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4a0553f27d25d8da325eb0e27d262c20" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/containers/containers-1/"><a class="padding" href="/archive/containers/containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/cyber-security/"><input type="checkbox" id="R-section-22d3475420d0c69262f1eaf35f3954e1" aria-controls="R-subsections-22d3475420d0c69262f1eaf35f3954e1"><label for="R-section-22d3475420d0c69262f1eaf35f3954e1"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/archive/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-22d3475420d0c69262f1eaf35f3954e1" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/cyber-security/security-enhanced-linux/"><a class="padding" href="/archive/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/cyber-security/securityenhancedlinux/"><a class="padding" href="/archive/cyber-security/securityenhancedlinux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/cyber-security/the-linux-firewall/"><a class="padding" href="/archive/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/cyber-security/the-secure-shell-service/"><a class="padding" href="/archive/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/desktop/"><input type="checkbox" id="R-section-f15fd7be41155db115964722da6b0d03" aria-controls="R-subsections-f15fd7be41155db115964722da6b0d03"><label for="R-section-f15fd7be41155db115964722da6b0d03"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/archive/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f15fd7be41155db115964722da6b0d03" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/desktop/new-setup/"><a class="padding" href="/archive/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/learning-touch-typing-1/"><a class="padding" href="/archive/desktop/learning-touch-typing-1/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/learning-touch-typing/"><a class="padding" href="/archive/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/my-fedora-setup-1/"><a class="padding" href="/archive/desktop/my-fedora-setup-1/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/my-fedora-setup/"><a class="padding" href="/archive/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/silverblue-2/"><a class="padding" href="/archive/desktop/silverblue-2/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/silverblue/"><a class="padding" href="/archive/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/files/"><input type="checkbox" id="R-section-35cbfba2aaa3dc53d47351d0737b957f" aria-controls="R-subsections-35cbfba2aaa3dc53d47351d0737b957f"><label for="R-section-35cbfba2aaa3dc53d47351d0737b957f"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Files</span></label><a class="padding default-animation" href="/archive/files/"><i class="fa-solid fa-copy"></i> Files<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-35cbfba2aaa3dc53d47351d0737b957f" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/files/advanced-file-management/"><a class="padding" href="/archive/files/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/files/file-management/"><a class="padding" href="/archive/files/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/networking/"><input type="checkbox" id="R-section-571da5e9c8cc7c2f921ff81d669260db" aria-controls="R-subsections-571da5e9c8cc7c2f921ff81d669260db"><label for="R-section-571da5e9c8cc7c2f921ff81d669260db"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/archive/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-571da5e9c8cc7c2f921ff81d669260db" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/networking/what-to-learn-after-ccna/"><a class="padding" href="/archive/networking/what-to-learn-after-ccna/">What to Learn After CCNA? Some Ideas<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/how-to-study-for-ccna-exam/"><a class="padding" href="/archive/networking/how-to-study-for-ccna-exam/">How I Studied for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/archive/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/dns-and-time-synchronization/"><a class="padding" href="/archive/networking/dns-and-time-synchronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/dns/"><a class="padding" href="/archive/networking/dns/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/archive/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/juniper_cli_basics/"><a class="padding" href="/archive/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/archive/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/networkdevicesandconnections/"><a class="padding" href="/archive/networking/networkdevicesandconnections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/archive/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/resources-for-passing-ccna/"><a class="padding" href="/archive/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/time-synchronization/"><a class="padding" href="/archive/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/toggle_poe/"><a class="padding" href="/archive/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/packages/"><input type="checkbox" id="R-section-ffbf85f24cd2239219afa8b9cbe18b38" aria-controls="R-subsections-ffbf85f24cd2239219afa8b9cbe18b38"><label for="R-section-ffbf85f24cd2239219afa8b9cbe18b38"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/archive/packages/"><i class="fa-solid fa-box-open"></i> Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ffbf85f24cd2239219afa8b9cbe18b38" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/packages/advanced-package-management/"><a class="padding" href="/archive/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/packages/basic-package-management/"><a class="padding" href="/archive/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/storage/"><input type="checkbox" id="R-section-5b321d96a2a369eec97e1394accb14fb" aria-controls="R-subsections-5b321d96a2a369eec97e1394accb14fb"><label for="R-section-5b321d96a2a369eec97e1394accb14fb"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/archive/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-5b321d96a2a369eec97e1394accb14fb" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/storage/autofs/"><a class="padding" href="/archive/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/local-file-systems-and-swap/"><a class="padding" href="/archive/storage/local-file-systems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/network-file-system-nfs/"><a class="padding" href="/archive/storage/network-file-system-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/partitioning-mbr-and-gpt/"><a class="padding" href="/archive/storage/partitioning-mbr-and-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/remove-a-filesystem-from-a-partition/"><a class="padding" href="/archive/storage/remove-a-filesystem-from-a-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/thin-provisioning/"><a class="padding" href="/archive/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/archive/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/systems/"><input type="checkbox" id="R-section-1dd2726e68c35ec062a2cfe2c1df58df" aria-controls="R-subsections-1dd2726e68c35ec062a2cfe2c1df58df"><label for="R-section-1dd2726e68c35ec062a2cfe2c1df58df"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/archive/systems/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-1dd2726e68c35ec062a2cfe2c1df58df" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/systems/you-need-to-learn-man-pages/"><a class="padding" href="/archive/systems/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/advanced-file-management/"><a class="padding" href="/archive/systems/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/advanced-package-management/"><a class="padding" href="/archive/systems/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/advanced-user-management/"><a class="padding" href="/archive/systems/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/autofs/"><a class="padding" href="/archive/systems/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/file-management/"><a class="padding" href="/archive/systems/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/basic-package-management/"><a class="padding" href="/archive/systems/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/basic-user-management/"><a class="padding" href="/archive/systems/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/boot-process-grub2-kernel/"><a class="padding" href="/archive/systems/boot-process-grub2-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/installation/"><a class="padding" href="/archive/systems/installation/">Installing RHEL Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/interaction/"><a class="padding" href="/archive/systems/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/local-filesystems-and-swap/"><a class="padding" href="/archive/systems/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/network-filesystem-nfs/"><a class="padding" href="/archive/systems/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/partitioning-mbr-gpt/"><a class="padding" href="/archive/systems/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/process-and-task-scheduling/"><a class="padding" href="/archive/systems/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/rm-filesystem-from-partition/"><a class="padding" href="/archive/systems/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/rhcsa-exam-environment/"><a class="padding" href="/archive/systems/rhcsa-exam-environment/">RHCSA Exam Environment Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/rhcsa-vagrant-lab-setup-1/"><a class="padding" href="/archive/systems/rhcsa-vagrant-lab-setup-1/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/sys-init-logging-and-tuning/"><a class="padding" href="/archive/systems/sys-init-logging-and-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/secure-shell-service-ssh/"><a class="padding" href="/archive/systems/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/thin-provisioning/"><a class="padding" href="/archive/systems/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/time-synchronization/"><a class="padding" href="/archive/systems/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/virtual-data-optimizer-vdo/"><a class="padding" href="/archive/systems/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/system/"><input type="checkbox" id="R-section-d52ce8aee0f4ac02a6f02a34de71d1c0" aria-controls="R-subsections-d52ce8aee0f4ac02a6f02a34de71d1c0"><label for="R-section-d52ce8aee0f4ac02a6f02a34de71d1c0"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/archive/system/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d52ce8aee0f4ac02a6f02a34de71d1c0" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/system/installation/"><a class="padding" href="/archive/system/installation/">Installation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/system/interaction/"><a class="padding" href="/archive/system/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/system/process-and-task-scheduling/"><a class="padding" href="/archive/system/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/tools/"><input type="checkbox" id="R-section-b320e1715e16e5d512ba5b82e27cc64b" aria-controls="R-subsections-b320e1715e16e5d512ba5b82e27cc64b"><label for="R-section-b320e1715e16e5d512ba5b82e27cc64b"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/archive/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-b320e1715e16e5d512ba5b82e27cc64b" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/tools/remove-formatting-from-highlights/"><a class="padding" href="/archive/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/calibre-web-docker-nginx/"><a class="padding" href="/archive/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/proxmox-pfsense-haproxy-setup/"><a class="padding" href="/archive/tools/proxmox-pfsense-haproxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/stop-using-ai/"><a class="padding" href="/archive/tools/stop-using-ai/">Why I Stopped Using AI so Much<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/install-ansible-using-uv/"><a class="padding" href="/archive/tools/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/archive/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/new-setup/"><a class="padding" href="/archive/tools/tools/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/archive/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/archive/tools/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/process-bookfusion-highlights/"><a class="padding" href="/archive/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/archive/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/archive/tools/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/archive/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/archive/tools/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/archive/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/archive/tools/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/using-vagrant-on-linux/"><a class="padding" href="/archive/tools/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/using-vagrant-on-linux/"><a class="padding" href="/archive/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/vimguide/"><a class="padding" href="/archive/tools/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/vimguide/"><a class="padding" href="/archive/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/using-man-pages/"><a class="padding" href="/archive/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/users-and-groups/"><input type="checkbox" id="R-section-db70fad5de90fe8fb545112d40b3bd47" aria-controls="R-subsections-db70fad5de90fe8fb545112d40b3bd47"><label for="R-section-db70fad5de90fe8fb545112d40b3bd47"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users and Groups</span></label><a class="padding default-animation" href="/archive/users-and-groups/"><i class="fa-solid fa-users"></i> Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-db70fad5de90fe8fb545112d40b3bd47" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/users-and-groups/advanced-user-management/"><a class="padding" href="/archive/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/users-and-groups/basic-user-management/"><a class="padding" href="/archive/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/virtualization/"><input type="checkbox" id="R-section-d0028714f8460f5888066e750cbc5914" aria-controls="R-subsections-d0028714f8460f5888066e750cbc5914"><label for="R-section-d0028714f8460f5888066e750cbc5914"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualization</span></label><a class="padding default-animation" href="/archive/virtualization/"><i class="fa-solid fa-microchip"></i> Virtualization<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d0028714f8460f5888066e750cbc5914" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/virtualization/rhcsa-vagrant-lab-setup/"><a class="padding" href="/archive/virtualization/rhcsa-vagrant-lab-setup/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1772467047" defer></script>
+    <script src="/js/theme.js?1772467047" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

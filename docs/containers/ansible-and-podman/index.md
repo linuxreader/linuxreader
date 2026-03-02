@@ -1,4 +1,4 @@
-# 
+# Ansible and Podman
 
 If you're used to managing packages installed on VMs, it's definitely a step up to run containers in podman via quadlet units
 

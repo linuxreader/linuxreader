@@ -21,7 +21,7 @@ vagrant plugin install vagrant-libvirt
 ```
 
 You will also need virt-manager, libvirt, and qemu for this tutorial. 
-![](images/Pasted%20image%2020250401043118.png)
+![](../images/Pasted%20image%2020250401043118.png)
 
 
 First, we need a plugin that will let Vagrant interact with our VM provider. Install libvirt plugin to do this:

@@ -232,7 +232,7 @@ For managing containers.
 ## Warehouse
 Managing installed applications.
 
-![](../../images/Pasted%20image%2020240905110143.png)
+![](../images/Pasted%20image%2020240905110143.png)
 
 ## Mission Center 
 Task Manager like application.

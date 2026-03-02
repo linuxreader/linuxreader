@@ -2,7 +2,7 @@ Create a vm in proxmox and copy the physical drive to the vm drive.
 
 1. Create New VM in proxmox
 2. In the OS tab, select "Do not use any media"
-![](../../images/Pasted%20image%2020240806075409.png)
+![](../images/Pasted%20image%2020240806075409.png)
 
 Verify Kernel version
 ```bash
@@ -34,7 +34,7 @@ sda                8:0    0 931.5G  0 disk
 ```
 
 Select the appropriate BIOS in the System tab:
-![](../../images/Pasted%20image%2020240806080050.png)
+![](../images/Pasted%20image%2020240806080050.png)
 Check your disk size
 ```bash
 [root@dall conf.d]# lsblk
@@ -43,7 +43,7 @@ sda                8:0    0 931.5G  0 disk
 ```
 
 Make the disk a little bit bigger than the physical disk
-![](../../images/Pasted%20image%2020240806080538.png)
+![](../images/Pasted%20image%2020240806080538.png)
 
 Select CPU and Memory based on requirements.
 
@@ -79,7 +79,7 @@ If the process gets stopped in the middle. You can resume by using the same ddre
 Rename file to .raw instead of .img with mv command
 
 sample vm config file
-![](../../images/Pasted%20image%2020240807124622.png)
+![](../images/Pasted%20image%2020240807124622.png)
 b_samZFS = name of storage pool
 123 = name of vm
 driveImage.raw is name of the image

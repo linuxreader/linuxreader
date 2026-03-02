@@ -60,18 +60,10 @@ issuing the reboot
 • **reboot_timeout:** The maximum seconds to wait for the rebooted
 machine to respond to the **test** command
 
-When the rebooted host is back, the current playbook continues its
-tasks. This scenario is shown in the example in [Listing
-14-7](#ch14.xhtml#list14_7), where first all managed hosts are rebooted,
-and after a successful reboot is issued, the message "successfully
-rebooted" is shown. [Listing 14-8](#ch14.xhtml#list14_8) shows the
-result of running this playbook. In [Exercise 14-2](#ch14.xhtml#exe14_2)
-you can practice rebooting hosts using the reboot module.
+- When the rebooted host is back, the current playbook continues its tasks. 
 
-**Listing 14-7** Rebooting Managed Hosts
-
-::: pre_1
-    ---
+```
+---
     - name: reboot all hosts
       hosts: all
       gather_facts: no
@@ -83,91 +75,138 @@ you can practice rebooting hosts using the reboot module.
       - name: print message to show host is back
         debug:
           msg: successfully rebooted
-:::
+```
 
-**Listing 14-8** Verifying the Success of the reboot Module
-
-::: pre_1
-    [ansible@control rhce8-book]$ ansible-playbook listing147.yaml
-    
-    PLAY [reboot all hosts] *************************************************************************************************
-    
-    TASK [reboot hosts] *****************************************************************************************************
-    changed: [ansible2]
-    changed: [ansible1]
-    changed: [ansible3]
-    changed: [ansible4]
-    changed: [ansible5]
-    
-    TASK [print message to show host is back] *******************************************************************************
-    ok: [ansible1] => {
-        "msg": "successfully rebooted"
-    }
-    ok: [ansible2] => {
-        "msg": "successfully rebooted"
-    }
-    ok: [ansible3] => {
-        "msg": "successfully rebooted"
-    }
-    ok: [ansible4] => {
-        "msg": "successfully rebooted"
-    }
-    ok: [ansible5] => {
-        "msg": "successfully rebooted"
-    }
-    
-    PLAY RECAP **************************************************************************************************************
-    ansible1                   : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-    ansible2                   : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-    ansible3                   : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-    ansible4                   : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-    ansible5                   : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-:::
-
-::: box
-**Exercise 14-2 Managing Boot State**
-
-1\. As a preparation for this playbook, so that it actually changes the
-default boot target on the managed host, use **ansible ansible2 -m file
--a "state=link src=/usr/lib/systemd/system/graphical.target
-dest=/etc/systemd/system/default.target"**.
-
-2\. Use your editor to create the file exercise142.yaml and write the
-following playbook header:
-
-``` pre1
+Change target and reboot:
+```yaml
 ---
-- name: set default boot target and reboot
-  hosts: ansible2
+- name: Set default target to graphical
+  hosts: practice
+  become: yes
   tasks:
+  - name: Link graphical.target to default.target
+    file:
+      src: /usr/lib/systemd/system/graphical.target
+      dest: /etc/systemd/system/default.target
+      state: link
+
+  - name: reboot
+    reboot:
+      test_command: whoami
+      msg: rebooting...
+
+  - name: print success message
+    debug:
+      msg: Reboot successful                            
 ```
 
-3\. Now you set the default boot target to multi-user.target. Add the
-following task to do so:
-
-``` pre1
-- name: set default boot target
-  file:
-    src: /usr/lib/systemd/system/multi-user.target
-    dest: /etc/systemd/system/default.target
-    state: link
+Test that the reboot was issued successfully by using 
+```
+ansible practice -a "systemctl get-default"
 ```
 
-4\. Complete the playbook to reboot the managed hosts by including the
-following tasks:
+### Lab: Managing the Boot Process and Services
 
-``` pre1
-- name: reboot hosts
-  reboot:
-    msg: reboot initiated by Ansible
-    test_command: whoami
-- name: print message to show host is back
-  debug:
-    msg: successfully rebooted
+Create a playbook that:
+- Runs a command before the reboot, 
+- Schedules a cron job at the next reboot
+- Using that cron job, ensures that after rebooting a specific command is used as well. 
+- To make sure you see what happens when, you work with a temporary file to which lines are added.
+
+```yaml
+❯ cat labs/reboot-msg.yaml
+---
+- name: reboot-msg
+  hosts: practice
+  tasks:
+  - name: add a line to a file before rebooting
+    lineinfile:
+      create: true
+      state: present
+      path: /tmp/rebooted
+      insertafter: EOF
+      line: rebooted at {{ ansible_facts['date_time']['time'] }}:{{ ansible_facts['date_time']['second'] }}
+
+  - name: run a cron job on reboot
+    cron:
+      name: "run on reboot"
+      state: present
+      special_time: reboot
+      job: "echo rebooted at $(date) >> /tmp/rebooted"
+
+  - name: reboot managed host
+    reboot:
+      msg: reboot initiated
+      test_command: whoami
+
+  - name: print reboot success message
+    debug:
+      msg: reboot success
 ```
 
-5\. Run the playbook by using **ansible-playbook exercise142.yaml**.
+Time, including a second indicator, is written using two Ansible facts. Not one single fact has the time in an hh:mm:ss format.
 
-6\. Test that the reboot was issued successfully by using **ansible
-ansible2 -a "systemctl get-default"**.
-:::
+Bash shell command substitution is possible in the cron module because commands are executed by a bash shell.
+
+This is not possible with the lineinfile module because the commands are not processed by a shell. 
+
+See results:
+```
+ansible practice -a "cat /tmp/rebooted"
+```
+
+### Lab: cron job
+
+Write a playbook according to the following specifications:
+
+• The cron module must be used to restart your managed servers at 2 a.m.
+each weekday.
+• After rebooting, a message must be written to syslog, with the text
+"CRON initiated reboot just completed."
+• The default systemd target must be set to multi-user.target.
+• The last task should use service facts to show the current version of the cron process.
+
+```yaml
+---
+- name: cron job
+  hosts: ansible1
+  tasks:
+  - name: cron job to restart servers at 2am each weekday
+    cron:
+      name: restart servers
+      weekday: MON-FRI
+      hour: 2
+      job: "reboot"
+
+  - name: After reboot send log message to syslog
+    cron: 
+      name: Print reboot message to syslog
+      special_time: reboot
+      job: "logger Sytem rebooted"  
+
+  - name: set the default systemd target to multi-user
+    file:
+      src: /usr/lib/systemd/system/multi-user.target
+      dest: /etc/systemd/system/default.target
+      state: link  
+
+  - name: populate service facts
+    service_facts:
+
+  - name: show current version of cron process using service facts
+    debug:
+      var: ansible_facts.services['crond.service']
+
+```
+
+```bash
+❯ ansible ansible1 -a "crontab -l"
+[WARNING]: Host 'ansible1' is using the discovered Python interpreter at '/usr/bin/python3.12', but future installation of another Python interpreter could cause a different interpreter to be discovered. See https://docs.ansible.com/ansible-core/2.20/reference_appendices/interpreter_discovery.html for more information.
+ansible1 | CHANGED | rc=0 >>
+#Ansible: run on reboot
+@reboot echo rebooted at $(date) >> /tmp/rebooted
+#Ansible: restart servers
+* 2 * * MON-FRI reboot
+#Ansible: Print reboot message to syslog
+@reboot logger Sytem rebooted
+```

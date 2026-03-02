@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=32883&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    <meta name="description" content="Chapter 7 - Inventories Earlier in the book, a basic inventory file example was given (see Chapter 1’s basic inventory file example). For the simplest of purposes, an inventory file at the default location (/etc/ansible/hosts) will suffice to describe to Ansible how to reach the servers you want to manage.
+Later, a slightly more involved inventory file was introduced (see Chapter 3’s inventory file for multiple servers), which allowed us to tell Ansible about multiple servers, and even group them into role-related groups, so we could run certain playbooks against certain groups.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="Chapter 7 - Inventories Earlier in the book, a basic inventory file example was given (see Chapter 1’s basic inventory file example). For the simplest of purposes, an inventory file at the default location (/etc/ansible/hosts) will suffice to describe to Ansible how to reach the servers you want to manage.
+Later, a slightly more involved inventory file was introduced (see Chapter 3’s inventory file for multiple servers), which allowed us to tell Ansible about multiple servers, and even group them into role-related groups, so we could run certain playbooks against certain groups.">
+    <meta property="og:url" content="http://localhost:32883/archive/ansible/ansible4devops/chapter-7---inventories/">
+    <meta property="og:description" content="Chapter 7 - Inventories Earlier in the book, a basic inventory file example was given (see Chapter 1’s basic inventory file example). For the simplest of purposes, an inventory file at the default location (/etc/ansible/hosts) will suffice to describe to Ansible how to reach the servers you want to manage.
+Later, a slightly more involved inventory file was introduced (see Chapter 3’s inventory file for multiple servers), which allowed us to tell Ansible about multiple servers, and even group them into role-related groups, so we could run certain playbooks against certain groups.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="">
+    <meta itemprop="description" content="Chapter 7 - Inventories Earlier in the book, a basic inventory file example was given (see Chapter 1’s basic inventory file example). For the simplest of purposes, an inventory file at the default location (/etc/ansible/hosts) will suffice to describe to Ansible how to reach the servers you want to manage.
+Later, a slightly more involved inventory file was introduced (see Chapter 3’s inventory file for multiple servers), which allowed us to tell Ansible about multiple servers, and even group them into role-related groups, so we could run certain playbooks against certain groups.">
+    <meta itemprop="wordCount" content="5784">
+    <title></title>
+    <link href="/archive/ansible/ansible4devops/chapter-7---inventories/index.md" rel="alternate" type="text/markdown" title="">
+    <link href="/images/favicon.svg?1772467047" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1772467047" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1772467047" defer></script>
+    <script src="/js/search-lunr.js?1772467047" defer></script>
+    <script src="/js/search.js?1772467047" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1772467047";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1772467047" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1772467047" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1772467047" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1772467047" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1772467047" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1772467047" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1772467047" rel="stylesheet">
+    <link href="/css/theme.css?1772467047" rel="stylesheet">
+    <link href="/css/format-html.css?1772467047" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/archive\/ansible\/ansible4devops\/chapter-7---inventories\/';
+      window.relearn.relBasePath='..\/..\/..\/..';
+      window.relearn.relBaseUri='..\/..\/..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:32883';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script>
+  </head>
+  <body class="mobile-support html" data-origin="/archive/ansible/ansible4devops/chapter-7---inventories/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#chapter-7---inventories">Chapter 7 - Inventories</a>
+      <ul>
+        <li><a href="#chap09.xhtml_leanpub-auto-a-real-world-web-application-server-inventory">A real-world web application server inventory</a></li>
+        <li><a href="#chap09.xhtml_leanpub-auto-inventory-variables">Inventory variables</a></li>
+        <li><a href="#chap09.xhtml_leanpub-auto-ephemeral-infrastructure-dynamic-inventory">Ephemeral infrastructure: Dynamic inventory</a></li>
+        <li><a href="#chap09.xhtml_leanpub-auto-summary-6">Summary</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/archive/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/archive/ansible/"><span itemprop="name">Ansible</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive/ansible/ansible4devops/chapter-7---inventories/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive/ansible/automate-kvm-vms/" title="Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/archive/ansible/ad-hoc-ansible-commands/" title="Ad Hoc Ansible Commands (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable archive" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id=""></h1>
+
+<h2 id="chapter-7---inventories">Chapter 7 - Inventories<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Earlier in the book, a basic inventory file example was given (see
+Chapter 1&rsquo;s <a href="/archive/ansible/ansible4devops/chapter-7---inventories/#chap03.xhtml_basic-inventory">basic inventory file
+example</a>). For the simplest of purposes,
+an inventory file at the default location (<code>/etc/ansible/hosts</code>) will
+suffice to describe to Ansible how to reach the servers you want to
+manage.</p>
+<p>Later, a slightly more involved inventory file was introduced (see
+Chapter 3&rsquo;s <a href="/archive/ansible/ansible4devops/chapter-7---inventories/#chap05.xhtml_multiple-server-inventory">inventory file for multiple
+servers</a>), which allowed us to
+tell Ansible about multiple servers, and even group them into
+role-related groups, so we could run certain playbooks against certain
+groups.</p>
+<p>Let&rsquo;s jump back to a basic inventory file example and build from there:</p>
+<figure class="code">
+<div class="highlight">
+<pre class="lineno"><code>1 # Inventory file at /etc/ansible/hosts
+2 
+3 # Groups are defined using square brackets (e.g. [groupname]). Each server
+4 # in the group is defined on its own line.
+5 [myapp]
+6 www.myapp.com</code></pre>
+</div>
+</figure>
+<p>If you want to run an ansible playbook on all the <code>myapp</code> servers in
+this inventory (so far, just one, <code>www.myapp.com</code>), you can set up the
+playbook like so:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>---
+- hosts: myapp
+<p>tasks:
+[&hellip;]</code></pre></p>
+</div>
+</figure>
+<p>If you want to run an ad-hoc command against all the <code>myapp</code> servers in
+the inventory, you can run a command like so:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code># Use ansible to check memory usage on all the myapp servers.
+$ ansible myapp -a &quot;free -m&quot;</code></pre>
+</div>
+</figure>
+<h3 id="chap09.xhtml_leanpub-auto-a-real-world-web-application-server-inventory">A real-world web application server inventory<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>The example above might be adequate for single-server services and tiny
+apps or websites, but most real-world applications require many more
+servers, and usually separate servers per application concern (database,
+caching, application, queuing, etc.). Let&rsquo;s take a look at a real-world
+inventory file for a small web application that monitors server uptime,
+<a href="https://servercheck.in/" rel="external" target="_blank">Server Check.in</a>.</p>
+<figure class="code">
+<div class="highlight">
+<pre class="lineno"><code> 1 # Individual Server Check.in servers.
+ 2 [servercheck-web]
+ 3 www1.servercheck.in
+ 4 www2.servercheck.in
+ 5 
+ 6 [servercheck-web:vars]
+ 7 ansible_ssh_user=servercheck_svc
+ 8 
+ 9 [servercheck-db]
+10 db1.servercheck.in
+11 
+12 [servercheck-log]
+13 log.servercheck.in
+14 
+15 [servercheck-backup]
+16 backup.servercheck.in
+17 
+18 [servercheck-nodejs]
+19 atl1.servercheck.in
+20 atl2.servercheck.in
+21 nyc1.servercheck.in
+22 nyc2.servercheck.in
+23 nyc3.servercheck.in
+24 ned1.servercheck.in
+25 ned2.servercheck.in
+26 
+27 [servercheck-nodejs:vars]
+28 ansible_ssh_user=servercheck_svc
+29 foo=bar
+30 
+31 # Server Check.in distribution-based groups.
+32 [centos:children]
+33 servercheck-web
+34 servercheck-db
+35 servercheck-nodejs
+36 servercheck-backup
+37 
+38 [ubuntu:children]
+39 servercheck-log</code></pre>
+</div>
+</figure>
+<p>This inventory may look a little overwhelming at first, but if you break
+it apart into simple groupings (web app servers, database servers,
+logging server, and node.js app servers), it describes a straightforward
+architecture.</p>
+<figure class="image center" style="width: 85%;">
+<img src="images/7-server-checkin-infrastructure.png"
+style="width: 100%;" alt="Server Check.in Infrastructure." />
+<figcaption aria-hidden="true">Server Check.in
+Infrastructure.</figcaption>
+</figure>
+<p>Lines 1-29 describe a few groups of servers (some with only one server),
+so playbooks and <code>ansible</code> commands can refer to the group by name.
+Lines 6-7 and 27-29 set variables that will apply only to the servers in
+the group (e.g. variables below <code>[servercheck-nodejs:vars]</code> will only
+apply to the servers in the <code>servercheck-nodejs</code> group).</p>
+<p>Lines 31-39 describe groups of groups (using <code>groupname:children</code> to
+describe &lsquo;child&rsquo; groups) that allow for some helpful abstractions.</p>
+<p>Describing infrastructure in such a way affords a lot of flexibility
+when using Ansible. Consider the task of patching a vulnerability on all
+your CentOS servers; instead of having to log into each of the servers,
+or even having to run an <code>ansible</code> command against all the groups, using
+the above structure allows you to easily run an ansible command or
+playbook against all <code>centos</code> servers.</p>
+<p>As an example, when the
+<a href="https://en.wikipedia.org/wiki/Shellshock_(software_bug)" rel="external" target="_blank">Shellshock</a>
+vulnerability was disclosed in 2014, patched bash packages were released
+for all the major distributions within hours. To update all the Server
+Check.in servers, all that was needed was:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible centos -m yum -a &quot;name=bash state=latest&quot;</code></pre>
+</div>
+</figure>
+<p>You could even go further and create a small playbook that would patch
+the vulnerability, then run tests to make sure the vulnerability was no
+longer present, as illustrated in <a href="https://raymii.org/s/articles/Patch_CVE-2014-6271_Shellshock_with_Ansible.html" rel="external" target="_blank">this
+playbook</a>.
+This would also allow you to run the playbook in check mode or run it
+through a continuous integration system to verify the fix works in a
+non-prod environment.</p>
+<p>This infrastructure inventory is also nice in that you could create a
+top-level playbook that runs certain roles or tasks against all your
+infrastructure, others against all servers of a certain Linux flavor,
+and another against all servers in your entire infrastructure.</p>
+<p>Consider, for example, this example master playbook to completely
+configure all the servers:</p>
+<figure class="code">
+<div class="highlight">
+<pre class="lineno"><code> 1 ---
+ 2 # Set up basic, standardized components across all servers.
+ 3 - hosts: all
+ 4   sudo: true
+ 5   roles:
+ 6     - security
+ 7     - logging
+ 8     - firewall
+ 9 
+10 # Configure web application servers.
+11 - hosts: servercheck-web
+12   roles:
+13     - nginx
+14     - php
+15     - servercheck-web
+16 
+17 # Configure database servers.
+18 - hosts: servercheck-db
+19   roles:
+20     - pgsql
+21     - db-tuning
+22 
+23 # Configure logging server.
+24 - hosts: servercheck-log
+25   roles:
+26     - java
+27     - elasticsearch
+28     - logstash
+29     - kibana
+30 
+31 # Configure backup server.
+32 - hosts: servercheck-backup
+33   roles:
+34     - backup
+35 
+36 # Configure Node.js application servers.
+37 - hosts: servercheck-nodejs
+38   roles:
+39     - servercheck-node</code></pre>
+</div>
+</figure>
+<p>There are a number of different ways you can structure your
+infrastructure-management playbooks and roles, and we&rsquo;ll explore some in
+later chapters, but for a simple infrastructure, something like this is
+adequate and maintainable.</p>
+<h4 id="chap09.xhtml_leanpub-auto-non-prod-environments-separate-inventory-files">Non-prod environments, separate inventory files<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Using the above playbook and the globally-configured Ansible inventory
+file is great for your production infrastructure, but what happens when
+you want to configure a separate but similar infrastructure for, say a
+development or user certification environment?</p>
+<p>In this case, it&rsquo;s easiest to use individual inventory files, rather
+than the central Ansible inventory file. For typical team-managed
+infrastructure, I would recommend including an inventory file for each
+environment in the same version-controlled repository as your Ansible
+playbooks, perhaps within an &lsquo;inventories&rsquo; directory.</p>
+<p>For example, I could take the entire contents of <code>/etc/ansible/hosts</code>
+above, and stash that inside an inventory file named <code>inventory-prod</code>,
+then duplicate it, changing server names where appropriate (e.g. the
+<code>[servercheck-web]</code> group would only have <code>www-dev1.servercheck.in</code> for
+the development environment), and naming the files for the environments:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>servercheck/
+  inventories/
+    inventory-prod
+    inventory-cert
+    inventory-dev
+  playbook.yml</code></pre>
+</div>
+</figure>
+<p>Now, when running <code>playbook.yml</code> to configure the development
+infrastructure, I would pass in the path to the dev inventory (assuming
+my current working directory is <code>servercheck/</code>):</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible-playbook playbook.yml -i inventories/inventory-dev</code></pre>
+</div>
+</figure>
+<p>Using inventory variables (which will be explored further), and
+well-constructed roles and/or tasks that use the variables effectively,
+you could architect your entire infrastructure, with
+environment-specific configurations, by changing some things in your
+inventory files.</p>
+<h3 id="chap09.xhtml_leanpub-auto-inventory-variables">Inventory variables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Chapter 5 introduced basic methods of managing variables for individual
+hosts or groups of hosts through your inventory in the <a href="/archive/ansible/ansible4devops/chapter-7---inventories/#chap07.xhtml_inventory-variables">inventory
+variables</a> section, but it&rsquo;s worth
+exploring the different ways of defining and overriding variables
+through inventory here.</p>
+<p>For extremely simple use cases&mdash;usually when you need to define one or
+two connection-related variables (like <code>ansible_ssh_user</code> or
+<code>ansible_ssh_port</code>)&mdash;you can place variables directly inside an
+inventory file.</p>
+<p>Assuming we have a standalone inventory file for a basic web
+application, here are some examples of variable definition inside the
+file:</p>
+<figure class="code">
+<div class="highlight">
+<pre class="lineno"><code> 1 [www]
+ 2 # You can define host-specific variables inline with the host.
+ 3 www1.example.com ansible_ssh_user=johndoe
+ 4 www2.example.com
+ 5 
+ 6 [db]
+ 7 db1.example.com
+ 8 db2.example.com
+ 9 
+10 # You can add a &#39;[group:vars]&#39; heading to create variables that will apply
+11 # to an entire inventory group.
+12 [db:vars]
+13 ansible_ssh_port=5222
+14 database_performance_mode=true</code></pre>
+</div>
+</figure>
+<p>It&rsquo;s usually better to avoid throwing too many variables inside static
+inventory files, because not only are these variables typically less
+visible, they are also mixed in with your architecture definition.
+Especially for host-specific vars (which appear on one long line per
+host), this is an unmaintainable, low-visibility approach to host and
+group-specific variables.</p>
+<p>Fortunately, Ansible provides a more flexible way of declaring host and
+group variables.</p>
+<h4 id="chap09.xhtml_leanpub-auto-hostvars"><code>host_vars</code><span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>For <a href="https://hostedapachesolr.com/" rel="external" target="_blank">Hosted Apache Solr</a>, different
+servers in a <code>solr</code> group have different memory requirements. The
+simplest way to tell Ansible to override a default variable in our
+Ansible playbook (in this case, the <code>tomcat_xmx</code> variable) is to use a
+<code>host_vars</code> directory (which can be placed either in the same location
+as your inventory file, or in a playbook&rsquo;s root directory), and place a
+YAML file named after the host which needs the overridden variable.</p>
+<p>As an illustration of the use of <code>host_vars</code>, we&rsquo;ll assume we have the
+following directory layout:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>hostedapachesolr/
+  host_vars/
+    nyc1.hostedapachesolr.com
+  inventory/
+    hosts
+  main.yml</code></pre>
+</div>
+</figure>
+<p>The <code>inventory/hosts</code> file contains a simple definition of all the
+servers by group:</p>
+<figure class="code">
+<div class="highlight">
+<pre class="lineno"><code>1 [solr]
+2 nyc1.hostedapachesolr.com
+3 nyc2.hostedapachesolr.com
+4 jap1.hostedapachesolr.com
+5 ...
+6 
+7 [log]
+8 log.hostedapachesolr.com</code></pre>
+</div>
+</figure>
+<p>Ansible will search for a file at either
+<code>hostedapachesolr/host_vars/nyc1.hostedapachesolr.com</code> or
+<code>hostedapachesolr/inventory/host_vars/nyc1.hostedapachesolr.com</code>, and if
+there are any variables defined in the file (in YAML format), those
+variables will override all other playbook and role variables and
+gathered facts, <em>only for the single host</em>.</p>
+<p>The <code>nyc1.hostedapachesolr.com</code> host_vars file looks like:</p>
+<figure class="code">
+<div class="highlight">
+<pre class="lineno"><code>1 ---
+2 tomcat_xmx: &quot;1024m&quot;</code></pre>
+</div>
+</figure>
+<p>The default for <code>tomcat_xmx</code> may normally be <code>640m</code>, but when Ansible
+runs a playbook against nyc1.hostedapachesolr.com, the value of
+<code>tomcat_xmx</code> will be <code>1024m</code> instead.</p>
+<p>Overriding host variables with <code>host_vars</code> is much more maintainable
+than doing so directly in static inventory files, and also provides
+greater visibility into what hosts are getting what overrides.</p>
+<h4 id="chap09.xhtml_leanpub-auto-groupvars"><code>group_vars</code><span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Much like <code>host_vars</code>, Ansible will automatically load any files named
+after inventory groups in a <code>group_vars</code> directory placed inside the
+playbook or inventory file&rsquo;s location.</p>
+<p>Using the same example as above, we&rsquo;ll override one particular variable
+for an entire group of servers. First, we add a <code>group_vars</code> directory
+with a file named after the group needing the overridden variable:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>hostedapachesolr/
+  group_vars/
+    solr
+  host_vars/
+    nyc1.hostedapachesolr.com
+  inventory/
+    hosts
+  main.yml</code></pre>
+</div>
+</figure>
+<p>Then, inside <code>group_vars/solr</code>, use YAML to define a list of variables
+that will be applied to servers in the <code>solr</code> group:</p>
+<figure class="code">
+<div class="highlight">
+<pre class="lineno"><code>1 ---
+2 do_something_amazing=true
+3 foo=bar</code></pre>
+</div>
+</figure>
+<p>Typically, if your playbook is only being run on one group of hosts,
+it&rsquo;s easier to define the variables in the playbook via an included vars
+file. However, in many cases you will be running a playbook or applying
+a set of roles to multiple inventory groups. In these situations, you
+may need to use <code>group_vars</code> to override specific variables for one or
+more groups of servers.</p>
+<h3 id="chap09.xhtml_leanpub-auto-ephemeral-infrastructure-dynamic-inventory">Ephemeral infrastructure: Dynamic inventory<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>In many circumstances, static inventories are adequate for describing
+your infrastructure. When working on small applications, low-traffic web
+applications, and individual workstations, it&rsquo;s simple enough to manage
+an inventory file by hand.</p>
+<p>However, in the age of cloud computing and highly scalable application
+architecture, it&rsquo;s often necessary to add dozens or hundreds of servers
+to an infrastructure in a short period of time&mdash;or to add and remove
+servers continuously, to scale as traffic grows and subsides. In this
+circumstance, it would be tedious (if not impossible) to manage a single
+inventory file by hand, especially if you&rsquo;re using auto-scaling
+infrastructure new instances are provisioned and need to be configured
+in minutes or seconds.</p>
+<p>Even in the case of container-based infrastructure, new instances need
+to be configured correctly, with the proper port mappings, application
+settings, and filesystem configuration.</p>
+<p>For these situations, Ansible allows you to define inventory
+<em>dynamically</em>. If you&rsquo;re using one of the larger cloud-based hosting
+providers, chances are there is already a dynamic inventory script
+(which Ansible uses to build an inventory) for you to use. Ansible core
+already includes scripts for Amazon Web Services, Cobbler, DigitalOcean,
+Linode, OpenStack, and other large providers, and later we&rsquo;ll explore
+creating our own dynamic inventory script (if you aren&rsquo;t using one of
+the major hosting providers or cloud management platforms).</p>
+<h4 id="chap09.xhtml_leanpub-auto-dynamic-inventory-with-digitalocean">Dynamic inventory with DigitalOcean<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Digital Ocean is one of the world&rsquo;s top five hosting companies, and has
+grown rapidly since it&rsquo;s founding in 2011. One of the reasons for the
+extremely rapid growth is the ease of provisioning new &lsquo;droplets&rsquo; (cloud
+VPS servers), and the value provided; as of this writing, you could get
+a fairly speedy VPS with 512MB of RAM and a generous portion of fast SSD
+storage for $5 USD per month.</p>
+<p>Digital Ocean&rsquo;s API and simple developer-friendly philosophy has made it
+easy for Ansible to interact with Digital Ocean droplets; you can
+create, manage, and delete droplets with Ansible, as well as use
+droplets with your playbooks using dynamic inventory.</p>
+<h5 id="chap09.xhtml_leanpub-auto-digitalocean-account-prerequisites">DigitalOcean account prerequisites<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h5>
+<p>Before you can follow the rest of the examples in this section, you will
+need:</p>
+<ol>
+<li>A DigitalOcean account (sign up at <a href="https://www.digitalocean.com" rel="external" target="_blank">www.digitalocean.com</a>).</li>
+<li><code>dopy</code>, a Python wrapper for Digital Ocean API interaction (you can
+install it with pip: <code>sudo pip install dopy</code>).</li>
+<li>Your DigitalOcean account API key and client ID (Ansible currently
+supports the v1 API, so you need to go to the &lsquo;Apps &amp; API&rsquo; page in
+your profile, then click the &lsquo;API v1.0 Page&rsquo; link to get a key and
+client ID).</li>
+<li>An SSH key pair, which will be used to connect to your DigitalOcean
+servers. Follow <a href="https://www.digitalocean.com/community/tutorials/how-to-use-ssh-keys-with-digitalocean-droplets" rel="external" target="_blank">this
+guide</a>
+to create a key pair and add the public key to your DigitalOcean
+account.</li>
+</ol>
+<p>Once you have these four things set up and ready to go, you should be
+able to communicate with your DigitalOcean account through Ansible.</p>
+<h5 id="chap09.xhtml_leanpub-auto-connecting-to-your-digitalocean-account">Connecting to your DigitalOcean account<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h5>
+<p>There are a few different ways you can specify your DigitalOcean client
+ID and API key (including command line arguments <code>--client-id</code> and
+<code>--api-key</code>, as values inside a <code>digital_ocean.ini</code> file, or as
+environment variables). For our example, we&rsquo;ll use environment variables
+(since these are easy to configure, and work both with Ansible&rsquo;s
+<code>digital_ocean</code> module and the dynamic inventory script). Open up a
+terminal session, and enter the following commands:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ export DO_CLIENT_ID=YOUR_CLIENT_ID_HERE
+$ export DO_API_KEY=YOUR_API_KEY_HERE</code></pre>
+</div>
+</figure>
+<p>Before we can use a dynamic inventory script to discover our
+DigitalOcean droplets, let&rsquo;s use Ansible to quickly provision a new
+droplet.</p>
+<aside class="warning blurb">
+<p>Creating cloud instances (&lsquo;Droplets&rsquo;, in DigitalOcean parlance) will
+incur minimal charges for the time you use them (currently less than
+$0.01/hour for the size in this example). For the purposes of this
+tutorial (and in general, for any testing), make sure you shut down and
+destroy your instances when you&rsquo;re finished using them, or you will be
+charged through the next billing cycle! Even so, using low-priced
+instances (like a $5/month DigitalOcean droplet with hourly billing)
+means that, even in the worst case, you won&rsquo;t have to pay much. If you
+create and destroy an instance in a few hours, you&rsquo;ll be charged a few
+pennies.</p>
+</aside>
+<h5 id="chap09.xhtml_leanpub-auto-creating-a-droplet-with-ansible">Creating a droplet with Ansible<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h5>
+<p>Create a new playbook named <code>provision.yml</code>, with the following
+contents:</p>
+<figure class="code">
+<div class="highlight">
+<pre class="lineno"><code> 1 ---
+ 2 - hosts: localhost
+ 3   connection: local
+ 4   gather_facts: false
+ 5 
+ 6   tasks:
+ 7     - name: Create new Droplet.
+ 8       digital_ocean:
+ 9         state: present
+10         command: droplet
+11         name: ansible-test
+12         private_networking: yes
+13         # 512mb
+14         size_id: 66
+15         # CentOS 7.0 x64
+16         image_id: 6713409
+17         # nyc2
+18         region_id: 4
+19         ssh_key_ids: 138954
+20         # Required for idempotence/only one droplet creation.
+21         unique_name: yes
+22       register: do</code></pre>
+</div>
+</figure>
+<p>The <code>digital_ocean</code> module lets you create, manage, and delete droplets
+with ease. You can read the documentation for all the options, but the
+above is an overview of the main options. <code>name</code> sets the hostname for
+the droplet, <code>state</code> can also be set to <code>deleted</code> if you want the
+droplet to be destroyed, and other options tell DigitalOcean where to
+set up the droplet, and with what OS and configuration.</p>
+<aside class="tip blurb">
+<p>You can use DigitalOcean&rsquo;s API, along with your client_id and api_key,
+to get the IDs for <code>size_id</code> (the size of the Droplet), <code>image_id</code> (the
+system or distro image to use), <code>region_id</code> (the data center in which
+your droplet will be created), and <code>ssh_key_ids</code> (a comma separate list
+of SSH keys to be included in the root account&rsquo;s <code>authorized_keys</code>
+file).</p>
+<p>As an example, to get all the available images, use
+<code>curl &quot;https://api.digitalocean.com/images/?client_id=CLIENT_ID&amp;api_key=API_KEY&amp;filter=global&quot; | python -m json.tool</code>,
+substituting your own <code>CLIENT_ID</code> and <code>API_KEY</code>, and you&rsquo;ll receive a
+JSON listing of all available values. Browse the <a href="https://developers.digitalocean.com/" rel="external" target="_blank">DigitalOcean
+API</a> for information on how to
+query SSH key information, size information, etc.</p>
+</aside>
+<p>We used <code>register</code> as part of the <code>digital_ocean</code> task so we could
+immediately start using and configuring the new host if needed. Running
+the above playbook returns the following output (using <code>debug: var=do</code>
+in an additional task to dump the contents of our registered variable,
+<code>do</code>):</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible-playbook do_test.yml
+<p>PLAY [localhost] ***********************************************************</p>
+<p>TASK: [Create new Droplet.] ************************************************
+changed: [localhost]</p>
+<p>TASK: [debug var=do] *******************************************************
+ok: [localhost] =&gt; {
+&quot;do&quot;: {
+&quot;changed&quot;: true,
+&quot;droplet&quot;: {
+&quot;backups&quot;: [],
+&quot;backups_active&quot;: false,
+&quot;created_at&quot;: &quot;2014-10-22T02:09:20Z&quot;,
+&quot;event_id&quot;: 34915980,
+&quot;id&quot;: 2940194,
+&quot;image_id&quot;: 6918990,
+&quot;ip_address&quot;: &quot;162.243.20.29&quot;,
+&quot;locked&quot;: false,
+&quot;name&quot;: &quot;ansible-test&quot;,
+&quot;private_ip_address&quot;: null,
+&quot;region_id&quot;: 4,
+&quot;size_id&quot;: 66,
+&quot;snapshots&quot;: [],
+&quot;status&quot;: &quot;active&quot;
+},
+&quot;invocation&quot;: {
+&quot;module_args&quot;: &quot;&quot;,
+&quot;module_name&quot;: &quot;digital_ocean&quot;
+}
+}
+}</p>
+<p>PLAY RECAP *****************************************************************
+localhost                  : ok=2    changed=1    unreachable=0    failed=0</code></pre></p>
+</div>
+</figure>
+<p>Since <code>do</code> contains the new droplet&rsquo;s IP address (alongside other
+relevant information), you can place your freshly-created droplet in an
+existing inventory group using Ansible&rsquo;s <code>add_host</code> module. Adding to
+the playbook we started above, you could set up your playbook to
+provision an instance and immediately configure it (after waiting for
+port 22 to become available) with something like:</p>
+<figure class="code">
+<div class="highlight">
+<pre class="lineno"><code>24     - name: Add new host to our inventory.
+25       add_host:
+26         name: &quot;{{ do.droplet.ip_address }}&quot;
+27         groups: do
+28       when: do.droplet is defined
+29 
+30 - hosts: do
+31   remote_user: root
+32   gather_facts: false
+33 
+34   tasks:
+35     - name: Wait for port 22 to become available.
+36       local_action: &quot;wait_for port=22 host={{ inventory_hostname }}&quot;
+37 
+38     - name: Install tcpdump.
+39       yum: name=tcpdump state=present</code></pre>
+</div>
+</figure>
+<p>At this point, if you run the playbook
+(<code>$ ansible-playbook provision.yml</code>), it should create a new droplet (if
+it has not already been created), then add that droplet to the <code>do</code>
+inventory group, and finally, run a new play on all the <code>do</code> hosts
+(including the new droplet). Here are the results:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible-playbook provision.yml
+<p>PLAY [localhost] ***********************************************************</p>
+<p>TASK: [Create new Droplet.] ************************************************
+changed: [localhost]</p>
+<p>TASK: [Add new host to our inventory.] *************************************
+ok: [localhost]</p>
+<p>PLAY [do] ******************************************************************</p>
+<p>TASK: [Install tcpdump.] ***************************************************
+changed: [162.243.20.29]</p>
+<p>PLAY RECAP *****************************************************************
+162.243.20.29              : ok=2    changed=1    unreachable=0    failed=0
+localhost                  : ok=2    changed=1    unreachable=0    failed=0</code></pre></p>
+</div>
+</figure>
+<p>If you run the same playbook again, it should report no changes&mdash;the
+entire playbook is idempotent! You might be starting to see just how
+powerful it is to have a tool as flexible as Ansible at your disposal;
+not only can you configure servers, you can create them (singly, or
+dozens at a time), and configure them at once. And even if a ham-fisted
+sysadmin jumps in and deletes an entire server, you can run the playbook
+again, and rest assured your server will be recreated and reconfigured
+exactly as it was when it was first set up.</p>
+<aside class="tip blurb">
+<p>Note that you might need to disable strict host key checking to get
+provisioning and instant configuration to work correctly, otherwise you
+may run into an error stating that Ansible can&rsquo;t connect to the new
+droplet during the second play. To do this, add the line
+<code>host_key_checking=False</code> under the <code>[defaults]</code> section in your
+<code>ansible.cfg</code> file (located in <code>/etc/ansible</code> by default).</p>
+<p>You should normally leave <code>host_key_checking</code> enabled, but when rapidly
+building and destroying VMs for testing purposes, it is simplest to
+disable it temporarily.</p>
+</aside>
+<h5 id="chap09.xhtml_leanpub-auto-digitalocean-dynamic-inventory-with-digitaloceanpy">DigitalOcean dynamic inventory with <code>digital_ocean.py</code><span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h5>
+<p>Once you have some DigitalOcean droplets, you need a way for Ansible to
+dynamically build an inventory of your servers so you can build
+playbooks and use the servers in logical groupings (or run playbooks and
+<code>ansible</code> commands directly on all droplets).</p>
+<p>There are a few steps to getting DigitalOcean&rsquo;s official dynamic
+inventory script working:</p>
+<ol>
+<li>Install <code>dopy</code> via pip (the DigitalOcean Python library):
+<code>$ pip install dopy</code>.</li>
+<li>Download the <a href="https://raw.githubusercontent.com/ansible/ansible/devel/plugins/inventory/digital_ocean.py" rel="external" target="_blank">DigitalOcean dynamic inventory
+script</a>
+from Ansible on GitHub:
+<code>$ curl -O https://raw.githubusercontent.com/ansible/ansible/devel/plugins/inventory/digital_ocean.py</code>.</li>
+<li>Make the inventory script executable: <code>$ chmod +x digital_ocean.py</code>.</li>
+<li>Make sure you have the credentials configured in <code>digital_ocean.ini</code>
+(as explained earlier in this chapter). Alternatively, you can set
+<code>DO_CLIENT_ID</code> and <code>DO_API_KEY</code> in your environment, or pass the
+command line options <code>--client-id</code> and <code>--api-key</code>.</li>
+<li>Make sure the script is working by running the script directly:
+<code>$ ./digital_ocean.py --pretty</code>. After a second or two, you should
+see all your droplets (likely just the one you created earlier)
+listed by IP address and dynamic group as JSON.</li>
+<li>Ping all your DigitalOcean droplets:
+<code>$ ansible all -m ping -i digital_ocean.py -u root</code>.</li>
+</ol>
+<p>Now that you have all your hosts being loaded through the dynamic
+inventory script, you can use <code>add_hosts</code> to build groups of the
+Droplets for use in your playbooks. Alternatively, if you want to fork
+the <code>digital_ocean.py</code> inventory script, you can modify it to suit your
+needs; exclude certain servers, build groups based on certain criteria,
+etc.</p>
+<aside class="information blurb">
+<p>Ansible currently supports DigitalOcean&rsquo;s v1 API, which makes working
+with DigitalOcean slightly more difficult. The v2 API allows you to use
+region names (e.g. &ldquo;nyc2&rdquo;) instead of numeric IDs, allows you to <a href="https://www.digitalocean.com/community/tutorials/an-introduction-to-droplet-metadata" rel="external" target="_blank">add
+metadata to your
+droplets</a>,
+and much more. Ansible should soon support the v2 API. If you&rsquo;re
+interested in the current status of this effort, or would like to help
+in migrating to the v2 API, visit <a href="https://github.com/ansible/ansible-modules-core/issues/209" rel="external" target="_blank">the v2 API support issue on
+GitHub</a>.</p>
+</aside>
+<h4 id="chap09.xhtml_leanpub-auto-dynamic-inventory-with-aws">Dynamic inventory with AWS<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Many of this book&rsquo;s readers are familiar with Amazon Web Services
+(especially EC2, S3, ElastiCache, and Route53), and likely have managed
+or currently manage an infrastructure within Amazon&rsquo;s cloud. Ansible has
+very strong support for managing AWS-based infrastructure, and includes
+a <a href="https://raw.githubusercontent.com/ansible/ansible/devel/plugins/inventory/ec2.py" rel="external" target="_blank">dynamic inventory
+script</a>
+to help you run playbooks on your hosts in a variety of ways.</p>
+<p>There are a few excellent guides to using Ansible with AWS, for example:</p>
+<ul>
+<li><a href="http://docs.ansible.com/guide_aws.html" rel="external" target="_blank">Ansible - Amazon Web Services
+Guide</a></li>
+<li><a href="https://leanpub.com/ansible-for-aws" rel="external" target="_blank">Ansible for AWS</a></li>
+</ul>
+<p>I won&rsquo;t be covering dynamic inventory in this chapter, but will mention
+that the <code>ec2.py</code> dynamic inventory script, along with Ansible&rsquo;s
+extensive support for AWS infrastructure through <code>ec2_*</code> modules, makes
+Ansible the best and most simple tool for managing a broad AWS
+infrastructure.</p>
+<p>In the next chapter, one of the examples will include a guide for
+provisioning infrastructure on AWS, along with a quick overview of
+dynamic inventory on AWS.</p>
+<h4 id="chap09.xhtml_leanpub-auto-inventory-on-the-fly-addhost-and-groupby">Inventory on-the-fly: <code>add_host</code> and <code>group_by</code><span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Sometimes, especially when provisioning new servers, you will need to
+modify the in-memory inventory during the course of a playbook run.
+Ansible offers the <code>add_host</code> and <code>group_by</code> modules to help you manage
+inventory for these scenarios.</p>
+<p>In the DigitalOcean example above, <code>add_host</code> was used to add the new
+droplet to the <code>do</code> group:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>[...]
+    - name: Add new host to our inventory.
+      add_host:
+        name: &quot;{{ do.droplet.ip_address }}&quot;
+        groups: do
+      when: do.droplet is defined
+<ul>
+<li>
+<p>hosts: do
+remote_user: root</p>
+<p>tasks:
+[&hellip;]</code></pre></p>
+</li>
+</ul>
+</div>
+</figure>
+<p>You could add multiple groups with add_host, and you can also add other
+variables for the host inline with <code>add_host</code>. As an example, let&rsquo;s say
+you created a VM using an image that exposes SSH on port 2288 and
+requires an application-specific memory limit specific to this VM:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>- name: Add new host to our inventory.
+  add_host:
+    name: &quot;{{ do.droplet.ip_address }}&quot;
+    ansible_ssh_port: 2288
+    myapp_memory_maximum: &quot;1G&quot;
+  when: do.droplet is defined</code></pre>
+</div>
+</figure>
+<p>The custom port will be used when Ansible connects to this host, and the
+<code>myapp_memory_maximum</code> will be passed into the playbooks just as any
+other inventory variable.</p>
+<p>The <code>group_by</code> module is even simpler, and allows you to create dynamic
+groups during the course of a playbook run. Usage is extremely simple:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>- hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Create an inventory group for each architecture.
+      group_by: &quot;key=architecture-{{ ansible_machine }}&quot;
+<pre><code>- debug: var=groups&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
+</div>
+</figure>
+<p>After running the above playbook, you&rsquo;d see all your normal inventory
+groups, plus groups for <code>architecture-x86_64</code>, <code>i386</code>, etc. (depending
+on what kind of server architectures you use).</p>
+<h4 id="chap09.xhtml_leanpub-auto-multiple-inventory-sources---mixing-static-and-dynamic-inventories">Multiple inventory sources - mixing static and dynamic inventories<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>If you need to combine static and dynamic inventory, or even if you wish
+to use multiple dynamic inventories (for example, if you are managing
+servers hosted by two different cloud providers), you can pass a
+directory to <code>ansible</code> or <code>ansible-playbook</code>, and Ansible will combine
+the output of all the inventories (both static and dynamic) inside the
+directory:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>`ansible-playbook -i path/to/inventories main.yml`</code></pre>
+</div>
+</figure>
+<p>One caveat: Ansible ignores <code>.ini</code> and backup files in the directory,
+but will attempt to parse every text file and execute every executable
+file in the directory&mdash;don&rsquo;t leave random files in mixed inventory
+folders!</p>
+<h4 id="chap09.xhtml_leanpub-auto-creating-custom-dynamic-inventories">Creating custom dynamic inventories<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Most infrastructure can be managed with a custom inventory file or an
+off-the-shelf cloud inventory script, but there are many situations
+where more control is needed. Ansible will accept any kind of executable
+file as an inventory file, so you can build your own dynamic inventory
+however you like, as long as you can pass it to Ansible as JSON.</p>
+<p>You could create an executable binary, a script, or anything else that
+can be run and will output JSON to stdout, and Ansible will call it with
+the argument <code>--list</code> when you run, as an example,
+<code>ansible all -i my-inventory-script -m ping</code>.</p>
+<p>Let&rsquo;s start working our own custom dynamic inventory script by outlining
+the basic JSON format Ansible expects:</p>
+<figure class="code">
+<div class="highlight">
+<pre class="lineno"><code> 1 {
+ 2     &quot;group&quot;: {
+ 3         &quot;hosts&quot;: [
+ 4             &quot;192.168.28.71&quot;,
+ 5             &quot;192.168.28.72&quot;
+ 6         ],
+ 7         &quot;vars&quot;: {
+ 8             &quot;ansible_ssh_user&quot;: &quot;johndoe&quot;,
+ 9             &quot;ansible_ssh_private_key_file&quot;: &quot;~/.ssh/mykey&quot;,
+10             &quot;example_variable&quot;: &quot;value&quot;
+11         }
+12     },
+13     &quot;_meta&quot;: {
+14         &quot;hostvars&quot;: {
+15             &quot;192.168.28.71&quot;: {
+16                 &quot;host_specific_var&quot;: &quot;bar&quot;
+17             },
+18             &quot;192.168.28.72&quot;: {
+19                 &quot;host_specific_var&quot;: &quot;foo&quot;
+20             }
+21         }
+22     }
+23 }</code></pre>
+</div>
+</figure>
+<p>Ansible expects a dictionary of groups (with each group having a list of
+<code>hosts</code>, and group variables in the group&rsquo;s <code>vars</code> dictionary), and a
+<code>_meta</code> dictionary that stores host variables for all hosts individually
+inside a <code>hostvars</code> dictionary.</p>
+<aside class="tip blurb">
+<p>When you return a <code>_meta</code> dictionary in your inventory script, Ansible
+stores that data in its cache and doesn&rsquo;t call your inventory script <em>N</em>
+times for all the hosts in the inventory. You can leave out the <code>_meta</code>
+variables if you&rsquo;d rather structure your inventory file to return host
+variables one host at a time (Ansible will call your script with the
+arguments <code>--host [hostname]</code> for each host), but it&rsquo;s often faster and
+easier to simply return all variables in the first call. In this book,
+all the examples will use the <code>_meta</code> dictionary.</p>
+</aside>
+<p>The dynamic inventory script can do anything to get the data (call an
+external API, pull information from a database or file, etc.), and
+Ansible will use it as an inventory source, so long as it returns a JSON
+structure like the one above when the script is called with the
+<code>--list</code>.</p>
+<h5 id="chap09.xhtml_leanpub-auto-building-a-custom-dynamic-inventory-in-python">Building a Custom Dynamic Inventory in Python<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h5>
+<p>To create a test dynamic inventory script for demonstration purposes,
+let&rsquo;s set up a quick set of two VMs using Vagrant. Create the following
+<code>Vagrantfile</code> in a new directory:</p>
+<figure class="code">
+<div class="highlight">
+<pre class="lineno"><code> 1 VAGRANTFILE_API_VERSION = &quot;2&quot;
+ 2 
+ 3 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+ 4   config.ssh.insert_key = false
+ 5   config.vm.provider :virtualbox do |vb|
+ 6     vb.customize [&quot;modifyvm&quot;, :id, &quot;--memory&quot;, &quot;256&quot;]
+ 7   end
+ 8 
+ 9   # Application server 1.
+10   config.vm.define &quot;inventory1&quot; do |inventory|
+11     inventory.vm.hostname = &quot;inventory1.dev&quot;
+12     inventory.vm.box = &quot;geerlingguy/ubuntu1404&quot;
+13     inventory.vm.network :private_network, ip: &quot;192.168.28.71&quot;
+14   end
+15 
+16   # Application server 2.
+17   config.vm.define &quot;inventory2&quot; do |inventory|
+18     inventory.vm.hostname = &quot;inventory2.dev&quot;
+19     inventory.vm.box = &quot;geerlingguy/ubuntu1404&quot;
+20     inventory.vm.network :private_network, ip: &quot;192.168.28.72&quot;
+21   end
+22 end</code></pre>
+</div>
+</figure>
+<p>Run <code>vagrant up</code> to boot two VMs running Ubuntu 14.04, with the IP
+addresses <code>192.168.28.71</code>, and <code>192.168.28.72</code>. A simple inventory file
+could be used to control the VMs with Ansible:</p>
+<figure class="code">
+<div class="highlight">
+<pre class="lineno"><code>1 [group]
+2 192.168.28.71 host_specific_var=foo
+3 192.168.28.72 host_specific_var=bar
+4 
+5 [group:vars]
+6 ansible_ssh_user=vagrant
+7 ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key
+8 example_variable=value</code></pre>
+</div>
+</figure>
+<p>However, let&rsquo;s assume the VMs were provisioned by another system, and
+you need to get the information through a dynamic inventory script.
+Here&rsquo;s a simple implementation of a dynamic inventory script in Python:</p>
+<figure class="code">
+<div class="highlight">
+<pre class="lineno"><code> 1 #!/usr/bin/env python
+ 2 
+ 3 &#39;&#39;&#39;
+ 4 Example custom dynamic inventory script for Ansible, in Python.
+ 5 &#39;&#39;&#39;
+ 6 
+ 7 import os
+ 8 import sys
+ 9 import argparse
+10 
+11 try:
+12     import json
+13 except ImportError:
+14     import simplejson as json
+15 
+16 class ExampleInventory(object):
+17 
+18     def __init__(self):
+19         self.inventory = {}
+20         self.read_cli_args()
+21 
+22         # Called with `--list`.
+23         if self.args.list:
+24             self.inventory = self.example_inventory()
+25         # Called with `--host [hostname]`.
+26         elif self.args.host:
+27             # Not implemented, since we return _meta info `--list`.
+28             self.inventory = self.empty_inventory()
+29         # If no groups or vars are present, return an empty inventory.
+30         else:
+31             self.inventory = self.empty_inventory()
+32 
+33         print json.dumps(self.inventory);
+34 
+35     # Example inventory for testing.
+36     def example_inventory(self):
+37         return {
+38             &#39;group&#39;: {
+39                 &#39;hosts&#39;: [&#39;192.168.28.71&#39;, &#39;192.168.28.72&#39;],
+40                 &#39;vars&#39;: {
+41                     &#39;ansible_ssh_user&#39;: &#39;vagrant&#39;,
+42                     &#39;ansible_ssh_private_key_file&#39;:
+43                         &#39;~/.vagrant.d/insecure_private_key&#39;,
+44                     &#39;example_variable&#39;: &#39;value&#39;
+45                 }
+46             },
+47             &#39;_meta&#39;: {
+48                 &#39;hostvars&#39;: {
+49                     &#39;192.168.28.71&#39;: {
+50                         &#39;host_specific_var&#39;: &#39;foo&#39;
+51                     },
+52                     &#39;192.168.28.72&#39;: {
+53                         &#39;host_specific_var&#39;: &#39;bar&#39;
+54                     }
+55                 }
+56             }
+57         }
+58 
+59     # Empty inventory for testing.
+60     def empty_inventory(self):
+61         return {&#39;_meta&#39;: {&#39;hostvars&#39;: {}}}
+62 
+63     # Read the command line args passed to the script.
+64     def read_cli_args(self):
+65         parser = argparse.ArgumentParser()
+66         parser.add_argument(&#39;--list&#39;, action = &#39;store_true&#39;)
+67         parser.add_argument(&#39;--host&#39;, action = &#39;store&#39;)
+68         self.args = parser.parse_args()
+69 
+70 # Get the inventory.
+71 ExampleInventory()</code></pre>
+</div>
+</figure>
+<p>Save the above as <code>inventory.py</code> in the same folder as the <code>Vagrantfile</code>
+you created earlier (make sure you booted the two VMs with
+<code>vagrant up</code>), and make the file executable <code>chmod +x inventory.py</code>.</p>
+<p>Run the inventory script manually to verify it returns the proper JSON
+response when run with <code>--list</code>:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ./inventory.py --list
+{&quot;group&quot;: {&quot;hosts&quot;: [&quot;192.168.28.71&quot;, &quot;192.168.28.72&quot;], &quot;vars&quot;:
+{&quot;ansible_ssh_user&quot;: &quot;vagrant&quot;, &quot;ansible_ssh_private_key_file&quot;:
+&quot;~/.vagrant.d/insecure_private_key&quot;, &quot;example_variable&quot;: &quot;value
+&quot;}}, &quot;_meta&quot;: {&quot;hostvars&quot;: {&quot;192.168.28.72&quot;: {&quot;host_specific_va
+r&quot;: &quot;bar&quot;}, &quot;192.168.28.71&quot;: {&quot;host_specific_var&quot;: &quot;foo&quot;}}}}</code></pre>
+</div>
+</figure>
+<p>Test Ansible&rsquo;s ability to use the inventory script to contact the two
+VMs:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible all -i inventory.py -m ping
+192.168.28.71 | success &gt;&gt; {
+    &quot;changed&quot;: false,
+    &quot;ping&quot;: &quot;pong&quot;
+}
+<p>192.168.28.72 | success &gt;&gt; {
+&quot;changed&quot;: false,
+&quot;ping&quot;: &quot;pong&quot;
+}</code></pre></p>
+</div>
+</figure>
+<p>Since Ansible can connect, verify the configured host variables (<code>foo</code>
+and <code>bar</code>) are set correctly on their respective hosts:</p>
+<figure class="code">
+<div class="highlight">
+<pre><code>$ ansible all -i inventory.py -m debug -a &quot;var=host_specific_var&quot;
+192.168.28.71 | success &gt;&gt; {
+    &quot;var&quot;: {
+        &quot;host_specific_var&quot;: &quot;foo&quot;
+    }
+}
+<p>192.168.28.72 | success &gt;&gt; {
+&quot;var&quot;: {
+&quot;host_specific_var&quot;: &quot;bar&quot;
+}
+}</code></pre></p>
+</div>
+</figure>
+<p>The only alteration for real-world usage you&rsquo;d need to make to the above
+<code>inventory.py</code> script would be changing the <code>example_inventory()</code> method
+to something that incorporates the business logic you would need for
+your own inventory, whether it would be calling an external API with all
+the server data or pulling in the information from a database or other
+data store.</p>
+<h5 id="chap09.xhtml_leanpub-auto-building-a-custom-dynamic-inventory-in-php">Building a Custom Dynamic Inventory in PHP<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h5>
+<p>You can build an inventory script in whatever language you&rsquo;d like. For
+example, the Python script from above can be ported to functional PHP as
+follows:</p>
+<figure class="code">
+<div class="highlight">
+<pre class="lineno"><code> 1 #!/usr/bin/php
+ 2 &lt;?php
+ 3 
+ 4 /**
+ 5  * @file
+ 6  * Example custom dynamic inventory script for Ansible, in PHP.
+ 7  */
+ 8 
+ 9 /**
+10  * Example inventory for testing.
+11  *
+12  * @return array
+13  *   An example inventory with two hosts.
+14  */
+15 function example_inventory() {
+16   return [
+17     &#39;group&#39; =&gt; [
+18       &#39;hosts&#39; =&gt; [&#39;192.168.28.71&#39;, &#39;192.168.28.72&#39;],
+19       &#39;vars&#39; =&gt; [
+20         &#39;ansible_ssh_user&#39; =&gt; &#39;vagrant&#39;,
+21         &#39;ansible_ssh_private_key_file&#39; =&gt; &#39;~/.vagrant.d/insecure_private_key&#39;,
+22         &#39;example_variable&#39; =&gt; &#39;value&#39;,
+23       ],
+24     ],
+25     &#39;_meta&#39; =&gt; [
+26       &#39;hostvars&#39; =&gt; [
+27         &#39;192.168.28.71&#39; =&gt; [
+28           &#39;host_specific_var&#39; =&gt; &#39;foo&#39;,
+29         ],
+30         &#39;192.168.28.72&#39; =&gt; [
+31           &#39;host_specific_var&#39; =&gt; &#39;bar&#39;,
+32         ],
+33       ],
+34     ],
+35   ];
+36 }
+37 
+38 /**
+39  * Empty inventory for testing.
+40  *
+41  * @return array
+42  *   An empty inventory.
+43  */
+44 function empty_inventory() {
+45   return [&#39;_meta&#39; =&gt; [&#39;hostvars&#39; =&gt; new stdClass()]];
+46 }
+47 
+48 /**
+49  * Get inventory.
+50  *
+51  * @param array $argv
+52  *   Array of command line arguments (as returned by $_SERVER[&#39;argv&#39;]).
+53  *
+54  * @return array
+55  *   Inventory of groups or vars, depending on arguments.
+56  */
+57 function get_inventory($argv = []) {
+58   $inventory = new stdClass();
+59 
+60   // Called with `--list`.
+61   if (!empty($argv[1]) &amp;&amp; $argv[1] == &#39;--list&#39;) {
+62     $inventory = example_inventory();
+63   }
+64   // Called with `--host [hostname]`.
+65   elseif ((!empty($argv[1]) &amp;&amp; $argv[1] == &#39;--host&#39;) &amp;&amp; !empty($argv[2])) {
+66     // Not implemented, since we return _meta info `--list`.
+67     $inventory = empty_inventory();
+68   }
+69   // If no groups or vars are present, return an empty inventory.
+70   else {
+71     $inventory = empty_inventory();
+72   }
+73 
+74   print json_encode($inventory);
+75 }
+76 
+77 // Get the inventory.
+78 get_inventory($_SERVER[&#39;argv&#39;]);
+79 
+80 ?&gt;</code></pre>
+</div>
+</figure>
+<p>If you were to save the code above into the file <code>inventory.php</code>, mark
+it executable (<code>chmod +x inventory.php</code>), and run the same Ansible
+command as earlier (referencing <code>inventory.php</code> instead of
+<code>inventory.py</code>), the command should succeed, just as with the previous
+Python example.</p>
+<aside class="information blurb">
+<p>All the files mentioned in these dynamic inventory examples are
+available in the <a href="https://github.com/geerlingguy/ansible-for-devops" rel="external" target="_blank">Ansible for DevOps GitHub
+repository</a>, in the
+<code>dynamic-inventory</code> folder.</p>
+</aside>
+<h5 id="chap09.xhtml_leanpub-auto-managing-a-paas-with-a-custom-dynamic-inventory">Managing a PaaS with a Custom Dynamic Inventory<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h5>
+<p><a href="https://hostedapachesolr.com/" rel="external" target="_blank">Hosted Apache Solr</a>&rsquo;s infrastructure is
+built using a custom dynamic inventory to allow for centrally-controlled
+server provisioning and configuration. Here&rsquo;s how the server
+provisioning process works on Hosted Apache Solr:</p>
+<ol>
+<li>A Drupal website holds a &lsquo;Server&rsquo; content type that stores metadata
+about each server (e.g. chosen hostname, data center location,
+choice of OS image, and memory settings).</li>
+<li>When a new server is added, a remote Jenkins job is triggered,
+which: 1. Builds a new cloud server on DigitalOcean using an Ansible
+playbook. 2. Runs a provisioning playbook on the server to
+initialize the configuration. 3. Adds a new DNS entry for the
+server. 4. Posts additional server metadata (like the IP address)
+back to the Drupal website via a private API.</li>
+<li>When a server is updated, or there is new configuration to be
+deployed to the server(s), a different Jenkins job is triggered,
+which: 1. Runs the same provisioning playbook on all the
+DigitalOcean servers. This playbook uses an inventory script which
+calls back to an inventory API endpoint that returns all the server
+information as JSON (the inventory script on the Jenkins server
+passes the JSON through to stdout). 2. Reports back success or
+failure of the ansible playbook to the REST API.</li>
+</ol>
+<p>The above process transformed the management of the entire Hosted Apache
+Solr platform. Instead of taking twenty to thirty minutes to build a new
+server (even when using an Ansible playbook with a few manual steps),
+the process can be completed in just a few minutes, with no manual
+intervention.</p>
+<aside class="warning blurb">
+<p>The security of your server inventory and infrastructure management
+should be a top priority; Hosted Apache Solr uses HTTPS everywhere, and
+has a hardened private API for inventory access and server metadata. If
+you have any automated processes that run over a network, you should
+take extra care to audit these processes and all the involved systems
+thoroughly!</p>
+</aside>
+<h3 id="chap09.xhtml_leanpub-auto-summary-6">Summary<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>From the most basic infrastructure consisting of one server to a
+multi-tenant, dynamic infrastructure with thousands of them, Ansible
+offers many options for describing your servers and overriding playbook
+and role variables for specific hosts or groups. With Ansible&rsquo;s flexible
+inventory system, you should be able to describe all your servers,
+however they&rsquo;re managed and wherever they&rsquo;re hosted.</p>
+<figure class="code">
+<div class="highlight">
+<pre><code> ___________________________________
+/ A pint of sweat saves a gallon of \
+\ blood. (General Patton)           /
+ -----------------------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||</code></pre>
+</div>
+</figure>
+:::
+<p>[]{#chap10.xhtml}</p>
+<p>::: {}</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="parent hidden " data-nav-id="/archive/"><input type="checkbox" id="R-section-3efae3733ab07a14aa0bb0bbf1f8e3dd" aria-controls="R-subsections-3efae3733ab07a14aa0bb0bbf1f8e3dd" checked><label for="R-section-3efae3733ab07a14aa0bb0bbf1f8e3dd"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Linux Reader</span></label><a class="padding default-animation" href="/archive/">Linux Reader<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-3efae3733ab07a14aa0bb0bbf1f8e3dd" class="collapsible-menu">
+            <li class="parent " data-nav-id="/archive/ansible/"><input type="checkbox" id="R-section-2da59b953fd922cc24bbcc833598ec18" aria-controls="R-subsections-2da59b953fd922cc24bbcc833598ec18" checked><label for="R-section-2da59b953fd922cc24bbcc833598ec18"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/archive/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-2da59b953fd922cc24bbcc833598ec18" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/"><input type="checkbox" id="R-section-e5951e8bf2f82dfe42bf49de8b6e015a" aria-controls="R-subsections-e5951e8bf2f82dfe42bf49de8b6e015a"><label for="R-section-e5951e8bf2f82dfe42bf49de8b6e015a"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu 45 Days to RHCE</span></label><a class="padding default-animation" href="/archive/ansible/45-days-to-rhce-1/">45 Days to RHCE<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5951e8bf2f82dfe42bf49de8b6e015a" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/ansible-navigator/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/crash-and-burn/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/crash-and-burn/">Crash and Burn<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/the-cheat-code/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/45-days-to-rhce-1/getting-ready/"><a class="padding" href="/archive/ansible/45-days-to-rhce-1/getting-ready/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-navigator/"><a class="padding" href="/archive/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/the-cheat-code/"><a class="padding" href="/archive/ansible/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/getting-ready-for-rhce/"><a class="padding" href="/archive/ansible/getting-ready-for-rhce/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/automate-kvm-vms/"><a class="padding" href="/archive/ansible/automate-kvm-vms/">Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="active hidden " data-nav-id="/archive/ansible/ansible4devops/chapter-7---inventories/"><a class="padding" href="/archive/ansible/ansible4devops/chapter-7---inventories/"><i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ad-hoc-ansible-commands/"><a class="padding" href="/archive/ansible/ad-hoc-ansible-commands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/adhoccommands/"><a class="padding" href="/archive/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-documentation/"><a class="padding" href="/archive/ansible/ansible-documentation/">Ansible Documentation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-facts/"><a class="padding" href="/archive/ansible/ansible-facts/">Ansible Facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-galaxy-roles/"><a class="padding" href="/archive/ansible/ansible-galaxy-roles/">Ansible Galaxy Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-inventory/"><a class="padding" href="/archive/ansible/ansible-inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/inventory/"><a class="padding" href="/archive/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-playbooks/"><a class="padding" href="/archive/ansible/ansible-playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/playbooks/"><a class="padding" href="/archive/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/roles/"><a class="padding" href="/archive/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-ansible-roles/"><a class="padding" href="/archive/ansible/using-ansible-roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-vault/"><a class="padding" href="/archive/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible-inventory-command/"><a class="padding" href="/archive/ansible/ansible-inventory-command/">Ansible-inventory command<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansible.cfg/"><a class="padding" href="/archive/ansible/ansible.cfg/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ansibleconfig/"><a class="padding" href="/archive/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/boot-process/"><a class="padding" href="/archive/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/building-an-ansible-lab-with-ansible/"><a class="padding" href="/archive/ansible/building-an-ansible-lab-with-ansible/">Building an Ansible lab with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/common-modules-with-examples/"><a class="padding" href="/archive/ansible/common-modules-with-examples/">Common modules with examples<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/deploying-files/"><a class="padding" href="/archive/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/discovering-storage-related-facts/"><a class="padding" href="/archive/ansible/discovering-storage-related-facts/">Discovering storage related facts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/dynamic-inventory/"><a class="padding" href="/archive/ansible/dynamic-inventory/">Dynamic Inventory<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/encrypted-passwords/"><a class="padding" href="/archive/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/execution-environments/"><a class="padding" href="/archive/ansible/execution-environments/">Execution Environments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/handlers/"><a class="padding" href="/archive/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/host-name-patterns/"><a class="padding" href="/archive/ansible/host-name-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/hostname-patterns/"><a class="padding" href="/archive/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/include-and-import-files/"><a class="padding" href="/archive/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/including-and-importing-files/"><a class="padding" href="/archive/ansible/including-and-importing-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/jinja2-templates/"><a class="padding" href="/archive/ansible/jinja2-templates/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/jinja2/"><a class="padding" href="/archive/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/user-and-groups/"><a class="padding" href="/archive/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-ansible-errors-and-logs/"><a class="padding" href="/archive/ansible/managing-ansible-errors-and-logs/">Managing Ansible Errors and Logs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-packages/"><a class="padding" href="/archive/ansible/managing-packages/">Managing Packages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/archive/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-partitions-and-lvm/"><a class="padding" href="/archive/ansible/managing-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/storage-partitions-and-lvm/"><a class="padding" href="/archive/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/managing-services/"><a class="padding" href="/archive/ansible/managing-services/">Managing Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/services/"><a class="padding" href="/archive/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/networking-with-ansible/"><a class="padding" href="/archive/ansible/networking-with-ansible/">Networking with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/nfs-setup/"><a class="padding" href="/archive/ansible/nfs-setup/">NFS Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/optimize-ansible-processing/"><a class="padding" href="/archive/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/optimizing-ansible-processing/"><a class="padding" href="/archive/ansible/optimizing-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/repositories-and-subscriptions/"><a class="padding" href="/archive/ansible/repositories-and-subscriptions/">Repositories and subscriptions<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/selinux-file-properties/"><a class="padding" href="/archive/ansible/selinux-file-properties/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/selinux/"><a class="padding" href="/archive/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/setting-up-an-ansible-lab/"><a class="padding" href="/archive/ansible/setting-up-an-ansible-lab/">Setting up an Ansible Lab<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/ssh-connections/"><a class="padding" href="/archive/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/troubleshooting-common-scenarios/"><a class="padding" href="/archive/ansible/troubleshooting-common-scenarios/">Troubleshooting Common Scenarios<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/users-and-groups/"><a class="padding" href="/archive/ansible/users-and-groups/">Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/tags/"><a class="padding" href="/archive/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/loops-and-items/"><a class="padding" href="/archive/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-loops-and-items/"><a class="padding" href="/archive/ansible/using-loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/modules-for-troubleshooting/"><a class="padding" href="/archive/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-modules-for-troubleshooting-and-testing/"><a class="padding" href="/archive/ansible/using-modules-for-troubleshooting-and-testing/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-multiple-inventories/"><a class="padding" href="/archive/ansible/using-multiple-inventories/">Using Multiple Inventories<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-rhel-system-roles/"><a class="padding" href="/archive/ansible/using-rhel-system-roles/">Using RHEL System roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-tags/"><a class="padding" href="/archive/ansible/using-tags/">Using Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/using-when-to-run-tasks-conditionally/"><a class="padding" href="/archive/ansible/using-when-to-run-tasks-conditionally/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/when/"><a class="padding" href="/archive/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/ansible/variables/"><a class="padding" href="/archive/ansible/variables/">Variables<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/bash/"><input type="checkbox" id="R-section-0007e539b2afbfa1d415742d840f3a8d" aria-controls="R-subsections-0007e539b2afbfa1d415742d840f3a8d"><label for="R-section-0007e539b2afbfa1d415742d840f3a8d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/archive/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-0007e539b2afbfa1d415742d840f3a8d" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/bash/bash-shell/"><a class="padding" href="/archive/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/bash/shell-scripting/"><a class="padding" href="/archive/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/boot/"><input type="checkbox" id="R-section-23ba0690f68cd095a84a225cf8506d0a" aria-controls="R-subsections-23ba0690f68cd095a84a225cf8506d0a"><label for="R-section-23ba0690f68cd095a84a225cf8506d0a"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Boot</span></label><a class="padding default-animation" href="/archive/boot/"><i class="fa-solid fa-hourglass-start"></i> Boot<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-23ba0690f68cd095a84a225cf8506d0a" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/boot/boot-process-grub2-and-kernel/"><a class="padding" href="/archive/boot/boot-process-grub2-and-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/boot/system-initialization-message-logging-and-system-tuning/"><a class="padding" href="/archive/boot/system-initialization-message-logging-and-system-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/containers/"><input type="checkbox" id="R-section-4a0553f27d25d8da325eb0e27d262c20" aria-controls="R-subsections-4a0553f27d25d8da325eb0e27d262c20"><label for="R-section-4a0553f27d25d8da325eb0e27d262c20"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/archive/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4a0553f27d25d8da325eb0e27d262c20" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/containers/containers-1/"><a class="padding" href="/archive/containers/containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/cyber-security/"><input type="checkbox" id="R-section-22d3475420d0c69262f1eaf35f3954e1" aria-controls="R-subsections-22d3475420d0c69262f1eaf35f3954e1"><label for="R-section-22d3475420d0c69262f1eaf35f3954e1"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/archive/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-22d3475420d0c69262f1eaf35f3954e1" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/cyber-security/security-enhanced-linux/"><a class="padding" href="/archive/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/cyber-security/securityenhancedlinux/"><a class="padding" href="/archive/cyber-security/securityenhancedlinux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/cyber-security/the-linux-firewall/"><a class="padding" href="/archive/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/cyber-security/the-secure-shell-service/"><a class="padding" href="/archive/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/desktop/"><input type="checkbox" id="R-section-f15fd7be41155db115964722da6b0d03" aria-controls="R-subsections-f15fd7be41155db115964722da6b0d03"><label for="R-section-f15fd7be41155db115964722da6b0d03"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/archive/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f15fd7be41155db115964722da6b0d03" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/desktop/new-setup/"><a class="padding" href="/archive/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/learning-touch-typing-1/"><a class="padding" href="/archive/desktop/learning-touch-typing-1/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/learning-touch-typing/"><a class="padding" href="/archive/desktop/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/my-fedora-setup-1/"><a class="padding" href="/archive/desktop/my-fedora-setup-1/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/my-fedora-setup/"><a class="padding" href="/archive/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/silverblue-2/"><a class="padding" href="/archive/desktop/silverblue-2/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/desktop/silverblue/"><a class="padding" href="/archive/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/files/"><input type="checkbox" id="R-section-35cbfba2aaa3dc53d47351d0737b957f" aria-controls="R-subsections-35cbfba2aaa3dc53d47351d0737b957f"><label for="R-section-35cbfba2aaa3dc53d47351d0737b957f"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Files</span></label><a class="padding default-animation" href="/archive/files/"><i class="fa-solid fa-copy"></i> Files<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-35cbfba2aaa3dc53d47351d0737b957f" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/files/advanced-file-management/"><a class="padding" href="/archive/files/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/files/file-management/"><a class="padding" href="/archive/files/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/networking/"><input type="checkbox" id="R-section-571da5e9c8cc7c2f921ff81d669260db" aria-controls="R-subsections-571da5e9c8cc7c2f921ff81d669260db"><label for="R-section-571da5e9c8cc7c2f921ff81d669260db"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/archive/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-571da5e9c8cc7c2f921ff81d669260db" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/networking/what-to-learn-after-ccna/"><a class="padding" href="/archive/networking/what-to-learn-after-ccna/">What to Learn After CCNA? Some Ideas<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/how-to-study-for-ccna-exam/"><a class="padding" href="/archive/networking/how-to-study-for-ccna-exam/">How I Studied for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/archive/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/dns-and-time-synchronization/"><a class="padding" href="/archive/networking/dns-and-time-synchronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/dns/"><a class="padding" href="/archive/networking/dns/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/archive/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/juniper_cli_basics/"><a class="padding" href="/archive/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/archive/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/networkdevicesandconnections/"><a class="padding" href="/archive/networking/networkdevicesandconnections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/archive/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/resources-for-passing-ccna/"><a class="padding" href="/archive/networking/resources-for-passing-ccna/">Resources for Passing CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/time-synchronization/"><a class="padding" href="/archive/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/networking/toggle_poe/"><a class="padding" href="/archive/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/packages/"><input type="checkbox" id="R-section-ffbf85f24cd2239219afa8b9cbe18b38" aria-controls="R-subsections-ffbf85f24cd2239219afa8b9cbe18b38"><label for="R-section-ffbf85f24cd2239219afa8b9cbe18b38"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/archive/packages/"><i class="fa-solid fa-box-open"></i> Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ffbf85f24cd2239219afa8b9cbe18b38" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/packages/advanced-package-management/"><a class="padding" href="/archive/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/packages/basic-package-management/"><a class="padding" href="/archive/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/storage/"><input type="checkbox" id="R-section-5b321d96a2a369eec97e1394accb14fb" aria-controls="R-subsections-5b321d96a2a369eec97e1394accb14fb"><label for="R-section-5b321d96a2a369eec97e1394accb14fb"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/archive/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-5b321d96a2a369eec97e1394accb14fb" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/storage/autofs/"><a class="padding" href="/archive/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/local-file-systems-and-swap/"><a class="padding" href="/archive/storage/local-file-systems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/network-file-system-nfs/"><a class="padding" href="/archive/storage/network-file-system-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/partitioning-mbr-and-gpt/"><a class="padding" href="/archive/storage/partitioning-mbr-and-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/remove-a-filesystem-from-a-partition/"><a class="padding" href="/archive/storage/remove-a-filesystem-from-a-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/thin-provisioning/"><a class="padding" href="/archive/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/archive/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/systems/"><input type="checkbox" id="R-section-1dd2726e68c35ec062a2cfe2c1df58df" aria-controls="R-subsections-1dd2726e68c35ec062a2cfe2c1df58df"><label for="R-section-1dd2726e68c35ec062a2cfe2c1df58df"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/archive/systems/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-1dd2726e68c35ec062a2cfe2c1df58df" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/systems/you-need-to-learn-man-pages/"><a class="padding" href="/archive/systems/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/advanced-file-management/"><a class="padding" href="/archive/systems/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/advanced-package-management/"><a class="padding" href="/archive/systems/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/advanced-user-management/"><a class="padding" href="/archive/systems/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/autofs/"><a class="padding" href="/archive/systems/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/file-management/"><a class="padding" href="/archive/systems/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/basic-package-management/"><a class="padding" href="/archive/systems/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/basic-user-management/"><a class="padding" href="/archive/systems/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/boot-process-grub2-kernel/"><a class="padding" href="/archive/systems/boot-process-grub2-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/installation/"><a class="padding" href="/archive/systems/installation/">Installing RHEL Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/interaction/"><a class="padding" href="/archive/systems/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/local-filesystems-and-swap/"><a class="padding" href="/archive/systems/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/network-filesystem-nfs/"><a class="padding" href="/archive/systems/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/partitioning-mbr-gpt/"><a class="padding" href="/archive/systems/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/process-and-task-scheduling/"><a class="padding" href="/archive/systems/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/rm-filesystem-from-partition/"><a class="padding" href="/archive/systems/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/rhcsa-exam-environment/"><a class="padding" href="/archive/systems/rhcsa-exam-environment/">RHCSA Exam Environment Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/rhcsa-vagrant-lab-setup-1/"><a class="padding" href="/archive/systems/rhcsa-vagrant-lab-setup-1/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/sys-init-logging-and-tuning/"><a class="padding" href="/archive/systems/sys-init-logging-and-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/secure-shell-service-ssh/"><a class="padding" href="/archive/systems/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/thin-provisioning/"><a class="padding" href="/archive/systems/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/time-synchronization/"><a class="padding" href="/archive/systems/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/systems/virtual-data-optimizer-vdo/"><a class="padding" href="/archive/systems/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/system/"><input type="checkbox" id="R-section-d52ce8aee0f4ac02a6f02a34de71d1c0" aria-controls="R-subsections-d52ce8aee0f4ac02a6f02a34de71d1c0"><label for="R-section-d52ce8aee0f4ac02a6f02a34de71d1c0"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/archive/system/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d52ce8aee0f4ac02a6f02a34de71d1c0" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/system/installation/"><a class="padding" href="/archive/system/installation/">Installation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/system/interaction/"><a class="padding" href="/archive/system/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/system/process-and-task-scheduling/"><a class="padding" href="/archive/system/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/tools/"><input type="checkbox" id="R-section-b320e1715e16e5d512ba5b82e27cc64b" aria-controls="R-subsections-b320e1715e16e5d512ba5b82e27cc64b"><label for="R-section-b320e1715e16e5d512ba5b82e27cc64b"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/archive/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-b320e1715e16e5d512ba5b82e27cc64b" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/tools/remove-formatting-from-highlights/"><a class="padding" href="/archive/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/calibre-web-docker-nginx/"><a class="padding" href="/archive/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/proxmox-pfsense-haproxy-setup/"><a class="padding" href="/archive/tools/proxmox-pfsense-haproxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/stop-using-ai/"><a class="padding" href="/archive/tools/stop-using-ai/">Why I Stopped Using AI so Much<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/install-ansible-using-uv/"><a class="padding" href="/archive/tools/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/archive/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/new-setup/"><a class="padding" href="/archive/tools/tools/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/archive/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/archive/tools/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/process-bookfusion-highlights/"><a class="padding" href="/archive/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/archive/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/archive/tools/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/archive/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/archive/tools/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/archive/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/archive/tools/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/using-vagrant-on-linux/"><a class="padding" href="/archive/tools/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/using-vagrant-on-linux/"><a class="padding" href="/archive/tools/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/tools/vimguide/"><a class="padding" href="/archive/tools/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/vimguide/"><a class="padding" href="/archive/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/tools/using-man-pages/"><a class="padding" href="/archive/tools/using-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/users-and-groups/"><input type="checkbox" id="R-section-db70fad5de90fe8fb545112d40b3bd47" aria-controls="R-subsections-db70fad5de90fe8fb545112d40b3bd47"><label for="R-section-db70fad5de90fe8fb545112d40b3bd47"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users and Groups</span></label><a class="padding default-animation" href="/archive/users-and-groups/"><i class="fa-solid fa-users"></i> Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-db70fad5de90fe8fb545112d40b3bd47" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/users-and-groups/advanced-user-management/"><a class="padding" href="/archive/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/archive/users-and-groups/basic-user-management/"><a class="padding" href="/archive/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/archive/virtualization/"><input type="checkbox" id="R-section-d0028714f8460f5888066e750cbc5914" aria-controls="R-subsections-d0028714f8460f5888066e750cbc5914"><label for="R-section-d0028714f8460f5888066e750cbc5914"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualization</span></label><a class="padding default-animation" href="/archive/virtualization/"><i class="fa-solid fa-microchip"></i> Virtualization<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d0028714f8460f5888066e750cbc5914" class="collapsible-menu">
+            <li class="" data-nav-id="/archive/virtualization/rhcsa-vagrant-lab-setup/"><a class="padding" href="/archive/virtualization/rhcsa-vagrant-lab-setup/">RHCSA Vagrant Lab Setup<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1772467047" defer></script>
+    <script src="/js/theme.js?1772467047" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>
