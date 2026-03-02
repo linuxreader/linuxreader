@@ -22,7 +22,7 @@
 -  [[Obsidian, Hugo, Github Website Stack (OHG)|Obsidian, Hugo, Github Website Stack (OHG)]]
 -  [[pandoc|pandoc]]
 -  [[Process-bookfusion-highlights|Process-bookfusion-highlights]]
--  [[Projects|Projects]]
+-  [[tools/Projects|Projects]]
 -  [[proxmox_setup|proxmox_setup]]
 -  [[rsync|rsync]]
 -  [[Serial-in-on-linux|Serial-in-on-linux]]

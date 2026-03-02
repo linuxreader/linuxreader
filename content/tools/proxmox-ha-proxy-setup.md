@@ -13,27 +13,27 @@ General HaProxy setup pretty much matches the LS video here: https://www.youtube
 
 **External address**
 
-![](Pasted%20image%2020260117041515.png)
+![](../../images/Pasted%20image%2020260117041515.png)
 
 **Type**
-![](Pasted%20image%2020260117041615.png)
+![](../../images/Pasted%20image%2020260117041615.png)
 
 **ACL**
-![](Pasted%20image%2020260117041708.png)
+![](../../images/Pasted%20image%2020260117041708.png)
 
 **ACL Actions**
-![](Pasted%20image%2020260117041758.png)
+![](../../images/Pasted%20image%2020260117041758.png)
 
 **SSL Offloading**
-![](Pasted%20image%2020260117041849.png)
+![](../../images/Pasted%20image%2020260117041849.png)
 
 ## Backend configuration
 
 **Backend Server Pool**
-![](Pasted%20image%2020260117042001.png)
+![](../../images/Pasted%20image%2020260117042001.png)
 
 **Health check**
-![](Pasted%20image%2020260117042031.png)
+![](../../images/Pasted%20image%2020260117042031.png)
 
 ## It's working finally!
-![](proxmox-gui.png)
+![](../../images/proxmox-gui.png)
