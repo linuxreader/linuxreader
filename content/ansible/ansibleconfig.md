@@ -7,7 +7,7 @@ showDate: false
 ## ansible.cfg
 You can store this in a project's directory or a user's home directory, in the case that multiple user's want to have their own Ansible configuration. Or in /etc/ansible if the configuration will be the same for every user and every project. You can also specify these settings in Ansible playbooks. The settings in a playbook take precedence over the .cfg file. 
 
-**ansible.cfg precedence** (Ansible uses the first one it finds and ignores the rest.)
+**ansible.cfg** precedence (Ansible uses the first one it finds and ignores the rest.)
 1. ANSIBLE_CONFIG environment variable
 2. ansible.cfg in current directory
 3. ~/.ansible.cfg
