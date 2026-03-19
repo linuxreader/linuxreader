@@ -18,30 +18,30 @@
     <meta property="article:section" content="Ansible">
     <meta itemprop="name" content="Deploying files">
     <meta itemprop="description" content="Manipulating files, SELinux, and Jinja2 templates">
-    <meta itemprop="wordCount" content="1019">
+    <meta itemprop="wordCount" content="1294">
     <title>Deploying files</title>
     <link href="/ansible/deploying-files/index.md" rel="alternate" type="text/markdown" title="Deploying files">
-    <link href="/images/favicon.svg?1772535744" rel="icon" type="image/svg+xml">
-    <link href="/css/auto-complete/auto-complete.min.css?1772535744" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1772535744" defer></script>
-    <script src="/js/search-lunr.min.js?1772535744" defer></script>
-    <script src="/js/search.min.js?1772535744" defer></script>
+    <link href="/images/favicon.svg?1773889569" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1773889569" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1773889569" defer></script>
+    <script src="/js/search-lunr.min.js?1773889569" defer></script>
+    <script src="/js/search.min.js?1773889569" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1772535744";
+      window.relearn.index_js_url="/searchindex.en.js?1773889569";
     </script>
-    <script src="/js/lunr/lunr.min.js?1772535744" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1772535744" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1772535744" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1772535744" defer></script>
+    <script src="/js/lunr/lunr.min.js?1773889569" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1773889569" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1773889569" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1773889569" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/all.min.css?1772535744" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1772535744" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1772535744" rel="stylesheet">
-    <link href="/css/theme.min.css?1772535744" rel="stylesheet">
-    <link href="/css/format-html.min.css?1772535744" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/all.min.css?1773889569" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1773889569" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1773889569" rel="stylesheet">
+    <link href="/css/theme.min.css?1773889569" rel="stylesheet">
+    <link href="/css/format-html.min.css?1773889569" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -128,6 +128,13 @@
         <li><a href="#lab-managing-files-with-ansible">Lab: Managing Files with Ansible</a></li>
       </ul>
     </li>
+    <li><a href="#more-deploying-files">More Deploying Files</a>
+      <ul>
+        <li><a href="#stat-module"><strong>Stat</strong> module</a></li>
+        <li><a href="#tests">Tests</a></li>
+        <li><a href="#modules-to-remember">Modules to remember:</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
                 </div>
@@ -198,12 +205,15 @@
 <li>Retrieves file or file system status</li>
 <li>not used to change anything</li>
 <li>use it to check specific file and perform an action if the properties are not set as expected.
-Shows:</li>
+Shows:
+<ul>
 <li>which permission mode is set,</li>
 <li>whether it is a link,</li>
 <li>which checksum is set on the file</li>
 <li>etc.</li>
 <li>See <code>ansible-doc stat</code> for list of full output</li>
+</ul>
+</li>
 </ul>
 <h3 id="lab-write-a-message-if-the-expected-permission-mode-is-not-set">Lab: write a message if the expected permission mode is not set.<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
@@ -414,6 +424,48 @@ Ensures that a file from the control host is synchronized to a file with that na
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">copy</span>:<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">src</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/tmp/ansible1/etc/motd</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">dest</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/tmp</span></span></span></code></pre></div>
+<h2 id="more-deploying-files">More Deploying Files<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="stat-module"><strong>Stat</strong> module<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>The outputs of the stat module can be used as a variable to test files.</p>
+<p>You can see all of the outputs at:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ansible-doc stat</code></pre></div>
+<p>Example from the docs:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Get stats of the FS object</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">ansible.builtin.stat</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">path</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/path/to/something</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">register</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">sym</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Print a debug message</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">ansible.builtin.debug</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">msg</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;islnk isn&#39;t defined (path doesn&#39;t exist)&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">when</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">sym.stat.islnk is not defined</span></span></span></code></pre></div>
+<h3 id="tests">Tests<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Another page that will be useful to find quickly during the exam is the <a href="https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_tests.html#tests" rel="external" target="_blank">tests page</a>. Just open the documentation site and type &ldquo;tests&rdquo;. I may end up just opening this right away during the exam.</p>
+<p>It&rsquo;s probably worth working with tests a bit. I wasn&rsquo;t sure exactly how to test against a bool when I tried but ended up with this:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">stat module test</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">ansible1</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">tasks</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">command</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">touch /tmp/statfile</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">stat</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">path</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/tmp/statfile</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">register</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">st</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">show current values</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">debug</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">msg</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">current value of the st variable is {{ st }}</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">fail</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">msg</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;File is not writeable&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">when</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">not st.stat.writeable</span></span></span></code></pre></div>
+<p>The <code>not st.stat.writeable</code> threw me for a loop cause every scenario I tried thought it was a string.</p>
+<h3 id="modules-to-remember">Modules to remember:<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><strong>fetch</strong> - Move a file from a the remote host to the ansible control node.<br>
+<strong>synchronize</strong> - Wrapper around <code>rsync</code> to sync files.<br>
+<strong>copy</strong> - Move a file from the control node to the managed host.<br>
+<strong>lineinfile</strong> - Copy a single line of text to a file.<br>
+<strong>blockinfile</strong> - Copy multiple lines to a file.<br>
+<strong>template</strong> - Copy templated file to the host. (indempotent)<br>
+<strong>acl</strong> - Work with system ACLs.<br>
+<strong>replace</strong> - Replaces strings in files based on regex.</p>
 
   <footer class="footline">
   </footer>
@@ -460,8 +512,9 @@ Ensures that a file from the control host is synchronized to a file with that na
           <ul class="enlarge morespace collapsible-menu">
             <li class="parent " data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606" checked><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
             <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/archive/practice-exam/"><a class="padding" href="/ansible/archive/practice-exam/">Crash and Burn<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/the-cheat-code/"><a class="padding" href="/ansible/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready for RHCE<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/automate-kvm-vms/"><a class="padding" href="/ansible/automate-kvm-vms/">Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/install-ansible-using-uv/"><a class="padding" href="/ansible/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
@@ -603,8 +656,8 @@ Ensures that a file from the control host is synchronized to a file with that na
 <div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1772535744" defer></script>
-    <script src="/js/theme.min.js?1772535744" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1773889569" defer></script>
+    <script src="/js/theme.min.js?1773889569" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

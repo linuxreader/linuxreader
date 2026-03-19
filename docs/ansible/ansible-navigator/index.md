@@ -66,7 +66,7 @@ Use `:` to run the listed commands.
 
 `esc` to go back.
 
-Generate config file, use tmp first so `ansible-navigato` doesn't try to read the file immediately:
+Generate config file, use tmp first so `ansible-navigator` doesn't try to read the file immediately:
 ```bash
 ansible-navigator settings --gs --pp never --dc false > tmp
 ```

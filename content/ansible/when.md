@@ -108,6 +108,17 @@ Checks for the existence of a specific disk device, using **variable is defined*
         when: ansible_facts[’devices’][’sdc’] is not defined
 ```
 
+**[match](https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/match_test.html)**
+- Compare string against regular expression. Regex is anchored to the start of the string.
+
+Match uids starting with 1:
+`item.uid | string is match('1'))`
+
+**search**
+`url is search("users/.*/resources/.*")`
+
+**regex**
+`url is regex("example\.com/\w+/foo")`
 ### Lab: Check that finds whether the first variable value is present in the second variable's list. 
 - executes the **debug** task if the variable **my_answer** is in **supported_packages**. 
 - **vars_prompt** is used. This stops the playbook, asks the user for input, and stores the input in a variable with the name my_answer.
@@ -220,7 +231,7 @@ Checks for the existence of a specific disk device, using **variable is defined*
           register: passwd_contents
         - debug:
             msg: passwd contains user lisa
-          when: passwd_contents.stdout.find(’lisa’) != -1
+          when: passwd_contents.stdout.find('lisa') != -1
 ```
 
 **passwd_contents.stdout.find**, 

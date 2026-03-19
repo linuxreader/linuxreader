@@ -18,30 +18,30 @@
     <meta property="article:section" content="Ansible">
     <meta itemprop="name" content="Boot Process">
     <meta itemprop="description" content="Managing Boot Process with Ansible">
-    <meta itemprop="wordCount" content="786">
+    <meta itemprop="wordCount" content="1379">
     <title>Boot Process</title>
     <link href="/ansible/boot-process/index.md" rel="alternate" type="text/markdown" title="Boot Process">
-    <link href="/images/favicon.svg?1772535744" rel="icon" type="image/svg+xml">
-    <link href="/css/auto-complete/auto-complete.min.css?1772535744" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1772535744" defer></script>
-    <script src="/js/search-lunr.min.js?1772535744" defer></script>
-    <script src="/js/search.min.js?1772535744" defer></script>
+    <link href="/images/favicon.svg?1773889569" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1773889569" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1773889569" defer></script>
+    <script src="/js/search-lunr.min.js?1773889569" defer></script>
+    <script src="/js/search.min.js?1773889569" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1772535744";
+      window.relearn.index_js_url="/searchindex.en.js?1773889569";
     </script>
-    <script src="/js/lunr/lunr.min.js?1772535744" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1772535744" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1772535744" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1772535744" defer></script>
+    <script src="/js/lunr/lunr.min.js?1773889569" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1773889569" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1773889569" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1773889569" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/all.min.css?1772535744" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1772535744" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1772535744" rel="stylesheet">
-    <link href="/css/theme.min.css?1772535744" rel="stylesheet">
-    <link href="/css/format-html.min.css?1772535744" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/all.min.css?1773889569" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1773889569" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1773889569" rel="stylesheet">
+    <link href="/css/theme.min.css?1773889569" rel="stylesheet">
+    <link href="/css/format-html.min.css?1773889569" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -113,6 +113,13 @@
         <li><a href="#managing-the-boot-process">Managing the Boot Process</a></li>
         <li><a href="#lab-managing-the-boot-process-and-services">Lab: Managing the Boot Process and Services</a></li>
         <li><a href="#lab-cron-job">Lab: cron job</a></li>
+      </ul>
+    </li>
+    <li><a href="#more-boot-process">More Boot Process</a>
+      <ul>
+        <li><a href="#setting-the-default-systemd-target">Setting the default systemd target</a></li>
+        <li><a href="#rebooting">Rebooting</a></li>
+        <li><a href="#cron">Cron</a></li>
       </ul>
     </li>
   </ul>
@@ -329,6 +336,123 @@ each weekday.
 </span></span><span style="display:flex;"><span>* <span style="color:#a5d6ff">2</span> * * MON-FRI reboot
 </span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#Ansible: Print reboot message to syslog</span>
 </span></span><span style="display:flex;"><span>@reboot logger Sytem rebooted</span></span></code></pre></div>
+<h2 id="more-boot-process">More Boot Process<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Managing the boot process will be more challenging because there are no modules that manage this. A solid understanding of the boot process and <strong>systemd</strong> will be needed here.</p>
+<h3 id="setting-the-default-systemd-target">Setting the default systemd target<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Say we want to change the default systemd target from multi-user.target to graphical.target.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ man -k systemd</span></span></code></pre></div>
+<p>The relevant man pages here may be:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemd.target <span style="color:#ff7b72;font-weight:bold">(</span>5<span style="color:#ff7b72;font-weight:bold">)</span>   - Target unit configuration
+</span></span><span style="display:flex;"><span>systemd.unit <span style="color:#ff7b72;font-weight:bold">(</span>5<span style="color:#ff7b72;font-weight:bold">)</span>     - Unit configuration</span></span></code></pre></div>
+<p>I didn&rsquo;t find exact instructions on how to change the default target. But there is information on symlinking in the systemd.unit. And also mentions using the <code>systemctl</code> command to make the symlink.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> As another example, default.target —
+</span></span><span style="display:flex;"><span>       the default system target started at boot — is commonly aliased
+</span></span><span style="display:flex;"><span>       to either multi-user.target or graphical.target to <span style="color:#ff7b72">select</span> what
+</span></span><span style="display:flex;"><span>       is started by default.</span></span></code></pre></div>
+<p>Let&rsquo;s check options for the systemctl command:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ systemctl --help | grep default
+</span></span><span style="display:flex;"><span>  get-default                         Get the name of the default target
+</span></span><span style="display:flex;"><span>  set-default TARGET                  Set the default target</span></span></code></pre></div>
+<h4 id="using-the-systemctl-method">Using the systemctl method:<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>This method isn&rsquo;t great because you have to run around with your head cut off trying to figure out a way to make it indempotent.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span>- <span style="color:#7ee787">block</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Install GUI package group</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">ansible.builtin.dnf</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;@Server with GUI&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">present</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">get current target</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">ansible.builtin.command</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;systemctl get-default&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">changed_when</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">false</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">register</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">systemdefault</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Set default to graphical target</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">ansible.builtin.command</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;systemctl set-default graphical.target&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">when</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;&#39;graphical&#39; not in systemdefault.stdout&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">changed_when</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">when</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">gui_enabled | bool</span></span></span></code></pre></div>
+<p>If you have a solid understanding of Ansible this is doable. In Sander Van Vugt&rsquo;s cert guide, he mentions just making the symlink with the <code>file</code> module:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">set default boot target</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">ansible2</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">tasks</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">set boot target to graphical</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">file</span>:<span style="color:#6e7681">            
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">src</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/usr/lib/systemd/system/graphical.target</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">dest</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/etc/systemd/system/default.target</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">link</span></span></span></code></pre></div>
+<h4 id="using-the-symlink-method">Using the symlink method<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>If you can&rsquo;t remember the search path, the paths are listed at the top of the systemd-unit man page:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ man systemd.unit</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  System Unit Search Path
+</span></span><span style="display:flex;"><span>       /etc/systemd/system.control/*
+</span></span><span style="display:flex;"><span>       /run/systemd/system.control/*
+</span></span><span style="display:flex;"><span>       /run/systemd/transient/*
+</span></span><span style="display:flex;"><span>       /run/systemd/generator.early/*
+</span></span><span style="display:flex;"><span>       /etc/systemd/system/*
+</span></span><span style="display:flex;"><span>       /etc/systemd/system.attached/*
+</span></span><span style="display:flex;"><span>       /run/systemd/system/*
+</span></span><span style="display:flex;"><span>       /run/systemd/system.attached/*
+</span></span><span style="display:flex;"><span>       /run/systemd/generator/*
+</span></span><span style="display:flex;"><span>       ...
+</span></span><span style="display:flex;"><span>       /usr/lib/systemd/system/*
+</span></span><span style="display:flex;"><span>       /run/systemd/generator.late/*</span></span></code></pre></div>
+<p>If you can remember that you need to symlink a unit to <strong>/etc/systemd/system/default.target</strong> then I think you&rsquo;ll be good here.</p>
+<p>You&rsquo;ll also want to remember where systemd keeps all of the default unit files. List is listed at the top of the systemd man page:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ man systemd | head
+</span></span><span style="display:flex;"><span>SYSTEMD<span style="color:#ff7b72;font-weight:bold">(</span>1<span style="color:#ff7b72;font-weight:bold">)</span>                      systemd                     SYSTEMD<span style="color:#ff7b72;font-weight:bold">(</span>1<span style="color:#ff7b72;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>NAME
+</span></span><span style="display:flex;"><span>       systemd, init - systemd system and service manager
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>SYNOPSIS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       /usr/lib/systemd/systemd <span style="color:#ff7b72;font-weight:bold">[</span>OPTIONS...<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       init <span style="color:#ff7b72;font-weight:bold">[</span>OPTIONS...<span style="color:#ff7b72;font-weight:bold">]</span> <span style="color:#ff7b72;font-weight:bold">{</span>COMMAND<span style="color:#ff7b72;font-weight:bold">}</span></span></span></code></pre></div>
+<p>The file module documentation has a symlink example at the bottom:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ansible-doc file</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Create a symbolic link</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">ansible.builtin.file</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">src</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/file/to/link/to</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">dest</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/path/to/symlink</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">owner</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">foo</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">group</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">foo</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">link</span></span></span></code></pre></div>
+<p>Come to think of it, the command module with the <code>systemctl</code> command is looking a lot easier now. It&rsquo;s good to know both methods in case the exam objectives throw you for a loop.</p>
+<h3 id="rebooting">Rebooting<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>You may need to use the reboot module for changes to take effect. The module documentation covers everything you need to know with examples:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ansible-doc reboot</code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Set default target to graphical</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">practice</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">yes</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">tasks</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Link graphical.target to default.target</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">file</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">src</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/usr/lib/systemd/system/graphical.target</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">dest</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/etc/systemd/system/default.target</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">link</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">reboot</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">reboot</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">test_command</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">whoami</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">msg</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">rebooting...</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">print success message</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">debug</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">msg</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Reboot successful</span></span></span></code></pre></div>
+<h3 id="cron">Cron<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>I struggled a bit with the lab for this <a href="../../../notes/rhce-notes/bootprocess/">section</a>. I do not remember learning about service facts. Nor did I remember about the <code>logger</code> command. Curse me for procrastination for so long after RHCSA.</p>
+<p>I found some useful documentation though.</p>
+<p>Cron specific documentation:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>man cron</code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ansible-doc cron</code></pre></div>
+<p><strong>service_facts</strong> module:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ansible-doc service_facts</code></pre></div>
+<p><code>logger</code> command for printing log messages:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>man logger</code></pre></div>
 
   <footer class="footline">
   </footer>
@@ -375,8 +499,9 @@ each weekday.
           <ul class="enlarge morespace collapsible-menu">
             <li class="parent " data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606" checked><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
             <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/archive/practice-exam/"><a class="padding" href="/ansible/archive/practice-exam/">Crash and Burn<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/the-cheat-code/"><a class="padding" href="/ansible/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready for RHCE<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/automate-kvm-vms/"><a class="padding" href="/ansible/automate-kvm-vms/">Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/install-ansible-using-uv/"><a class="padding" href="/ansible/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
@@ -518,8 +643,8 @@ each weekday.
 <div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1772535744" defer></script>
-    <script src="/js/theme.min.js?1772535744" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1773889569" defer></script>
+    <script src="/js/theme.min.js?1773889569" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

@@ -49,7 +49,7 @@ To define a variable
 
 - As the variable is the first item in the value, its name must be placed between double curly brackets as well as double quotes.
 
-Variable equirements:
+Variable requirements:
 
 • Must start with a letter.
 • Case sensitive.

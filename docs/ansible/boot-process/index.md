@@ -210,3 +210,180 @@ ansible1 | CHANGED | rc=0 >>
 #Ansible: Print reboot message to syslog
 @reboot logger Sytem rebooted
 ```
+
+## More Boot Process
+Managing the boot process will be more challenging because there are no modules that manage this. A solid understanding of the boot process and **systemd** will be needed here. 
+
+### Setting the default systemd target
+Say we want to change the default systemd target from multi-user.target to graphical.target.
+
+```bash
+$ man -k systemd
+```
+
+The relevant man pages here may be:
+```bash
+systemd.target (5)   - Target unit configuration
+systemd.unit (5)     - Unit configuration
+```
+
+I didn't find exact instructions on how to change the default target. But there is information on symlinking in the systemd.unit. And also mentions using the `systemctl` command to make the symlink. 
+
+```bash
+ As another example, default.target —
+       the default system target started at boot — is commonly aliased
+       to either multi-user.target or graphical.target to select what
+       is started by default.
+```
+
+Let's check options for the systemctl command:
+```bash
+$ systemctl --help | grep default
+  get-default                         Get the name of the default target
+  set-default TARGET                  Set the default target
+```
+
+#### Using the systemctl method:
+
+This method isn't great because you have to run around with your head cut off trying to figure out a way to make it indempotent.
+```yml
+- block:
+  - name: Install GUI package group
+    ansible.builtin.dnf:
+      name: "@Server with GUI"
+      state: present
+
+  - name: get current target
+    ansible.builtin.command: "systemctl get-default"
+    changed_when: false
+    register: systemdefault
+
+  - name: Set default to graphical target
+    ansible.builtin.command: "systemctl set-default graphical.target"
+    when: "'graphical' not in systemdefault.stdout"
+    changed_when: true
+
+  when: gui_enabled | bool
+```
+
+If you have a solid understanding of Ansible this is doable. In Sander Van Vugt's cert guide, he mentions just making the symlink with the `file` module:
+```yaml
+---
+- name: set default boot target
+    hosts: ansible2
+    tasks:
+    - name: set boot target to graphical
+      file:            
+        src: /usr/lib/systemd/system/graphical.target
+        dest: /etc/systemd/system/default.target
+        state: link
+```
+
+#### Using the symlink method
+If you can't remember the search path, the paths are listed at the top of the systemd-unit man page:
+```bash
+$ man systemd.unit
+```
+
+```bash
+  System Unit Search Path
+       /etc/systemd/system.control/*
+       /run/systemd/system.control/*
+       /run/systemd/transient/*
+       /run/systemd/generator.early/*
+       /etc/systemd/system/*
+       /etc/systemd/system.attached/*
+       /run/systemd/system/*
+       /run/systemd/system.attached/*
+       /run/systemd/generator/*
+       ...
+       /usr/lib/systemd/system/*
+       /run/systemd/generator.late/*
+```
+
+If you can remember that you need to symlink a unit to **/etc/systemd/system/default.target** then I think you'll be good here. 
+
+You'll also want to remember where systemd keeps all of the default unit files. List is listed at the top of the systemd man page:
+```bash
+$ man systemd | head
+SYSTEMD(1)                      systemd                     SYSTEMD(1)
+
+NAME
+       systemd, init - systemd system and service manager
+
+SYNOPSIS
+
+       /usr/lib/systemd/systemd [OPTIONS...]
+
+       init [OPTIONS...] {COMMAND}
+
+```
+
+The file module documentation has a symlink example at the bottom:
+```bash
+ansible-doc file
+```
+
+```yaml
+- name: Create a symbolic link
+  ansible.builtin.file:
+    src: /file/to/link/to
+    dest: /path/to/symlink
+    owner: foo
+    group: foo
+    state: link
+```
+
+Come to think of it, the command module with the `systemctl` command is looking a lot easier now. It's good to know both methods in case the exam objectives throw you for a loop.
+
+### Rebooting
+You may need to use the reboot module for changes to take effect. The module documentation covers everything you need to know with examples:
+```
+ansible-doc reboot
+```
+
+```yaml
+---
+- name: Set default target to graphical
+  hosts: practice
+  become: yes
+  tasks:
+  - name: Link graphical.target to default.target
+    file:
+      src: /usr/lib/systemd/system/graphical.target
+      dest: /etc/systemd/system/default.target
+      state: link
+
+  - name: reboot
+    reboot:
+      test_command: whoami
+      msg: rebooting...
+
+  - name: print success message
+    debug:
+      msg: Reboot successful
+```
+
+### Cron
+I struggled a bit with the lab for this [section](../../../notes/rhce-notes/bootprocess/). I do not remember learning about service facts. Nor did I remember about the `logger` command. Curse me for procrastination for so long after RHCSA.
+
+I found some useful documentation though. 
+
+Cron specific documentation:
+```
+man cron
+```
+
+```
+ansible-doc cron
+```
+
+**service_facts** module:  
+```
+ansible-doc service_facts
+```
+
+`logger` command for printing log messages:
+```
+man logger
+```

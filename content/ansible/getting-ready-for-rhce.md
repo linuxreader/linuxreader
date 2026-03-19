@@ -1,11 +1,8 @@
 ---
-title: Getting Ready
+title: Getting Ready for RHCE
 date: 2026-02-01
 draft: false
 ---
-
-This series is to document my final 47 days prepping for the RHCE exam. I have been using Ansible already for 11 months and have configured dozens of servers with Ansible. As a reference point. 
-
 
 Let's make sure we have everything we need set up for getting RHCE certified.
 ## Scheduling the exam

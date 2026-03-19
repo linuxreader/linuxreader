@@ -62,7 +62,7 @@ Run an ad hoc command to remove the /var/www/html/index.html file on the managed
  
 Run the playbook again and you'll see the handler runs.
 
-#### Understanding Handler Execution and Exceptions
+### Understanding Handler Execution and Exceptions
 
 When a task fails, none of the following tasks run. How does that make handlers different? A handler runs only on the success of a task, but the next task in the list also runs only if the previous task was successful. What, then, is so special about handlers?
 
@@ -385,3 +385,20 @@ status.
 
 - you cannot use a block on a loop. 
 - If you need to iterate over a list of values, think of using a different solution.
+
+## More Handlers, testing, and blocks
+
+A handler won't run if a task in the playbook fails. 
+
+Use **force_handlers** to make handlers run even if a tasks fails. **ignore_errors** can also accomplish this.
+
+Handlers run after the play is finished. If you have multiple plays, the handlers for the first play will run before the second play begins. 
+
+Useful doc to search: [Error handling in playbooks](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_error_handling.html)
+
+The **fail** module also exists and let's you specify a clear failure message:  
+```
+ansisible-doc fail
+```
+
+A good blocks [document](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_blocks.html#block-error-handling) exists and covers blocks, rescue, and always. 

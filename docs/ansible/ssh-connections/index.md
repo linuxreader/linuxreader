@@ -183,3 +183,5 @@ Steps
       key: "{{ lookup(‘file’, ‘./’+ username +’/id_rsa.pub’) }}"
 ```
 
+You can use sshpass to work with ssh passwords in a non-interactive way.
+`sudo yum install sshpass`

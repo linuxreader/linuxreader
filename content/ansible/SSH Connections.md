@@ -1,7 +1,8 @@
-+++
-title = 'SSH Connections'
-description = 'SSH Connections'
-+++
+---
+title: 'SSH Connections'
+description: 'SSH Connections'
+---
+
 ### Managing SSH Connections
 
 - How to provide for SSH keys for new users in such a way that users are provided with SSH keys without having to set them up themselves. 
@@ -185,3 +186,5 @@ Steps
       key: "{{ lookup(‘file’, ‘./’+ username +’/id_rsa.pub’) }}"
 ```
 
+You can use sshpass to work with ssh passwords in a non-interactive way.
+`sudo yum install sshpass`

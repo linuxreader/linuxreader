@@ -1,24 +1,36 @@
 # Managing Partitions and LVM
 
-## Discovering storage related facts
+## Modules for managing storage
 
-**Table 15-2** Modules for Managing Storage
+**parted**
+- manage partitions.
+**lvg**
+- Manage LVM volume groups.
+**lvol**
+- Manage LVM logical volumes.
+**filesystem**
+- Manage filesystems on storage devices.
+**mount**
+- Mount storage devices that have been configured with a filesystem.
+**vdo**
+- Interfaces with VDO storage layer. 
 
-![Image](../../../images/15tab02%201.jpg)
+## Using Storage-Related Facts
 
 To make sure that your playbook is applied to the right devices, you first need to find which devices are available on your managed system. 
 
 After you find them, you can use conditionals to make sure that tasks are executed on the right devices.
 
-#### Using Storage-Related Facts
+**ansible_facts** 
+- Includes facts related to storage
 
-Ansible_facts related to storage
-
-ansible_devices
+**ansible_devices**
 - Available storage and device info
-ansible_device_links
-- info on how to access storage and other device info
-ansible_mounts
+
+**ansible_device_links**
+- Info on how to access storage and other device info
+
+**ansible_mounts**
 - Mount point info
 
 
@@ -27,10 +39,10 @@ ansible_mounts
 
 - The **filter** argument to the setup module uses a shell-style wildcard to search for matching items and for that reason can search in the highest level facts, such as **ansible_devices**, but it is incapable of further specifying what is searched for. For that reason, in the **filter** argument to the setup module, you cannot use a construction like `ansible ansible1 -m setup -a "filter=ansible_devices.sda"` which is common when looking up the variable in conditional statements.
 
-#### Using Storage-Related Facts in Conditional Statements
+### Using Storage-Related Facts in Conditional Statements
 
 Assert module
-- show an error message if a device does not exist and to perform a task if the device exists. 
+- Show an error message if a device does not exist and to perform a task if the device exists. 
 - For an easier solution, you can also use a **when** statement to look for the existence of a device. 
 - The advantage of using the assert module is that an error message can be printed if the condition is not met.
 

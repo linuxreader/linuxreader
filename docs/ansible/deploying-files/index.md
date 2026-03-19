@@ -30,12 +30,12 @@
 - Retrieves file or file system status
 - not used to change anything
 - use it to check specific file and perform an action if the properties are not set as expected. 
-Shows:
-- which permission mode is set,
-- whether it is a link, 
-- which checksum is set on the file
-- etc.
-- See `ansible-doc stat` for list of full output
+  Shows:
+	- which permission mode is set,
+	- whether it is a link, 
+	- which checksum is set on the file
+	- etc.
+	- See `ansible-doc stat` for list of full output
 ### Lab: write a message if the expected permission mode is not set.
 ```yml
 ---
@@ -287,3 +287,58 @@ Ensures that a file from the control host is synchronized to a file with that na
       dest: /tmp
 
 ```
+
+## More Deploying Files
+
+### **Stat** module
+The outputs of the stat module can be used as a variable to test files. 
+
+You can see all of the outputs at:
+```
+ansible-doc stat
+```
+
+Example from the docs:
+```yaml
+- name: Get stats of the FS object
+  ansible.builtin.stat:
+    path: /path/to/something
+  register: sym
+
+- name: Print a debug message
+  ansible.builtin.debug:
+    msg: "islnk isn't defined (path doesn't exist)"
+  when: sym.stat.islnk is not defined
+```
+
+### Tests
+Another page that will be useful to find quickly during the exam is the [tests page](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_tests.html#tests). Just open the documentation site and type "tests". I may end up just opening this right away during the exam. 
+
+It's probably worth working with tests a bit. I wasn't sure exactly how to test against a bool when I tried but ended up with this:
+```yaml
+---
+- name: stat module test
+  hosts: ansible1
+  tasks:
+  - command: touch /tmp/statfile
+  - stat:
+      path: /tmp/statfile
+    register: st
+  - name: show current values
+    debug:
+      msg: current value of the st variable is {{ st }}
+  - fail:
+      msg: "File is not writeable"
+    when: not st.stat.writeable
+```
+
+The `not st.stat.writeable` threw me for a loop cause every scenario I tried thought it was a string. 
+### Modules to remember:
+**fetch** - Move a file from a the remote host to the ansible control node.  
+**synchronize** - Wrapper around `rsync` to sync files.   
+**copy** - Move a file from the control node to the managed host.  
+**lineinfile** - Copy a single line of text to a file.  
+**blockinfile** - Copy multiple lines to a file.  
+**template** - Copy templated file to the host. (indempotent)  
+**acl** - Work with system ACLs.  
+**replace** - Replaces strings in files based on regex.  

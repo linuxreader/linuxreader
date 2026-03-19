@@ -102,3 +102,75 @@ Because this exercise focuses on the use of Vault, the password is not provided 
 
 7\. Verify that it's working by using `ansible-playbook --vault-password-file=vault-pass create-users.yaml`
 JunctionScallopPoise
+
+## More `ansible-vault` command
+
+View options and information:  
+```
+man ansible-vault
+```
+
+Create a vault using a vault password file:  
+```bash
+echo "lima-bean" > vault-pass2
+
+ansible-vault create secrets2.yml --vault-password-file vault-pass2
+```
+
+Edit the file:  
+```
+ansible-vault edit secrets2.yml --vault-password-file vault-pass2
+```
+
+If you have the vault listed as a variable file. Either in a playbook or under a variable folder such as: `group_vars/all/secrets2.yml`. You can list the vault password file to decrypt globally in **ansible.cfg**:
+```
+vault_password_file = ~/vault-pass2
+```
+
+You can also add it as an option when you run `ansible-playbook` or have it in the playbook itself.
+
+The man page also shows you how to decrypt a vault, view the contents, encrypt an existing file, and change a vault's password.
+
+### Vault options for `ansible-playbook` command
+Use --help and `grep` to quickly see vault options:
+```bash
+$ ansible-playbook --help | grep vault
+                        [-e EXTRA_VARS] [--vault-id VAULT_IDS] [-J |
+                        --vault-password-file VAULT_PASSWORD_FILES] [-f FORKS]
+  --vault-id VAULT_IDS  the vault identity to use. This argument may be
+  --vault-password-file, --vault-pass-file VAULT_PASSWORD_FILES
+                        vault password file
+  -J, --ask-vault-password, --ask-vault-pass
+                        ask for vault password
+```
+
+### Vault options for ansible.cfg
+Use the same strategy to quickly see vault options to set globally in **ansible.cfg**:
+```bash
+$ ansible-config list | grep vault
+  - This controls whether an Ansible playbook should prompt for a vault password.
+  - key: ask_vault_pass
+  name: Ask for the vault password(s)
+  description: The vault_id to use for encrypting by default. If multiple vault_ids
+    are provided, this specifies which to use for encryption. The ``--encrypt-vault-id``
+  - key: vault_encrypt_identity
+    key: defaults.vault_encrypt_identity
+  description: The label to use for the default vault id label in cases where a vault
+  - key: vault_identity
+    key: defaults.vault_identity
+  description: A list of vault-ids to use by default. Equivalent to multiple ``--vault-id``
+  - key: vault_identity_list
+  name: Default vault ids
+    key: defaults.vault_identity_list
+  description: If true, decrypting vaults with a vault id will only try the password
+    from the matching vault-id.
+  - key: vault_id_match
+  name: Force vault id match
+    key: defaults.vault_id_match
+  - The vault password file to use. Equivalent to ``--vault-password-file`` or ``--vault-id``.
+  - key: vault_password_file
+    key: defaults.vault_password_file
+  description: The salt to use for the vault encryption. If it is not provided, a
+  - key: vault_encrypt_salt
+    YAML or JSON or vaulted versions of these.
+```

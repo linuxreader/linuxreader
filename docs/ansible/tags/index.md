@@ -8,29 +8,35 @@ A tag is a label that is applied to a task or another item like a block or a pla
 Use `ansible-playbook --tags` or `ansible-playbook --skip-tags` to specify which tags need to be executed. 
 
 Using **tags** in a Playbook
+tags.yml
 ```yaml
 ---
-- name: using tags example
+- name: using tags
   hosts: all
+  become: yes
   vars:
-    service:
+    services:
     - vsftpd
     - httpd
   tasks:
-  - yum:
+  - name: install packages
+    yum:
       name:
       - httpd
       - vsftpd
       state: present
     tags:
     - install
-  - service:
-    name: "{{ item }}"
+
+  - name: start services
+    service:
+      name: "{{ item }}"
       state: started
       enabled: yes
     loop: "{{ services }}"
     tags:
     - services
+
 ```
 
 `ansible-playbook --tags "install" listing1115.yaml` Would run only the tasks that are tagged with "install"
@@ -56,7 +62,8 @@ all - Runs all tasks
 Set a **debug** tag to easily identify tasks that should be run only if you specifically want to run debug tasks as well. If combined with the **never** tag, the
 task that is tagged with the **debug,never** tasks runs only if the **debug** tag is specifically requested. Then run debug tasks with `ansible-playbook --tags all,debug` command. 
 
-``` pre1
+never-tags.yml
+```yml
 ---
 - name: using assert to check if volume group vgdata exists
   hosts: all
@@ -80,6 +87,7 @@ task that is tagged with the **debug,never** tasks runs only if the **debug** ta
 
 
 Apply tags to an entire play.
+play-tags.yml
 ```yaml
 - hosts: webservers
   tags: deploy

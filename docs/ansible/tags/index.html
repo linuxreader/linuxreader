@@ -18,30 +18,30 @@
     <meta property="article:section" content="Ansible">
     <meta itemprop="name" content="Using Ansible Tags">
     <meta itemprop="description" content="Guide for how to use Ansible Tags. What are they, and some examples to put them to use.">
-    <meta itemprop="wordCount" content="606">
+    <meta itemprop="wordCount" content="616">
     <title>Using Ansible Tags</title>
     <link href="/ansible/tags/index.md" rel="alternate" type="text/markdown" title="Using Ansible Tags">
-    <link href="/images/favicon.svg?1772535744" rel="icon" type="image/svg+xml">
-    <link href="/css/auto-complete/auto-complete.min.css?1772535744" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1772535744" defer></script>
-    <script src="/js/search-lunr.min.js?1772535744" defer></script>
-    <script src="/js/search.min.js?1772535744" defer></script>
+    <link href="/images/favicon.svg?1773889569" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1773889569" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1773889569" defer></script>
+    <script src="/js/search-lunr.min.js?1773889569" defer></script>
+    <script src="/js/search.min.js?1773889569" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1772535744";
+      window.relearn.index_js_url="/searchindex.en.js?1773889569";
     </script>
-    <script src="/js/lunr/lunr.min.js?1772535744" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1772535744" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1772535744" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1772535744" defer></script>
+    <script src="/js/lunr/lunr.min.js?1773889569" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1773889569" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1773889569" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1773889569" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/all.min.css?1772535744" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1772535744" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1772535744" rel="stylesheet">
-    <link href="/css/theme.min.css?1772535744" rel="stylesheet">
-    <link href="/css/format-html.min.css?1772535744" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/all.min.css?1773889569" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1773889569" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1773889569" rel="stylesheet">
+    <link href="/css/theme.min.css?1773889569" rel="stylesheet">
+    <link href="/css/format-html.min.css?1773889569" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -152,24 +152,29 @@
 <p><a href="https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_tags.html" rel="external" target="_blank">https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_tags.html</a></p>
 <p>A tag is a label that is applied to a task or another item like a block or a play.
 Use <code>ansible-playbook --tags</code> or <code>ansible-playbook --skip-tags</code> to specify which tags need to be executed.</p>
-<p>Using <strong>tags</strong> in a Playbook</p>
+<p>Using <strong>tags</strong> in a Playbook
+tags.yml</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">using tags example</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">using tags</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">all</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">yes</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">vars</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">service</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">services</span>:<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span>- <span style="color:#a5d6ff">vsftpd</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span>- <span style="color:#a5d6ff">httpd</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">tasks</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">yum</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">install packages</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">yum</span>:<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#a5d6ff">httpd</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#a5d6ff">vsftpd</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">present</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">tags</span>:<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span>- <span style="color:#a5d6ff">install</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">service</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ item }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">start services</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">service</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ item }}&#34;</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">started</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">enabled</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">yes</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">loop</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ services }}&#34;</span><span style="color:#6e7681">
@@ -201,25 +206,27 @@ untagged - Runs all untagged tasks
 all - Runs all tasks</p>
 <p>Set a <strong>debug</strong> tag to easily identify tasks that should be run only if you specifically want to run debug tasks as well. If combined with the <strong>never</strong> tag, the
 task that is tagged with the <strong>debug,never</strong> tasks runs only if the <strong>debug</strong> tag is specifically requested. Then run debug tasks with <code>ansible-playbook --tags all,debug</code> command.</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code class="language-pre1" data-lang="pre1">---
-- name: using assert to check if volume group vgdata exists
-  hosts: all
-  tasks:
-  - name: check if vgdata exists
-    command: vgs vgdata
-    register: vg_result
-    ignore_errors: true
-  - name: show vg_result variable
-    debug:
-      var: vg_result
-    tags: [ never, debug ]
-  - name: print a message
-    assert:
-      that:
-      - vg_result.rc == 0
-      fail_msg: volume group not found
-      success_msg: volume group was found</code></pre></div>
-<p>Apply tags to an entire play.</p>
+<p>never-tags.yml</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">using assert to check if volume group vgdata exists</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">all</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">tasks</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">check if vgdata exists</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">command</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">vgs vgdata</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">register</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">vg_result</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">ignore_errors</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">show vg_result variable</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">debug</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">var</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">vg_result</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">tags</span>:<span style="color:#6e7681"> </span>[<span style="color:#6e7681"> </span><span style="color:#a5d6ff">never, debug ]</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">print a message</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">assert</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">that</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#a5d6ff">vg_result.rc == 0</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">fail_msg</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">volume group not found</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">success_msg</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">volume group was found</span></span></span></code></pre></div>
+<p>Apply tags to an entire play.
+play-tags.yml</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">webservers</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">tags</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">deploy</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">roles</span>:<span style="color:#6e7681">
@@ -308,8 +315,9 @@ Find a tagging style that suits your needs and lets you run (or <em>not</em> run
           <ul class="enlarge morespace collapsible-menu">
             <li class="parent " data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606" checked><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
             <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/archive/practice-exam/"><a class="padding" href="/ansible/archive/practice-exam/">Crash and Burn<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/the-cheat-code/"><a class="padding" href="/ansible/the-cheat-code/">The Cheatcode<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready for RHCE<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/automate-kvm-vms/"><a class="padding" href="/ansible/automate-kvm-vms/">Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/install-ansible-using-uv/"><a class="padding" href="/ansible/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
@@ -451,8 +459,8 @@ Find a tagging style that suits your needs and lets you run (or <em>not</em> run
 <div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1772535744" defer></script>
-    <script src="/js/theme.min.js?1772535744" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1773889569" defer></script>
+    <script src="/js/theme.min.js?1773889569" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

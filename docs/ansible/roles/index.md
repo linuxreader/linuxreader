@@ -47,8 +47,6 @@ Most of the role directories have a `main.yml` file. This is the the entrypoint 
 
 ## Where roles are stored
 
-# LEFT OFF HERE
-
 Roles can be stored in different locations:
 
 **./roles**
