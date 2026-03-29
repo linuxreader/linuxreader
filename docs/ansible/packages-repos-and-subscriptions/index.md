@@ -68,7 +68,6 @@ Use Yum package groups to install the Virtualization Host package group:
 - Working with yum modules is similar to working with yum package groups.
 - The main difference is that a version number and the installation profile are included in the module name.
 ```yml
-
 ---
 - name: installing an AppStream module
   hosts: ansible2
@@ -79,9 +78,7 @@ Use Yum package groups to install the Virtualization Host package group:
       state: present
 ```
 
-
 ### Managing Package Facts
-
 - When Ansible is gathering facts, package facts are not included. 
 - To include package facts as well, you need to run a separate task
 

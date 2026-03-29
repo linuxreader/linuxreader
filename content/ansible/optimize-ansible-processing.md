@@ -8,9 +8,9 @@ showDate: false
 
 
 **Parallel task execution** 
-- manages the number of hosts on which tasks are executed simultaneously. 
+- Manages the number of hosts on which tasks are executed simultaneously. 
 **Serial task execution** 
-- tasks are executed on a host or group of hosts before proceeding to the next host or group of hosts.
+- Tasks are executed on a host or group of hosts before proceeding to the next host or group of hosts.
 
 #### Parallel Task Execution
  
@@ -29,7 +29,7 @@ showDate: false
 - If, for instance, a playbook is used to update a cluster of hosts this way, this would create a situation where the old software has been updated, but the new version has not been started yet and the entire cluster would be down. 
 - Use the **serial** keyword in the play header to configure
 	- **serial: 3** 
-		- all tasks are executed on three hosts, and after completely running all tasks on three hosts, the next group of three hosts is handled. 
+		- All tasks are executed on three hosts, and after completely running all tasks on three hosts, the next group of three hosts is handled. 
 
 ### Lab: Managing Parallelism
 
