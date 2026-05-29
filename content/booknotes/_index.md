@@ -9,7 +9,7 @@ build:
 These are the summaries and notes of books I have read. I also keep a [Master Reading list](masterlist) of all of the books I have read. And a [Book Graveyard](bookgraveyard/) for books that I did not finish.
 
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="/images/willpowerinstinct.png" style="width:13%; height:auto;" />
+  <img src="/images/willpowerinstinct.png" style="width:19%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/booknotes/thewillpowerinstinct" class="hover:underline">
@@ -26,7 +26,7 @@ These are the summaries and notes of books I have read. I also keep a [Master Re
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="dopaminenation/dopaminenation.png" style="width:19%; height:auto;" />
+  <img src="/images/dopaminenation.png" style="width:19%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/notes/dopaminenation/" class="hover:underline">
@@ -43,7 +43,7 @@ These are the summaries and notes of books I have read. I also keep a [Master Re
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="goodinside/goodinside.png" style="width:19%; height:auto;" />
+  <img src="/images/goodinside.png" style="width:19%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/notes/goodinside/" class="hover:underline">
@@ -60,7 +60,7 @@ These are the summaries and notes of books I have read. I also keep a [Master Re
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="therelationshiphandbook/therelationshiphandbook.png" style="width:19%; height:auto;" />
+  <img src="/images/therelationshiphandbook.png" style="width:19%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/notes/therelationshiphandbook/" class="hover:underline">
@@ -77,7 +77,7 @@ These are the summaries and notes of books I have read. I also keep a [Master Re
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="thepowerofpositivedogtraining/positivedogtraining.png" style="width:19%; height:auto;" />
+  <img src="/images/positivedogtraining.png" style="width:19%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/notes/thepowerofpositivedogtraining/" class="hover:underline">
@@ -94,7 +94,7 @@ These are the summaries and notes of books I have read. I also keep a [Master Re
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="nonviolentcommunication/nonviolentcommunication.png" style="width:19%; height:auto;" />
+  <img src="/images/nonviolentcommunication.png" style="width:19%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/notes/nonviolentcommunication/" class="hover:underline">
@@ -110,7 +110,7 @@ These are the summaries and notes of books I have read. I also keep a [Master Re
   </div>
 </div>
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="100m-offers/100m-offers.png" style="width:19%; height:auto;" />
+  <img src="/images/100m-offers.png" style="width:19%; height:auto;" />
   <div>
     <h2 class="mb-1">
     <a href="/notes/100m-offers/" class="hover:underline">
@@ -127,7 +127,7 @@ These are the summaries and notes of books I have read. I also keep a [Master Re
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="meditations/meditations.png" style="width:19%; height:auto;" />
+  <img src="/images/meditations.png" style="width:19%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/notes/meditations/" class="hover:underline">
@@ -144,7 +144,7 @@ These are the summaries and notes of books I have read. I also keep a [Master Re
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="caffeineblues/caffeineblues.png" style="width:19%; height:auto;" />
+  <img src="/images/caffeineblues.png" style="width:19%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/notes/caffeineblues/" class="hover:underline">
@@ -161,7 +161,7 @@ These are the summaries and notes of books I have read. I also keep a [Master Re
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="thepsychologyofmoney/psychologyofmoney.png" style="width:19%; height:auto;" />
+  <img src="/images/psychologyofmoney.png" style="width:19%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/notes/thepsychologyofmoney/" class="hover:underline">
@@ -178,7 +178,7 @@ These are the summaries and notes of books I have read. I also keep a [Master Re
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="milliondollarweekend/milliondollarweekend.png" style="width:19%; height:auto;" />
+  <img src="/images/milliondollarweekend.png" style="width:19%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/notes/milliondollarweekend/" class="hover:underline">
@@ -195,7 +195,7 @@ These are the summaries and notes of books I have read. I also keep a [Master Re
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="anythingyouwant/anythingyouwant.png" style="width:19%; height:auto;" />
+  <img src="/images/anythingyouwant.png" style="width:19%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/notes/anythingyouwant/" class="hover:underline">
@@ -214,7 +214,7 @@ These are the summaries and notes of books I have read. I also keep a [Master Re
 
 
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="the12weekyear/the12weekyear.png" style="width:19%; height:auto;" />
+  <img src="/images/the12weekyear.png" style="width:19%; height:auto;" />
   <div>
     <h2 class="mb-1">
     <a href="/notes/the12weekyear/" class="hover:underline">
@@ -230,7 +230,7 @@ These are the summaries and notes of books I have read. I also keep a [Master Re
   </div>
 </div>
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="tribes/tribes.png" style="width:19%; height:auto;" />
+  <img src="/images/tribes.png" style="width:19%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/notes/tribes/" class="hover:underline">
@@ -247,7 +247,7 @@ These are the summaries and notes of books I have read. I also keep a [Master Re
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="theblogstartup/blogstartup.png" style="width:19%; height:auto;" />
+  <img src="/images/blogstartup.png" style="width:19%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/notes/theblogstartup/" class="hover:underline">
@@ -264,7 +264,7 @@ These are the summaries and notes of books I have read. I also keep a [Master Re
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="theeasywaytoquitcaffeine/easywaytoquitcaffeine.png" style="width:19%; height:auto;" />
+  <img src="/images/easywaytoquitcaffeine.png" style="width:13%; height:auto;" />
   <div>
     <h3 class="mb-1">
      <a href="/notes/theeasywaytoquitcaffeine/" class="hover:underline">
@@ -281,7 +281,7 @@ These are the summaries and notes of books I have read. I also keep a [Master Re
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="123magic/123magic.png" style="width:19%; height:auto;" />
+  <img src="/images/123magic.png" style="width:19%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/notes/123magic/" class="hover:underline">
