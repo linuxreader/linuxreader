@@ -5,16 +5,13 @@ description: 'The premier Linux documentation site'
 type: 'home'
 ---
 
-
-![David Thomas](/images/davidsquare.png?height=220px&classes=inline) 
-![CCNA Logo](/images/ccnabadge.png?height=100px&classes=inline)
-![RHCSALogo](/images/rhcsabadge.png?height=100px&classes=inline)
-
-## Hey, I'm David.
-This is my Linux documentation site. I'm an RHCSA certified Linux System Administrator. This is the place where I put all of my notes, tips, and tricks for Linux and other open-source tools. 
+## Hey, I'm David
+This is my super awesome tech documentation site. Or a place where I put all of my tech notes, tips, and tricks for Networking, Linux, open-source tools, and more!
 
 Browse categories below or navigate using the sidebar.
 
 Have fun!
+
+P.S. Sorry it's such a mess. I'm working on it!
 
 {{< children type="card" description="false">}}
