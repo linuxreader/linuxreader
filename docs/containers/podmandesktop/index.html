@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    <meta name="description" content="Managing Your Container, Kubernetes, and AI Workloads from a Graphical Interface
+Accelerate day-to-day tasks such as inspecting logs, managing multiple environments, and exploring new technologies. Comprehensive control center for all your container, Kubernetes, and even artificial intelligence (AI) development needs, right on your local machine. In this chapter, we&#39;re going to cover the following main topics:
+Setting up the prerequisites for the host operating system Easily building, running, stopping, and managing containers with a user-friendly interface Connecting to and interacting directly with Kubernetes clusters Provisioning local inference servers to run AI models and obtaining endpoints for application integration Integrating an AI model running on Podman for building your own chatbot use case Technical requirements To complete this chapter, you will need a machine with a working Podman installation.[]{.sentence-end} As we mentioned in Chapter 3{.chapref}, Running the First Container, all the examples in this book were executed on a Fedora 40 system or later, but can be reproduced on your choice of operating system (OS).">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="Managing Your Container, Kubernetes, and AI Workloads from a Graphical Interface
+Accelerate day-to-day tasks such as inspecting logs, managing multiple environments, and exploring new technologies. Comprehensive control center for all your container, Kubernetes, and even artificial intelligence (AI) development needs, right on your local machine. In this chapter, we&#39;re going to cover the following main topics:
+Setting up the prerequisites for the host operating system Easily building, running, stopping, and managing containers with a user-friendly interface Connecting to and interacting directly with Kubernetes clusters Provisioning local inference servers to run AI models and obtaining endpoints for application integration Integrating an AI model running on Podman for building your own chatbot use case Technical requirements To complete this chapter, you will need a machine with a working Podman installation.[]{.sentence-end} As we mentioned in Chapter 3{.chapref}, Running the First Container, all the examples in this book were executed on a Fedora 40 system or later, but can be reproduced on your choice of operating system (OS).">
+    <meta property="og:url" content="http://localhost:1313/containers/podmandesktop/">
+    <meta property="og:description" content="Managing Your Container, Kubernetes, and AI Workloads from a Graphical Interface
+Accelerate day-to-day tasks such as inspecting logs, managing multiple environments, and exploring new technologies. Comprehensive control center for all your container, Kubernetes, and even artificial intelligence (AI) development needs, right on your local machine. In this chapter, we&#39;re going to cover the following main topics:
+Setting up the prerequisites for the host operating system Easily building, running, stopping, and managing containers with a user-friendly interface Connecting to and interacting directly with Kubernetes clusters Provisioning local inference servers to run AI models and obtaining endpoints for application integration Integrating an AI model running on Podman for building your own chatbot use case Technical requirements To complete this chapter, you will need a machine with a working Podman installation.[]{.sentence-end} As we mentioned in Chapter 3{.chapref}, Running the First Container, all the examples in this book were executed on a Fedora 40 system or later, but can be reproduced on your choice of operating system (OS).">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Containers">
+    <meta itemprop="description" content="Managing Your Container, Kubernetes, and AI Workloads from a Graphical Interface
+Accelerate day-to-day tasks such as inspecting logs, managing multiple environments, and exploring new technologies. Comprehensive control center for all your container, Kubernetes, and even artificial intelligence (AI) development needs, right on your local machine. In this chapter, we&#39;re going to cover the following main topics:
+Setting up the prerequisites for the host operating system Easily building, running, stopping, and managing containers with a user-friendly interface Connecting to and interacting directly with Kubernetes clusters Provisioning local inference servers to run AI models and obtaining endpoints for application integration Integrating an AI model running on Podman for building your own chatbot use case Technical requirements To complete this chapter, you will need a machine with a working Podman installation.[]{.sentence-end} As we mentioned in Chapter 3{.chapref}, Running the First Container, all the examples in this book were executed on a Fedora 40 system or later, but can be reproduced on your choice of operating system (OS).">
+    <meta itemprop="wordCount" content="5653">
+    <title></title>
+    <link href="/containers/podmandesktop/index.md" rel="alternate" type="text/markdown" title="">
+    <link href="/images/favicon.svg?1780154752" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1780154752" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1780154752" defer></script>
+    <script src="/js/search-lunr.js?1780154752" defer></script>
+    <script src="/js/search.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1780154752";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780154752" rel="stylesheet">
+    <link href="/css/theme.css?1780154752" rel="stylesheet">
+    <link href="/css/format-html.css?1780154752" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/containers\/podmandesktop\/';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:1313';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script><script defer src="https://cloud.umami.is/script.js" data-website-id="d179743c-138a-4212-8906-28f70628ef95"></script>
+<style>
+:root {
+    --MENU-S-width: 15rem;
+    --MENU-M-width: 15rem;
+    --MENU-L-width: 18rem;
+    --MAIN-MAX-width: 100rem;
+}
+html {
+  zoom: 1.2;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif,
+               "Apple Color Emoji", "Segoe UI Emoji" !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500 !important;
+  letter-spacing: 0.7px;
+}
+
+code, kbd, pre, samp {
+  font-family: "Fira Code", "Hack", "Source Code Pro", Consolas, Menlo, monospace !important;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+  <body class="mobile-support html" data-origin="/containers/podmandesktop/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#h2_352">Installing on Linux</a>
+      <ul>
+        <li><a href="#h3_353">Installing with Flatpak</a></li>
+      </ul>
+    </li>
+    <li><a href="#h2_354">Installing on macOS</a></li>
+    <li><a href="#h2_355">Installing on Windows</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#h2_357">Running a container from an image</a></li>
+    <li><a href="#h2_358">Managing the container lifecycle</a></li>
+    <li><a href="#h2_359">Attaching persistent storage using volumes</a></li>
+    <li><a href="#h2_360">Working with container networking</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#h2_362">Connecting to a local cluster with minikube</a></li>
+    <li><a href="#h2_363">Connecting Podman Desktop to a Kubernetes cluster</a>
+      <ul>
+        <li><a href="#h3_364">Creating a local kind cluster</a></li>
+      </ul>
+    </li>
+    <li><a href="#h2_365">Exploring and managing Kubernetes resources</a>
+      <ul>
+        <li><a href="#h3_366">Managing Pods</a></li>
+        <li><a href="#h3_367">Managing deployments and services</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#podman-ai-lab">Podman AI Lab</a></li>
+    <li><a href="#enabling-podman-ai-lab">Enabling Podman AI Lab</a></li>
+    <li><a href="#running-your-first-ai-model">Running your first AI model</a></li>
+    <li><a href="#verifying-the-running-model-server">Verifying the running model server</a></li>
+    <li><a href="#obtaining-the-api-endpoint">Obtaining the API endpoint</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#h2_375">Step 1: Starting an OpenAI-compatible inference server</a></li>
+    <li><a href="#step-2-running-the-anythingllm-application-container">Step 2: Running the AnythingLLM application container</a></li>
+    <li><a href="#step-3-connecting-the-model-to-the-application">Step 3: Connecting the model to the application</a></li>
+    <li><a href="#step-4-testing-your-personal-assistant">Step 4: Testing your personal assistant</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/containers/"><span itemprop="name">Containers</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/podmandesktop/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/" title="Containers (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/ansible-and-podman/" title="Ansible and Podman (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable containers" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id=""></h1>
+
+<p>Managing Your Container, Kubernetes, and AI Workloads from a Graphical Interface</p>
+<ul>
+<li>Accelerate day-to-day tasks such as inspecting logs, managing multiple environments, and exploring new technologies.</li>
+<li>Comprehensive control center for all your container, Kubernetes, and even <strong>artificial</strong> <strong>intelligence</strong> (<strong>AI</strong>) development needs, right on your local machine.</li>
+</ul>
+<p>In this chapter, we're going to cover the following main topics:</p>
+<ul>
+<li>Setting up the prerequisites for the host operating system</li>
+<li>Easily building, running, stopping, and managing containers with a
+user-friendly interface</li>
+<li>Connecting to and interacting directly with Kubernetes clusters</li>
+<li>Provisioning local inference servers to run AI models and obtaining
+endpoints for application integration</li>
+<li>Integrating an AI model running on Podman for building your own
+chatbot use case</li>
+</ul>
+<h1 id="h1_350" class="heading-1">Technical requirements<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>To complete this chapter, you will need a machine with a working Podman
+installation.[]{.sentence-end} As we mentioned in <em><a href="/containers/podmandesktop/#Chapter_3.xhtml#h1_83">Chapter
+3</a>{.chapref}</em>, <em>Running</em> <em>the</em> <em>First
+Container</em>, all the examples in this book were executed on a Fedora 40
+system or later, but can be reproduced on your choice of <strong>operating
+system</strong> (<strong>OS</strong>).</p>
+<p>Having a good understanding of the topics that were covered in <em><a href="/containers/podmandesktop/#Chapter_4.xhtml#h1_114">Chapter
+4</a>{.chapref}</em>, <em>Managing Running Containers</em>,
+<em><a href="/containers/podmandesktop/#Chapter_5.xhtml#h1_133">Chapter 5</a>{.chapref}</em>, <em>Implementing Storage
+for the Container's Data</em>, and <em><a href="/containers/podmandesktop/#Chapter_9.xhtml#h1_219">Chapter
+9</a>{.chapref}</em>, <em>Pushing Images to a Container
+Registry</em>, will help you grasp the topics we'll cover in this chapter.</p>
+<p>You should also have a good understanding of system administration and
+Kubernetes container orchestration, and a general understanding of
+generative AI.</p>
+<h1 id="h1_351" class="heading-1">Setting up the prerequisites for the host operating system<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Before []{#Chapter_15.xhtml#idx_e77c0b62 .index-entry
+index-entry=&ldquo;host OS:prerequisites&rdquo;}we can dive into managing our
+container and AI workloads, we first need to install the primary tool
+for this chapter: <strong>Podman</strong> <strong>Desktop</strong>.[]{.sentence-end} Podman
+Desktop []{#Chapter_15.xhtml#idx_24eb8b44 .index-entry
+index-entry=&ldquo;Podman Desktop&rdquo;}is an open source graphical tool that
+enables you to seamlessly work with containers and Kubernetes,
+regardless of your local environment.[]{.sentence-end} It provides a
+unified interface to manage containers, build images, interact with
+container registries, and connect []{#Chapter_15.xhtml#idx_c733b6bf
+.index-entry index-entry=&ldquo;host OS:prerequisites&rdquo;}to Kubernetes clusters.</p>
+<p>In the following subsections, we will walk through the installation
+process for Linux, macOS, and Windows.</p>
+<h2 id="h2_352" class="heading-2">Installing on Linux<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>For Linux users, Podman Desktop can be installed in a couple of
+ways.[]{.sentence-end} We will cover the universal method using Flatpak,
+which works across most distributions, and the native package manager
+method for Fedora users.</p>
+<h3 id="h3_353" class="heading-3">Installing with Flatpak<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Flatpak[]{#Chapter_15.xhtml#idx_b34ffd90 .index-entry
+index-entry=&ldquo;Flatpak&rdquo;} is a universal packaging system for Linux that
+allows applications to run in a sandboxed environment, isolated from the
+rest of the system.[]{.sentence-end} This is the recommended method for
+most Linux distributions:</p>
+<ol>
+<li>
+<p>First, ensure that []{#Chapter_15.xhtml#idx_3771edb9 .index-entry
+index-entry=&ldquo;Flatpak:Podman Desktop, installing on Linux&rdquo;}you have
+Flatpak installed and []{#Chapter_15.xhtml#idx_51de71bd .index-entry
+index-entry=&ldquo;Linux:Podman Desktop, installing on&rdquo;}the Flathub
+repository configured []{#Chapter_15.xhtml#idx_e2026776 .index-entry
+index-entry=&ldquo;Podman Desktop:installing, on Linux&rdquo;}on your
+system.[]{.sentence-end} If not, please refer to the official
+[]{#Chapter_15.xhtml#idx_2dab7764 .index-entry
+index-entry=&ldquo;Flatpak:reference link, for setup guide&rdquo;}Flatpak setup
+guide at
+<a href="https://flatpak.org/setup/" rel="external" target="_blank">[https://flatpak.org/setup/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.[]{.sentence-end}
+Once Flatpak is ready, you can install Podman Desktop with a single
+command:</p>
+<div class="programlisting snippet-con-one highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># flatpak install flathub io.podman_desktop.PodmanDesktop</code></pre></div>
+</li>
+<li>
+<p>Flatpak will resolve the required runtimes and dependencies, ask for
+confirmation, and proceed with the installation.</p>
+</li>
+<li>
+<p>After the installation is complete, you can launch Podman Desktop
+from your distribution's application menu or by running the
+following command from the terminal:</p>
+<div class="programlisting snippet-con-one highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># flatpak run io.podman_desktop.PodmanDesktop</code></pre></div>
+</li>
+<li>
+<p>Upon the []{#Chapter_15.xhtml#idx_9a516773 .index-entry
+index-entry=&ldquo;Flatpak:Podman Desktop, installing on Linux&rdquo;}first
+launch, Podman Desktop[]{#Chapter_15.xhtml#idx_5b51700b .index-entry
+index-entry=&ldquo;Linux:Podman Desktop, installing on&rdquo;} will greet you
+with a welcome screen[]{#Chapter_15.xhtml#idx_d256beaf .index-entry
+index-entry=&ldquo;Podman Desktop:installing, on Linux&rdquo;} and check for any
+required dependencies, such as a working Podman engine
+installation.[]{.sentence-end}</p>
+<figure class="mediaobject-one">
+<img src="images/B31467_15_1.png"
+style="width:460.79999999999995px; height:239.53983471074378px;"
+alt="Image 1" />
+</figure>
+<p>Figure 15.1: Podman Desktop welcome screen on a Linux system after
+Flatpak installation</p>
+</li>
+</ol>
+<h2 id="h2_354" class="heading-2">Installing on macOS<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>On macOS, Podman[]{#Chapter_15.xhtml#idx_49d47785 .index-entry
+index-entry=&ldquo;Podman Desktop:installing, on macOS&rdquo;} Desktop can be
+installed using either the official disk
+[]{#Chapter_15.xhtml#idx_c287a75e .index-entry
+index-entry=&ldquo;macOS:Podman Desktop, installing on&rdquo;}image
+(<code>.</code>{.inlineCode}<code>dmg</code>{.inlineCode}) file or via the Homebrew package
+manager:</p>
+<ul>
+<li>
+<p><strong>Using the</strong> <code>.dmg </code>{.inlineCode}<strong>installer</strong>:</p>
+<ol>
+<li>Navigate to the official Podman Desktop website at
+<a href="https://podman-desktop.io/" rel="external" target="_blank">[https://podman-desktop.io/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</li>
+<li>Download the installer for macOS (it will be a
+<code>.</code>{.inlineCode}<code>dmg</code>{.inlineCode} file).</li>
+<li>Open the downloaded <code>.</code>{.inlineCode}<code>dmg</code>{.inlineCode}
+file.[]{.sentence-end} A window will appear.</li>
+<li>Drag the Podman Desktop icon into your
+<code>Applications</code>{.inlineCode} folder.</li>
+</ol>
+</li>
+<li>
+<p><strong>Using Homebrew</strong>:</p>
+<p>If you have Homebrew installed, you can simply run the following
+command in your terminal:</p>
+<div class="programlisting snippet-con-one highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># brew install --cask podman-desktop</code></pre></div>
+<p>After that, you[]{#Chapter_15.xhtml#idx_1354c6fd .index-entry
+index-entry=&ldquo;Podman Desktop:installing, on macOS&rdquo;} should be able to
+start Podman Desktop and []{#Chapter_15.xhtml#idx_0b2afd45
+.index-entry index-entry=&ldquo;macOS:Podman Desktop, installing on&rdquo;}see
+something similar to the following:</p>
+<figure class="mediaobject-one">
+<img src="images/B31467_15_2.png"
+style="width:460.79999999999995px; height:235.7033248081841px;"
+alt="Image 2" />
+</figure>
+<p>Figure 15.2: Podman Desktop welcome screen on macOS after
+installation</p>
+</li>
+</ul>
+<p>After installation, you can launch Podman Desktop from your
+<code>Applications</code>{.inlineCode} folder.[]{.sentence-end} On its first run,
+it will guide you through the process of setting up the Podman machine,
+which is a lightweight virtual machine required for running Podman on
+macOS.</p>
+<h2 id="h2_355" class="heading-2">Installing on Windows<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>For Windows []{#Chapter_15.xhtml#idx_3e8889a3 .index-entry
+index-entry=&ldquo;Windows:Podman Desktop, installing on&rdquo;}users, Podman
+[]{#Chapter_15.xhtml#idx_f4e6b99b .index-entry
+index-entry=&ldquo;Podman Desktop:installing, on Windows&rdquo;}Desktop leverages
+<strong>Windows Subsystem for Linux</strong> (<strong>WSL</strong>) 2 to run the Podman
+engine.[]{.sentence-end} The installer simplifies the
+entire[]{#Chapter_15.xhtml#idx_e08aed91 .index-entry
+index-entry=&ldquo;Windows Subsystem for Linux (WSL) 2&rdquo;} setup process:</p>
+<ol>
+<li>Navigate to the official Podman Desktop website at
+<a href="https://podman-desktop.io/" rel="external" target="_blank">[https://podman-desktop.io/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</li>
+<li>Download the installer for Windows (it will be an
+<code>.exe</code>{.inlineCode} file).</li>
+<li>Run the downloaded installer.[]{.sentence-end} It will guide you
+through the setup wizard.</li>
+<li>Follow the on-screen instructions.[]{.sentence-end} If you do not
+have WSL 2 or a working Podman installation, the setup wizard will
+offer to configure them for you.</li>
+</ol>
+<p>Once the installation is complete, Podman Desktop will be available in
+your <strong>Start</strong> menu:</p>
+<figure class="mediaobject">
+<img src="images/B31467_15_3.png"
+style="width:528.0px; height:270.33250620347394px;" alt="Image 3" />
+</figure>
+<p>Figure 15.3: Podman Desktop welcome screen on a Windows OS after
+installation</p>
+<p>On the first[]{#Chapter_15.xhtml#idx_83d2c5d7 .index-entry
+index-entry=&ldquo;Windows:Podman Desktop, installing on&rdquo;} launch, it will
+finalize the WSL 2 integration and ensure
+[]{#Chapter_15.xhtml#idx_8b75725d .index-entry
+index-entry=&ldquo;Podman Desktop:installing, on Windows&rdquo;}that the Podman
+machine is running correctly, providing a seamless container management
+experience on Windows.</p>
+<p>note
+<strong>Please</strong> <strong>note</strong></p>
+<p>The installation instructions could change slightly depending on your OS
+release.[]{.sentence-end} For additional information, please refer to
+the related Podman Desktop website.</p>
+<p>With Podman Desktop now installed on our OS, we are ready to explore its
+user-friendly interface for managing containers in the next section.</p>
+<h1 id="h1_356" class="heading-1">Easily building, running, stopping, and managing containers with a user-friendly interface<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>One of the primary goals of Podman Desktop is to simplify the day-to-day
+workflow of developers and operators.[]{.sentence-end} It provides a
+visual dashboard to see what's running at a glance and offers intuitive
+controls for common operations that would otherwise require remembering
+various command-line flags.</p>
+<p>When you first launch the application, you are presented with the main
+dashboard.[]{.sentence-end} The left-hand sidebar is your main
+navigation tool, providing access to different resources such as
+<strong>Containers</strong>, <strong>Pods</strong>, <strong>Images</strong>, <strong>Volumes</strong>, and
+<strong>Settings</strong>.[]{.sentence-end} We will use these sections to manage our
+containerized applications.</p>
+<figure class="mediaobject">
+<img src="images/B31467_15_4.png"
+style="width:528.0px; height:274.4727272727273px;" alt="Image 4" />
+</figure>
+<p>Figure 15.4: The main Podman Desktop dashboard, highlighting the sidebar
+and an empty list of containers</p>
+<h2 id="h2_357" class="heading-2">Running a container from an image<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Before we can run []{#Chapter_15.xhtml#idx_45b20d9c .index-entry
+index-entry=&ldquo;container:running, from image&rdquo;}a container, we need an
+image.[]{.sentence-end} Let's start by pulling a
+standard[]{#Chapter_15.xhtml#idx_285cea83 .index-entry
+index-entry=&ldquo;image:container, running from&rdquo;} NGINX web server image from
+a public registry and then launch a container from it:</p>
+<ol>
+<li>
+<p>Navigate to the <strong>Images</strong> section using the left
+sidebar.[]{.sentence-end} This screen lists all the container images
+available on your local machine.</p>
+</li>
+<li>
+<p>Click the <strong>Pull an image</strong> button.[]{.sentence-end} A dialog will
+appear.</p>
+</li>
+<li>
+<p>In the dialog, enter the name of the image you want to
+pull.[]{.sentence-end} For this example, we will use
+<code>docker.io/library/nginx</code>{.inlineCode}.[]{.sentence-end} As you can
+see, we are not setting any tag, so we are pulling only the
+<code>latest</code>{.inlineCode} tag.</p>
+</li>
+<li>
+<p>Click the <strong>Pull image</strong> button to start the
+download.[]{.sentence-end} You will see a progress indicator as
+Podman Desktop downloads the image layers.[]{.sentence-end} Once
+complete, the <code>nginx</code>{.inlineCode} image will appear in your list of
+local images.[]{.sentence-end}</p>
+<figure class="mediaobject-one">
+<img src="images/B31467_15_5.png"
+style="width:460.79999999999995px; height:239.53983471074378px;"
+alt="Image 5" />
+</figure>
+<p>Figure 15.5: The Images screen showing the newly pulled NGINX image
+with its details</p>
+</li>
+</ol>
+<p>Now that we have the[]{#Chapter_15.xhtml#idx_853ddd6a .index-entry
+index-entry=&ldquo;container:running, from image&rdquo;} image, we can create and
+run a container[]{#Chapter_15.xhtml#idx_f90f0e30 .index-entry
+index-entry=&ldquo;image:container, running from&rdquo;} from it:</p>
+<ol>
+<li>
+<p>In the <strong>Images</strong> list, locate the <code>nginx</code>{.inlineCode} image and
+click the <strong>Run</strong> icon (a <em>play</em> symbol) in the <strong>Actions</strong> column.</p>
+</li>
+<li>
+<p>This will bring up the <strong>Create a container</strong> configuration
+screen.[]{.sentence-end} Here, you can define all the parameters for
+your new container:</p>
+<ul>
+<li><strong>Container</strong> <strong>name</strong>: Give your container a memorable name,
+such as <code>my-web-server</code>{.inlineCode}.</li>
+<li><strong>Port</strong> <strong>mapping</strong>: This is crucial for accessing the web
+server from your host machine.[]{.sentence-end} In the <strong>Ports</strong>
+section, map a local host port to the container's exposed
+port.[]{.sentence-end} NGINX listens on port <code>80</code>{.inlineCode}
+inside the container, so let's map port <code>8080</code>{.inlineCode} on
+our host to port <code>80</code>{.inlineCode} in the container by entering
+<code>8080</code>{.inlineCode} in the <strong>Host Port</strong> field and
+<code>80</code>{.inlineCode} in the <strong>Container Port</strong>
+field.[]{.sentence-end} In case Podman Desktop recognizes the
+existing exposed ports, you will need to enter just the target
+host port.</li>
+</ul>
+<figure class="mediaobject-one">
+<img src="images/B31467_15_6.png"
+style="width:460.79999999999995px; height:239.53983471074378px;"
+alt="Image 6" />
+</figure>
+<p>Figure 15.6: The Create a container dialog, with the container name
+and port mapping fields filled out</p>
+</li>
+<li>
+<p>Click the <strong>Start Container</strong> button.[]{.sentence-end} Podman
+Desktop will create and start the container.[]{.sentence-end} It
+[]{#Chapter_15.xhtml#idx_ce668195 .index-entry
+index-entry=&ldquo;container:running, from image&rdquo;}will then automatically
+navigate you []{#Chapter_15.xhtml#idx_466e854d .index-entry
+index-entry=&ldquo;image:container, running from&rdquo;}to the <strong>Containers</strong>
+list, where you will see your <code>my-web-server</code>{.inlineCode} container
+running, indicated by a green icon and a <strong>Running</strong> status label.</p>
+</li>
+</ol>
+<p>To verify that it's working, open a web browser and navigate to
+<a href="https://http://localhost:8080" rel="external" target="_blank">[http://localhost:8080]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.[]{.sentence-end}
+You should see the default <strong>Welcome to nginx!</strong> page.</p>
+<h2 id="h2_358" class="heading-2">Managing the container lifecycle<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>The <strong>Containers</strong> list is your[]{#Chapter_15.xhtml#idx_88fad17a
+.index-entry index-entry=&ldquo;container lifecycle:managing&rdquo;} central hub for
+managing all running and stopped containers.[]{.sentence-end} For each
+container, you have a set of quick actions to control its state:</p>
+<ul>
+<li><strong>Stop/Start</strong>: The square stop icon will stop a running container,
+changing its status to <strong>Exited</strong>.[]{.sentence-end} The play icon
+will start a stopped container.</li>
+<li><strong>Delete</strong>: The trash can icon allows you to permanently remove a
+container.[]{.sentence-end} Note that a container must be stopped
+before it can be deleted.</li>
+</ul>
+<p>For more detailed interaction, you can click on the container's name to
+open its <strong>Details</strong> view.[]{.sentence-end} This view is organized into
+several tabs:</p>
+<ul>
+<li>
+<p><strong>Logs</strong>: This tab provides a real-time stream of the container's
+standard output, which is invaluable for debugging.[]{.sentence-end}
+You can see NGINX's access logs here as you refresh your browser
+page.</p>
+</li>
+<li>
+<p><strong>Inspect</strong>: This provides a detailed JSON output containing all the
+low-level configuration and state information about the container,
+similar to the <code>podman</code>{.inlineCode}<code> inspect</code>{.inlineCode} command.</p>
+</li>
+<li>
+<p><strong>Terminal</strong>: This is one of the most powerful
+features.[]{.sentence-end} It gives you direct shell access inside
+the running container.[]{.sentence-end} You can use it to explore
+the container's filesystem, check running processes, or modify
+configuration files for temporary testing.[]{.sentence-end}</p>
+<figure class="mediaobject-one">
+<img src="images/B31467_15_7.png"
+style="width:460.79999999999995px; height:239.4550218340611px;"
+alt="Image 7" />
+</figure>
+<p>Figure 15.7: The Details view of the running NGINX container,
+showing the Logs tab</p>
+</li>
+</ul>
+<h2 id="h2_359" class="heading-2">Attaching persistent storage using volumes<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Containers are[]{#Chapter_15.xhtml#idx_5745b848 .index-entry
+index-entry=&ldquo;persistent storage:attaching, with volumes&rdquo;} ephemeral by
+nature.[]{.sentence-end} If we were to remove
+[]{#Chapter_15.xhtml#idx_4a3ea030 .index-entry
+index-entry=&ldquo;volumes:persistent storage, attaching&rdquo;}our
+<code>my-web-server</code>{.inlineCode} container, any data written inside it would
+be lost.[]{.sentence-end} To persist data, we use
+volumes.[]{.sentence-end} Let's create a volume to store the NGINX web
+content and attach it to a new container:</p>
+<ol>
+<li>
+<p>Navigate to the <strong>Volumes</strong> section from the left
+sidebar.[]{.sentence-end} This screen lists all available volumes.</p>
+</li>
+<li>
+<p>Click the <strong>Create</strong> button.</p>
+</li>
+<li>
+<p>In the dialog that appears, provide a name for your volume, for
+example, <code>web-content</code>{.inlineCode}, and click
+<strong>Create</strong>.[]{.sentence-end} The new volume will now appear in the
+list.[]{.sentence-end}</p>
+<p>Now, let's create a new NGINX container and attach this volume to
+it.</p>
+</li>
+<li>
+<p>Go back to the <strong>Images</strong> section, find the <code>nginx</code>{.inlineCode}
+image, and click the <strong>Run</strong> icon again.</p>
+</li>
+<li>
+<p>On the <strong>Create a container</strong> screen, give it a new name such as
+<code>persistent-web-server</code>{.inlineCode} and configure the port mapping
+again, but with a different host port (<code>8081:80</code>{.inlineCode}).</p>
+</li>
+<li>
+<p>Scroll down to the <strong>Volumes</strong> section of the configuration screen.</p>
+</li>
+<li>
+<p>Here, you will map the <code>web-content</code>{.inlineCode} volume we just
+created to the directory where NGINX stores its default HTML files,
+which is
+<code>/</code>{.inlineCode}<code>usr</code>{.inlineCode}<code>/share/</code>{.inlineCode}<code>nginx</code>{.inlineCode}<code>/html</code>{.inlineCode}:</p>
+<ul>
+<li>In the first field, paste the <code>web-content</code>{.inlineCode} volume
+path that you previously created.[]{.sentence-end} You can get
+the volume's path in the <strong>Volumes</strong> section, in the volume's
+details.</li>
+<li>In the []{#Chapter_15.xhtml#idx_105d0599 .index-entry
+index-entry=&ldquo;persistent storage:attaching, with volumes&rdquo;}second
+field, enter the[]{#Chapter_15.xhtml#idx_fed52167 .index-entry
+index-entry=&ldquo;volumes:persistent storage, attaching&rdquo;} container
+path:
+<code>/</code>{.inlineCode}<code>usr</code>{.inlineCode}<code>/share/</code>{.inlineCode}<code>nginx</code>{.inlineCode}<code>/html</code>{.inlineCode}.</li>
+</ul>
+<figure class="mediaobject-one">
+<img src="images/B31467_15_8.png"
+style="width:460.79999999999995px; height:239.53983471074378px;"
+alt="Image 8" />
+</figure>
+<p>Figure 15.8: The Volumes mapping section within the Create a
+container screen, showing the web-content volume mapped to
+/usr/share/nginx/html</p>
+</li>
+<li>
+<p>Click <strong>Start Container</strong>.[]{.sentence-end} Now, this new container
+is using the <code>web-content</code>{.inlineCode} volume to
+serve[]{#Chapter_15.xhtml#idx_6e4e1add .index-entry
+index-entry=&ldquo;persistent storage:attaching, with volumes&rdquo;} its
+files.[]{.sentence-end} Even if you stop
+and[]{#Chapter_15.xhtml#idx_5586da43 .index-entry
+index-entry=&ldquo;volumes:persistent storage, attaching&rdquo;} remove this
+container, the volume and its data will remain.[]{.sentence-end} You
+can then launch another container and attach it to the same volume
+to resume using the persisted data.</p>
+</li>
+</ol>
+<h2 id="h2_360" class="heading-2">Working with container networking<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Networking is a[]{#Chapter_15.xhtml#idx_7a0541ce .index-entry
+index-entry=&ldquo;container networking&rdquo;} fundamental aspect of
+containerization.[]{.sentence-end} As we've already seen, Podman
+Desktop makes port mapping incredibly simple during container
+creation.[]{.sentence-end} This is the most common networking
+interaction you'll have, allowing you to expose services running inside
+containers to your host machine or the wider network.</p>
+<p>While Podman supports the creation of complex custom networks for
+multi-container applications, the Podman Desktop interface focuses on
+the essentials.[]{.sentence-end} During container creation, you can
+assign a container to any pre-existing network via the <strong>Networking</strong>
+dropdown in the advanced settings.[]{.sentence-end} However, creating
+and managing the networks themselves is typically an advanced operation
+handled via the command line.</p>
+<p>For day-to-day use, the key networking information is readily available
+in the container's <strong>Details</strong> view.[]{.sentence-end} The <strong>Summary</strong>
+tab clearly displays any port mappings, allowing you to quickly see
+which host port corresponds to which container port, saving you from
+having to inspect the container's configuration manually.</p>
+<p>With these features, Podman Desktop provides a robust and intuitive
+toolkit for handling the entire container lifecycle, from creation and
+management to persistence and networking, all without needing to touch
+the command line.[]{.sentence-end} We are now ready to explore its
+user-friendly interface for managing a real Kubernetes cluster in the
+next section.</p>
+<h1 id="h1_361" class="heading-1">Connecting to and interacting directly with Kubernetes clusters<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Before diving into the graphical interface, it's helpful to understand
+the role of Kubernetes.[]{.sentence-end} Born out of Google's internal
+need to manage applications at an immense scale, Kubernetes is an open
+source container orchestration platform that automates the deployment,
+scaling, and management of containerized applications.[]{.sentence-end}
+It groups containers that make up an application into logical units
+called <strong>Pods</strong> for[]{#Chapter_15.xhtml#idx_7bd4e35e .index-entry
+index-entry=&ldquo;Pods&rdquo;} easy management and discovery.[]{.sentence-end} Over
+the years, Kubernetes has evolved into the de facto standard for
+multi-node container orchestration, supported by a vast ecosystem and a
+vibrant community.[]{.sentence-end} Its power lies in its declarative
+nature: you define the desired state of your application, and Kubernetes
+works to maintain that state, handling failures, scaling, and service
+discovery automatically.</p>
+<p>Podman Desktop embraces this standard by providing a seamless, built-in
+client to connect to and manage any Kubernetes cluster.</p>
+<figure class="mediaobject">
+<img src="images/B31467_15_9.png"
+style="width:528.0px; height:274.4727272727273px;" alt="Image 9" />
+</figure>
+<p>Figure 15.9: The Kubernetes Settings screen in Podman Desktop, showing
+the empty list of available Kubernetes contexts</p>
+<p>This turns Podman Desktop into a comprehensive control panel, allowing
+you to manage your local Podman containers and your remote Kubernetes
+workloads from a single, unified interface.</p>
+<h2 id="h2_362" class="heading-2">Connecting to a local cluster with minikube<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>For developers[]{#Chapter_15.xhtml#idx_02a9a850 .index-entry
+index-entry=&ldquo;minikube:used, for connecting to local cluster&rdquo;} who prefer
+to run a Kubernetes cluster directly on their local machine,
+<strong>minikube</strong> is an excellent and widely adopted tool.[]{.sentence-end}
+It's a project designed to spin up a single-node Kubernetes cluster
+inside a virtual machine or a container on your personal
+computer.[]{.sentence-end} This approach is perfect for learning
+Kubernetes, daily development, and testing your applications in a
+lightweight, self-contained environment.</p>
+<p>You can find all the information and the documentation on how to set up
+a <code>minikube</code>{.inlineCode} instance in <em><a href="/containers/podmandesktop/#Chapter_14.xhtml#h1_330">Chapter
+14</a>{.chapref}</em>, <em>Interacting with</em> <em>systemd</em>
+<em>and</em> <em>Kubernetes</em>.</p>
+<h2 id="h2_363" class="heading-2">Connecting Podman Desktop to a Kubernetes cluster<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Let's see now[]{#Chapter_15.xhtml#idx_afdc90bf .index-entry
+index-entry=&ldquo;Podman Desktop:connecting, to Kubernetes cluster&rdquo;} how to
+connect an existing []{#Chapter_15.xhtml#idx_97b5c090 .index-entry
+index-entry=&ldquo;Kubernetes cluster:Podman Desktop, connecting to&rdquo;}Kubernetes
+cluster to Podman Desktop:</p>
+<ol>
+<li>
+<p>The first step to managing a Kubernetes cluster is telling Podman
+Desktop where to find it.[]{.sentence-end} This is handled through a
+<code>kubeconfig</code>{.inlineCode} file, which contains the credentials and
+endpoint information for one or more clusters.[]{.sentence-end}
+Podman Desktop automatically detects <code>kubeconfig</code>{.inlineCode} files
+from their default location
+(<code>~/.</code>{.inlineCode}<code>kube</code>{.inlineCode}<code>/</code>{.inlineCode}<code>config</code>{.inlineCode}).</p>
+</li>
+<li>
+<p>To view and manage your Kubernetes connections, look at the bottom
+of the Podman Desktop window.[]{.sentence-end} You will see a button
+indicating the current context (it might say <strong>Podman</strong> by
+default).[]{.sentence-end} Clicking this button reveals a menu of
+all detected Kubernetes contexts.</p>
+</li>
+<li>
+<p>Alternatively, navigate to <strong>Settings</strong> |
+<strong>Kubernetes</strong>.[]{.sentence-end} This screen provides a detailed
+list of all available Kubernetes contexts found on your
+system.[]{.sentence-end}</p>
+<figure class="mediaobject-one">
+<img src="images/B31467_15_10.png"
+style="width:460.79999999999995px; height:239.53983471074378px;"
+alt="Image 10" />
+</figure>
+<p>Figure 15.10: The Kubernetes main screen in Podman Desktop, showing
+the default available context from the kubeconfig file</p>
+</li>
+<li>
+<p>From the <strong>Settings</strong> list, you can select the context you wish to
+interact with.[]{.sentence-end} Let's assume you have a
+<code>minikube</code>{.inlineCode} cluster running, as set up in the previous
+chapter.[]{.sentence-end} Select the <code>minikube</code>{.inlineCode} context
+from the list.</p>
+</li>
+<li>
+<p>Once []{#Chapter_15.xhtml#idx_291fdc40 .index-entry
+index-entry=&ldquo;Podman Desktop:connecting, to Kubernetes cluster&rdquo;}selected,
+Podman Desktop's []{#Chapter_15.xhtml#idx_05d2ea64 .index-entry
+index-entry=&ldquo;Kubernetes cluster:Podman Desktop, connecting to&rdquo;}entire
+UI will switch its focus from the local Podman engine to the remote
+<code>minikube</code>{.inlineCode} cluster.[]{.sentence-end} The sidebar will
+now be populated with Kubernetes resources such as Pods,
+Deployments, Services, and so on.</p>
+</li>
+</ol>
+<p>As shown, the process is really straightforward, and it could make
+Podman a good companion for managing any existing Kubernetes cluster.</p>
+<h3 id="h3_364" class="heading-3">Creating a local kind cluster<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><strong>Kubernetes</strong> <strong>in</strong> <strong>Docker</strong> (<strong>kind</strong>) is
+a[]{#Chapter_15.xhtml#idx_6c4bdcff .index-entry
+index-entry=&ldquo;Kubernetes in Docker (kind)&rdquo;} great alternative to
+<code>minikube</code>{.inlineCode} for developers aiming to work on a local
+Kubernetes cluster.[]{.sentence-end} Different from
+<code>minikube</code>{.inlineCode}, <code>k</code>{.inlineCode}<code>ind</code>{.inlineCode} doesn't
+create a local []{#Chapter_15.xhtml#idx_1c9203cb .index-entry
+index-entry=&ldquo;local kind cluster:creating&rdquo;}virtual machine but totally
+relies on the container engine to spin up all the Kubernetes control
+plane services.[]{.sentence-end} It's a very simple and intuitive
+approach, and great for working on local application development.</p>
+<p>To create a <code>k</code>{.inlineCode}<code>ind</code>{.inlineCode} cluster with Podman
+Desktop, go to <strong>Settings</strong> | <strong>Resources</strong> and click on the <strong>Create
+new&hellip;</strong> button in the <strong>Kind</strong> box.</p>
+<figure class="mediaobject">
+<img src="images/B31467_15_11.png"
+style="width:528.0px; height:288.43636363636364px;" alt="Image 11" />
+</figure>
+<p>Figure 15.11: Kind cluster creation</p>
+<p>The next screen allows users to customize the name of the
+<code>kind</code>{.inlineCode} cluster (default is <strong>kind-cluster</strong>), the provider
+type (default is <strong>Podman</strong>), the default HTTP/HTTPS ports, and to
+define the Ingress controller setup.</p>
+<figure class="mediaobject">
+<img src="images/B31467_15_12.png"
+style="width:528.0px; height:288.43636363636364px;" alt="Image 12" />
+</figure>
+<p>Figure 15.12: Kind cluster details definition</p>
+<p>Click on the <strong>Create</strong> button[]{#Chapter_15.xhtml#idx_57732518
+.index-entry index-entry=&ldquo;local kind cluster:creating&rdquo;} and wait for the
+<code>k</code>{.inlineCode}<code>ind</code>{.inlineCode} cluster to start.[]{.sentence-end}
+When the cluster creation is completed, you will see a successful
+creation screen:</p>
+<figure class="mediaobject">
+<img src="images/B31467_15_13.png"
+style="width:493.76250000000005px; height:269.7330681818182px;"
+alt="Image 13" />
+</figure>
+<p>Figure 15.13: Kind cluster creation in progress</p>
+<p>After creation, the <code>k</code>{.inlineCode}<code>ind</code>{.inlineCode} cluster will be
+visible under the Kubernetes resources.</p>
+<p>To stop the <code>k</code>{.inlineCode}<code>ind</code>{.inlineCode} cluster, go
+[]{#Chapter_15.xhtml#idx_ba3d1280 .index-entry
+index-entry=&ldquo;local kind cluster:creating&rdquo;}to <strong>Settings</strong> |
+<strong>Resources</strong> and simply click on the <strong>Stop</strong> icon.[]{.sentence-end} To
+start it again, click on the <strong>Play</strong> icon.</p>
+<figure class="mediaobject">
+<img src="images/B31467_15_14.png"
+style="width:528.0px; height:288.43636363636364px;" alt="Image 14" />
+</figure>
+<p>Figure 15.14: Kind cluster available in the Resources section</p>
+<p>After completing the process, we will get a fully functional Kubernetes
+cluster that we can use for testing purposes.[]{.sentence-end} Let's
+now see how to explore and manage Kubernetes resources.</p>
+<h2 id="h2_365" class="heading-2">Exploring and managing Kubernetes resources<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>With Podman Desktop connected to your cluster, you can now browse and
+manage its resources as easily as you manage local containers.</p>
+<h3 id="h3_366" class="heading-3">Managing Pods<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Pods are the smallest deployable[]{#Chapter_15.xhtml#idx_c71c67d6
+.index-entry index-entry=&ldquo;Pods:managing&rdquo;} units of computing in
+Kubernetes, representing a group of one or more
+containers.[]{.sentence-end} Follow these steps:</p>
+<ol>
+<li>
+<p>Navigate to the <strong>Pods</strong> section using the left
+sidebar.[]{.sentence-end} You will see a list of all Pods running
+across all namespaces in your cluster, if any.</p>
+</li>
+<li>
+<p>You can use the <strong>Namespace</strong> dropdown at the top of the list to
+filter the view and focus on a specific namespace, such as
+<code>default</code>{.inlineCode} or
+<code>kube</code>{.inlineCode}<code>-system</code>{.inlineCode}.[]{.sentence-end} The list
+provides at-a-glance information, including the Pod's name, status
+(e.g., <strong>Running</strong>, <strong>Pending</strong>, or <strong>Error</strong>), and
+[]{#Chapter_15.xhtml#idx_42871196 .index-entry
+index-entry=&ldquo;Pods:managing&rdquo;}the namespace it belongs
+to.[]{.sentence-end}</p>
+<figure class="mediaobject-one">
+<img src="images/B31467_15_15.png"
+style="width:460.79999999999995px; height:239.53983471074378px;"
+alt="Image 15" />
+</figure>
+<p>Figure 15.15: The Pods list view in Podman Desktop, filtered to a
+specific namespace and showing several running Pods</p>
+</li>
+<li>
+<p>To get more details, click on any Pod in the list.[]{.sentence-end}
+This opens a <strong>Details</strong> view, very similar to the one for local
+containers:</p>
+<ul>
+<li><strong>Logs</strong>: This tab allows you to view the real-time logs of the
+containers running inside the Pod.[]{.sentence-end} If the Pod
+has multiple containers, you can select which container's logs
+you want to see.</li>
+<li><strong>Inspect</strong>: This tab shows the low-level details of the Pod
+resource in JSON format.</li>
+<li><strong>Terminal</strong>: This []{#Chapter_15.xhtml#idx_a9328105
+.index-entry index-entry=&ldquo;Pods:managing&rdquo;}powerful feature lets
+you open an interactive shell directly into a running container
+within the Pod, which is incredibly useful for debugging.</li>
+</ul>
+</li>
+</ol>
+<h3 id="h3_367" class="heading-3">Managing deployments and services<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>While Pods are the basic building[]{#Chapter_15.xhtml#idx_0b27242b
+.index-entry index-entry=&ldquo;deployments:managing&rdquo;} blocks, in a real-world
+scenario, you typically manage[]{#Chapter_15.xhtml#idx_e581f021
+.index-entry index-entry=&ldquo;services:managing&rdquo;} them through higher-level
+objects such as <em>Deployments</em> and expose them with <em>Services</em>.</p>
+<ol>
+<li>
+<p>Navigate to the <strong>Deployments</strong> section in the
+sidebar.[]{.sentence-end} Here, you'll see a list of all
+Deployments in the cluster.[]{.sentence-end} This view shows the
+desired number of replicas versus the currently available ones,
+giving you a quick check on the health of your applications.</p>
+</li>
+<li>
+<p>Click on a Deployment to see its details, including the Pods it
+manages.[]{.sentence-end} From here, you can perform basic actions
+such as deleting the deployment, which will also terminate its
+associated Pods.</p>
+</li>
+<li>
+<p>Next, navigate to the <strong>Services</strong> section.[]{.sentence-end} A
+Service in Kubernetes is an abstraction that defines a logical set
+of Pods and a policy by which to access them.[]{.sentence-end} This
+list shows all the services, their type (<code>ClusterIP</code>{.inlineCode},
+<code>NodePort</code>{.inlineCode}, or <code>LoadBalancer</code>{.inlineCode}), and the
+ports they expose.[]{.sentence-end}</p>
+<p><a href="#R-image-c4e4dfec1f84927f58e5c53c5d4f1988" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="images/B31467_15_16.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-c4e4dfec1f84927f58e5c53c5d4f1988"><img class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_15_16.png"></a></p>
+<p>Figure 15.16: The Services list view, showing services of different
+types, including a NodePort service with its assigned port</p>
+</li>
+</ol>
+<p>Let's put this into a[]{#Chapter_15.xhtml#idx_e5b88426 .index-entry
+index-entry=&ldquo;deployments:managing&rdquo;} practical context.[]{.sentence-end}
+Imagine that our WordPress application[]{#Chapter_15.xhtml#idx_5066d415
+.index-entry index-entry=&ldquo;services:managing&rdquo;} from the previous chapter
+is running on the cluster:</p>
+<ul>
+<li>In the <strong>Deployments</strong> list, you would find the
+<code>wordpress</code>{.inlineCode}<code>-pod</code>{.inlineCode} and
+<code>mysql</code>{.inlineCode}<code>-pod</code>{.inlineCode} Deployments.</li>
+<li>In the <strong>Services</strong> list, you would see the
+<code>wordpress</code>{.inlineCode}<code>-pod</code>{.inlineCode} Service of the
+<code>NodePort</code>{.inlineCode} type.[]{.sentence-end} By looking at its
+details, you could find the specific port to access the WordPress
+setup page through your cluster's IP address.</li>
+<li>If a WordPress Pod was having issues, you could go to the <strong>Pods</strong>
+list, find the specific Pod, and use the <strong>Logs</strong> tab to check for
+errors or the <strong>Terminal</strong> tab to <code>exec</code>{.inlineCode} into the
+container and check its configuration files.</li>
+</ul>
+<p>By integrating Kubernetes management so deeply, Podman Desktop
+streamlines the developer workflow.[]{.sentence-end} It eliminates the
+need to constantly switch between a terminal for <code>kubectl</code>{.inlineCode}
+commands and other tools.[]{.sentence-end} Instead, it provides a
+centralized, intuitive interface to observe, debug, and interact with
+applications, whether they are running locally on Podman or remotely on
+a full-fledged Kubernetes cluster.</p>
+<p>We are now ready to explore its user-friendly interface for managing AI
+workloads in the next section.</p>
+<h1 id="deploying-local-ai-inference-for-app-integration">Deploying local AI inference for app integration<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<h2 id="podman-ai-lab">Podman AI Lab<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Recognizing the trend toward local AI, the creators of Podman introduced <strong>Podman</strong>
+<strong>AI Lab</strong>, an integrated extension within Podman Desktop. The primary goal of Podman AI Lab is to radically simplify the process of downloading, running, and managing AI models on a developer's machine. It abstracts away the complex, manual steps of setting up environments, configuring model servers, and managing dependencies. Instead, it leverages the power of containers to provide a one-click experience for spinning up a local inference server, complete with a ready-to-use API endpoint for your applications.</p>
+<p>Key features include the following:</p>
+<ul>
+<li>A curated catalog of popular, open source models</li>
+<li>Simplified model download and setup</li>
+<li>Automatic provisioning of a containerized inference server</li>
+<li>Clear presentation of API endpoints for integration</li>
+</ul>
+<h2 id="enabling-podman-ai-lab">Enabling Podman AI Lab<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Podman AI Lab is included as an extension and needs to be enabled before you can use it:</p>
+<ol>
+<li>
+<p>Open Podman Desktop and select <strong>Extensions</strong>.</p>
+</li>
+<li>
+<p>You will see a list of available extensions. Locate <strong>Podman</strong> <strong>AI Lab</strong>.</p>
+</li>
+<li>
+<p>Click the toggle switch to enable it. The application might require a quick restart to apply the
+changes.</p>
+<p><a href="#R-image-5a68a79f7cd0f07df1477b0e1a59d3f1" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="images/B31467_15_17.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-5a68a79f7cd0f07df1477b0e1a59d3f1"><img class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_15_17.png"></a></p>
+</li>
+</ol>
+<p>Once enabled, a new <strong>AI Lab</strong> icon will appear in your left sidebar, ready for you to explore.</p>
+<h2 id="running-your-first-ai-model">Running your first AI model<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Download a model and run a local inference server. We will use a small, efficient model for this example, such as <code>Phi-3-mini</code>, which is
+designed to run well on consumer hardware:</p>
+<ol>
+<li>
+<p>Click on the new <strong>AI Lab</strong> icon in the sidebar. This will take you to the <strong>AI Lab</strong> dashboard. Then, click on the <strong>Catalog</strong> section, which presents a list of available models you can download.</p>
+</li>
+<li>
+<p>Find the model you wish to run (e.g., <strong>Phi-2-GGUF</strong>) from the catalog and click on its card to see more details. We are choosing this model for its reduced footprint.</p>
+</li>
+<li>
+<p>On the catalog's main screen, you will see a <strong>Download</strong> icon on the right side. Click it to start downloading the model files to your machine. This may take some time, depending on the model&rsquo;s size and your internet connection.</p>
+</li>
+<li>
+<p>Once the download is complete, the button will change to a <em>rocket</em> icon to create the model service. Click it to begin setting up the inference server.</p>
+</li>
+<li>
+<p>A configuration dialog will appear. Here, you can accept the defaults or customize the setup. For now, the default settings are sufficient. Click <strong>Create service</strong> to proceed.</p>
+<p><a href="#R-image-cdbf43f521836007fc3887cc990ec241" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="images/B31467_15_18.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-cdbf43f521836007fc3887cc990ec241"><img class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_15_18.png"></a></p>
+</li>
+</ol>
+<p>If you see any warning regarding the available RAM, please disregard it if you are running Podman Desktop on a Linux machine; otherwise, please follow any instructions to adjust the memory settings.</p>
+<p>Podman AI Lab will now work in the background to provision an inference server. This is where the magic
+happens: it pulls the <code>ramalama</code> specialized container image, starts a container, loads the model into it, and exposes the necessary ports.</p>
+<p><strong>RamaLama</strong> is an open source tool designed to simplify running and serving AI models on a local machine by using the familiar workflow of OCI containers. It automatically detects the user's hardware, such as GPUs from NVIDIA, AMD, or Apple, and pulls the correct accelerated container image, eliminating the need for complex host system configuration. This allows engineers to manage
+AI models with container-centric commands such as <code>run</code>, <code>pull</code>, and <code>serve</code>, while also enhancing security by running the models in isolated, rootless containers with no network access by default. The project supports pulling models from multiple registries, including Hugging Face and Ollama, and allows users to interact with them through a REST API or as a chatbot.</p>
+<p>Once it has pulled the inference server container image, Podman Desktop will run it.</p>
+<h2 id="verifying-the-running-model-server">Verifying the running model server<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>How can we be sure of what AI Lab has done? We can use the core container management features of Podman Desktop to see the result:</p>
+<ol>
+<li>
+<p>Navigate to the <strong>Containers</strong> section in the left sidebar.</p>
+</li>
+<li>
+<p>You will see a new container running. Its name will be related to the AI Lab service (e.g., <code>ramalama-llama-server</code>. This confirms that AI Lab simply orchestrated the creation of a standard Podman container to host the model.</p>
+<p><a href="#R-image-3067ab42cfad9606d42dbeb1e2349e8c" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="images/B31467_15_19.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-3067ab42cfad9606d42dbeb1e2349e8c"><img class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_15_19.png"></a></p>
+</li>
+</ol>
+<p>By clicking on this container, you can inspect it just like any other: view its logs, check the mapped ports, or even open a terminal inside it. This transparency is a key benefit because you are always in control and can use your existing container skills to manage the underlying infrastructure.</p>
+<h2 id="obtaining-the-api-endpoint">Obtaining the API endpoint<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Now that the server is running, we need the endpoint to interact with it from our own applications:</p>
+<ol>
+<li>
+<p>Return to the <strong>AI Lab</strong> dashboard.</p>
+</li>
+<li>
+<p>Go to the <strong>Services</strong> tab, and you will see that your <strong>Phi-2-GGUF</strong> model now has a <strong>Running</strong> status.</p>
+</li>
+<li>
+<p>Click on the model to view its details. The interface will now display a ready-to-use <strong>API Endpoint URL</strong>. This is typically an OpenAI-compatible endpoint, making it easy to integrate with a vast range of existing libraries and tools. The URL will look something
+like http://localhost:8080/v1/chat/completions</p>
+</li>
+</ol>
+<p><a href="#R-image-2ca13ea53f50b480bd00844fed1159e1" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="images/B31467_15_20.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-2ca13ea53f50b480bd00844fed1159e1"><img class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_15_20.png"></a></p>
+<p>You can test the endpoint immediately. Copy the URL, open a terminal on your host machine, and use a tool such as <code>curl</code> to send a
+request.[]{.sentence-end} While we will build a full application in the
+next section, a simple test demonstrates that your local AI server is
+live and ready for integration.</p>
+<p>With just a few clicks, Podman AI Lab has provisioned a fully
+functional, containerized AI inference server on your local
+machine.[]{.sentence-end} This powerful capability empowers you to
+experiment with and develop AI-driven features with unparalleled ease,
+all while maintaining privacy and control over your
+data.[]{.sentence-end} Thanks to these great features, we are now ready
+to explore how it could be easy to develop a new end-to-end use case
+using Podman Desktop in the next section.</p>
+<h1 id="h1_374" class="heading-1">Integrating an AI model running on Podman for building your own chatbot use case<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>We have reached the final and most rewarding part of our
+journey.[]{.sentence-end} So far, we have provisioned a local AI
+inference server.[]{.sentence-end} Now, we will put it to work by
+building a complete, end-to-end application: a private, personal chatbot
+that runs entirely on your machine.[]{.sentence-end} This section will
+guide you through integrating your containerized AI model with a
+powerful, open source user interface, demonstrating the true value of AI
+when harnessed by a real-world use case.</p>
+<p>An AI model, no matter how powerful, is of little use on its
+own.[]{.sentence-end} Its value is unlocked when it is integrated into
+an application that solves a problem or provides a
+service.[]{.sentence-end} The true potential of generative AI is
+realized in these end-to-end use cases, which inspire innovation and
+showcase its practical benefits.[]{.sentence-end} With Podman and Podman
+Desktop, we have the unique ability to run not only the AI model but
+also the application that uses it, side by side, in a secure and
+manageable containerized environment.</p>
+<p>In this section, we will build a fully functional chatbot using an AI
+model of our choice and integrate it with <strong>AnythingLLM</strong>, a
+[]{#Chapter_15.xhtml#idx_1df72259 .index-entry
+index-entry=&ldquo;AnythingLLM&rdquo;}popular open source web interface designed to
+create a custom personal assistant.[]{.sentence-end} The entire
+stack&mdash;from the AI model to the web application&mdash;will be powered by
+Podman Desktop and its AI Lab extension.</p>
+<h2 id="h2_375" class="heading-2">Step 1: Starting an OpenAI-compatible inference server<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>AnythingLLM requires a[]{#Chapter_15.xhtml#idx_95e23bb4 .index-entry
+index-entry=&ldquo;OpenAI-compatible inference server:starting&rdquo;} connection to
+an LLM that exposes an OpenAI-compatible API.[]{.sentence-end}
+Fortunately, Podman AI Lab's inference servers are designed for this
+exact purpose.</p>
+<p>Let's start by ensuring that our model server is up and
+running.[]{.sentence-end} Please be sure to have a model running from
+the previous section, so you can proceed to the next step.</p>
+<h2 id="step-2-running-the-anythingllm-application-container">Step 2: Running the AnythingLLM application container<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Next, we need to run the AnythingLLM web application itself. We will do this by pulling its official container image and running it using Podman Desktop:</p>
+<ol>
+<li>
+<p>Navigate to the <strong>Images</strong> section in the sidebar.</p>
+</li>
+<li>
+<p>Click the <strong>Pull an image</strong> button. In the dialog, enter the official image name for AnythingLLM
+<code>mintplexlabs/anythingllm</code> and click <strong>Pull image</strong>.</p>
+</li>
+<li>
+<p>After the image is downloaded, find it in the list and click the <strong>Run</strong> icon to start the container creation process.</p>
+</li>
+<li>
+<p>The <strong>Create a container</strong> screen will appear. We need to configure two important settings
+for AnythingLLM to work correctly:</p>
+<ul>
+<li>
+<p><strong>Port</strong> <strong>mapping</strong>: The AnythingLLM web server listens on port <code>3001</code> inside the container. Map
+port <code>3001</code>{.inlineCode} on your host to port <code>3001</code> in the container.</p>
+</li>
+<li>
+<p><strong>Volume for</strong> <strong>persistent</strong> <strong>storage</strong>: To ensure that your chat history and configuration are saved, we need to attach a
+volume. The application stores its data in the <code>/app/server/storage</code> directory:</p>
+<ul>
+<li>First, go to the <strong>Volumes</strong> section in Podman Desktop and create a new volume named <code>anythingllm-storage</code></li>
+<li>Now, we need to create an empty<code>.env</code> file in that storage location. From the just-created volume, you can inspect the details of the underlying directory and run the <code>touch</code>  command for creating the empty file. Finally, also apply the right permission to the root folder. The command will look like this:</li>
+</ul>
+<div class="programlisting snippet-con-two highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ touch /home/seal/.local/share/containers/storage/volumes/anythingllm/_data/.env
+$ chmod -R 777 /home/seal/.local/share/containers/storage/volumes/anythingllm/_data</code></pre></div>
+<ul>
+<li>Return to the container creation screen. In the <strong>Volumes</strong> section, map the <code>anythingllm-storage</code> volume to the container path, <code>/app/server/storage</code>.</li>
+<li>In the <strong>Volumes</strong> section, also map the <code>.env</code>{.inlineCode} file we created with the <code>.env</code> file inside the container available at this location, <code>/app/server/.env</code></li>
+<li>Finally, append the <code>:z</code> suffix to the container path strings. This ensures that SELinux grants the container the necessary permissions to write to the system storage.</li>
+<li>Define the <code>STORAGE_DIR</code> environment variable with the <code>/app/server/storage</code> value.</li>
+<li>Add the required capabilities in the <strong>Security</strong> tab: <code>SYS_ADMIN</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Give the container a name, such as <code>anything-llm</code>, and click <strong>Start Container</strong>.</p>
+<p><a href="#R-image-1efbe628120096c5d2e2efc36c66b1d1" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="images/B31467_15_21.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-1efbe628120096c5d2e2efc36c66b1d1"><img class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_15_21.png"></a></p>
+</li>
+</ol>
+<p>After that, the container will start, and we will be ready to connect it to our model!</p>
+<h2 id="step-3-connecting-the-model-to-the-application">Step 3: Connecting the model to the application<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>With both our AI model and web application running in separate containers, the final step is to connect them:</p>
+<ol>
+<li>
+<p>First, we need the inference URL for our model:</p>
+<ol>
+<li>Navigate to the <strong>AI Lab</strong> section and click on your running model (<strong>Phi-2-GGUF</strong>).</li>
+<li>On its <strong>Details</strong> page, copy the API endpoint
+URL. It will look like http://localhost:43717/v1.</li>
+</ol>
+</li>
+<li>
+<p>Now, open a web browser and navigate to the <strong>AnythingLLM</strong> interface at http://localhost:3001</p>
+</li>
+</ol>
+<p><a href="#R-image-60e237e1e492b10bbb9591dcff377030" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="images/B31467_15_22.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-60e237e1e492b10bbb9591dcff377030"><img class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_15_22.png"></a></p>
+<ol start="3">
+<li>You will be guided through a one-time setup process.When you reach the <strong>LLM Preference</strong> step, you will configure it to use your local model:
+<ul>
+<li>
+<p><strong>LLM</strong> <strong>Provider</strong>: select <strong>Generic OpenAI</strong>.</p>
+</li>
+<li>
+<p><strong>Chat Endpoint</strong>: This is where you need to paste the inference server URL. Since the model is served through a
+container but it's also exposed on the host machine, we could use this special DNS name to reach it. Modify
+the URL to be something like <code>http://host.containers.internal:43717/v1</code></p>
+</li>
+<li>
+<p><strong>API Key</strong>: For local models served this way, an API key is not required. You can leave this field blank.</p>
+</li>
+<li>
+<p><strong>Chat Model Name</strong>: Enter the identifier for your model as shown in the AI Lab catalog, such as <code>/models/phi-2.Q4_K_M.gguf</code> You can get your model name by running this simple <code>curl</code> command on your host:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ curl -H &#39;accept: application/json&#39; -X &#39;GET&#39; &#39;http://localhost:43717/v1/models&#39;</code></pre></div>
+</li>
+<li>
+<p><strong>Token context window</strong>: Enter the value for the maximum number of tokens (roughly words/subword units) that the model can
+&quot;see&quot; at once. You can start with a conservative <code>4096</code> value and increase later if necessary.</p>
+</li>
+</ul>
+</li>
+</ol>
+<p><a href="#R-image-859b5cb3ecb248b83a209360a3c94036" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="images/B31467_15_23.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-859b5cb3ecb248b83a209360a3c94036"><img class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_15_23.png"></a></p>
+<ol start="4">
+<li>Complete the setup. You will be taken to the main chat interface.</li>
+</ol>
+<h2 id="step-4-testing-your-personal-assistant">Step 4: Testing your personal assistant<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>You are now ready to interact with your fully private, locally-hosted chatbot.</p>
+<p>First of all, select the first created workspace through the left  navigation bar. Then, try asking a question, such as
+<code>What is Podman?</code></p>
+<p>The request will travel from the AnythingLLM container to your local inference server container, be processed by the AI model, and the
+response will be streamed back to the web interface.</p>
+<p>To confirm that the entire stack is running as expected, return to Podman Desktop and navigate to the <strong>Containers</strong> list.</p>
+<p>You should now see at least two running containers: your AI inference server and your web application <code>anythingllm</code>.</p>
+<p><a href="#R-image-283f685749071c4ce47940b83e166604" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="images/B31467_15_24.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-283f685749071c4ce47940b83e166604"><img class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_15_24.png"></a></p>
+<h1 id="h1_380" class="heading-1">Further reading<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<ul>
+<li>Podman Desktop downloads:
+<a href="https://podman-desktop.io/downloads" rel="external" target="_blank">[https://podman-desktop.io/downloads]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>Podman Desktop tutorials:
+<a href="https://podman-desktop.io/tutorial" rel="external" target="_blank">[https://podman-desktop.io/tutorial]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>Podman Desktop blog:
+<a href="https://podman-desktop.io/blog" rel="external" target="_blank">[https://podman-desktop.io/blog]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>Podman Desktop AI LAB:
+<a href="https://podman-desktop.io/docs/ai-lab" rel="external" target="_blank">[https://podman-desktop.io/docs/ai-lab]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>RamaLama project:
+<a href="https://ramalama.ai/" rel="external" target="_blank">[https://ramalama.ai/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>The <code>minikube</code>{.inlineCode} project's home page:
+<a href="https://minikube.sigs.k8s.io/" rel="external" target="_blank">[https://minikube.sigs.k8s.io/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>Podman community links:
+<a href="https://podman.io/community/" rel="external" target="_blank">[https://podman.io/community/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+</ul>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready for RHCE<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/install-ansible-using-uv/"><a class="padding" href="/ansible/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/playbooks/"><a class="padding" href="/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/hostname-patterns/"><a class="padding" href="/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/include-and-import-files/"><a class="padding" href="/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2/"><a class="padding" href="/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/user-and-groups/"><a class="padding" href="/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/storage-partitions-and-lvm/"><a class="padding" href="/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/services/"><a class="padding" href="/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimize-ansible-processing/"><a class="padding" href="/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux/"><a class="padding" href="/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/tags/"><a class="padding" href="/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/loops-and-items/"><a class="padding" href="/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/modules-for-troubleshooting/"><a class="padding" href="/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Using Variables In Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/when/"><a class="padding" href="/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/secure-shell-service-ssh/"><a class="padding" href="/cyber-security/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ansiblepuppetchef/"><a class="padding" href="/networking/ccna/ccna-notes-1/ansiblepuppetchef/">Ansible, Puppet, and Chef<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscoacls/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscoacls/">Cisco ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscocli/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscocli/">Cisco CLI<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/classfulipv4/"><a class="padding" href="/networking/ccna/ccna-notes-1/classfulipv4/">Classful IPv4<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/cloudarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/cloudarchitecture/">Cloud Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/controllerbasednetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/controllerbasednetworking/">Controller-Based Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/device-management-protocols/"><a class="padding" href="/networking/ccna/ccna-notes-1/device-management-protocols/">Device Management Protocols<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-config/">DHCP Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/">DHCP Snooping and ARP Inspection<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-syncronization/"><a class="padding" href="/networking/dns-and-time-syncronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ethernetlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/ethernetlans/">Ethernet LANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/extended-acls/"><a class="padding" href="/networking/ccna/ccna-notes-1/extended-acls/">Extended ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-services/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-services/">IP Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-transport-and-applications/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-transport-and-applications/">IP Transport and Applications<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6/">IPv6<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/">IPv6 Addressing and Subnetting<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6configuration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6configuration/">IPv6 Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6routing/">IPv6 Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lan-architecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/lan-architecture/">LAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/l2-etherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/l2-etherchannel/">Layer 2 Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/network-devices-and-connections/"><a class="padding" href="/networking/network-devices-and-connections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospf-concepts/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospf-concepts/">OSPF Concepts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfconfiguration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfconfiguration/">OSPF Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/">OSPF Network Types and Neighbors<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/restandjson/"><a class="padding" href="/networking/ccna/ccna-notes-1/restandjson/">REST and JSON<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/router_operation/"><a class="padding" href="/networking/ccna/ccna-notes-1/router_operation/">Router Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/routeroperation/"><a class="padding" href="/networking/ccna/ccna-notes-1/routeroperation/">ROuter Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lanrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/lanrouting/">Routing in the LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/rstpandetherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/rstpandetherchannel/">RSTP and Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/securing-network-devices/"><a class="padding" href="/networking/ccna/ccna-notes-1/securing-network-devices/">Securing Network Devices<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/security-architectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/security-architectures/">Security Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/softwaredefinedaccess/"><a class="padding" href="/networking/ccna/ccna-notes-1/softwaredefinedaccess/">Software-Defined Access (SDA)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/spanningtreeprotocol/"><a class="padding" href="/networking/ccna/ccna-notes-1/spanningtreeprotocol/">Spanning Tree Protocol<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/static-routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/static-routing/">Static Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchinterfaces/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchinterfaces/">Switch Interfaces<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switching/"><a class="padding" href="/networking/ccna/ccna-notes-1/switching/">Switching<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchport-security-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchport-security-config/">Switchport Security Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/tcpipbasic/"><a class="padding" href="/networking/ccna/ccna-notes-1/tcpipbasic/">TCP/IP Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/troubleshootingrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/troubleshootingrouting/">Troubleshooting Routing Issues<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/vlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/vlans/">VLANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wanarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/wanarchitecture/">WAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wansandiprouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/wansandiprouting/">WANs and IP Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessarchitectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessarchitectures/">Wireless Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_lan/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_lan/">Wireless LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessnetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessnetworking/">Wireless Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_security/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_security/">Wireless Security<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
+            <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/local-filesystems-and-swap/"><a class="padding" href="/storage/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/network-filesystem-nfs/"><a class="padding" href="/storage/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/partitioning-mbr-gpt/"><a class="padding" href="/storage/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/rm-filesystem-from-partition/"><a class="padding" href="/storage/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/remove-formatting-from-highlights/"><a class="padding" href="/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-docker-nginx/"><a class="padding" href="/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/you-need-to-learn-man-pages/"><a class="padding" href="/tools/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/proxmox-ha-proxy-setup/"><a class="padding" href="/tools/proxmox-ha-proxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/learning-touch-typing/"><a class="padding" href="/tools/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5" checked><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/">Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="active hidden " data-nav-id="/containers/podmandesktop/"><a class="padding" href="/containers/podmandesktop/"><i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/ansible-and-podman/"><a class="padding" href="/containers/ansible-and-podman/">Ansible and Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/intro-to-containers-1/"><a class="padding" href="/containers/intro-to-containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/convert-docker-compose-to-quadlets/"><a class="padding" href="/containers/convert-docker-compose-to-quadlets/">Convert Docker Compose to Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-links/"><a class="padding" href="/containers/podman-links/">Podman Links<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-quadlets/"><a class="padding" href="/containers/podman-quadlets/">Podman Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/">Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
+            <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users-and-Groups</span></label><a class="padding default-animation" href="/users-and-groups/">Users-and-Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
+            <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/virtualization/"><input type="checkbox" id="R-section-da8ee4406de37987b502b79e5b0a9d1c" aria-controls="R-subsections-da8ee4406de37987b502b79e5b0a9d1c"><label for="R-section-da8ee4406de37987b502b79e5b0a9d1c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualizations</span></label><a class="padding default-animation" href="/virtualization/">Virtualizations<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-da8ee4406de37987b502b79e5b0a9d1c" class="collapsible-menu">
+            <li class="" data-nav-id="/virtualization/using-vagrant-on-linux/"><a class="padding" href="/virtualization/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/booknotes/"><a class="padding" href="/booknotes/"><i class='fas fa-fw fa-book'></i> Book Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/now/"><a class="padding" href="/now/"><i class='fas fa-fw fa-clock'></i> Now<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780154752" defer></script>
+    <script src="/js/theme.js?1780154752" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

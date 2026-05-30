@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    <meta name="description" content="Docker container daemon architecture A container engine is a software tool that accepts and processes requests from users to create a container; it can be seen as a sort of orchestrator. A container runtime is a lower-level piece of software used by container engines to run containers on the host, managing isolation, storage, networking, and so on. The Docker container engine consists of three fundamental pillars:">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="Docker container daemon architecture A container engine is a software tool that accepts and processes requests from users to create a container; it can be seen as a sort of orchestrator. A container runtime is a lower-level piece of software used by container engines to run containers on the host, managing isolation, storage, networking, and so on. The Docker container engine consists of three fundamental pillars:">
+    <meta property="og:url" content="http://localhost:1313/containers/docker-vs-podman/">
+    <meta property="og:description" content="Docker container daemon architecture A container engine is a software tool that accepts and processes requests from users to create a container; it can be seen as a sort of orchestrator. A container runtime is a lower-level piece of software used by container engines to run containers on the host, managing isolation, storage, networking, and so on. The Docker container engine consists of three fundamental pillars:">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Containers">
+    <meta itemprop="description" content="Docker container daemon architecture A container engine is a software tool that accepts and processes requests from users to create a container; it can be seen as a sort of orchestrator. A container runtime is a lower-level piece of software used by container engines to run containers on the host, managing isolation, storage, networking, and so on. The Docker container engine consists of three fundamental pillars:">
+    <meta itemprop="wordCount" content="5670">
+    <title></title>
+    <link href="/containers/docker-vs-podman/index.md" rel="alternate" type="text/markdown" title="">
+    <link href="/images/favicon.svg?1780154752" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1780154752" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1780154752" defer></script>
+    <script src="/js/search-lunr.js?1780154752" defer></script>
+    <script src="/js/search.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1780154752";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780154752" rel="stylesheet">
+    <link href="/css/theme.css?1780154752" rel="stylesheet">
+    <link href="/css/format-html.css?1780154752" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/containers\/docker-vs-podman\/';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:1313';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script><script defer src="https://cloud.umami.is/script.js" data-website-id="d179743c-138a-4212-8906-28f70628ef95"></script>
+<style>
+:root {
+    --MENU-S-width: 15rem;
+    --MENU-M-width: 15rem;
+    --MENU-L-width: 18rem;
+    --MAIN-MAX-width: 100rem;
+}
+html {
+  zoom: 1.2;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif,
+               "Apple Color Emoji", "Segoe UI Emoji" !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500 !important;
+  letter-spacing: 0.7px;
+}
+
+code, kbd, pre, samp {
+  font-family: "Fira Code", "Hack", "Source Code Pro", Consolas, Menlo, monospace !important;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+  <body class="mobile-support html" data-origin="/containers/docker-vs-podman/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#the-docker-daemon">The Docker daemon</a></li>
+    <li><a href="#interacting-with-the-docker-daemon">Interacting with the Docker daemon</a></li>
+    <li><a href="#the-docker-rest-api">The Docker REST API</a></li>
+    <li><a href="#docker-client-commands">Docker client commands</a></li>
+    <li><a href="#docker-images">Docker images</a></li>
+    <li><a href="#docker-registries">Docker registries</a></li>
+    <li><a href="#what-does-a-running-docker-architecture-look-like">What does a running Docker architecture look like?</a></li>
+    <li><a href="#containerd-architecture">containerd architecture</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#podman-commands-and-rest-api">Podman commands and REST API</a></li>
+    <li><a href="#podman-building-blocks">Podman building blocks</a></li>
+    <li><a href="#the-libpod-library">The libpod library</a></li>
+    <li><a href="#the-runc-and-crun-oci-container-runtimes">The runc and crun OCI container runtimes</a></li>
+    <li><a href="#conmon">Conmon</a></li>
+    <li><a href="#rootless-containers">Rootless containers</a></li>
+    <li><a href="#oci-images">OCI images</a>
+      <ul>
+        <li><a href="#manifest">Manifest</a></li>
+        <li><a href="#image-index">Image index</a></li>
+        <li><a href="#image-layout">Image layout</a></li>
+        <li><a href="#filesystem-layers">Filesystem layers</a></li>
+        <li><a href="#image-configuration">Image configuration</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#command-line-interface-comparison">Command-line interface comparison</a></li>
+    <li><a href="#running-a-container">Running a container</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/containers/"><span itemprop="name">Containers</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/docker-vs-podman/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/" title="Containers (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/ansible-and-podman/" title="Ansible and Podman (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable containers" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id=""></h1>
+
+<h1 id="docker-container-daemon-architecture">Docker container daemon architecture<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<ul>
+<li>A container engine is a software tool that accepts and processes requests from users to create a container; it can be seen as a sort of orchestrator.</li>
+<li>A container runtime is a lower-level piece of software used by container engines to run containers on the host, managing isolation, storage, networking, and so on.</li>
+</ul>
+<p>The Docker container engine consists of three fundamental pillars:</p>
+<ul>
+<li>Docker daemon</li>
+<li>Docker REST API</li>
+<li>Docker CLI</li>
+</ul>
+<p><a href="#R-image-71f037d305735eb8f5e91137918e4c0d" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="images/B31467_2_1.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-71f037d305735eb8f5e91137918e4c0d"><img class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_2_1.png"></a></p>
+<ul>
+<li>Once a <strong>Docker</strong> <strong>daemon</strong> is running, you can interact with it through a Docker <strong>client</strong> or a <strong>remote API</strong>.</li>
+<li>The Docker daemon is responsible for many local container activities, as well as interacting with external registries to pull or push <strong>container</strong> <strong>images</strong>.</li>
+<li>The Docker daemon is the most critical piece of the architecture, and it should always be up and running; otherwise, your beloved containers will not survive for long!</li>
+</ul>
+<h2 id="the-docker-daemon">The Docker daemon<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>The Docker daemon is the background process that is responsible for the following:</p>
+<ul>
+<li>
+<p>Listening for Docker API requests</p>
+</li>
+<li>
+<p>Handling, managing, and checking for running containers</p>
+</li>
+<li>
+<p>Managing Docker images, networks, and storage volumes</p>
+</li>
+<li>
+<p>Interacting with external/remote container image registries</p>
+</li>
+<li>
+<p>All these actions should be instructed to the daemon through a client or by calling its API.</p>
+</li>
+</ul>
+<h2 id="interacting-with-the-docker-daemon">Interacting with the Docker daemon<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>
+<p>The Docker daemon can be contacted through the socket of a process, usually available in the filesystem of the host machine: <code>/var/run/docker.sock</code>.</p>
+</li>
+<li>
+<p>Depending on the Linux distribution of your choice, you may need to set the right permissions for your non-root users to be able to interact with the Docker daemon or simply add your non-privileged users to the <code>docker</code> group.</p>
+</li>
+</ul>
+<p>Permissions set for the Docker daemon in a Fedora 40 operating system:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ls -la /var/run/docker.sock srw-rw----. 1 root docker 0 Aug 25 12:48 /var/run/docker.sock</code></pre></div>
+<ul>
+<li>There is no other kind of security or authentication for a Docker daemon enabled by default</li>
+<li>Be careful not to publicly expose the daemon to untrusted networks</li>
+<li>Access to the daemon&rsquo;s socket would be equivalent to passwordless root access on the system.</li>
+</ul>
+<h2 id="the-docker-rest-api">The Docker REST API<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Can do every kind of activity you can perform through the command-line tool.
+<ul>
+<li>List containers</li>
+<li>Create a container</li>
+<li>Inspect a container</li>
+<li>Get container logs</li>
+<li>Export a container</li>
+<li>Start or stop a container</li>
+<li>Kill a container</li>
+<li>Rename a container</li>
+<li>Pause a container</li>
+</ul>
+</li>
+</ul>
+<p>Use the Linux command-line tool <code>curl</code> to make a <strong>HyperText Transfer Protocol</strong> (<strong>HTTP</strong>) request to get details about any container image already stored in the daemon's local cache:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>curl --unix-socket /var/run/docker.sock \ http://localhost/v1.41/images/json | jq [
+ { &#34;Containers&#34;: -1, &#34;Created&#34;: 1724036893, &#34;Id&#34;: &#34;sha256:a95dd4643de6c46ee41ea5d8b7bb4049ce82453e8ec9c8238b14e729219541fe&#34;, &#34;Labels&#34;: { &#34;architecture&#34;: &#34;x86_64&#34;, &#34;build-date&#34;: &#34;2024-08-19T03:00:40&#34;, &#34;com.redhat.component&#34;: &#34;ubi9-container&#34;, &#34;com.redhat.license_terms&#34;: &#34;https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI&#34;, &#34;description&#34;: &#34;The Universal Base Image is designed and engineered to be the base layer for all of your containerized applications, middleware and utilities. This base image is freely redistributable, but Red Hat only supports Red Hat technologies through subscriptions for Red Hat products. This image is maintained by Red Hat and updated regularly.&#34;, &#34;distribution-scope&#34;: &#34;public&#34;, &#34;io.buildah.version&#34;: &#34;1.29.0&#34;, &#34;io.k8s.description&#34;: &#34;The Universal Base Image is designed and engineered to be the base layer for all of your containerized applications, middleware and utilities. This base image is freely redistributable, but Red Hat only supports Red Hat technologies through subscriptions for Red Hat products. This image is maintained by Red Hat and updated regularly.&#34;, &#34;io.k8s.display-name&#34;: &#34;Red Hat Universal Base Image 9&#34;, &#34;io.openshift.expose-services&#34;: &#34;&#34;, &#34;io.openshift.tags&#34;: &#34;base rhel9&#34;, &#34;maintainer&#34;: &#34;Red Hat, Inc.&#34;, &#34;name&#34;: &#34;ubi9&#34;, &#34;release&#34;: &#34;1181.1724035907&#34;, &#34;summary&#34;: &#34;Provides the latest release of Red Hat Universal Base Image 9.&#34;, &#34;url&#34;: &#34;https://access.redhat.com/containers/#/registry.access.redhat.com/ubi9/images/9.4-1181.1724035907&#34;, &#34;vcs-ref&#34;: &#34;e309397d02fc53f7fa99db1371b8700eb49f268f&#34;, &#34;vcs-type&#34;: &#34;git&#34;, &#34;vendor&#34;: &#34;Red Hat, Inc.&#34;, &#34;version&#34;: &#34;9.4&#34; }, &#34;ParentId&#34;: &#34;&#34;, &#34;RepoDigests&#34;: [ &#34;registry.access.redhat.com/ubi9/ubi@sha256:9e6a89ab2a9224712391c77fab2ab01009e387aff42854826427aaf18b98b1ff&#34; ], &#34;RepoTags&#34;: [ &#34;registry.access.redhat.com/ubi9/ubi:9.4-1181.1724035907&#34; ], &#34;SharedSize&#34;: -1, &#34;Size&#34;: 212442936, &#34;VirtualSize&#34;: 212442936 } ]</code></pre></div>
+<ul>
+<li>Output is in JSON format</li>
+<li>Very detailed with multiple metadata information.</li>
+</ul>
+<h2 id="docker-client-commands">Docker client commands<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>
+<p>Enable any system administrator or Docker user to instruct and control the daemon and its containers.</p>
+</li>
+<li>
+<p>Common commands:</p>
+<ul>
+<li><code>build</code>: Build an image from a Dockerfile</li>
+<li><code>cp</code>: Copy files/folders between a container and the local filesystem</li>
+<li><code>exec</code>: Run a command in a running container</li>
+<li><code>images</code>: List images</li>
+<li><code>inspect</code>: Return low-level information on Docker objects</li>
+<li><code>kill</code>: Kill one or more running containers</li>
+<li><code>load</code>: Load an image from a tar archive or STDIN</li>
+<li><code>login</code>: Log in to a Docker registry</li>
+<li><code>logs</code>: Fetch the logs of a container</li>
+<li><code>ps</code>: List running containers</li>
+<li><code>pull</code>: Pull an image or a repository from a registry</li>
+<li><code>push</code>: Push an image or a repository to a registry</li>
+<li><code>restart</code>: Restart one or more containers</li>
+<li><code>rm</code>: Remove one or more containers</li>
+<li><code>rmi</code>: Remove one or more images</li>
+<li><code>run</code>: Run a command in a new container</li>
+<li><code>save</code>: Save one or more images to a TAR archive (streamed to stdout by default)</li>
+<li><code>create</code>: Create a new container from a specified image without starting it.</li>
+<li><code>start</code>: Start one or more stopped containers</li>
+<li><code>stop</code>: Stop one or more running containers</li>
+<li><code>tag</code>: Create a <code>TARGET_IMAGE</code> tag that refers to <code>SOURCE_IMAGE</code></li>
+</ul>
+</li>
+<li>
+<p>Once you launch the Docker client with one of these commands and its respective options, the client will contact the Docker daemon, where it'll instruct it on what is needed and which action must be performed.</p>
+</li>
+<li>
+<p>The daemon needs to be up and running.</p>
+</li>
+</ul>
+<h2 id="docker-images">Docker images<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Format introduced by Docker for managing binary data and metadata as a template for container creation.</li>
+<li>Packages for shipping and transferring runtimes, libraries, and all the stuff needed for a given process to be up and running.</li>
+<li>Adheres to the <strong>OCI Image Format Specification</strong>.
+<ul>
+<li>A list of layers</li>
+<li>Creation date</li>
+<li>Operating system</li>
+<li>CPU architecture</li>
+<li>Configuration parameters for use within a container runtime</li>
+</ul>
+</li>
+<li>Content (binaries, libraries, filesystem data) is organized in layers.</li>
+<li>A layer is just a set of filesystem changes that does not contain any environment variables or default arguments for a given command.
+<ul>
+<li>Data is stored in the <strong>image</strong> <strong>manifest</strong> that owns the configuration parameters.</li>
+</ul>
+</li>
+<li>Composed together using image metadata and merged into a single filesystem view.</li>
+<li>Most common approach is by using union filesystems
+<ul>
+<li>Combining two filesystems and providing a unique, <em>squashed</em> view.</li>
+</ul>
+</li>
+<li>When a container is executed, a new, <em>read/write</em> ephemeral layer is created on top of the image, which will be lost after the container is destroyed.</li>
+</ul>
+<h2 id="docker-registries">Docker registries<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>A repository of Docker container images that holds the metadata and the layers of container images.</li>
+<li>Docker daemon acts as a client to a Docker registry through an HTTP API, pushing and pulling container images depending on the action that the Docker client instructs.</li>
+<li>Facilitate the use of containers on many independent machines.</li>
+<li>Machines can be configured to pull container images from a registry if they are not present in the Docker daemon local cache.</li>
+<li>The default registry that is preconfigured in Docker daemon settings is <strong>Docker</strong> <strong>Hub</strong>, a <strong>Software-as-a-Service</strong> container registry hosted by the Docker company in the cloud.</li>
+<li><strong>Quay.io</strong>
+<ul>
+<li>A Software-as-a-Service container registry hosted by Red Hat.</li>
+</ul>
+</li>
+<li>On-premises Docker registry
+<ul>
+<li>Which can be created through a container on a machine running the Docker daemon with just one command:</li>
+</ul>
+</li>
+</ul>
+<p><code>$ docker run -d -p 5000:5000 --restart=always --name registry registry:2</code></p>
+<h2 id="what-does-a-running-docker-architecture-look-like">What does a running Docker architecture look like?<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># systemctl status docker ● docker.service
+- Docker Application Container Engine Loaded: loaded (/usr/lib/systemd/system/docker.service; disabled; preset: disabled) Drop-In: /usr/lib/systemd/system/service.d └─10-timeout-abort.conf Active: active (running) since Tue 2024-09-03 20:01:46 UTC; 4min 0s ago TriggeredBy: ● docker.socket Docs: https://docs.docker.com Main PID: 3970 (dockerd) Tasks: 11 Memory: 171.4M (peak: 237.3M swap: 4.0K swap peak: 4.0K) CPU: 4.062s CGroup: /system.slice/docker.service └─3970 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock 0</code></pre></div>
+<p><strong>containerd</strong></p>
+<ul>
+<li>Docker daemon companion.</li>
+</ul>
+<p><a href="#R-image-fe76b4f2df506de1ec341841bae773d6" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="images/B31467_2_2.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-fe76b4f2df506de1ec341841bae773d6"><img class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_2_2.png"></a></p>
+<ul>
+<li>Decouples the container management (kernel interaction included) from the Docker daemon.</li>
+<li>Adheres to the OCI standard using <code>runc</code> as the container runtime.</li>
+</ul>
+<p>Check the status of containerd in our preconfigured operating system:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code class="language-0#" data-lang="0#">- containerd container runtime Loaded: loaded (/usr/lib/systemd/system/containerd.service; disabled; preset: disabled) Drop-In: /usr/lib/systemd/system/service.d └─10-timeout-abort.conf Active: active (running) since Tue 2024-09-03 20:01:45 UTC; 8min ago Docs: https://containerd.io Process: 3960 ExecStartPre=/sbin/modprobe overlay (code=exited, status=0/SUCCESS) Main PID: 3962 (containerd) Tasks: 18 Memory: 93.4M (peak: 111.9M swap: 3.0M swap peak: 5.6M) CPU: 359ms CGroup: /system.slice/containerd.service ├─3962 /usr/bin/containerd └─4231 /usr/bin/containerd-shim-runc-v2 -namespace moby -id a478c626278a1aa388732501c14fe9f4b4dfab70ad8d87266cdcc770adf3e93b -address /run/containerd/containerd.sock ```</code></pre></div>
+<p>The service is up and running, and it has started one child process: <code>/usr/bin/containerd-shim-runc-v2</code>.</p>
+<h2 id="containerd-architecture">containerd architecture<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Composed of several components that are organized in subsystems.</li>
+<li>Components that link different subsystems are also referred to as modules in the containerd architecture:</li>
+</ul>
+<p><a href="#R-image-72543a8931e628b8f251202c3fc1028f" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="images/B31467_2_3.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-72543a8931e628b8f251202c3fc1028f"><img class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_2_3.png"></a></p>
+<p>The two main subsystems:</p>
+<ul>
+<li>The bundle service that extracts bundles from disk images</li>
+<li>The runtime service that executes the bundles, creating the runtime containers</li>
+</ul>
+<p>The main modules that make the architecture fully functional are the following:</p>
+<ul>
+<li>The <code>Executor</code> module, which implements the container runtime that is represented in the preceding architecture as the <strong>Runtimes</strong> block.</li>
+<li>The <code>Supervisor</code> module, which monitors and reports the container state that is part of the <strong>Containers</strong> block in the preceding architecture</li>
+<li>The <code>Snapshot</code> module, which manages filesystem snapshots.</li>
+<li>The <code>Events</code> module, which collects and consumes events.</li>
+<li>The <code>Metrics</code> module, which exports several metrics via the metrics API.</li>
+</ul>
+<p>The steps needed by containerd to place a container in a running state are summed up as follows:</p>
+<ol>
+<li>Pull metadata and content through a <strong>distribution</strong> <strong>controller</strong>.</li>
+<li>Use the <strong>bundle</strong> <strong>controller</strong> to unpack the retrieved data, creating snapshots that will compose bundles</li>
+<li>Execute the container through the bundle just created through the <strong>runtime</strong> <strong>controller</strong>:</li>
+</ol>
+<p><a href="#R-image-89b06d96544208afb8d04aad6ac66c7e" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="images/B31467_2_4.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-89b06d96544208afb8d04aad6ac66c7e"><img class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_2_4.png"></a></p>
+<h1 id="podman-daemonless-architecture">Podman daemonless architecture<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Podman (short for <em>POD MANager</em>)</p>
+<ul>
+<li>Daemonless container engine</li>
+<li>Enables users to manage containers, images, and their related resources, such as storage volumes or network resources.</li>
+<li>No service to start after the installation is complete.</li>
+<li>Podman binary acts both as a <strong>command-line interface</strong> (<strong>CLI</strong>) and as a container engine that orchestrates the container runtime execution.</li>
+</ul>
+<h2 id="podman-commands-and-rest-api">Podman commands and REST API<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>The Podman CLI provides a growing set of commands: <a href="https://docs.podman.io/en/latest/Commands.html" rel="external" target="_blank">https://docs.podman.io/en/latest/Commands.html</a>.</p>
+<p>Commonly used commands:</p>
+<ul>
+<li>
+<p><code>build</code>: Build an image from a Containerfile or Dockerfile</p>
+</li>
+<li>
+<p><code>cp</code>: Copy files/folders between a container and the local filesystem</p>
+</li>
+<li>
+<p><code>exec</code>: Run a command in a running container</p>
+</li>
+<li>
+<p><code>events</code>: Show Podman events</p>
+</li>
+<li>
+<p><code>generate</code>: Generate structured data such as Kubernetes YAML or systemd units</p>
+</li>
+<li>
+<p><code>images</code>: List local cached images</p>
+</li>
+<li>
+<p><code>inspect</code>: Return low-level information on containers or images</p>
+</li>
+<li>
+<p><code>kill</code>: Kill one or more running containers</p>
+</li>
+<li>
+<p><code>load</code>: Load an image from a container TAR archive or stdin</p>
+</li>
+<li>
+<p><code>login</code>: Log in to a container registry</p>
+</li>
+<li>
+<p><code>logs</code>: Fetch the logs of a container</p>
+</li>
+<li>
+<p><code>pod</code>: Manage pods</p>
+</li>
+<li>
+<p><code>ps</code>: List running containers</p>
+</li>
+<li>
+<p><code>pull</code>: Pull an image or a repository from a registry</p>
+</li>
+<li>
+<p><code>push</code>: Push an image or a repository to a registry</p>
+</li>
+<li>
+<p><code>restart</code>: Restart one or more containers</p>
+</li>
+<li>
+<p><code>rm</code>: Remove one or more containers</p>
+</li>
+<li>
+<p><code>rmi</code>: Remove one or more images</p>
+</li>
+<li>
+<p><code>run</code>: Run a command in a new container</p>
+</li>
+<li>
+<p><code>save</code>: Save one or more images to a TAR archive (streamed to stdout by default)</p>
+</li>
+<li>
+<p><code>start</code>: Start one or more stopped containers</p>
+</li>
+<li>
+<p><code>stop</code>: Stop one or more running containers</p>
+</li>
+<li>
+<p><code>system</code>: Manage Podman (disk usage, container migration, REST API services, storage management, and pruning)</p>
+</li>
+<li>
+<p><code>tag</code>: Create a <code>TARGET_IMAGE</code> tag that refers to <code>SOURCE_IMAGE</code></p>
+</li>
+<li>
+<p><code>unshare</code>: Run a command in a modified user namespace</p>
+</li>
+<li>
+<p><code>volume</code>: Manage container volumes (list, pruning, creation, inspection)</p>
+</li>
+<li>
+<p>Podman CLI commands are compatible with Docker ones to help a smooth transition between the two tools.</p>
+</li>
+<li>
+<p>Users can choose to run a Podman service and make it listen to a Unix socket to expose native REST APIs.</p>
+</li>
+</ul>
+<p>Use Podman to create a socket endpoint on a path of preference and listen to API calls:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman system service -–time 0 unix://tmp/podman.sock</code></pre></div>
+<ul>
+<li>Default socket endpoint is <code>unix://run/podman/podman.sock</code> for rootful services and <code>unix://run/user/&lt;UID&gt;/podman/podman.sock</code> for non-root users.</li>
+</ul>
+<p>Query Podman for the available local images:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ curl --unix-socket /tmp/podman.sock \ http://d/v3.0.0/libpod/images/json | jq . </code></pre></div>
+<p>Podman OpenAPI-compliant documentation: <a href="https://docs.podman.io/en/latest/" rel="external" target="_blank">https://docs.podman.io/en/latest/</a>_static/api.html.</p>
+<h2 id="podman-building-blocks">Podman building blocks<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>
+<p>Podman aims to adhere to open standards as much as possible</p>
+</li>
+<li>
+<p>Most of the runtime, build, storage, and networking components rely on community projects and standards.</p>
+</li>
+<li>
+<p>The container life cycle is managed with the <strong>libpod</strong> library, included in the Podman main repository: <a href="https://github.com/containers/podman/tree/main/libpod" rel="external" target="_blank">https://github.com/containers/podman/tree/main/libpod</a></p>
+</li>
+<li>
+<p>The container runtime is based on the OCI specs implemented by OCI-compliant runtimes, such as <strong>crun</strong> and <strong>runc</strong>.</p>
+</li>
+<li>
+<p>Image management implements the <strong>containers/image</strong> library (<a href="https://github.com/containers/container-libs/tree/main/image)" rel="external" target="_blank">https://github.com/containers/container-libs/tree/main/image)</a>.</p>
+<ul>
+<li>Set of Go libraries used both by container engines and container registries.</li>
+</ul>
+</li>
+<li>
+<p>Container and image storage is implemented adopting the <strong>containers/storage</strong> library (<a href="https://github.com/containers/container-libs/tree/main/storage" rel="external" target="_blank">https://github.com/containers/container-libs/tree/main/storage</a>)</p>
+<ul>
+<li>Go library to manage filesystem layers, container images, and container volumes at runtime.</li>
+</ul>
+</li>
+<li>
+<p>Image builds are implemented with Buildah (<a href="https://github.com/containers/buildah" rel="external" target="_blank">https://github.com/containers/buildah</a>)</p>
+<ul>
+<li>Both a binary tool and a library to build OCI images.</li>
+</ul>
+</li>
+<li>
+<p>Container runtime monitoring and communication with the engine is implemented with <strong>Conmon</strong></p>
+<ul>
+<li>A tool that monitors OCI runtimes, and is used by both Podman and <strong>CRI-O</strong> (<a href="https://github.com/containers/conmon)" rel="external" target="_blank">https://github.com/containers/conmon)</a>.</li>
+</ul>
+</li>
+<li>
+<p>Container networking support is implemented through a Rust-based container network stack called <strong>Netavark</strong>.</p>
+<ul>
+<li>Introduced in Podman 4.0 along with <strong>Container Network Interface</strong> <strong>(CNI)</strong> as the new default.</li>
+<li>In Podman 5.0, CNI was declared deprecated.</li>
+<li>By default, Podman uses the basic <code>bridge</code> driver for the default network.</li>
+<li>Currently, bridge, <strong>macvlan</strong>, and <strong>ipvlan</strong> drivers are supported.</li>
+<li>The plugin-oriented approach allows users to implement their own Netavark plugins using the Netavark plugin API: <a href="https://github.com/containers/netavark/blob/main/plugin-API.md" rel="external" target="_blank">https://github.com/containers/netavark/blob/main/plugin-API.md</a>.</li>
+</ul>
+</li>
+</ul>
+<h2 id="the-libpod-library">The libpod library<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Podman core foundations are based on the <code>libpod</code> library.</li>
+<li>Contains all the necessary logic to orchestrate the container life cycle.</li>
+<li>Written in Go and accessed as a <strong>Go package</strong>.</li>
+<li>Intended to implement all the high-level functionalities of the engine.</li>
+<li>According to the <code>libpod</code> and Podman documentation, its scope includes the following:
+<ul>
+<li>Managing container image format, which includes both OCI and Docker images.
+<ul>
+<li>Includes the full image life cycle management
+<ul>
+<li>Authenticating and pulling from a container registry</li>
+<li>Local storage of the image layers and metadata</li>
+<li>Building of new images and pushing to remote registries.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Container life cycle management
+<ul>
+<li>Container creation (with all the necessary preliminary steps involved)</li>
+<li>Running the container</li>
+<li>All the other runtime functionalities
+<ul>
+<li>stop, kill, resume, and delete, process execution on running containers, and logging.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Managing both simple containers and pods, which are groups of sandboxed containers that share namespaces together (notably UTC, IPC, network, and optionally, PID as a recent feature) and are also managed together as a whole.</li>
+<li>Supporting rootless containers and pods that can be executed by standard users with no need for privilege escalation.</li>
+<li>Managing container resource isolation.
+<ul>
+<li>Achieved at a low level with cgroups</li>
+<li>Podman users can interact using CLI options during container execution to manage memory and CPU reservation or limit read/write rate on a storage device.</li>
+</ul>
+</li>
+<li>Supporting a CLI interface that can be used as a Docker-compatible alternative.
+<ul>
+<li>Most Podman commands are the same as the Docker CLI.</li>
+</ul>
+</li>
+<li>Providing a Docker-compatible REST API with local Unix sockets (not enabled by default).
+<ul>
+<li>Libpod REST APIs provide all the functionalities provided by the Podman CLI.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Libpod package</p>
+<ul>
+<li>Interacts, at a lower level, with container runtimes, Conmon, and packages such as container/storage, container/image, Buildah, and Netavark.</li>
+</ul>
+<h2 id="the-runc-and-crun-oci-container-runtimes">The runc and crun OCI container runtimes<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>A container engine takes care of the high-level orchestration of the container life cycle</li>
+<li>The low-level actions necessary to create and run the container are delivered by a container runtime.</li>
+</ul>
+<p><strong>OCI Runtime Specification</strong>: <a href="https://github.com/opencontainers/runtime-spec" rel="external" target="_blank">https://github.com/opencontainers/runtime-spec</a></p>
+<ul>
+<li>Industry standard</li>
+<li>The <em>Runtime and Lifecycle</em> document provides a full description of how the container runtime should handle the container creation and execution: <a href="https://github.com/opencontainers/runtime-spec/blob/master/runtime.md" rel="external" target="_blank">https://github.com/opencontainers/runtime-spec/blob/master/runtime.md</a>.</li>
+</ul>
+<p><strong>runc</strong> (<a href="https://github.com/opencontainers/runc" rel="external" target="_blank">https://github.com/opencontainers/runc</a>)</p>
+<ul>
+<li>Currently the most widely adopted OCI container runtime.</li>
+<li>Fully supports Linux containers and OCI runtime specs.</li>
+<li>The project repository includes the <strong>libcontainer</strong> package, which is a Go package for creating containers with namespaces, cgroups, capabilities, and filesystem access controls.</li>
+</ul>
+<p><code>libcontainer</code> package</p>
+<ul>
+<li>Defines the inner logic and the low-level system interaction to bootstrap a container from scratch, from the initial isolation of namespaces to the execution as PID 1 of the binary program inside the container itself.</li>
+</ul>
+<p>The runtime recalls the <code>libcontainer</code> library to fulfill the following tasks:</p>
+<ul>
+<li>Consume the container mount point and the container metadata provided by Podman.</li>
+<li>Interact with the kernel to start the container and execute the isolated process using the <code>clone()</code> and <code>unshare()</code> syscalls.</li>
+<li>Set up cgroup resource reservations.</li>
+<li>Set up SELinux Policy, Seccomp, and App Armor rules.</li>
+</ul>
+<p>libcontainer</p>
+<ul>
+<li>Handles
+<ul>
+<li>Running processes.</li>
+<li>Initialization of namespaces and file descriptors</li>
+<li>Creation of the container <code>rootFS</code> and bind mounts</li>
+<li>Exporting logs from container processes</li>
+<li>Managing security restrictions with seccomp, SELinux, and AppArmor</li>
+<li>Creating and mapping users and groups.</li>
+</ul>
+</li>
+<li>Methods for the Linux OS that implement the interface are defined at <a href="https://github.com/opencontainers/runc/blob/master/libcontainer/container_linux.go" rel="external" target="_blank">https://github.com/opencontainers/runc/blob/master/libcontainer/container_linux.go</a>.</li>
+</ul>
+<p><strong>nsenter</strong> package</p>
+<ul>
+<li>
+<p>Handles Low-level execution of <code>clone()</code> and <code>unshare() syscall</code> to isolate the process namespaces</p>
+</li>
+<li>
+<p>By using the <code>nsexec()</code> function. <a href="https://github.com/opencontainers/runc/blob/master/libcontainer/nsenter/nsexec.c" rel="external" target="_blank">https://github.com/opencontainers/runc/blob/master/libcontainer/nsenter/nsexec.c</a></p>
+<ul>
+<li>C function embedded in the Go code, using <strong>cgo</strong>.</li>
+</ul>
+</li>
+<li>
+<p>Along with <code>runc</code>, many other container runtimes have been created.</p>
+</li>
+</ul>
+<p><strong>crun</strong> (<a href="https://github.com/containers/crun" rel="external" target="_blank">https://github.com/containers/crun</a>)</p>
+<ul>
+<li>
+<p>A fast and low-memory-footprint OCI container runtime fully written in C.</p>
+</li>
+<li>
+<p>The idea behind <code>crun</code> was to provide an improved OCI runtime that could leverage the C design approach for a cleaner and more lightweight runtime.</p>
+</li>
+<li>
+<p><code>runc</code> and <code>crun</code> can be used interchangeably by a container engine.</p>
+</li>
+<li>
+<p>Advantages against <code>runc</code>, such as the following:</p>
+<ul>
+<li><strong>Smaller binary</strong>: A <code>crun</code> build is approximately 50 times smaller than a <code>runc</code> build.</li>
+<li><strong>Faster execution</strong>: <code>crun</code> is faster on instrumenting the container than <code>runc</code> under the same execution conditions.</li>
+<li><strong>Less memory usage</strong>: <code>crun</code> consumes less than half the memory of <code>runc</code>. A smaller memory footprint is extremely helpful when dealing with massive container deployments or IoT appliances. It also allows you to set very low resource limits on containers (4 MB and possibly smaller).</li>
+</ul>
+</li>
+<li>
+<p>Can also be used as a library and integrated into other OCI-compliant projects.</p>
+</li>
+<li>
+<p>Both <code>crun</code> and <code>runc</code> provide a command-line interface but are not meant to be used manually by end users, who are supposed to use a container engine such as Podman or Docker to manage the container life cycle.</p>
+</li>
+</ul>
+<p>To switch between the two runtimes in Podman, run a container using the <code>–runtime</code> flag to provide an OCI runtime binary path.</p>
+<p>Runs the container using <code>runc</code>:
+<code>$ podman --runtime /usr/bin/runc run --rm fedora echo &quot;Hello World&quot;</code></p>
+<p>Runs the same container with the <code>crun</code> binary:
+<code>$ podman --runtime /usr/bin/crun run --rm fedora echo &quot;Hello World&quot;</code></p>
+<ul>
+<li>Runtime must be installed on the system for the &ndash;runtime flag to work.</li>
+<li>Both <code>crun</code> and <code>runc</code> support <strong>eBPF</strong> and <strong>CRIU</strong>.</li>
+</ul>
+<p><strong>eBPF</strong> (<strong>Extended Berkeley Packet Filter</strong>)</p>
+<ul>
+<li>Kernel-based technology</li>
+<li>Allows the execution of user-defined programs in the Linux kernel to add extra capabilities to the system without the need to recompile the kernel or load extra modules.</li>
+<li>All eBPF programs are executed inside a sandbox virtual machine, and their execution is secure by design. Today, eBPF is gaining momentum and attracting industry interest, leading to wide adoption in different use cases, most notably, networking, security, observability, and tracing.</li>
+</ul>
+<p><strong>Checkpoint Restore in Userspace</strong> (<strong>CRIU</strong>) is a piece of software that enables users to freeze a running container and save its state to disk for further resumption. Data structures saved in memory are dumped and restored accordingly.</p>
+<p>Another important architectural component used by Podman is Conmon, a tool for monitoring container runtime status. Let's investigate this in more detail in the next subsection.</p>
+<h2 id="conmon">Conmon<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>We may still have some questions about runtime execution.</p>
+<p>How do Podman (the container engine) and <code>runc</code>/<code>crun</code> (the OCI container runtime) interact with each other? Which is responsible for launching the container runtime process? Is there a way to monitor the container execution?</p>
+<p>Let's introduce the Conmon project (<a href="https://github.com/containers/conmon)" rel="external" target="_blank">https://github.com/containers/conmon)</a>. Conmon is a monitoring and communication tool that sits between the container engine and the runtime. Every time a new container is created, a new instance of Conmon is launched. It detaches from the container manager process and runs daemonized, launching the container runtime as a child process.</p>
+<p>If we attach a tracing tool to a Podman container, we can see in the following the order it's written in:</p>
+<ol>
+<li>The container engine runs the Conmon process, which detaches and daemonizes itself. 2. The Conmon process runs a container runtime instance that starts the container and exits. 3. The Conmon process continues to run to provide a monitoring interface, while the manager/engine process has exited or detached.</li>
+</ol>
+<p>The following diagram shows the logical workflow, from Podman execution to the running container:</p>
+<p><a href="#R-image-c9acf3a4f34207291ee5aec3d80fdbfd" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="images/B31467_2_5.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-c9acf3a4f34207291ee5aec3d80fdbfd"><img class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_2_5.png"></a></p>
+<p>On a system with many running containers, users will find many instances of the Conmon process, one for every container created. In other words, Conmon acts as a small, dedicated daemon to the container.</p>
+<p>Let's look at the following example, where a simple shell loop is used to create three identical nginx containers:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># for i in {1..3}; do podman run -d --rm docker.io/library/nginx; done 592f705cc31b1e47df18f71ddf922ea7e6c9e49217f00d1af8cf18c8e5557bde 4b1e44f512c86be71ad6153ef1cdcadcdfa8bcfa8574f606a0832c647739a0a2 4ef467b7d175016d3fa024d8b03ba44b761b9a75ed66b2050de3fec28232a8a7
+# ps aux | grep conmon root 4272 0.0 0.5 9856 2456 ? Ss 20:22 0:00 /usr/bin/conmon --api-version 1 -c 775cb306658941f414298be6d185274dd8fc9e39e1a7bbe950b0ed87d40f749f -u 775cb306658941f414298be6d185274dd8fc9e39e1a7bbe950b0ed87d40f749f -r /usr/bin/crun [..omitted output] root 4341 0.0 0.5 9856 2464 ? Ss 20:22 0:00 /usr/bin/conmon --api-version 1 -c 5abde0da3e6f5c6a6f7ca4d7c4698124c8bc9c297efc835d7806e9a16281abd6 -u 5abde0da3e6f5c6a6f7ca4d7c4698124c8bc9c297efc835d7806e9a16281abd6 -r /usr/bin/crun [..omitted output] root 4409 0.0 0.5 9856 2460 ? Ss 20:22 0:00 /usr/bin/conmon --api-version 1 -c 9cd5e4461c9ab4d22baeabe0bfff3ab239d4d09b99ccd0eddf4d3c2cd2d16f48 -u 9cd5e4461c9ab4d22baeabe0bfff3ab239d4d09b99ccd0eddf4d3c2cd2d16f48 -r /usr/bin/crun [..omitted output] ```</code></pre></div>
+<p>After running the containers, a simple regular expression pattern applied to the output of the <code>ps aux</code> command shows three Conmon process instances.</p>
+<p>Even if the initial Podman process is not running anymore (since there is no daemon), it is still possible to connect to the Conmon process and attach to the container. At the same time, Conmon exposes a way to attach to the container and container logs to log files or the systemd journal.</p>
+<p>Conmon is a lightweight project written in C. It also provides Go language bindings to pass config structures between the manager and the runtime.</p>
+<h2 id="rootless-containers">Rootless containers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>One of the most interesting features of Podman is the capability to run rootless containers, which means that users without elevated privileges can run their own containers.</p>
+<p>Rootless containers provide better security isolation and let different users run their own container instances independently. And, thanks to <strong>fork/exec</strong>, a daemonless approach adopted by Podman, rootless containers are amazingly easy to manage. A rootless container is simply run by the standard user with the usual commands and arguments, as in the following example:</p>
+<p><code>$ podman run –d –-rm docker.io/library/nginx</code></p>
+<p>When this command is issued, Podman creates a new user namespace and maps UIDs between the two namespaces using a <strong>uid_map</strong> file (see <code>man user_namespaces</code>). This method allows you to have, for example, a root user inside the container mapped to an ordinary user in the host.</p>
+<p>Rootless containers and image data are stored under the user's home directory, usually under <code>$HOME/.local/share/containers/storage</code>.</p>
+<p>Podman manages network connectivity for rootless containers in a different way than rootful containers. An in-depth technical comparison between rootless and rootful containers, especially from the network and security point of view, will be covered later in this book, in <em><a href="/containers/docker-vs-podman/#Chapter_10.xhtml#h1_248">Chapter 10</a>{.chapref}</em>.</p>
+<p>After an in-depth analysis of the runtime workflow, it is useful to provide an overview of the OCI image specs used by Podman.</p>
+<h2 id="oci-images">OCI images<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Podman and the container/image package implement the OCI Image Format Specification. The full specification is available on GitHub at the following link and pairs with the OCI runtime specification: <a href="https://github.com/opencontainers/image-spec" rel="external" target="_blank">https://github.com/opencontainers/image-spec</a>.</p>
+<p>An OCI image is made of the following elements:</p>
+<ul>
+<li>Manifest</li>
+<li>An image index (optional)</li>
+<li>An image layout</li>
+<li>One or more filesystem layer changeset archive that will be unpacked to create a final filesystem</li>
+<li>An image configuration document to define layer ordering, as well as application arguments and environments</li>
+<li>A conversion document describing how the translation should occur</li>
+<li>An Artifacts Guidance document describing the spec usage for packaging content other than OCI images</li>
+<li>A reference named Descriptor to describe the type, metadata, and content address of referenced content</li>
+</ul>
+<p>Let's see in detail what kinds of information and data are managed by the most relevant of the preceding elements.</p>
+<h3 id="manifest">Manifest<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>An image manifest specification should provide content-addressable images. The image manifest contains image layers and configurations for a specific architecture and operating system, such as Linux x86_64.</p>
+<p>Here's the specification:</p>
+<p><a href="https://github.com/opencontainers/image-spec/blob/main/manifest.md" rel="external" target="_blank">https://github.com/opencontainers/image-spec/blob/main/manifest.md</a></p>
+<h3 id="image-index">Image index<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>An image index is an object that contains a list of manifests related to different architectures (for example, amd64, arm64, or 386) and operating systems, along with custom annotations.</p>
+<p>Here's the specification:</p>
+<p><a href="https://github.com/opencontainers/image-spec/blob/main/image-index.md" rel="external" target="_blank">https://github.com/opencontainers/image-spec/blob/main/image-index.md</a></p>
+<h3 id="image-layout">Image layout<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>The OCI image layout represents the directory structure of image blobs. The image layout also provides the necessary manifest location references, as well as the image index (in JSON format) and the image configuration. The image <code>index.json</code> contains the reference to the image manifest, stored as a blob in the OCI image bundle.</p>
+<p>Here's the specification: <a href="https://github.com/opencontainers/image-spec/blob/main/image-layout.md" rel="external" target="_blank">https://github.com/opencontainers/image-spec/blob/main/image-layout.md</a></p>
+<h3 id="filesystem-layers">Filesystem layers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Inside an image, one or more layers are applied on top of each other to create a filesystem that the container can use.</p>
+<p>At a low level, layers are packaged as TAR archives (with compression options with <code>gzip</code> and <code>zstd</code>). The filesystem layer implements the logic and order of layer stacking and how the changeset layers (layers containing file changes) are applied.</p>
+<p>As described in the previous chapter, a copy-on-write or union filesystem has become a standard to manage stacking in a graph-like approach. To manage layer stacking, Podman uses <strong>overlayfs</strong> by default as a graph driver.</p>
+<p>Here's the specification:</p>
+<p><a href="https://github.com/opencontainers/image-spec/blob/main/layer.md" rel="external" target="_blank">https://github.com/opencontainers/image-spec/blob/main/layer.md</a></p>
+<h3 id="image-configuration">Image configuration<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>An image configuration defines the image layer composition and the corresponding execution parameters, such as entry points, volumes, execution arguments, or environment variables, as well as additional image metadata.</p>
+<p>The image JSON holding the configurations is an <strong>immutable</strong> object; changing it means creating a new derived image.</p>
+<p>Here's the specification:</p>
+<p><a href="https://github.com/opencontainers/image-spec/blob/main/config.md" rel="external" target="_blank">https://github.com/opencontainers/image-spec/blob/main/config.md</a></p>
+<p>The following diagram represents an OCI image implementation, composed of image layer(s), image index, and image configuration:</p>
+<p><a href="#R-image-69eb1ba32627fa0e0ade31df880d6dff" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="images/B31467_2_6.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-69eb1ba32627fa0e0ade31df880d6dff"><img class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_2_6.png"></a></p>
+<p>Let's inspect a realistic example from a basic, lightweight <strong>alpine</strong> image:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># tree alpine/ alpine/ ├── blobs │ └── sha256 │ ├── 03014f0323753134bf6399ffbe26dcd75e89c6a7429adfab392d64706649f07b │ ├── 696d33ca1510966c426bdcc0daf05f75990d68c4eb820f615edccf7b971935e7 │ └── a0d0a0d46f8b52473982a3c466318f479767577551a53ffc9074c9fa7035982e ├── index.json └── oci-layout ```</code></pre></div>
+<p>The directory layout contains an <code>index.json</code> file, with the following content:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code> {
+ &#34;schemaVersion&#34;: 2, &#34;manifests&#34;: [ { &#34;mediaType&#34;: &#34;application/vnd.oci.image.manifest.v1+json&#34;, &#34;digest&#34;: &#34;sha256:03014f0323753134bf6399ffbe26dcd75e89c6a7429adfab392d64706649f07b&#34;, &#34;size&#34;: 348, &#34;annotations&#34;: { &#34;org.opencontainers.image.ref.name&#34;: &#34;latest&#34; } } ] }</code></pre></div>
+<p>The index contains a <code>manifests</code> array with only one item inside. The object <code>digest</code> is a SHA256 and corresponds to the filename as one of the blobs listed previously. The file is the image manifest and can be inspected:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># cat alpine/blobs/sha256/03014f0323753134bf6399ffbe26dcd75e89c6a7429adfab392d64706649f07b | jq {
+ &#34;schemaVersion&#34;: 2, &#34;config&#34;: { &#34;mediaType&#34;: &#34;application/vnd.oci.image.config.v1+json&#34;, &#34;digest&#34;: &#34;sha256:696d33ca1510966c426bdcc0daf05f75990d68c4eb820f615edccf7b971935e7&#34;, &#34;size&#34;: 585 }, &#34;layers&#34;: [ { &#34;mediaType&#34;: &#34;application/vnd.oci.image.layer.v1.tar+gzip&#34;, &#34;digest&#34;: &#34;sha256:a0d0a0d46f8b52473982a3c466318f479767577551a53ffc9074c9fa7035982e&#34;, &#34;size&#34;: 2814446 } ] }</code></pre></div>
+<p>The manifest contains references to the image configuration and layers. In this particular case, the image has only one layer. Again, their digests correspond to the blob filenames listed before.</p>
+<p>The config file shows image metadata, environment variables, and command execution. At the same time, it contains <code>DiffID</code> references to the layers used by the image and image creation information:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># cat alpine/blobs/sha256/696d33ca1510966c426bdcc0daf05f75990d68c4eb820f615edccf7b971935e7 | jq {
+ &#34;created&#34;: &#34;2021-08-27T17:19:45.758611523Z&#34;, &#34;architecture&#34;: &#34;amd64&#34;, &#34;os&#34;: &#34;linux&#34;, &#34;config&#34;: { &#34;Env&#34;: [ &#34;PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&#34; ], &#34;Cmd&#34;: [ &#34;/bin/sh&#34; ] }, &#34;rootfs&#34;: { &#34;type&#34;: &#34;layers&#34;, &#34;diff_ids&#34;: [ &#34;sha256:e2eb06d8af8218cfec8210147357a68b7e13f7c485b991c288c2d01dc228bb68&#34; ] }, &#34;history&#34;: [ { &#34;created&#34;: &#34;2021-08-27T17:19:45.553092363Z&#34;, &#34;created_by&#34;: &#34;/bin/sh -c #(nop) ADD file:aad4290d27580cc1a094ffaf98c3ca2fc5d699fe695dfb8e6e9fac20f1129450 in / &#34; }, { &#34;created&#34;: &#34;2021-08-27T17:19:45.758611523Z&#34;, &#34;created_by&#34;: &#34;/bin/sh -c #(nop) CMD [\&#34;/bin/sh\&#34;]&#34;, &#34;empty_layer&#34;: true } ] }</code></pre></div>
+<p>The image layer is the third blob file. This is a TAR archive that could be exploded and inspected. For space reasons, in this book, the example is limited to an inspection of the file type:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># file alpine/blobs/sha256/a0d0a0d46f8b52473982a3c466318f479767577551a53ffc9074c9fa7035982e alpine/blobs/sha256/a0d0a0d46f8b52473982a3c466318f479767577551a53ffc9074c9fa7035982e: gzip compressed data, original size modulo 2^32 5865472 ```</code></pre></div>
+<p>The result demonstrates that the file is a TAR gzipped archive.</p>
+<h1 id="the-main-differences-between-docker-and-podman">The main differences between Docker and Podman<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In the previous sections, we went through the key features of Docker and Podman, looking into the underlying layer, discovering the companion open source projects that made these two tools unique in their container engine role, but now it's time to compare them.</p>
+<p>As we saw earlier, the significant difference between the two is that Docker has a daemon-centric approach while Podman instead has a daemonless architecture. The Podman binary acts as a command-line interface, as well as a container engine, and uses Conmon to orchestrate and monitor the container runtime.</p>
+<p>Looking under the hood into the internals of both projects, we will also find many other differences, but, in the end, once the container has started, they both leverage OCI standard container runtimes, though with some differences: Docker uses <code>runc</code> while Podman uses <code>crun</code> in most distributions, with some exceptions; for example, Podman's default in Fedora or Red Hat Enterprise Linux 9 is <code>crun</code> while it still uses <code>runc</code> in the most conservative Red Hat Enterprise Linux 8, with <code>crun</code> as an option. Red Hat Enterprise Linux 10 only ships <code>crun</code> as the only runtime since it is considered fully stable and production-ready.</p>
+<p>Despite the <code>crun</code> performance advantages described in the previous section, it is not the objective of this book to make a detailed performance comparison between the two. Readers interested in the topic will easily find literature about the performance differences between the two runtimes.</p>
+<p>Another big gap that was recently filled by the Docker team was the rootless container. Podman was the first container engine to bring out this excellent feature that increases security and improves the usage of containers in many contexts, but, as we mentioned, this feature is now available in Docker too.</p>
+<p>But let's go more practical in the next sections, by comparing them side by side through the command line first and then by running a container.</p>
+<h2 id="command-line-interface-comparison">Command-line interface comparison<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>In this section, we will go through a side-by-side comparison, looking at the Docker and Podman CLIs.</p>
+<p>Looking at the available commands for both CLIs, it is easy to spot the many similarities. The following table was truncated to improve readability:</p>
+<p><strong>Docker</strong> <strong>Podman</strong> &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash; &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-
+<code>attach</code> <code>attach</code> <code>build</code> <code>auto-update</code> <code>commit</code> <code>build</code> <code>cp</code> <code>commit</code> <code>create</code> <code>container</code> <code>diff</code> <code>cp</code> <code>events</code> <code>create</code> <code>exec</code> <code>diff</code> <code>export</code> <code>events</code> <code>history</code> <code>exec</code> <code>images</code> <code>export</code> <code>import</code> <code>generate</code> <code>info</code> <code>healthcheck</code> <code>inspect</code> <code>help</code> <code>kill</code> <code>history</code> <code>load</code> <code>image</code> <code>login</code> <code>images</code> <code>logout</code> <code>import</code> <code>logs</code> <code>info</code> <code>pause</code> <code>init</code> <code>port</code> <code>inspect</code> <code>…</code> <code>…</code></p>
+<p>Table 2.1 &ndash; Comparison of Docker and Podman commands</p>
+<p>As mentioned previously, Docker was born in 2013, while Podman only arrived 4 years later in 2017. Podman was built keeping in mind how experienced container administrators were with the most famous container engine available at that time: Docker. For this reason, the Podman development team decided not to change the <em>look and feel</em> of the command-line tools too much, to improve Docker users' migration to the newly born Podman.</p>
+<p>There was a claim, in fact, at the beginning of the distribution of Podman that if you have any existing scripts that run Docker, you can create an alias and it should work (<code>alias docker=podman</code>). There was also a package that places a <em>fake</em> Docker command under <code>/usr/bin</code> that points to the <em>Podman</em> binary instead. For this reason, if you are a Docker user, you can expect a smooth transition to Podman once you are ready.</p>
+<p>Another important point is that the images created with Docker are compatible with the OCI standard, so you can easily migrate or pull any image you previously used again with Docker.</p>
+<p>If we take a deep look into the command options available for Podman, you will notice that there are some additional commands that are not present in Docker, while some others are missing.</p>
+<p>For example, Podman can manage, along with containers, pods (the name Podman is quite promising here). The pod concept was introduced with Kubernetes and represents the smallest execution unit in a Kubernetes cluster.</p>
+<p>With Podman, users can create empty pods and then run containers inside them easily using the following command:</p>
+<p><code>$ podman pod create --name mypod $ podman run –-pod mypod –d docker.io/library/nginx</code></p>
+<p>This is not as easy with Docker, where users must first run a container and then create new ones attaching to the network namespace of the first container.</p>
+<p>Podman has additional features that could help users to move their containers in Kubernetes environments. Using the <code>podman generate kube</code> command, Podman can create a Kubernetes YAML file for a running container that can be used to create a pod inside a Kubernetes cluster.</p>
+<p>Running containers as systemd services is equally easy by placing the <code>podlet</code> command in front of the original <code>podman run</code> command. This takes a running container or pod and generates a systemd unit file that can be used to automatically start the service at system startup.</p>
+<p>Here's a notable example: the <strong>OpenStack</strong> project, an open source cloud computing infrastructure, adopted Podman as the default manager for its containerized services when deployed with TripleO. All the services are executed by Podman and orchestrated by systemd in the control plane and compute nodes.</p>
+<p>Having checked the surface of these container engines and having looked at their command lines, let's recap the under-the-hood differences in the next section.</p>
+<h2 id="running-a-container">Running a container<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Running a container in a Docker environment, as we mentioned earlier, consists of using the Docker command-line client to communicate with the Docker daemon that will do the actions required to get the container up and running. Just to summarize the concepts we explained in this chapter, we can take a look at the following diagram:</p>
+<p><a href="#R-image-3ac901ddff5b9b7dc043f1f1878be34e" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="images/B31467_2_7.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-3ac901ddff5b9b7dc043f1f1878be34e"><img class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_2_7.png"></a></p>
+<p>Podman, instead, interacts directly with the image registry, storage, and with the Linux kernel through the container runtime process (not a daemon), with Conmon as a monitoring process executed between Podman and the OCI runtime, as we can schematize in the following diagram:</p>
+<p><a href="#R-image-416b9c8817f9e8ca0142ea94b1488f6e" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="images/B31467_2_8.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-416b9c8817f9e8ca0142ea94b1488f6e"><img class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_2_8.png"></a></p>
+<p>The core difference between the two architectures is the daemon-centric Docker vision versus the fork/exec approach of Podman.</p>
+<p>This book does not get into the pros and cons of the Docker daemon architecture and features. However, it is fair to say that a significant number of Docker users were concerned about this daemon-centric approach for many reasons. Here are some examples:</p>
+<ul>
+<li>The daemon could be a single point of failure</li>
+<li>Resource consumption</li>
+<li>Poor support for rootless containers due to the need for per-user Docker and containerd daemons</li>
+</ul>
+<p>Despite the architectural differences and the aliasing solutions described before to easily migrate projects without changing any script, running a container from the command line with Docker or Podman is pretty much the same thing for the end user:</p>
+<p><code>$ docker run –d -–rm docker.io/library/nginx $ podman run –d -–rm docker.io/library/nginx</code></p>
+<p>For the same reason, most of the command-line arguments of CLI commands have been kept as close as possible to the original version in Docker.</p>
+<h1 id="further-reading">Further reading<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>For more information about the topics covered in this chapter, you can refer to the following:</p>
+<ul>
+<li>Rootless containers with Podman: The basics: <a href="https://developers.redhat.com/blog/2020/09/25/rootless-containers-with-podman-the-basics" rel="external" target="_blank">https://developers.redhat.com/blog/2020/09/25/rootless-containers-with-podman-the-basics</a></li>
+<li>How to transition from Docker to Podman: <a href="https://developers.redhat.com/blog/2020/11/19/transitioning-from-docker-to-podman" rel="external" target="_blank">https://developers.redhat.com/blog/2020/11/19/transitioning-from-docker-to-podman</a></li>
+<li>cgroup v2: <a href="https://github.com/opencontainers/runc/blob/master/docs/cgroup-v2.md" rel="external" target="_blank">https://github.com/opencontainers/runc/blob/master/docs/cgroup-v2.md</a></li>
+<li>An introduction to <code>crun</code>, a fast and low-memory footprint container runtime: <a href="https://www.redhat.com/sysadmin/introduction-crun" rel="external" target="_blank">https://www.redhat.com/sysadmin/introduction-crun</a></li>
+<li>eBPF Documentation: <a href="https://ebpf.io/what-is-ebpf/" rel="external" target="_blank">https://ebpf.io/what-is-ebpf/</a></li>
+</ul>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready for RHCE<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/install-ansible-using-uv/"><a class="padding" href="/ansible/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/playbooks/"><a class="padding" href="/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/hostname-patterns/"><a class="padding" href="/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/include-and-import-files/"><a class="padding" href="/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2/"><a class="padding" href="/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/user-and-groups/"><a class="padding" href="/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/storage-partitions-and-lvm/"><a class="padding" href="/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/services/"><a class="padding" href="/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimize-ansible-processing/"><a class="padding" href="/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux/"><a class="padding" href="/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/tags/"><a class="padding" href="/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/loops-and-items/"><a class="padding" href="/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/modules-for-troubleshooting/"><a class="padding" href="/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Using Variables In Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/when/"><a class="padding" href="/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/secure-shell-service-ssh/"><a class="padding" href="/cyber-security/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ansiblepuppetchef/"><a class="padding" href="/networking/ccna/ccna-notes-1/ansiblepuppetchef/">Ansible, Puppet, and Chef<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscoacls/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscoacls/">Cisco ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscocli/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscocli/">Cisco CLI<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/classfulipv4/"><a class="padding" href="/networking/ccna/ccna-notes-1/classfulipv4/">Classful IPv4<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/cloudarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/cloudarchitecture/">Cloud Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/controllerbasednetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/controllerbasednetworking/">Controller-Based Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/device-management-protocols/"><a class="padding" href="/networking/ccna/ccna-notes-1/device-management-protocols/">Device Management Protocols<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-config/">DHCP Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/">DHCP Snooping and ARP Inspection<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-syncronization/"><a class="padding" href="/networking/dns-and-time-syncronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ethernetlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/ethernetlans/">Ethernet LANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/extended-acls/"><a class="padding" href="/networking/ccna/ccna-notes-1/extended-acls/">Extended ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-services/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-services/">IP Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-transport-and-applications/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-transport-and-applications/">IP Transport and Applications<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6/">IPv6<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/">IPv6 Addressing and Subnetting<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6configuration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6configuration/">IPv6 Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6routing/">IPv6 Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lan-architecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/lan-architecture/">LAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/l2-etherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/l2-etherchannel/">Layer 2 Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/network-devices-and-connections/"><a class="padding" href="/networking/network-devices-and-connections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospf-concepts/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospf-concepts/">OSPF Concepts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfconfiguration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfconfiguration/">OSPF Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/">OSPF Network Types and Neighbors<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/restandjson/"><a class="padding" href="/networking/ccna/ccna-notes-1/restandjson/">REST and JSON<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/router_operation/"><a class="padding" href="/networking/ccna/ccna-notes-1/router_operation/">Router Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/routeroperation/"><a class="padding" href="/networking/ccna/ccna-notes-1/routeroperation/">ROuter Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lanrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/lanrouting/">Routing in the LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/rstpandetherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/rstpandetherchannel/">RSTP and Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/securing-network-devices/"><a class="padding" href="/networking/ccna/ccna-notes-1/securing-network-devices/">Securing Network Devices<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/security-architectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/security-architectures/">Security Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/softwaredefinedaccess/"><a class="padding" href="/networking/ccna/ccna-notes-1/softwaredefinedaccess/">Software-Defined Access (SDA)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/spanningtreeprotocol/"><a class="padding" href="/networking/ccna/ccna-notes-1/spanningtreeprotocol/">Spanning Tree Protocol<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/static-routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/static-routing/">Static Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchinterfaces/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchinterfaces/">Switch Interfaces<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switching/"><a class="padding" href="/networking/ccna/ccna-notes-1/switching/">Switching<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchport-security-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchport-security-config/">Switchport Security Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/tcpipbasic/"><a class="padding" href="/networking/ccna/ccna-notes-1/tcpipbasic/">TCP/IP Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/troubleshootingrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/troubleshootingrouting/">Troubleshooting Routing Issues<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/vlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/vlans/">VLANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wanarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/wanarchitecture/">WAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wansandiprouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/wansandiprouting/">WANs and IP Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessarchitectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessarchitectures/">Wireless Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_lan/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_lan/">Wireless LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessnetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessnetworking/">Wireless Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_security/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_security/">Wireless Security<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
+            <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/local-filesystems-and-swap/"><a class="padding" href="/storage/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/network-filesystem-nfs/"><a class="padding" href="/storage/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/partitioning-mbr-gpt/"><a class="padding" href="/storage/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/rm-filesystem-from-partition/"><a class="padding" href="/storage/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/remove-formatting-from-highlights/"><a class="padding" href="/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-docker-nginx/"><a class="padding" href="/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/you-need-to-learn-man-pages/"><a class="padding" href="/tools/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/proxmox-ha-proxy-setup/"><a class="padding" href="/tools/proxmox-ha-proxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/learning-touch-typing/"><a class="padding" href="/tools/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5" checked><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/">Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="active hidden " data-nav-id="/containers/docker-vs-podman/"><a class="padding" href="/containers/docker-vs-podman/"><i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/ansible-and-podman/"><a class="padding" href="/containers/ansible-and-podman/">Ansible and Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/intro-to-containers-1/"><a class="padding" href="/containers/intro-to-containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/convert-docker-compose-to-quadlets/"><a class="padding" href="/containers/convert-docker-compose-to-quadlets/">Convert Docker Compose to Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-links/"><a class="padding" href="/containers/podman-links/">Podman Links<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-quadlets/"><a class="padding" href="/containers/podman-quadlets/">Podman Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/">Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
+            <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users-and-Groups</span></label><a class="padding default-animation" href="/users-and-groups/">Users-and-Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
+            <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/virtualization/"><input type="checkbox" id="R-section-da8ee4406de37987b502b79e5b0a9d1c" aria-controls="R-subsections-da8ee4406de37987b502b79e5b0a9d1c"><label for="R-section-da8ee4406de37987b502b79e5b0a9d1c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualizations</span></label><a class="padding default-animation" href="/virtualization/">Virtualizations<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-da8ee4406de37987b502b79e5b0a9d1c" class="collapsible-menu">
+            <li class="" data-nav-id="/virtualization/using-vagrant-on-linux/"><a class="padding" href="/virtualization/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/booknotes/"><a class="padding" href="/booknotes/"><i class='fas fa-fw fa-book'></i> Book Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/now/"><a class="padding" href="/now/"><i class='fas fa-fw fa-clock'></i> Now<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780154752" defer></script>
+    <script src="/js/theme.js?1780154752" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

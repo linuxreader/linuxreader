@@ -93,6 +93,52 @@ homebrew:
       virt-manager
 ```
 
+## VSCodium
+Added for starship compatibility
+```
+❯ cat ~/.config/starship.toml 
+[container]
+disabled = true
+```
+
+`❯ cp /usr/bin/starship ~/.local/bin/starship`
+
+Add to end of bashrc
+```
+#eval "$(starship init bash)"
+if [ -z "$CONTAINER_ID" ]; then
+    eval "$(starship init bash)"
+fi
+```
+
+Settings.json
+```
+{
+    "window.titleBarStyle": "custom",
+    "editor.fontFamily": "'Cascadia Code', 'Droid Sans Mono', 'monospace', monospace, 'Symbols Nerd Font Mono'",
+    "update.mode": "none",
+    "workbench.editor.empty.hint": "hidden",
+    "explorer.confirmDragAndDrop": false,
+    "editor.autoClosingBrackets": "never",
+    "editor.suggestOnTriggerCharacters": false,
+    "editor.quickSuggestions": {
+        "comments": "off",
+        "strings": "off",
+        "other": "off"
+    },
+    "editor.hover.enabled": false,
+    "editor.parameterHints.enabled": false,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "html.suggest.html5": false,
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "path": "/bin/bash",
+            "args": ["--login", "-i"]
+        }
+    },
+    "terminal.integrated.defaultProfile.linux": "bash"
+}
+```
 ## Install Homebrew Stuff:
 
 then run `just homebrew` after a reboot to install packages with brew
@@ -232,7 +278,7 @@ For managing containers.
 ## Warehouse
 Managing installed applications.
 
-![](../images/Pasted%20image%2020240905110143.png)
+![](../../images/Pasted%20image%2020240905110143.png)
 
 ## Mission Center 
 Task Manager like application.
@@ -324,7 +370,7 @@ From Tools menu, select Arrow
 
 ## Distrobox
 
-See [distrobox](../tools/distrobox.md) 
+See [distrobox](../../Containers/distrobox.md) 
 
 ## ZSH For Humans
 

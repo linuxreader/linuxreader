@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    <meta name="description" content="14 Interacting with systemd and Kubernetes In previous chapters, we learned how to initialize and manage containers, starting with simple concepts and arriving at advanced ones.[]{.sentence-end} Containers represent a key technology for application development in the latest Linux operating system (OS) releases.[]{.sentence-end} For this reason, containers are only the starting point for advanced developers and system administrators.[]{.sentence-end} Once this technology is widely adopted in an enterprise company or a technical project, the next step will be to integrate it with the base OS and with system orchestration platforms.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="14 Interacting with systemd and Kubernetes In previous chapters, we learned how to initialize and manage containers, starting with simple concepts and arriving at advanced ones.[]{.sentence-end} Containers represent a key technology for application development in the latest Linux operating system (OS) releases.[]{.sentence-end} For this reason, containers are only the starting point for advanced developers and system administrators.[]{.sentence-end} Once this technology is widely adopted in an enterprise company or a technical project, the next step will be to integrate it with the base OS and with system orchestration platforms.">
+    <meta property="og:url" content="http://localhost:1313/containers/systemdandk8s/">
+    <meta property="og:description" content="14 Interacting with systemd and Kubernetes In previous chapters, we learned how to initialize and manage containers, starting with simple concepts and arriving at advanced ones.[]{.sentence-end} Containers represent a key technology for application development in the latest Linux operating system (OS) releases.[]{.sentence-end} For this reason, containers are only the starting point for advanced developers and system administrators.[]{.sentence-end} Once this technology is widely adopted in an enterprise company or a technical project, the next step will be to integrate it with the base OS and with system orchestration platforms.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Containers">
+    <meta itemprop="description" content="14 Interacting with systemd and Kubernetes In previous chapters, we learned how to initialize and manage containers, starting with simple concepts and arriving at advanced ones.[]{.sentence-end} Containers represent a key technology for application development in the latest Linux operating system (OS) releases.[]{.sentence-end} For this reason, containers are only the starting point for advanced developers and system administrators.[]{.sentence-end} Once this technology is widely adopted in an enterprise company or a technical project, the next step will be to integrate it with the base OS and with system orchestration platforms.">
+    <meta itemprop="wordCount" content="8751">
+    <title></title>
+    <link href="/containers/systemdandk8s/index.md" rel="alternate" type="text/markdown" title="">
+    <link href="/images/favicon.svg?1780154752" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1780154752" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1780154752" defer></script>
+    <script src="/js/search-lunr.js?1780154752" defer></script>
+    <script src="/js/search.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1780154752";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780154752" rel="stylesheet">
+    <link href="/css/theme.css?1780154752" rel="stylesheet">
+    <link href="/css/format-html.css?1780154752" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/containers\/systemdandk8s\/';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:1313';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script><script defer src="https://cloud.umami.is/script.js" data-website-id="d179743c-138a-4212-8906-28f70628ef95"></script>
+<style>
+:root {
+    --MENU-S-width: 15rem;
+    --MENU-M-width: 15rem;
+    --MENU-L-width: 18rem;
+    --MAIN-MAX-width: 100rem;
+}
+html {
+  zoom: 1.2;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif,
+               "Apple Color Emoji", "Segoe UI Emoji" !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500 !important;
+  letter-spacing: 0.7px;
+}
+
+code, kbd, pre, samp {
+  font-family: "Fira Code", "Hack", "Source Code Pro", Consolas, Menlo, monospace !important;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+  <body class="mobile-support html" data-origin="/containers/systemdandk8s/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#h2_336">Generating basic Pod resources from running containers</a></li>
+    <li><a href="#h2_337">Generating Pods and Services from running containers</a></li>
+    <li><a href="#h2_338">Generating a composite application in a single Pod</a></li>
+    <li><a href="#h2_339">Generating composite applications with multiple Pods</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#h2_342">Setting up minikube</a></li>
+    <li><a href="#h2_343">Starting minikube</a></li>
+    <li><a href="#h2_344">Running generated resource files in Kubernetes</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/containers/"><span itemprop="name">Containers</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/systemdandk8s/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/" title="Containers (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/ansible-and-podman/" title="Ansible and Podman (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable containers" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id=""></h1>
+
+<h1 id="h1_330" class="chapterNumber">14<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<h1 id="h1_331" class="chapterTitle">Interacting with systemd and Kubernetes<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In previous chapters, we learned how to initialize and manage
+containers, starting with simple concepts and arriving at advanced
+ones.[]{.sentence-end} Containers represent a key technology for
+application development in the latest Linux <strong>operating system</strong>
+(<strong>OS</strong>) releases.[]{.sentence-end} For this reason, containers are only
+the starting point for advanced developers and system
+administrators.[]{.sentence-end} Once this technology is widely adopted
+in an enterprise company or a technical project, the next step will be
+to integrate it with the base OS and with system orchestration
+platforms.</p>
+<p>In this chapter, we're going to cover the following main topics:</p>
+<ul>
+<li>Setting up the prerequisites for the host OS</li>
+<li>Integrating containers into systemd via Quadlets</li>
+<li>Generating Kubernetes YAML resources</li>
+<li>Running Kubernetes resource files in Podman</li>
+<li>Testing the results in Kubernetes</li>
+</ul>
+<h1 id="h1_332" class="heading-1">Technical requirements<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>To complete this chapter, you will need a machine with a working Podman
+installation.[]{.sentence-end} As we mentioned in <em><a href="/containers/systemdandk8s/#Chapter_3.xhtml#h1_83">Chapter
+3</a>{.chapref}</em>, <em>Running</em> <em>the</em> <em>First
+Container</em>, all the examples in this book were executed on a Fedora 40
+system or later but can be reproduced on your choice of OS.</p>
+<p>Having a good understanding of the topics that were covered in <em><a href="/containers/systemdandk8s/#Chapter_4.xhtml#h1_114">Chapter
+4</a>{.chapref}</em>, <em>Managing Running Containers</em>,
+<em><a href="/containers/systemdandk8s/#Chapter_5.xhtml#h1_133">Chapter 5</a>{.chapref}</em>, <em>Implementing Storage
+for the Container's Data</em>, and <em><a href="/containers/systemdandk8s/#Chapter_9.xhtml#h1_219">Chapter
+9</a>{.chapref}</em>, <em>Pushing Images to a Container
+Registry</em>, will help you grasp the topics we'll cover regarding
+advanced containers.</p>
+<p>You should also have a good understanding of system administration and
+Kubernetes container orchestration.</p>
+<h1 id="h1_333" class="heading-1">Setting up the prerequisites for the host OS<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>As we saw in <em><a href="/containers/systemdandk8s/#Chapter_1.xhtml#h1_14">Chapter 1</a>{.chapref}</em>,
+<em>Introduction to Container Technology</em>, containers were created to help
+simplify and[]{#Chapter_14.xhtml#idx_e388e213 .index-entry
+index-entry=&ldquo;host OS:prerequisites&rdquo;} create system services that can be
+distributed on standalone hosts.</p>
+<p>In the following sections, we will learn how to run MariaDB and a Git
+service in containers while managing those containers like any other
+service &ndash; that is, through systemd and the <code>systemctl</code>{.inlineCode}
+command.</p>
+<p>First, let's introduce []{#Chapter_14.xhtml#idx_cf32c7b0 .index-entry
+index-entry=&ldquo;systemd&rdquo;}systemd, a system and service manager for Linux
+that runs as the first process on boot (as PID 1) and acts as an
+<code>init</code>{.inlineCode} system that brings up and maintains userspace
+services.[]{.sentence-end} Once a new user logs in to the host system,
+separate instances are executed to start their services.</p>
+<p>The systemd daemon starts services and ensures priority with a
+dependency system between various entities called
+<strong>units</strong>.[]{.sentence-end} There[]{#Chapter_14.xhtml#idx_16381ee8
+.index-entry index-entry=&ldquo;units&rdquo;} are 11 different types of units.</p>
+<p>Fedora 40 and later have systemd enabled and running by
+default.[]{.sentence-end} We can check whether it is running properly by
+using the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># systemctl is-system-running
+running</code></pre></div>
+<p>In the following []{#Chapter_14.xhtml#idx_1dbe2636 .index-entry
+index-entry=&ldquo;host OS:prerequisites&rdquo;}sections, we are going to work with
+system unit files of the <code>service</code>{.inlineCode} type.[]{.sentence-end}
+We can check the current ones by running the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># systemctl list-units --type=service | head
+  UNIT                      LOAD   ACTIVE SUB     DESCRIPTION
+  abrt-journal-core.service  loaded active running Creates ABRT problems from coredumpctl messages
+  abrt-oops.service  loaded active running ABRT kernel log watcher
+  abrt-xorg.service  loaded active running ABRT Xorg log watcher
+  abrtd.service  loaded active running ABRT Automated Bug Reporting Tool</code></pre></div>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>The systemd service and its internals are more complex, so they cannot
+be summarized in a few lines.[]{.sentence-end} For additional
+information, please refer to the related Linux manual.</p>
+<p>Now that we've confirmed that the host is ready to handle the heavy
+lifting, we can transition from basic system management to Quadlets, the
+current industry standard for integrating containerized workloads
+directly into the OS service life cycle.</p>
+<h1 id="h1_334" class="heading-1">Integrating containers into systemd via Quadlets<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Historically, Podman []{#Chapter_14.xhtml#idx_6b5ecd75 .index-entry
+index-entry=&ldquo;Quadlets:containers, integrating into systemd&rdquo;}utilized the
+<code>podman generate systemd</code>{.inlineCode} command to create unit
+files.[]{.sentence-end} However, this command is now deprecated and
+should no longer be used.[]{.sentence-end} The Podman team found that
+static unit generation was brittle; as best practices for unit files
+evolved with each release, users often failed to regenerate their files,
+missing critical bug fixes and performance updates.</p>
+<p>The current recommended solution is Quadlets.[]{.sentence-end} Quadlets
+allow you to describe a container in a declarative format very similar
+to standard systemd configuration files.[]{.sentence-end} Instead of you
+managing a complex <code>.service</code>{.inlineCode} file, systemd uses a
+generator to automatically create the necessary units at runtime.</p>
+<p>The most efficient way to create Quadlet files is through a utility
+called <code>podlet</code>{.inlineCode}.[]{.sentence-end} This tool takes standard
+<code>podman run</code>{.inlineCode} commands and transforms them into the Quadlet
+format.</p>
+<p>We will create two system services based on containers to create a Git
+repository.</p>
+<p>For this example, we will []{#Chapter_14.xhtml#idx_a7051590 .index-entry
+index-entry=&ldquo;Quadlets:containers, integrating into systemd&rdquo;}leverage two
+well-known open source projects:</p>
+<ul>
+<li><strong>Gitea</strong>: The[]{#Chapter_14.xhtml#idx_7384bb46 .index-entry
+index-entry=&ldquo;Gitea&rdquo;} Git repository, which also offers a nice web
+interface for code management</li>
+<li><strong>MariaDB</strong>: The[]{#Chapter_14.xhtml#idx_0f83c39b .index-entry
+index-entry=&ldquo;MariaDB&rdquo;} SQL database for holding the data that's
+produced by the Gitea service</li>
+</ul>
+<p>Let's start with an example.[]{.sentence-end} First, we need to
+generate a password for a user of our database:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># export MARIADB_PASSWORD=my-secret-pw
+# podman secret create MARIADB_PASSWORD --env MARIADB_PASSWORD
+cb5eab6a00d2b69635a314188</code></pre></div>
+<p>Here, we exported the environment variable with the secret password we
+are going to use and then leveraged a useful secrets management command
+that we have not introduced previously:
+<code>podman secret create</code>{.inlineCode}.[]{.sentence-end} Unfortunately,
+this command holds the secret in plain text, though this is good enough
+for our purpose.[]{.sentence-end} Since we are running these containers
+as root, these secrets are stored on the filesystem with root-only
+permissions.</p>
+<p>We can inspect the secret with the following commands:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman secret ls
+ID                         NAME              DRIVER      CREATED         UPDATED
+cb5eab6a00d2b69635a314188  MARIADB_PASSWORD  file        18 seconds ago  18 seconds ago
+
+# podman secret inspect cb5eab6a00d2b69635a314188
+[
+    {
+        &#34;ID&#34;: &#34;cb5eab6a00d2b69635a314188&#34;,
+        &#34;CreatedAt&#34;: &#34;2025-08-07T15:18:01.250800245Z&#34;,
+        &#34;UpdatedAt&#34;: &#34;2025-08-07T15:18:01.250800245Z&#34;,
+        &#34;Spec&#34;: {
+            &#34;Name&#34;: &#34;MARIADB_PASSWORD&#34;,
+            &#34;Driver&#34;: {
+                &#34;Name&#34;: &#34;file&#34;,
+                &#34;Options&#34;: {
+                    &#34;path&#34;: &#34;/var/lib/containers/storage/secrets/filedriver&#34;
+                }
+            },
+            &#34;Labels&#34;: {}
+        }
+    }
+]
+
+# cat /var/lib/containers/storage/secrets/filedriver/secretsdata.json
+{
+  &#34;cb5eab6a00d2b69635a314188&#34;: &#34;bXktc2VjcmV0LXB3&#34;
+}
+# ls -l /var/lib/containers/storage/secrets/filedriver/secretsdata.json
+-rw-------. 1 root root 53 Aug  7 15:18 /var/lib/containers/storage/secrets/filedriver/secretsdata.json</code></pre></div>
+<p>Here, we have asked []{#Chapter_14.xhtml#idx_7c77db30 .index-entry
+index-entry=&ldquo;Quadlets:containers, integrating into systemd&rdquo;}Podman to
+list and inspect the secret we created previously and looked at the
+underlying filesystem for the file holding the secrets.</p>
+<p>The file holding the secrets is a file in JSON format and, as we
+mentioned previously, is in plain text.[]{.sentence-end} The first
+string is the secret ID, while the second string is the value
+Base64-encoded.[]{.sentence-end} If we tried to decode it with the
+<code>BASE64</code>{.inlineCode} algorithm, we would see that it represents the
+password we just added &ndash; that is, <code>my-secret-pw</code>{.inlineCode}.</p>
+<p>Even though the password is stored in plain text, it is good enough for
+our example because we are using the root user, and this filestore has
+root-only permission, as we can verify with the last command of the
+previous output.</p>
+<p>Now, we can continue setting up the database container.[]{.sentence-end}
+We will start with the database setup because it is a dependency on our
+Git server.</p>
+<p>We must create a local folder in the host system where we can store
+container data:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># mkdir -p /opt/var/lib/mariadb</code></pre></div>
+<p>We can also look[]{#Chapter_14.xhtml#idx_ba0ca4d7 .index-entry
+index-entry=&ldquo;Quadlets:containers, integrating into systemd&rdquo;} at the
+public documentation of the container image to find out the right volume
+path and the various environment variables to use to start our
+container:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run -d --network host --name mariadb -v \
+ /opt/var/lib/mariadb:/var/lib/mysql:Z -e \
+ MARIADB_DATABASE=gitea -e MARIADB_USER=gitea -e \
+ MARIADB_RANDOM_ROOT_PASSWORD=true \
+--secret=MARIADB_PASSWORD,type=env docker.io/mariadb:latest
+61ae055ef6512cb34c4b3fe1d8feafe6ec174a25547728873932f064921762d1</code></pre></div>
+<p>We are going to run and test the container standalone first to check
+whether there are any errors; then, we will transform it into a system
+service.</p>
+<p>In the preceding Podman command, we did the following:</p>
+<ul>
+<li>We ran the container in detached mode</li>
+<li>We assigned it a name &ndash; that is, <code>mariadb</code>{.inlineCode}</li>
+<li>We exposed the host network for simplicity; of course, we could
+limit and filter this connectivity</li>
+<li>We mapped the storage volume with the newly created local directory
+while also specifying the <code>:Z</code>{.inlineCode} option to correctly
+assign the SELinux labels</li>
+<li>We defined the environment variables to use at runtime by the
+container's processes, also providing the password's secret with
+the <code>--secret</code>{.inlineCode} option</li>
+<li>We used the container image name we want to use &ndash; that is,
+<code>docker.io/mariadb:latest</code>{.inlineCode}</li>
+</ul>
+<p>We can also check whether the container is up and running by using the
+following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman ps
+CONTAINER ID  IMAGE                             COMMAND     CREATED        STATUS        PORTS       NAMES
+a37da3b39e5b  docker.io/library/mariadb:latest  mariadbd    9 minutes ago  Up 9 minutes              mariadb</code></pre></div>
+<p>The easiest way to create a []{#Chapter_14.xhtml#idx_06e31325
+.index-entry
+index-entry=&ldquo;Quadlets:containers, integrating into systemd&rdquo;}Quadlet
+configuration file is through a utility[]{#Chapter_14.xhtml#idx_e9ceba7b
+.index-entry index-entry=&ldquo;podlet&rdquo;} called <strong>podlet</strong>.[]{.sentence-end}
+Let's install it on our system:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># dnf install -y podlet
+Last metadata expiration check: 3:31:19 ago on Thu 07 Aug 2025 12:06:37 PM UTC.
+Dependencies resolved.
+=====================================================================================
+ Package          Architecture     Version                   Repository         Size
+=====================================================================================
+Installing:
+ podlet           x86_64           0.3.0-1.fc40              updates           2.1 M
+
+Transaction Summary
+=====================================================================================
+Install  1 Package
+
+Total download size: 2.1 M
+Installed size: 6.6 M
+Is this ok [y/N]: y
+Downloading Packages:
+podlet-0.3.0-1.fc40.x86_64.rpm                       3.4 MB/s | 2.1 MB     00:00   
+-------------------------------------------------------------------------------------
+Total                                                2.0 MB/s | 2.1 MB     00:01    
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                             1/1
+  Installing       : podlet-0.3.0-1.fc40.x86_64                                  1/1
+  Running scriptlet: podlet-0.3.0-1.fc40.x86_64                                  1/1
+
+Installed:
+  podlet-0.3.0-1.fc40.x86_64                                                        
+
+Complete!</code></pre></div>
+<p>Now let's generate the[]{#Chapter_14.xhtml#idx_039bd798 .index-entry
+index-entry=&ldquo;Quadlets:containers, integrating into systemd&rdquo;} Quadlet for
+our running <code>mariadb</code>{.inlineCode} service:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podlet podman run -d --network host --name mariadb -v /opt/var/lib/mariadb:/var/lib/mysql:Z -e MARIADB_DATABASE=gitea -e MARIADB_USER=gitea -e MARIADB_RANDOM_ROOT_PASSWORD=true --secret=MARIADB_PASSWORD,type=env docker.io/mariadb:latest
+# mariadb.container
+[Container]
+ContainerName=mariadb
+Environment=MARIADB_DATABASE=gitea MARIADB_USER=gitea MARIADB_RANDOM_ROOT_PASSWORD=true
+Image=docker.io/mariadb:latest
+Network=host
+Secret=MARIADB_PASSWORD,type=env
+Volume=/opt/var/lib/mariadb:/var/lib/mysql:Z</code></pre></div>
+<p>As you can see, we are just putting before the previous
+<code>podman run</code>{.inlineCode} command the <code>podlet</code>{.inlineCode} command;
+everything will be managed directly by the utility!</p>
+<p>Now, let's look at the Git service.[]{.sentence-end} First, we will
+create the storage directory:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># mkdir -p /opt/var/lib/gitea/data</code></pre></div>
+<p>After that, we can[]{#Chapter_14.xhtml#idx_941dca44 .index-entry
+index-entry=&ldquo;Quadlets:containers, integrating into systemd&rdquo;} look at the
+project documentation for any configuration that's needed for the Gitea
+container image to be built correctly and complete the
+<code>podman run</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run -d --network host --name gitea \
+-v /opt/var/lib/gitea/data:/data:Z \
+docker.io/gitea/gitea:latest
+fb91f23bccc318f90748ffd6ceebdf66ac5375d3c6ac78f267527a00b92a71f6</code></pre></div>
+<p>In the previous Podman command, we did the following:</p>
+<ul>
+<li>We ran the container in detached mode</li>
+<li>We assigned it a name &ndash; that is, <code>gitea</code>{.inlineCode}</li>
+<li>We exposed the host network for simplicity; of course, we can limit
+and filter this connectivity</li>
+<li>We mapped the storage volume with the newly created local directory
+while specifying the <code>:Z</code>{.inlineCode} option to correctly assign
+the SELinux labels</li>
+</ul>
+<p>Finally, we can check whether the service is running properly by
+inspecting its logs:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman logs gitea
+2025/08/07 15:56:34 cmd/web.go:261:runWeb() [I] Starting Gitea on PID: 2
+2025/08/07 15:56:34 cmd/web.go:114:showWebStartupMessage() [I] Gitea version: 1.24.4 built with GNU Make 4.4.1, go1.24.5 : bindata, timetzdata, sqlite, sqlite_unlock_notify
+2025/08/07 15:56:34 cmd/web.go:115:showWebStartupMessage() [I] * RunMode: prod
+2025/08/07 15:56:34 cmd/web.go:116:showWebStartupMessage() [I] * AppPath: /usr/local/bin/gitea
+2025/08/07 15:56:34 cmd/web.go:117:showWebStartupMessage() [I] * WorkPath: /var/lib/gitea
+2025/08/07 15:56:34 cmd/web.go:118:showWebStartupMessage() [I] * CustomPath: /var/lib/gitea/custom
+2025/08/07 15:56:34 cmd/web.go:119:showWebStartupMessage() [I] * ConfigFile: /etc/gitea/app.ini
+2025/08/07 15:56:34 cmd/web.go:120:showWebStartupMessage() [I] Prepare to run install page
+2025/08/07 15:56:35 cmd/web.go:323:listen() [I] Listen: http://0.0.0.0:3000
+2025/08/07 15:56:35 cmd/web.go:327:listen() [I] AppURL(ROOT_URL): http://localhost:3000/
+2025/08/07 15:56:35 modules/graceful/server.go:50:NewServer() [I] Starting new Web server: tcp:0.0.0.0:3000 on PID: 2</code></pre></div>
+<p>As we can see, the []{#Chapter_14.xhtml#idx_cde4344f .index-entry
+index-entry=&ldquo;Quadlets:containers, integrating into systemd&rdquo;}Gitea
+service is listening on port <code>3000</code>{.inlineCode}.[]{.sentence-end}
+Let's point our web browser to <code>http://localhost:3000</code>{.inlineCode} to
+install it with the required configuration:</p>
+<figure class="mediaobject">
+<img src="images/B31467_14_1.png"
+style="width:528.0px; height:538.88px;" alt="Image 1" />
+</figure>
+<p>Figure 14.1 &ndash; Gitea service installation page</p>
+<p>In the preceding screenshot, we[]{#Chapter_14.xhtml#idx_3b7109be
+.index-entry
+index-entry=&ldquo;Quadlets:containers, integrating into systemd&rdquo;} defined the
+database's type, address, username, and password to complete the
+installation.[]{.sentence-end} Once done, we should be redirected to the
+login page, as follows:</p>
+<figure class="mediaobject">
+<img src="images/B31467_14_2.png"
+style="width:528.0px; height:397.64588528678297px;" alt="Image 2" />
+</figure>
+<p>Figure 14.2 &ndash; Gitea service login page</p>
+<p>Once the []{#Chapter_14.xhtml#idx_2f0573af .index-entry
+index-entry=&ldquo;Quadlets:containers, integrating into systemd&rdquo;}configuration
+is complete, we can generate and add the Quadlet configuration files to
+the right configuration path:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podlet podman run -d --network host --name mariadb -v /opt/var/lib/mariadb:/var/lib/mysql:Z -e MARIADB_DATABASE=gitea -e MARIADB_USER=gitea -e MARIADB_RANDOM_ROOT_PASSWORD=true --secret=MARIADB_PASSWORD,type=env docker.io/mariadb:latest &gt; /etc/containers/systemd/mariadb.container
+# podlet podman run -d --network host --name gitea -v /opt/var/lib/gitea/data:/data:Z docker.io/gitea/gitea:latest-rootless</code></pre></div>
+<p>Then, we can even manually edit the Gitea Quadlet unit file by adding a
+dependency order to the MariaDB service through the special
+<code>Requires</code>{.inlineCode} instruction:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># cat /etc/containers/systemd/gitea.container
+# gitea.container
+[Unit]
+Requires=mariadb.container
+[Container]
+ContainerName=gitea
+Image=docker.io/gitea/gitea:latest-rootless
+Network=host
+Volume=/opt/var/lib/gitea/data:/data:Z</code></pre></div>
+<p>Thanks to []{#Chapter_14.xhtml#idx_b3b1cb43 .index-entry
+index-entry=&ldquo;Quadlets:containers, integrating into systemd&rdquo;}the
+<code>Requires</code>{.inlineCode} instruction, systemd will start the MariaDB
+service first, then the Gitea service.</p>
+<p>Now, we can stop the containers by starting them through the systemd
+units:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman stop mariadb gitea
+mariadb
+gitea</code></pre></div>
+<p>Don't worry about the data &ndash; previously, we mapped both containers to
+a dedicated storage volume that holds the data.</p>
+<p>We need to let the systemd daemon know about the new unit files we just
+added.[]{.sentence-end} So, first, we need to run the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># systemctl daemon-reload</code></pre></div>
+<p>After that, we can start the services through systemd and check their
+statuses:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># systemctl start mariadb
+# systemctl status mariadb
+# systemctl status mariadb
+● mariadb.service
+     Loaded: loaded (/etc/containers/systemd/mariadb.container; generated)
+    Drop-In: /usr/lib/systemd/system/service.d
+             └─10-timeout-abort.conf
+     Active: active (running) since Thu 2025-08-07 16:11:15 UTC; 21s ago
+
+...
+# systemctl start gitea
+# systemctl status gitea
+● gitea.service
+     Loaded: loaded (/etc/containers/systemd/gitea.container; generated)
+    Drop-In: /usr/lib/systemd/system/service.d
+             └─10-timeout-abort.conf
+     Active: active (running) since Thu 2025-08-07 16:12:46 UTC; 4s ago
+...</code></pre></div>
+<p>Finally, we can[]{#Chapter_14.xhtml#idx_a87e2a27 .index-entry
+index-entry=&ldquo;Quadlets:containers, integrating into systemd&rdquo;} enable the
+service to start them when the OS boots; we just need to add the
+following sections for both the <code>mariadb.container</code>{.inlineCode} and
+<code>gitea.container</code>{.inlineCode} files:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>[Install]
+# Start by default on boot
+WantedBy=multi-user.target default.target</code></pre></div>
+<p>With that, we have set up and enabled two containerized system services
+on our host OS.[]{.sentence-end} This process is simple and could be
+useful for leveraging the containers' features and capabilities,
+extending them to system services.</p>
+<p>Once your <code>.container</code>{.inlineCode} files are placed in the systemd
+directories, the <code>podman quadlet</code>{.inlineCode} command provides a suite
+of tools for inspecting and managing them without having to manually
+sift through the <code>/etc/</code>{.inlineCode} or <code>/run/</code>{.inlineCode}
+directory.[]{.sentence-end} This command acts as an administrative
+bridge, allowing you to verify how Podman and systemd are collaborating
+to run your services.</p>
+<p>The most []{#Chapter_14.xhtml#idx_4ce36be9 .index-entry
+index-entry=&ldquo;Quadlets:containers, integrating into systemd&rdquo;}common task
+is verifying which Quadlets are currently recognized by the
+system.[]{.sentence-end} By running
+<code>podman quadlet -</code>{.inlineCode}<code>v</code>{.inlineCode}, you can see a verbose
+list of all files that the systemd generator has processed.</p>
+<p>Now, we are ready to move on to the next advanced topic, where we will
+learn how to generate Kubernetes resources.</p>
+<h1 id="h1_335" class="heading-1">Generating Kubernetes YAML resources<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Kubernetes has []{#Chapter_14.xhtml#idx_14c0b643 .index-entry
+index-entry=&ldquo;Kubernetes YAML resources:generating&rdquo;}become the de facto
+standard for multi-node container orchestration.[]{.sentence-end}
+Kubernetes clusters allow multiple Pods to be executed across nodes
+according to scheduling policies that reflect the node's load, labels,
+capabilities, or hardware resources (for example, GPUs).</p>
+<p>We have already described the concept of a Pod &ndash; a single execution
+group of one or more containers that share common namespaces (network,
+IPC, and, optionally, PID namespaces).[]{.sentence-end} In other words,
+we can think of Pods as sandboxes for containers.[]{.sentence-end}
+Containers inside a Pod are executed and thus started, stopped, or
+paused simultaneously.</p>
+<p>One of the most promising features that was introduced by Podman is the
+capability to generate Kubernetes resources in YAML
+format.[]{.sentence-end} Podman can read the configuration of containers
+or Pods and generate a <code>Pod</code>{.inlineCode} resource that is compliant
+with Kubernetes API specifications.</p>
+<p>Along with Pods, we can generate
+Service[]{#Chapter_14.xhtml#idx_4bd812f7 .index-entry
+index-entry=&ldquo;PersistentVolumeClaim (PVC)&rdquo;} and <strong>PersistentVolumeClaim</strong>
+(<strong>PVC</strong>) resources as well, which reflect the configurations of the
+port mappings and volumes that are mounted inside containers.</p>
+<p>We can use the generated Kubernetes resources inside Podman itself as an
+alternative to the Docker Compose stacks or apply them inside a
+Kubernetes cluster to orchestrate the execution of simple Pods.</p>
+<p>Kubernetes has many ways to orchestrate how workloads are executed:
+Deployments, StatefulSets, DaemonSets, Jobs, and
+CronJobs.[]{.sentence-end} In every case, Pods are their
+workload-minimal execution units, and the orchestration logic changes
+based on that specific behavior.[]{.sentence-end} This means that we can
+take a Pod resource that's been generated by Podman and easily adapt it
+to be orchestrated in a more complex object, such as a Deployment, which
+manages replicas and version rollouts of our applications, or a
+DaemonSet, which guarantees that a singleton Pod instance is created for
+every cluster node.</p>
+<p>Now, let's learn how to generate Kubernetes YAML resources with Podman.</p>
+<h2 id="h2_336" class="heading-2">Generating basic Pod resources from running containers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>The basic []{#Chapter_14.xhtml#idx_9659029c .index-entry
+index-entry=&ldquo;basic Pod resources:generating, from running containers&rdquo;}command
+to generate a Kubernetes resource from Podman is
+<code>podman kube</code>{.inlineCode}<code> generate</code>{.inlineCode}, followed by various
+options and arguments, as shown in the following code:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman kube generate [options] {CONTAINER|POD|VOLUME}</code></pre></div>
+<p>We can apply this command to a running container, Pod, or existing
+volume.[]{.sentence-end} The command also allows you to use the
+<code>-s, --service</code>{.inlineCode} option to generate <code>Service</code>{.inlineCode}
+resources and <code>-f, --filename</code>{.inlineCode} to export contents to a file
+(the default is to standard output).</p>
+<p>Let's start with a basic example of a <code>Pod</code>{.inlineCode} resource
+that's been generated from a running container.[]{.sentence-end} First,
+we will start a rootless Nginx container:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run -d \
+  -p 8080:80 --name nginx \
+  docker.io/library/nginx</code></pre></div>
+<p>When the container is created, we can generate our Kubernetes
+<code>Pod</code>{.inlineCode} resource:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman kube generate nginx
+# Save the output of this file and use kubectl create -f to import
+# it into Kubernetes.
+#
+# Created with podman-5.2.5
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: &#34;2025-08-07T16:19:45Z&#34;
+  labels:
+    app: nginx-pod
+  name: nginx-pod
+spec:
+  containers:
+  - args:
+    - nginx
+    - -g
+    - daemon off;
+    image: docker.io/library/nginx:latest
+    name: nginx
+    ports:
+    - containerPort: 80
+      hostPort: 8080</code></pre></div>
+<p>Let's describe the []{#Chapter_14.xhtml#idx_b049d65b .index-entry
+index-entry=&ldquo;basic Pod resources:generating, from running containers&rdquo;}generated
+output.[]{.sentence-end} Every new Kubernetes resource is always
+composed of at least four fields:</p>
+<ul>
+<li><code>apiVersion</code>{.inlineCode}: This field describes the API version
+schema of the resource.[]{.sentence-end} The <code>Pod</code>{.inlineCode}
+object belongs to the <code>v1</code>{.inlineCode} version of the
+<code>core</code>{.inlineCode} APIs of Kubernetes.</li>
+<li><code>kind</code>{.inlineCode}: This field defines the resource kind, which is
+<code>Pod</code>{.inlineCode} in our example.</li>
+<li><code>metadata</code>{.inlineCode}: This field is an object that holds a set of
+resource metadata that usually includes <code>name</code>{.inlineCode},
+<code>namespace</code>{.inlineCode}, <code>labels</code>{.inlineCode}, and
+<code>annotations</code>{.inlineCode}, along with additional dynamic metadata
+that's created at runtime, such as
+<code>creationTimestamp</code>{.inlineCode}, <code>resourceVersion</code>{.inlineCode}, or
+the resource's <code>uid</code>{.inlineCode}.</li>
+<li><code>spec</code>{.inlineCode}: This field holds resource specifications and
+varies among different resources.[]{.sentence-end} For example, a
+<code>Pod</code>{.inlineCode} resource will contain a list of containers, along
+with their startup arguments, volumes, ports, or security contexts.</li>
+</ul>
+<p>All the information that's embedded inside a Pod resource is enough to
+start the Pod inside a Kubernetes cluster.[]{.sentence-end} Along with
+the fields described previously, a fifth <code>status</code>{.inlineCode} field is
+dynamically created when the Pod is running to describe its execution
+status.</p>
+<p>From the generated output, we can notice an <code>args</code>{.inlineCode} list for
+every container, along with their startup commands, arguments, and
+options.</p>
+<p>When you're generating a Pod from a container with mapped ports, the
+following <code>ports</code>{.inlineCode} list is created inside the Pod resource:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ports:
+    - containerPort: 80
+      hostPort: 8080</code></pre></div>
+<p>This means that []{#Chapter_14.xhtml#idx_0e2bed52 .index-entry
+index-entry=&ldquo;basic Pod resources:generating, from running containers&rdquo;}port
+<code>80</code>{.inlineCode} must be exposed to the container and port
+<code>8080</code>{.inlineCode} must be exposed on the host running
+it.[]{.sentence-end} This information will be used by Podman when we
+create containers and Pods with the
+<code>podman kube</code>{.inlineCode}<code> play</code>{.inlineCode} command, as we will see
+in the next section.</p>
+<p>We can apply the output of the
+<code>podman kube</code>{.inlineCode}<code> generate</code>{.inlineCode} command directly to a
+Kubernetes cluster or save it to a file.[]{.sentence-end} To save it to
+a file, we can use the <code>-f</code>{.inlineCode} option:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman kube generate nginx -f nginx-pod.yaml</code></pre></div>
+<p>To apply the []{#Chapter_14.xhtml#idx_734208f4 .index-entry
+index-entry=&ldquo;kubectl&rdquo;}generated output to a running Kubernetes cluster,
+we can use the Kubernetes CLI tool, <strong>kubectl</strong>.[]{.sentence-end} The
+<code>kubectl create</code>{.inlineCode} command applies a resource object inside
+the cluster:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman kube generate nginx | kubectl create -f -</code></pre></div>
+<p>The basic Pod generation command can be enriched by creating the related
+Kubernetes services, as described in the next subsection.</p>
+<h2 id="h2_337" class="heading-2">Generating Pods and Services from running containers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Pods[]{#Chapter_14.xhtml#idx_86a4f572 .index-entry
+index-entry=&ldquo;Pods:generating, from running containers&rdquo;} running inside a
+Kubernetes cluster obtain unique IP addresses on a software-defined
+network that's managed by the default network plugin.</p>
+<p>These IPs are not routed externally &ndash; we can only reach the Pod's IP
+address from within the cluster.[]{.sentence-end} However, we need a
+layer to balance multiple replicas of the same Pods and provide a DNS
+resolution for a single abstraction frontend.[]{.sentence-end} In other
+words, our application must be able to query for a given service name
+and receive a unique IP address that abstracts from the Pods' IPs,
+regardless of the number of replicas.</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>Native, cluster-scoped DNS name resolution in
+[]{#Chapter_14.xhtml#idx_de0cbcba .index-entry
+index-entry=&ldquo;CoreDNS service&rdquo;}Kubernetes is implemented with the
+<strong>CoreDNS</strong> service, which is started when the cluster control plane is
+bootstrapped.[]{.sentence-end} CoreDNS is delegated to resolve internal
+requests and to forward ones for external names to authoritative DNS
+servers outside the cluster.</p>
+<p>The[]{#Chapter_14.xhtml#idx_da5c1b13 .index-entry index-entry=&ldquo;Service&rdquo;}
+resource that describes the abstraction in one or more Pods in
+Kubernetes is called a <strong>Service</strong>.</p>
+<p>For example, we can have three replicas of the Nginx Pod running inside
+our cluster and expose them with a unique IP.[]{.sentence-end} It
+belongs to a <code>ClusterIP</code>{.inlineCode} type, and its allocation is
+dynamic when the[]{#Chapter_14.xhtml#idx_dda8deaa .index-entry
+index-entry=&ldquo;Service:generating, from running containers&rdquo;} service is
+created.[]{.sentence-end} <code>ClusterIP</code>{.inlineCode} Services are the
+default in Kubernetes, and their assigned IPs are only local to the
+cluster.</p>
+<p>We can also create <code>NodePort</code>{.inlineCode}-type Services that
+[]{#Chapter_14.xhtml#idx_d34c75e3 .index-entry
+index-entry=&ldquo;Network Address Translation (NAT)&quot;}use <strong>Network Address
+Translation</strong> (<strong>NAT</strong>) so that the service can be reached from the
+external world.[]{.sentence-end} We can do this by mapping the service
+VIP and port to a local port on the cluster worker nodes.</p>
+<p>If we have a cluster running on an infrastructure that allows dynamic
+load balancing (such as a public cloud provider), we can create
+<code>LoadBalancer</code>{.inlineCode}-type Services and have the provider manage
+ingress traffic load balancing for us.</p>
+<p>Pods running inside a Kubernetes cluster obtain unique IP addresses on a
+software-defined network managed by a network plugin.[]{.sentence-end}
+These IPs are not routed externally; they are only reachable from within
+the cluster.[]{.sentence-end} To expose these Pods and provide DNS
+resolution or internal load balancing, Kubernetes utilizes a
+<code>Service</code>{.inlineCode} resource.[]{.sentence-end} Podman allows you to
+create Services along with Pods by adding the <code>-s</code>{.inlineCode} option
+to the <code>podman kube</code>{.inlineCode}<code> generate</code>{.inlineCode}
+command.[]{.sentence-end} This allows them to be potentially reused
+inside a Kubernetes cluster.</p>
+<p>We should also consider that in a production Kubernetes environment, we
+may also find a <code>LoadBalancer</code>{.inlineCode} Service, which leverages
+cloud provider infrastructure to distribute traffic.[]{.sentence-end}
+Because Podman is a []{#Chapter_14.xhtml#idx_ce5d4894 .index-entry
+index-entry=&ldquo;Service:generating, from running containers&rdquo;}single-node
+engine, it does not support the <code>LoadBalancer</code>{.inlineCode} type; load
+balancing across multiple nodes does not apply to a standalone
+deployment.[]{.sentence-end} The goal of the
+<code>podman generate kube</code>{.inlineCode} command is to be a starting point,
+so the user can add additional details to Podman's YAML and produce the
+deployment that they really intended.</p>
+<p>The following example is a variation of the previous one and generates
+the Service resource along with the previously described Pod:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman kube generate -s nginx
+# Save the output of this file and use kubectl create -f to import
+# it into Kubernetes.
+#
+# Created with podman-4.0.0-rc4
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: &#34;2022-02-12T21:54:02Z&#34;
+  labels:
+    app: nginxpod
+  name: nginx_pod
+spec:
+  ports:
+  - name: &#34;80&#34;
+    nodePort: 30582
+    port: 80
+    targetPort: 80
+  selector:
+    app: nginxpod
+  type: NodePort
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: &#34;2022-02-12T21:54:02Z&#34;
+  labels:
+    app: nginxpod
+  name: nginx_pod
+spec:
+  containers:
+  - args:
+    - nginx
+    - -g
+    - daemon off;
+    image: docker.io/library/nginx:latest
+    name: nginx
+    ports:
+    - containerPort: 80
+      hostPort: 8080
+    securityContext:
+      capabilities:
+        drop:
+        - CAP_MKNOD
+        - CAP_NET_RAW
+        - CAP_AUDIT_WRITE</code></pre></div>
+<p>The generated output[]{#Chapter_14.xhtml#idx_8a19df72 .index-entry
+index-entry=&ldquo;Service:generating, from running containers&rdquo;} contains,
+along with the Pod resource, a Service resource that exposes the Nginx
+Pod using a selector field.[]{.sentence-end} The selector matches all
+the Pods with the <code>app: nginxpod</code>{.inlineCode} label.</p>
+<p>When the service is created inside a Kubernetes cluster, an internal,
+non-routed VIP is allocated for the service.[]{.sentence-end} Since this
+is a <code>NodePort</code>{.inlineCode}-type service, a <strong>Destination NAT</strong>
+(<strong>DNAT</strong>) rule is []{#Chapter_14.xhtml#idx_a63e608c .index-entry
+index-entry=&ldquo;Destination NAT (DNAT) rule&rdquo;}created to match incoming
+traffic on all the cluster nodes on port <code>30582</code>{.inlineCode} and
+forward it to the service IP.</p>
+<p>By default, Podman generates <code>NodePort</code>{.inlineCode}-type
+services.[]{.sentence-end} Whenever a container or Pod is decorated with
+a port mapping, Podman populates the <code>ports</code>{.inlineCode} object with a
+list of ports and their related <code>nodePort</code>{.inlineCode} mappings inside
+the manifest.</p>
+<p>In our use case, we created the Nginx container by mapping its port,
+<code>80</code>{.inlineCode}, to port <code>8080</code>{.inlineCode} on the
+host.[]{.sentence-end} Here, Podman generated a Service that maps the
+container's port, <code>80</code>{.inlineCode}, to port <code>30582</code>{.inlineCode} on
+the cluster nodes.</p>
+<p>The value of []{#Chapter_14.xhtml#idx_6f3c59d5 .index-entry
+index-entry=&ldquo;Service:generating, from running containers&rdquo;}creating
+Kubernetes services and Pods from Podman is the ability to port the
+workload to a Kubernetes platform with little effort.</p>
+<p>In many cases, we work with composite, multi-tier applications that need
+to be exported and recreated together.[]{.sentence-end} Podman allows us
+to export multiple containers into a single Kubernetes Pod object or to
+create and export multiple Pods to gain more control over our
+application.[]{.sentence-end} In the next two subsections, we will see
+both cases applied to a WordPress application and try to find out what
+the best approach is.</p>
+<h2 id="h2_338" class="heading-2">Generating a composite application in a single Pod<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>In this first scenario, we []{#Chapter_14.xhtml#idx_d4e6b0c1
+.index-entry
+index-entry=&ldquo;composite application:generating, in single Pod&rdquo;}will
+implement a multi-tier application in a single Pod.[]{.sentence-end} The
+advantages of this approach are that we can leverage the Pod as a single
+unit that will execute multiple containers and that resource sharing
+across them is simplified.</p>
+<p>We will launch two containers &ndash; one for MySQL and one for WordPress &ndash;
+and export them as a single Pod resource.[]{.sentence-end} We will learn
+how to work around some minor adjustments to make it work seamlessly
+later during run tests.</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>The following examples have been created in a rootless context, but can
+be seamlessly applied to rootful containers too.</p>
+<p>A set of scripts that will be useful for launching the stacks and the
+generated Kubernetes YAML files is available in this book's GitHub
+repository at
+<a href="https://github.com/PacktPublishing/Podman-for-DevOps-Second-Edition/tree/main/Chapter14/kube" rel="external" target="_blank">[https://github.com/PacktPublishing/Podman-for-DevOps-Second-Edition/tree/main/Chapter14/kube]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>First, we must create two volumes that will be used later by the
+WordPress and MySQL containers:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ for vol in dbvol wpvol; do podman volume create $vol; done</code></pre></div>
+<p>Then, we must create an empty Pod named <code>wordpress-pod</code>{.inlineCode}
+with the necessary predefined port mappings:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman pod create --name wordpress-pod -p 8080:80</code></pre></div>
+<p>Now, we can populate our Pod by creating the WordPress and MySQL
+containers.[]{.sentence-end} Let's begin with the MySQL container:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman create \
+  --pod wordpress-pod --name db \
+  -v dbvol:/var/lib/mysql
+  -e MYSQL_ROOT_PASSWORD=myrootpasswd \
+  -e MYSQL_DATABASE=wordpress \
+  -e MYSQL_USER=wordpress \
+  -e MYSQL_PASSWORD=wordpress \
+  docker.io/library/mysql</code></pre></div>
+<p>Now, we can []{#Chapter_14.xhtml#idx_044e2581 .index-entry
+index-entry=&ldquo;composite application:generating, in single Pod&rdquo;}create the
+WordPress container:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman create \
+  --pod wordpress-pod --name wordpress \
+  -v wpvol:/var/www/html
+  -e WORDPRESS_DB_HOST=127.0.0.1 \
+  -e WORDPRESS_DB_USER=wordpress \
+  -e WORDPRESS_DB_PASSWORD=wordpress \
+  -e WORDPRESS_DB_NAME=wordpress \
+  docker.io/library/wordpress</code></pre></div>
+<p>Here, we can see that the <code>WORDPRESS_DB_HOST</code>{.inlineCode} variable has
+been set to <code>127.0.0.1</code>{.inlineCode} (the address of the loopback
+device) since the two containers are going to run in the same Pod and
+share the same network namespace.[]{.sentence-end} For this reason, we
+let the WordPress container know that the MySQL service is listening on
+the same loopback device.</p>
+<p>Finally, we can[]{#Chapter_14.xhtml#idx_ef114e74 .index-entry
+index-entry=&ldquo;composite application:generating, in single Pod&rdquo;} start the
+Pod with the <code>podman pod start</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman pod start wordpress-pod</code></pre></div>
+<p>We can inspect the running containers with <code>podman ps</code>{.inlineCode}:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman ps
+CONTAINER ID  IMAGE                                        COMMAND               CREATED            STATUS                PORTS                 NAMES
+19bf706f0eb8  localhost/podman-pause:4.0.0-rc4-1643988335                        About an hour ago  Up About an hour ago  0.0.0.0:8080-&gt;80/tcp  0400f8770627-infra
+f1da755a846c  docker.io/library/mysql:latest               mysqld                About an hour ago  Up About an hour ago  0.0.0.0:8080-&gt;80/tcp  db
+1f28ef82d58f  docker.io/library/wordpress:latest           apache2-foregroun...  About an hour ago  Up About an hour ago  0.0.0.0:8080-&gt;80/tcp  wordpress</code></pre></div>
+<p>Now, we can point our browser to <code>http://localhost:8080</code>{.inlineCode}
+and confirm the appearance of the WordPress setup dialog screen:</p>
+<figure class="mediaobject">
+<img src="images/B31467_14_3.png"
+style="width:304.1930680359435px; height:652.8px;" alt="Image 3" />
+</figure>
+<p>Figure 14.3 &ndash; WordPress setup dialog screen</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>The Pod also started a third <strong>infra</strong> container that initializes the
+Pod's network and the IPC namespaces of our example.[]{.sentence-end}
+The image is built directly in the background on the host the first time
+a Pod is created and executes a <code>catatonit</code>{.inlineCode} process, an
+<code>init</code>{.inlineCode} micro container written in C that's designed to
+handle system signals and zombie process reaping.</p>
+<p>This behavior of the Pod's infra image is directly inherited from
+Kubernetes's Pod life cycle.[]{.sentence-end} For additional details,
+refer to the following link:
+<a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/" rel="external" target="_blank">[https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>Now, we are []{#Chapter_14.xhtml#idx_da7944d9 .index-entry
+index-entry=&ldquo;composite application:generating, in single Pod&rdquo;}ready to
+generate our Pod YAML manifest with the
+<code>podman kube</code>{.inlineCode}<code> generate</code>{.inlineCode} command and save it
+to a file for reuse:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman kube generate wordpress-pod \
+  -f wordpress-single-pod.yaml</code></pre></div>
+<p>The preceding command generates a file with the following content:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># Save the output of this file and use kubectl create -f to import
+# it into Kubernetes.
+#
+# Created with podman-5.4.2
+apiVersion: v1
+kind: Pod
+metadata:
+ annotations:
+  io.kubernetes.cri-o.SandboxID/wordpress: 6f7d22b98e403ef9804e5d141628cf5abbe03f64b3e133065ddd78c30ea6aea4
+ creationTimestamp: &#34;2026-02-13T20:41:28Z&#34;
+ labels:
+  app: wordpress-pod
+ name: wordpress-pod
+spec:
+ containers:
+ - args:
+  - apache2-foreground
+  env:
+  - name: WORDPRESS_DB_HOST
+   value: 127.0.0.1
+  - name: WORDPRESS_DB_PASSWORD
+   value: wordpress
+  - name: WORDPRESS_DB_NAME
+   value: wordpress
+  - name: WORDPRESS_DB_USER
+   value: wordpress
+  image: docker.io/library/wordpress:latest
+  name: wordpress
+  ports:
+  - containerPort: 80
+   hostPort: 8080
+  volumeMounts:
+  - mountPath: /var/www/html
+   name: wpvol-pvc
+ volumes:
+ - name: wpvol-pvc
+  persistentVolumeClaim:
+   claimName: wpvol</code></pre></div>
+<p>Our YAML []{#Chapter_14.xhtml#idx_bac60f0e .index-entry
+index-entry=&ldquo;composite application:generating, in single Pod&rdquo;}file holds
+a single Pod resource with two containers inside.[]{.sentence-end} Note
+that the previously defined environment variables have been created
+correctly inside our containers (when using Podman v4.0.0 or later).</p>
+<p>Also, notice that the two container volumes have been mapped to PVC
+objects.</p>
+<p>PVCs are Kubernetes resources that are used to request (in other words,
+claim) a storage volume resource that satisfies a specific capacity and
+consumption modes.[]{.sentence-end} The attached storage volume resource
+is called []{#Chapter_14.xhtml#idx_e17b370c .index-entry
+index-entry=&ldquo;PersistentVolume (PV)&quot;}a <strong>PersistentVolume</strong> (<strong>PV</strong>) and
+can be created manually or automatically by a
+<code>StorageClass</code>{.inlineCode} resource that leverages a storage driver
+that's compliant with []{#Chapter_14.xhtml#idx_3790e382 .index-entry
+index-entry=&ldquo;Container Storage Interface (CSI)&quot;}the <strong>Container Storage
+Interface</strong> (<strong>CSI</strong>).</p>
+<p>When we create a PVC in Kubernetes, the default
+<code>StorageClass</code>{.inlineCode} provisions a PV that satisfies our storage
+requests, and the two resources are bound together.[]{.sentence-end}
+This approach decouples the storage request from storage provisioning
+and makes storage consumption in Kubernetes more portable.</p>
+<p>When Podman generates Kubernetes YAML files, PVC resources are not
+exported by default.[]{.sentence-end} However, we can also export the
+PVC resources to recreate them in Kubernetes with the
+<code>podman kube</code>{.inlineCode}<code> generate</code>{.inlineCode}<code> </code>{.inlineCode}<code>&lt;</code>{.inlineCode}<code>VOLUME</code>{.inlineCode}<code>_NAME</code>{.inlineCode}<code>&gt;</code>{.inlineCode}
+command.</p>
+<p>The following command exports the WordPress application, along with its
+volume definitions, as a PVC:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman kube generate wordpress-pod wpvol dbvol</code></pre></div>
+<p>The following is an []{#Chapter_14.xhtml#idx_00f5156e .index-entry
+index-entry=&ldquo;composite application:generating, in single Pod&rdquo;}example of
+the <code>dbvol</code>{.inlineCode} volume translated into a PVC:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    volume.podman.io/driver: local
+  creationTimestamp: &#34;2026-02-13T20:42:11Z &#34;
+  name: dbvol
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+status: {}</code></pre></div>
+<p>This approach has the advantage of providing the necessary PVC
+definitions to recreate the whole application in a Kubernetes cluster,
+but it is not necessary to recreate the volume resources in Podman: if
+they're not available, an empty volume with the same name will be
+created automatically.</p>
+<p>To recreate all the resource dependencies in a Kubernetes cluster, we
+can also export the application's <code>Service</code>{.inlineCode} resource.</p>
+<p>The following command exports everything in our WordPress example,
+including Pods, services, and volumes:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman kube generate -s wordpress-pod wpvol dbvol</code></pre></div>
+<p>Before we move on, let's[]{#Chapter_14.xhtml#idx_ca742f72 .index-entry
+index-entry=&ldquo;composite application:generating, in single Pod&rdquo;} briefly
+dig into the single-Pod approach logic that was described in this
+subsection and look at its advantages and possible limitations.</p>
+<p>One great advantage of executing all the containers in a single Pod is
+the simpler networking configuration &ndash; one network namespace is shared
+by all the running containers.[]{.sentence-end} This also means that we
+don't have to create a dedicated Podman network to let the containers
+communicate with each other.</p>
+<p>On the other hand, this approach does not reflect the common Kubernetes
+pattern of executing Pods.[]{.sentence-end} In Kubernetes, we would
+prefer to split the WordPress Pod and the MySQL Pod to manage them
+independently and have different services associated with
+them.[]{.sentence-end} More separation implies more control and the
+chance to update independently.</p>
+<p>In the next subsection, you'll learn how to replicate this approach and
+generate multiple Pods for every application tier.</p>
+<h2 id="h2_339" class="heading-2">Generating composite applications with multiple Pods<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>One of the[]{#Chapter_14.xhtml#idx_9f39e8ef .index-entry
+index-entry=&ldquo;composite applications:generating, with multiple Pods&rdquo;}
+features of Docker Compose is that you can create different independent
+containers that communicate with each other using a service abstraction
+concept that is decoupled from the container's execution.</p>
+<p>The Podman community (and many of its users) believe that
+standardization toward Kubernetes YAML manifests to describe complex
+workloads is useful to get closer to the mainstream orchestration
+solution.</p>
+<p>For this reason, the approach we'll describe in this section can become
+a full replacement for Docker Compose while providing Kubernetes
+portability at the same time.[]{.sentence-end} First, we will learn how
+to prepare an environment that can be used to generate the YAML
+manifests.[]{.sentence-end} After that, we can get rid of the workloads
+and only use the Kubernetes YAML to run our workloads.</p>
+<p>The following example can be executed with rootless containers and
+networks.</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>Before continuing, make sure that the previous example's Pod and
+containers have been completely removed, along with their volumes, to
+prevent any issues with port assignment or WordPress content
+initialization.[]{.sentence-end} Please refer to the commands in this
+book's GitHub repository as a reference:
+<a href="https://github.com/PacktPublishing/Podman-for-DevOps-Second-Edition/tree/main/AdditionalMaterial" rel="external" target="_blank">[https://github.com/PacktPublishing/Podman-for-DevOps-Second-Edition/tree/main/AdditionalMaterial]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>First, we need to[]{#Chapter_14.xhtml#idx_73ab4cfb .index-entry
+index-entry=&ldquo;composite applications:generating, with multiple Pods&rdquo;}
+create a network.[]{.sentence-end} We have chosen the name
+<code>kubenet</code>{.inlineCode} to identify it easily and leave it with the
+default configuration for the sake of our example:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman network create kubenet</code></pre></div>
+<p>Once the network has been created, the two <code>dbvol</code>{.inlineCode} and
+<code>wpvol</code>{.inlineCode} volumes must be created:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ for vol in wpvol dbvol; do podman volume create $vol; done</code></pre></div>
+<p>We want to generate two distinct Pods &ndash; one for each
+container.[]{.sentence-end} First, we must create the MySQL Pod and its
+related container:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman pod create -p 3306:3306 \
+  --network kubenet \
+  --name mysql-pod
+$ podman create --name db \
+  --pod mysql-pod \
+  -v dbvol:/var/lib/mysql \
+  -e MYSQL_ROOT_PASSWORD=myrootpasswd\
+  -e MYSQL_DATABASE=wordpress \
+  -e MYSQL_USER=wordpress \
+  -e MYSQL_PASSWORD=wordpress \
+  docker.io/library/mysql</code></pre></div>
+<p>Notice the port []{#Chapter_14.xhtml#idx_e59d4ed2 .index-entry
+index-entry=&ldquo;composite applications:generating, with multiple Pods&rdquo;}mapping,
+which we can use to access the MySQL service from a client and create
+the correct port mapping later in the Kubernetes service.</p>
+<p>Now, let's create the WordPress Pod and container:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman pod create -p 8080:80 \
+  --network kubenet \
+  --name wordpress-pod
+$ podman create --name wordpress \
+  --pod wordpress-pod \
+  -v wpvol:/var/www/html \
+  -e WORDPRESS_DB_HOST=mysql-pod \
+  -e WORDPRESS_DB_USER=wordpress \
+  -e WORDPRESS_DB_PASSWORD=wordpress \
+  -e WORDPRESS_DB_NAME=wordpress \
+  docker.io/library/wordpress</code></pre></div>
+<p>There is a very important variable in the preceding command that can be
+considered the key to this approach: <code>WORDPRESS_DB_HOST</code>{.inlineCode} is
+populated with the <code>mysql-pod</code>{.inlineCode} string, which is the name
+that's been given to the MySQL Pod.</p>
+<p>In Podman, the Pod's name will act as the service name of the
+application, and the DNS daemon associated with the network
+(<code>aardvark-dns</code>{.inlineCode} since Podman 4) will directly resolve the
+Pod name to the associated IP address.[]{.sentence-end} This is a key
+feature that makes multi-Pod applications a perfect replacement for
+Compose stacks.</p>
+<p>Now, we can start the two Pods and have all the containers up and
+running:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman pod start mysql-pod &amp;&amp;
+  podman pod start wordpress-pod</code></pre></div>
+<p>Once again, pointing our browsers to
+<code>http://localhost:8080</code>{.inlineCode} should lead us to the WordPress
+first setup page (if everything was set up correctly).</p>
+<p>Now, we are ready to export our Kubernetes YAML
+manifest.[]{.sentence-end} We can choose to simply export the two Pod
+resources or create a full export that also includes services and
+volumes.[]{.sentence-end} This is useful if you need to import to a
+Kubernetes cluster.</p>
+<p>Let's start with the []{#Chapter_14.xhtml#idx_06a9c93d .index-entry
+index-entry=&ldquo;composite applications:generating, with multiple Pods&rdquo;}basic
+version:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman kube generate \
+  -f wordpress-multi-pod-basic.yaml \
+  wordpress-pod \
+  mysql-pod</code></pre></div>
+<p>The output of the preceding code will contain nothing but the two Pod
+resources:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># Save the output of this file and use kubectl create -f to import
+# it into Kubernetes.
+#
+# Created with podman-5.4.2
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: &#34;2026-02-13T20:43:21Z&#34;
+  labels:
+    app: wordpress-pod
+  name: wordpress-pod
+spec:
+  containers:
+  - args:
+    - apache2-foreground
+    env:
+    - name: WORDPRESS_DB_NAME
+      value: wordpress
+    - name: WORDPRESS_DB_HOST
+      value: mysql-pod
+    - name: WORDPRESS_DB_PASSWORD
+      value: wordpress
+    - name: WORDPRESS_DB_USER
+      value: wordpress
+    image: docker.io/library/wordpress:latest
+    name: wordpress
+    ports:
+    - containerPort: 80
+      hostPort: 8080
+    resources: {}
+    securityContext:
+      capabilities:
+        drop:
+        - CAP_MKNOD
+        - CAP_NET_RAW
+        - CAP_AUDIT_WRITE
+    volumeMounts:
+    - mountPath: /var/www/html
+      name: wpvol-pvc
+  restartPolicy: Never
+  volumes:
+  - name: wpvol-pvc
+    persistentVolumeClaim:
+      claimName: wpvol
+status: {}
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: &#34;2026-02-13T20:44:38Z&#34;
+  labels:
+    app: mysql-pod
+  name: mysql-pod
+spec:
+  containers:
+  - args:
+    - mysqld
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: myrootpasswd
+    - name: MYSQL_DATABASE
+      value: wordpress
+    - name: MYSQL_USER
+      value: wordpress
+    - name: MYSQL_PASSWORD
+      value: wordpress
+    image: docker.io/library/mysql:latest
+    name: db
+    ports:
+    - containerPort: 3306
+      hostPort: 3306
+    resources: {}
+    securityContext:
+      capabilities:
+        drop:
+        - CAP_MKNOD
+        - CAP_NET_RAW
+        - CAP_AUDIT_WRITE
+    volumeMounts:
+    - mountPath: /var/lib/mysql
+      name: dbvol-pvc
+  restartPolicy: Never
+  volumes:
+  - name: dbvol-pvc
+    persistentVolumeClaim:
+      claimName: dbvol
+status: {}</code></pre></div>
+<p>The resulting file is also available in this book's GitHub repository:</p>
+<p><a href="https://github.com/PacktPublishing/Podman-for-DevOps-Second-Edition/blob/main/Chapter14/kube/wordpress-multi-pod-basic.yaml" rel="external" target="_blank">[https://github.com/PacktPublishing/Podman-for-DevOps-Second-Edition/blob/main/Chapter14/kube/wordpress-multi-pod-basic.yaml]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>As we will see in the next section, this YAML file is enough to recreate
+a fully working WordPress []{#Chapter_14.xhtml#idx_8580d9cb .index-entry
+index-entry=&ldquo;composite applications:generating, with multiple Pods&rdquo;}application
+on Podman from scratch.[]{.sentence-end} We can persist and version it
+on a source control repository such as Git for future reuse.</p>
+<p>The following code exports the two Pod resources, along with the PVC and
+Service resources:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman kube generate -s \
+  -f wordpress-multi-pod-full.yaml \
+  wordpress-pod \
+  mysql-pod \
+  dbvol \
+  wpvol</code></pre></div>
+<p>The output of this command is also available in this book's GitHub
+repository:</p>
+<p><a href="https://github.com/PacktPublishing/Podman-for-DevOps-Second-Edition/blob/main/Chapter14/kube/wordpress-multi-pod-full.yaml" rel="external" target="_blank">[https://github.com/PacktPublishing/Podman-for-DevOps-Second-Edition/blob/main/Chapter14/kube/wordpress-multi-pod-full.yaml]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>This full manifest is useful for importing and testing our application
+on a Kubernetes cluster, where the Service and PVC resources are
+necessary.</p>
+<p>Now, we are ready to test our generated resources in Podman and learn
+how to reproduce full stack deployments with simple operations.</p>
+<h1 id="h1_340" class="heading-1">Running Kubernetes resource files in Podman<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Now []{#Chapter_14.xhtml#idx_872cb41b .index-entry
+index-entry=&ldquo;Kubernetes resource files:running, in Podman&rdquo;}that we've
+learned how to generate Kubernetes []{#Chapter_14.xhtml#idx_645deb0e
+.index-entry
+index-entry=&ldquo;Podman:Kubernetes resource files, running&rdquo;}YAML files
+containing the necessary resources to deploy our applications, we want
+to test them in a real scenario.</p>
+<p>For this book, we will use the WordPress application again, both in its
+simple form with a single container and in its multi-Pod variation.</p>
+<p>The following examples are also available in this book's GitHub
+repository &ndash; you can choose to use the resources that have been
+generated from your labs or use the prepared manifests in this book's
+repository.</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>Don't forget to clean up all the previous workloads before testing the
+creation of Kubernetes resources with Podman.</p>
+<p>For all our examples, we will use the
+<code>podman kube</code>{.inlineCode}<code> play</code>{.inlineCode} command.[]{.sentence-end}
+It offers us an easy and intuitive interface for managing the execution
+of complex stacks with a good degree of customization.</p>
+<p>The first example will be based on the single-Pod manifest:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman kube play wordpress-single-pod.yaml</code></pre></div>
+<p>The preceding command creates a Pod called <code>wordpress-pod</code>{.inlineCode}
+that's composed of the two containers, along with the necessary
+volumes.[]{.sentence-end} Let's inspect the results and see what
+happened:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman pod ps
+POD ID        NAME           STATUS      CREATED         INFRA ID      # OF CONTAINERS
+5f8ecfe66acd  wordpress-pod  Running     4 minutes ago  46b4bdfe6a08  3</code></pre></div>
+<p>We can also check the running containers.[]{.sentence-end} Here, we
+expect to see the two WordPress and MySQL containers and the third
+infra-related <code>podman-pause</code>{.inlineCode}:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman ps
+CONTAINER ID  IMAGE                                        COMMAND               CREATED         STATUS             PORTS                 NAMES
+46b4bdfe6a08  localhost/podman-pause:4.0.0-rc4-1643988335                        4 minutes ago  Up 4 minutes ago  0.0.0.0:8080-&gt;80/tcp  5f8ecfe66acd-infra
+ef88a5c8d1e5  docker.io/library/mysql:latest               mysqld                4 minutes ago  Up 4 minutes ago  0.0.0.0:8080-&gt;80/tcp  wordpress-pod-db
+76c6b6328653  docker.io/library/wordpress:latest           apache2-foregroun...  4 minutes ago  Up 4 minutes ago  0.0.0.0:8080-&gt;80/tcp  wordpress-pod-wordpress</code></pre></div>
+<p>Finally, we can verify whether the <code>dbvol</code>{.inlineCode} and
+<code>wpvol</code>{.inlineCode} volumes have been created:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman volume ls
+DRIVER      VOLUME NAME
+local       dbvol
+local       wpvol</code></pre></div>
+<p>Before we look[]{#Chapter_14.xhtml#idx_45da0658 .index-entry
+index-entry=&ldquo;Kubernetes resource files:running, in Podman&rdquo;} at the more
+articulated (and interesting) example[]{#Chapter_14.xhtml#idx_e6bff69d
+.index-entry index-entry=&ldquo;Podman:Kubernetes resource files, running&rdquo;}
+with the multi-Pod manifest, we must clean up the
+environment.[]{.sentence-end} We can do this manually or by using the
+<code>--down</code>{.inlineCode} option of the
+<code>podman kube</code>{.inlineCode}<code> play</code>{.inlineCode} command, which
+immediately stops and removes the running Pods:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman kube play --down wordpress-single-pod.yaml
+Pods stopped:
+5f8ecfe66acd01b705f38cd175fad222890ab612bf572807082f30ab37fd0b88
+Pods removed:
+5f8ecfe66acd01b705f38cd175fad222890ab612bf572807082f30ab37fd0b88</code></pre></div>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>Volumes are not removed by default since it can be useful to keep them
+if containers have already written data on them, and, of course,
+deleting volumes could be a potential risk for losing important data, so
+Podman is much more cautious there.[]{.sentence-end} To remove unused
+volumes, use the <code>podman volume prune</code>{.inlineCode} command.</p>
+<p>Now, let's run the multi-Pod example using the basic exported manifest:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman kube play --network kubenet \
+  wordpress-multi-pod-basic.yaml</code></pre></div>
+<p>Notice the[]{#Chapter_14.xhtml#idx_6d6a4202 .index-entry
+index-entry=&ldquo;Kubernetes resource files:running, in Podman&rdquo;} additional
+<code>--network</code>{.inlineCode} argument, which is used to specify the network
+that the Pods will be attached to.[]{.sentence-end} This is necessary
+information since the Kubernetes YAML file contains no information about
+Podman networks.[]{.sentence-end} Our Pods
+[]{#Chapter_14.xhtml#idx_af2a8b0d .index-entry
+index-entry=&ldquo;Podman:Kubernetes resource files, running&rdquo;}will be executed
+in rootless mode and attached to the rootless <code>kubenet</code>{.inlineCode}
+network.</p>
+<p>We can check that the two Pods have been created correctly by using the
+following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman pod ps
+POD ID        NAME           STATUS      CREATED        INFRA ID      # OF CONTAINERS
+c9d775da0379  mysql-pod      Running     8 minutes ago  71c93fa6080b  2
+3b497cbaeebc  wordpress-pod  Running     8 minutes ago  0c52ee133f0f  2</code></pre></div>
+<p>Now, we can inspect the running containers.[]{.sentence-end} The strings
+that are highlighted in the following code represent the main workload
+to differentiate from the infra containers:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman ps --format &#34;{{.Image }} {{.Names}}&#34;
+localhost/podman-pause:5.4.2-1743552000 3b497cbaeebc-infra
+docker.io/library/wordpress:latest wordpress-pod-wordpress
+localhost/podman-pause:5.4.2-1743552000 c9d775da0379-infra
+docker.io/library/mysql:latest mysql-pod-db</code></pre></div>
+<p>The <code>podman volume ls</code>{.inlineCode} command confirms the existence of
+the two volumes:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman volume ls
+DRIVER      VOLUME NAME
+local       dbvol
+local       wpvol</code></pre></div>
+<p>Finally, let's inspect the DNS behavior.[]{.sentence-end} On Podman 4
+and newer versions, the name resolution for custom networks is managed
+by the <code>aardvark-dns</code>{.inlineCode} daemon, while on Podman 3, it is
+managed by <code>dnsmasq</code>{.inlineCode}.[]{.sentence-end} Since we assume that
+you're using Podman 5 for these examples, let's look at its DNS
+configuration.[]{.sentence-end} For rootless networks, we can find the
+managed records in the
+<code>/run/user/</code>{.inlineCode}<code>&lt;</code>{.inlineCode}<code>UID</code>{.inlineCode}<code>&gt;</code>{.inlineCode}<code>/containers/networks/aardvark-dns/</code>{.inlineCode}<code>&lt;</code>{.inlineCode}<code>NETWORK_NAME</code>{.inlineCode}<code>&gt;</code>{.inlineCode}
+file.</p>
+<p>In our example, the []{#Chapter_14.xhtml#idx_b83e171b .index-entry
+index-entry=&ldquo;Kubernetes resource files:running, in Podman&rdquo;}configuration
+for the <code>kubenet</code>{.inlineCode} network is
+as[]{#Chapter_14.xhtml#idx_e4436794 .index-entry
+index-entry=&ldquo;Podman:Kubernetes resource files, running&rdquo;} follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ cat /run/user/1000/containers/networks/aardvark-dns/kubenet
+10.89.0.1
+0c52ee133f0fec5084f25bd89ad8bd0f6af2fc46d696e2b8161864567b0a920b 10.89.0.4  wordpress-pod,0c52ee133f0f
+71c93fa6080b6a3bfe1ebad3e164594c5fa7ea584e180113d2893eb67f6f3b56 10.89.0.5  mysql-pod,71c93fa6080b</code></pre></div>
+<p>The most amazing thing from this output is the confirmation that the
+name resolution now works at the Pod level, not at the container
+level.[]{.sentence-end} This is fair if we think that the Pod
+initialized the namespaces, including the network
+namespace.[]{.sentence-end} For this reason, we can treat the Pod name
+in Podman as a service name.</p>
+<p>Here, we demonstrated how the Kubernetes manifests that are generated
+with Podman can become a great replacement for the Docker Compose
+approach while being more portable.[]{.sentence-end} Now, let's learn
+how to import our generated resources into a test Kubernetes cluster.</p>
+<h1 id="h1_341" class="heading-1">Testing the results in Kubernetes<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In this section, we want to import the multi-Pod YAML file, which is
+enriched with the Service and PVC configurations, on Kubernetes.</p>
+<p>To provide a repeatable environment, we will
+[]{#Chapter_14.xhtml#idx_4e587015 .index-entry
+index-entry=&ldquo;minikube&rdquo;}use <strong>minikube</strong> (with a lowercase m), a portable
+solution, to create an all-in-one Kubernetes cluster as the local
+infrastructure.</p>
+<p>The minikube project aims to provide a local Kubernetes cluster on
+Linux, Windows, and macOS.[]{.sentence-end} It uses host virtualization
+to spin up a VM that runs the all-in-one cluster or containerization to
+create a control plane that runs inside a container.[]{.sentence-end} It
+also provides a large set of add-ons to extend cluster functionalities,
+such as ingress controllers, service meshes, registries, and logging.</p>
+<p>Another widely adopted []{#Chapter_14.xhtml#idx_41f8d9bb .index-entry
+index-entry=&ldquo;Kubernetes in Docker (KinD) project&rdquo;}alternative to
+spinning up a local Kubernetes cluster is the <strong>Kubernetes in Docker</strong>
+(<strong>KinD</strong>) project, which is not explored in this book.[]{.sentence-end}
+KinD runs a Kubernetes control plane inside a container that's driven
+by Docker or Podman.</p>
+<p>To set up minikube, users need virtualization support (KVM, VirtualBox,
+Hyper-V, Parallels, or VMware) or a container runtime such as Docker or
+Podman.</p>
+<p>For brevity, we will not cover the technical steps necessary to
+configure the virtualization support for the different OSs; instead, we
+will use a GNU/Linux distribution.</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>If you already own a running Kubernetes cluster or want to set up one in
+an alternative way, you can skip the next minikube configuration quick
+start and go to the <em>Running generated resource files in Kubernetes</em>
+subsection.</p>
+<h2 id="h2_342" class="heading-2">Setting up minikube<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Run the following commands to []{#Chapter_14.xhtml#idx_8ddfda1c
+.index-entry index-entry=&ldquo;minikube:setting up&rdquo;}download and install the
+latest <code>minikube</code>{.inlineCode} binary:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+
+$ sudo install minikube-linux-amd64 /usr/local/bin/minikube</code></pre></div>
+<p>You can choose to run minikube with a virtualization or containerization
+driver.[]{.sentence-end} To run minikube as a VM on the KVM driver, you
+must install the <strong>Qemu/KVM</strong> and <strong>libvirt</strong> packages.</p>
+<p>On Fedora, run the []{#Chapter_14.xhtml#idx_8ce2b8a5 .index-entry
+index-entry=&ldquo;minikube:setting up&rdquo;}following command to install all the
+mandatory and default packages[]{#Chapter_14.xhtml#idx_d1d38b68
+.index-entry index-entry=&ldquo;libvirt package&rdquo;} using the
+<code>@virtualization</code>{.inlineCode} package group:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo dnf install @virtualization</code></pre></div>
+<p>Now, start and enable the <code>libvirtd</code>{.inlineCode} service:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo systemctl enable --now libvirtd</code></pre></div>
+<p>To grant the user running minikube the proper permissions, append it to
+the <code>libvirt</code>{.inlineCode} supplementary group (this operation requires
+a new login to load the new group):</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo usermod -aG libvirt $(whoami)</code></pre></div>
+<p>The following command statically configures the <code>kvm2</code>{.inlineCode}
+driver as the default:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ minikube config set driver kvm2</code></pre></div>
+<p>When the preceding command is executed for the first time, minikube will
+automatically download the proper <code>kvm2</code>{.inlineCode} driver binary
+before starting the VM.</p>
+<p>Alternatively, you can choose to run minikube as a containerized service
+with Docker or Podman.[]{.sentence-end} Assuming Podman is already
+installed, we just need to ensure that the user running minikube can run
+passwordless <code>sudo</code>{.inlineCode}.[]{.sentence-end} This is necessary
+since the Kubernetes cluster must run in a rootfull container, so
+privilege escalation is necessary.[]{.sentence-end} To allow
+passwordless privilege escalation for Podman, edit the
+<code>/etc/sudoers</code>{.inlineCode} file with the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo visudo</code></pre></div>
+<p>Once opened, add the following line to the end of the file to grant
+passwordless escalation for the Podman binary and save
+it.[]{.sentence-end} Remember to replace
+<code>&lt;</code>{.inlineCode}<code>username</code>{.inlineCode}<code>&gt;</code>{.inlineCode} with your
+user's name:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>&lt;username&gt; ALL=(ALL) NOPASSWD: /usr/bin/podman</code></pre></div>
+<p>The following command statically configures the <code>podman</code>{.inlineCode}
+driver as the default:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ minikube config set driver podman</code></pre></div>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>If your host is a VM running on a hypervisor such as KVM, and Podman is
+installed on the host, minikube will detect the environment and set up
+the default driver as <code>podman</code>{.inlineCode} automatically.</p>
+<p>To use minikube, users[]{#Chapter_14.xhtml#idx_9255f327 .index-entry
+index-entry=&ldquo;minikube:setting up&rdquo;} also need to install the Kubernetes
+CLI tool, kubectl.[]{.sentence-end} The following commands download and
+install the latest Linux release:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ version=$(curl -L -s https://dl.k8s.io/release/stable.txt) curl -LO &#34;https://dl.k8s.io/release/${version}/bin/linux/amd64/kubectl $ sudo install -o root -g root \
+  -m 0755 kubectl \
+  /usr/local/bin/kubectl</code></pre></div>
+<p>Now, we are ready to run our Kubernetes cluster with minikube.</p>
+<h2 id="h2_343" class="heading-2">Starting minikube<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>To []{#Chapter_14.xhtml#idx_b59f10a0 .index-entry
+index-entry=&ldquo;minikube:starting&rdquo;}start minikube as a VM, use the CRI-O
+container runtime inside the Kubernetes cluster:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ minikube start --driver=kvm2 --container-runtime=cri-o</code></pre></div>
+<p>The <code>--driver</code>{.inlineCode} option is not necessary if
+<code>kvm2</code>{.inlineCode} has already been configured as the default driver
+with the <code>minikube config set driver</code>{.inlineCode} command.</p>
+<p>To start minikube with Podman, use the CRI-O container runtime inside
+the cluster:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ minikube start --driver=podman --container-runtime=cri-o</code></pre></div>
+<p>Again, the <code>--driver</code>{.inlineCode} option is not necessary if
+<code>podman</code>{.inlineCode} has already been configured as the default driver
+with the <code>minikube config set driver</code>{.inlineCode} command.</p>
+<p>To ensure that the cluster has been created correctly, run the following
+command with the <code>kubectl</code>{.inlineCode} CLI.[]{.sentence-end} All the
+[]{#Chapter_14.xhtml#idx_c250b389 .index-entry
+index-entry=&ldquo;minikube:starting&rdquo;}Pods should have the
+<code>Running</code>{.inlineCode} status:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ kubectl get pods -A
+NAMESPACE     NAME                             READY   STATUS    RESTARTS   AGE
+kube-system   coredns-64897985d-gqnrn            1/1     Running   0          19s
+kube-system   etcd-minikube                      1/1     Running   0          27s
+kube-system   kube-apiserver-minikube            1/1     Running   0          27s
+kube-system   kube-controller-manager-minikube   1/1     Running   0          27s
+kube-system   kube-proxy-sj7xn                   1/1     Running   0          20s
+kube-system   kube-scheduler-minikube            1/1     Running   0          33s
+kube-system   storage-provisioner                1/1     Running   0          30s</code></pre></div>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>If one or more containers still have the
+<code>ContainerCreating</code>{.inlineCode} status, wait a little longer for the
+images to be pulled.</p>
+<p>Also, note that the output may differ slightly if you're running
+minikube with a Podman driver.[]{.sentence-end} In that case, an
+additional Pod named <code>kindnet</code>{.inlineCode} will be created to help
+manage CNI networking inside the cluster.</p>
+<p>With that, we have set everything up for a local Kubernetes environment
+and are ready to test our generated manifests.</p>
+<h2 id="h2_344" class="heading-2">Running generated resource files in Kubernetes<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>In the <em>Generating composite applications</em> <em>with multiple Pods</em> section,
+we learned how to export a manifest file
+from[]{#Chapter_14.xhtml#idx_4ef9d141 .index-entry
+index-entry=&ldquo;generated resource files:running, in Kubernetes&rdquo;} Podman
+that included the Pod[]{#Chapter_14.xhtml#idx_79ed857e .index-entry
+index-entry=&ldquo;Kubernetes:generated resource files, running&rdquo;} resources,
+along with the Service and PVC resources.[]{.sentence-end} The need to
+export this set of resources is related to the way Kubernetes handles
+workloads, storage, and exposed services.</p>
+<p>Kubernetes services are needed to provide a resolution mechanism, as
+well as internal load balancing.[]{.sentence-end} In our example, the
+<code>mysql-pod</code>{.inlineCode} Pod will be mapped to a homonymous
+<code>mysql-pod</code>{.inlineCode} service.</p>
+<p>PVCs are required to define a storage claim that starts provisioning PVs
+for our Pods.[]{.sentence-end} In minikube, automated provisioning is
+implemented by a local <code>StorageClass</code>{.inlineCode} named
+<code>minikube-hostpath</code>{.inlineCode}; it creates local directories in the
+VM/container filesystem that are later bind-mounted inside the Pods'
+containers.</p>
+<p>We can roll out our WordPress stack by using the
+<code>kubectl create</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ kubectl create -f wordpress-multi-pod-full.yaml</code></pre></div>
+<p>If not specified, all the resources will be created in the
+<code>default</code>{.inlineCode} Kubernetes namespace.[]{.sentence-end} Let's
+wait for the Pods to reach the <code>Running</code>{.inlineCode} status and inspect
+the results.</p>
+<p>First, we can inspect the Pods and services that have been created:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ kubectl get pods
+NAME            READY   STATUS    RESTARTS   AGE
+mysql-pod       1/1     Running   0          48m
+wordpress-pod   1/1     Running   0          48m
+$ kubectl get svc
+NAME            TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+kubernetes      ClusterIP   10.96.0.1      &lt;none&gt;        443/TCP          53m
+mysql-pod       NodePort    10.108.34.77   &lt;none&gt;        3306:30284/TCP   52m
+wordpress-pod   NodePort    10.96.63.142   &lt;none&gt;        80:30408/TCP     52m</code></pre></div>
+<p>Notice that the two <code>mysql-pod</code>{.inlineCode} and
+<code>wordpress-pod</code>{.inlineCode} services have been created with the
+<code>NodePort</code>{.inlineCode} type and mapped to port <code>30000</code>{.inlineCode} or
+an upper range.[]{.sentence-end} We will use the <code>30408</code>{.inlineCode}
+port to test the WordPress []{#Chapter_14.xhtml#idx_671113a2
+.index-entry
+index-entry=&ldquo;generated resource files:running, in Kubernetes&rdquo;}frontend.</p>
+<p>The Pods are mapped[]{#Chapter_14.xhtml#idx_1ace0b0e .index-entry
+index-entry=&ldquo;Kubernetes:generated resource files, running&rdquo;} by the
+services using label-matching logic.[]{.sentence-end} If the labels that
+have been defined in the service's <code>selector</code>{.inlineCode} field exist
+in the Pod, it becomes an endpoint to the service
+itself.[]{.sentence-end} Let's view the current endpoints in our
+project:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ kubectl get endpoints
+NAME            ENDPOINTS         AGE
+kubernetes      10.88.0.6:8443    84m
+mysql-pod       10.244.0.5:3306   4m9s
+wordpress-pod   10.244.0.6:80     4m9s</code></pre></div>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>The <code>kubernetes</code>{.inlineCode} service and its related endpoint provide
+API access to internal workloads.[]{.sentence-end} However, it is not
+part of this book's examples, so it can be ignored in this context.</p>
+<p>Let's also inspect the claims and their related volumes:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ kubectl get pvc
+NAME    STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+dbvol   Bound    pvc-4d4a047b-bd20-4bef-879c-c3d80f96d712   1Gi        RWO            standard       54m
+wpvol   Bound    pvc-accd7947-1499-44b5-bac8-9345da7edc23   1Gi        RWO            standard       54m
+
+$ kubectl get pv
+NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM           STORAGECLASS   REASON   AGE
+pvc-4d4a047b-bd20-4bef-879c-c3d80f96d712   1Gi        RWO            Delete           Bound    default/dbvol   standard                60m
+pvc-accd7947-1499-44b5-bac8-9345da7edc23   1Gi        RWO            Delete           Bound    default/wpvol   standard                60m</code></pre></div>
+<p>The two PVC resources have been created and bound to two dynamically
+provisioned PVs.[]{.sentence-end} So long as the PVC objects exist, the
+related PV will stay untouched, even if the Pods are destroyed and
+recreated.</p>
+<p>Now, the []{#Chapter_14.xhtml#idx_da35ec6a .index-entry
+index-entry=&ldquo;generated resource files:running, in Kubernetes&rdquo;}WordPress
+application can be tested.[]{.sentence-end} By default,
+minikube[]{#Chapter_14.xhtml#idx_106f77ba .index-entry
+index-entry=&ldquo;Kubernetes:generated resource files, running&rdquo;} does not
+deploy an ingress controller (even though this can be enabled with the
+<code>minikube addons enable ingress</code>{.inlineCode} command), so we will use
+the simple <code>NodePort</code>{.inlineCode} service to test the functionalities
+of our application.</p>
+<p>The current minikube VM/container IP must be obtained to reach the
+exposed <code>NodePort</code>{.inlineCode} service.[]{.sentence-end} Port
+<code>30408</code>{.inlineCode}, which is associated with the
+<code>wordpress-pod</code>{.inlineCode} service, listens to the IP address that's
+produced by the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ minikube ip
+10.88.0.6</code></pre></div>
+<p>Now, we can point our browser to <code>http://10.88.0.6:30408</code>{.inlineCode}
+and see the WordPress first setup screen.</p>
+<p>To remove the WordPress application and all its related content, use the
+<code>kubectl delete</code>{.inlineCode} command in the YAML manifest file:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ kubectl delete -f wordpress-multi-pod-full.yaml</code></pre></div>
+<p>This []{#Chapter_14.xhtml#idx_05f121b1 .index-entry
+index-entry=&ldquo;generated resource files:running, in Kubernetes&rdquo;}command
+removes all the resources that have []{#Chapter_14.xhtml#idx_783e563a
+.index-entry
+index-entry=&ldquo;Kubernetes:generated resource files, running&rdquo;}been defined
+in the file, including the generated PVs.</p>
+<h1 id="h1_345" class="heading-1">Summary<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>With that, we have reached the end of this book about Podman and its
+companion tools.</p>
+<p>First, we learned how to generate systemd unit files and control
+containerized workloads as systemd services, which allows us to, for
+example, automate container execution at system startup.</p>
+<p>After that, we learned how to generate Kubernetes YAML
+resources.[]{.sentence-end} Starting with basic concepts and examples,
+we learned how to generate complex application stacks using both
+single-Pod and multiple-Pod approaches, and illustrated how the latter
+can provide a great alternative (that is also Kubernetes-compliant) to
+the Docker Compose methodology.</p>
+<p>Finally, we tested our results on Podman and a local Kubernetes cluster
+that had been created with minikube to show the great portability of
+this approach.</p>
+<p>In the next chapter, we explore how to manage containers, Kubernetes,
+and AI workloads using Podman Desktop.</p>
+<h1 id="h1_346" class="heading-1">Further reading<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>To learn more about the topics that were covered in this chapter, take a
+look at the following resources:</p>
+<ul>
+<li>The Catatonit repository on GitHub:
+<a href="https://github.com/openSUSE/catatonit" rel="external" target="_blank">[https://github.com/openSUSE/catatonit]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>Kubernetes PersistentVolumes definition:
+<a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/" rel="external" target="_blank">[https://kubernetes.io/docs/concepts/storage/persistent-volumes/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>The minikube project's home page:
+<a href="https://minikube.sigs.k8s.io/" rel="external" target="_blank">[https://minikube.sigs.k8s.io/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>The KinD project's home page:
+<a href="https://kind.sigs.k8s.io/" rel="external" target="_blank">[https://kind.sigs.k8s.io/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>Podman community links:
+<a href="https://podman.io/community/" rel="external" target="_blank">[https://podman.io/community/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+</ul>
+<h1 id="h1_347" class="heading-1">Join us on Discord<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>For discussions around the book and to connect with your peers, join us
+on Discord at
+<a href="https://packt.link/discordcloud" rel="external" target="_blank">[packt.link/discordcloud]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}
+or scan the QR code below:</p>
+<p><a href="#R-image-31a8fdd11bb45be737fb70fa1767c997" class="lightbox-link"><img alt="Image" class="lazy lightbox figure-image" loading="lazy" src="images/B31467_14_4.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-31a8fdd11bb45be737fb70fa1767c997"><img alt="Image" class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_14_4.png"></a>{style=&ldquo;width:25%;&rdquo;}</p>
+<p>[]{#Chapter_15.xhtml}</p>
+<p>{.section .chapter-first}</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready for RHCE<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/install-ansible-using-uv/"><a class="padding" href="/ansible/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/playbooks/"><a class="padding" href="/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/hostname-patterns/"><a class="padding" href="/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/include-and-import-files/"><a class="padding" href="/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2/"><a class="padding" href="/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/user-and-groups/"><a class="padding" href="/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/storage-partitions-and-lvm/"><a class="padding" href="/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/services/"><a class="padding" href="/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimize-ansible-processing/"><a class="padding" href="/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux/"><a class="padding" href="/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/tags/"><a class="padding" href="/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/loops-and-items/"><a class="padding" href="/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/modules-for-troubleshooting/"><a class="padding" href="/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Using Variables In Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/when/"><a class="padding" href="/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/secure-shell-service-ssh/"><a class="padding" href="/cyber-security/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ansiblepuppetchef/"><a class="padding" href="/networking/ccna/ccna-notes-1/ansiblepuppetchef/">Ansible, Puppet, and Chef<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscoacls/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscoacls/">Cisco ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscocli/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscocli/">Cisco CLI<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/classfulipv4/"><a class="padding" href="/networking/ccna/ccna-notes-1/classfulipv4/">Classful IPv4<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/cloudarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/cloudarchitecture/">Cloud Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/controllerbasednetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/controllerbasednetworking/">Controller-Based Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/device-management-protocols/"><a class="padding" href="/networking/ccna/ccna-notes-1/device-management-protocols/">Device Management Protocols<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-config/">DHCP Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/">DHCP Snooping and ARP Inspection<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-syncronization/"><a class="padding" href="/networking/dns-and-time-syncronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ethernetlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/ethernetlans/">Ethernet LANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/extended-acls/"><a class="padding" href="/networking/ccna/ccna-notes-1/extended-acls/">Extended ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-services/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-services/">IP Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-transport-and-applications/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-transport-and-applications/">IP Transport and Applications<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6/">IPv6<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/">IPv6 Addressing and Subnetting<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6configuration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6configuration/">IPv6 Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6routing/">IPv6 Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lan-architecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/lan-architecture/">LAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/l2-etherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/l2-etherchannel/">Layer 2 Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/network-devices-and-connections/"><a class="padding" href="/networking/network-devices-and-connections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospf-concepts/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospf-concepts/">OSPF Concepts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfconfiguration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfconfiguration/">OSPF Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/">OSPF Network Types and Neighbors<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/restandjson/"><a class="padding" href="/networking/ccna/ccna-notes-1/restandjson/">REST and JSON<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/router_operation/"><a class="padding" href="/networking/ccna/ccna-notes-1/router_operation/">Router Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/routeroperation/"><a class="padding" href="/networking/ccna/ccna-notes-1/routeroperation/">ROuter Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lanrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/lanrouting/">Routing in the LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/rstpandetherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/rstpandetherchannel/">RSTP and Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/securing-network-devices/"><a class="padding" href="/networking/ccna/ccna-notes-1/securing-network-devices/">Securing Network Devices<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/security-architectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/security-architectures/">Security Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/softwaredefinedaccess/"><a class="padding" href="/networking/ccna/ccna-notes-1/softwaredefinedaccess/">Software-Defined Access (SDA)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/spanningtreeprotocol/"><a class="padding" href="/networking/ccna/ccna-notes-1/spanningtreeprotocol/">Spanning Tree Protocol<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/static-routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/static-routing/">Static Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchinterfaces/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchinterfaces/">Switch Interfaces<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switching/"><a class="padding" href="/networking/ccna/ccna-notes-1/switching/">Switching<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchport-security-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchport-security-config/">Switchport Security Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/tcpipbasic/"><a class="padding" href="/networking/ccna/ccna-notes-1/tcpipbasic/">TCP/IP Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/troubleshootingrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/troubleshootingrouting/">Troubleshooting Routing Issues<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/vlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/vlans/">VLANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wanarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/wanarchitecture/">WAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wansandiprouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/wansandiprouting/">WANs and IP Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessarchitectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessarchitectures/">Wireless Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_lan/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_lan/">Wireless LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessnetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessnetworking/">Wireless Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_security/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_security/">Wireless Security<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
+            <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/local-filesystems-and-swap/"><a class="padding" href="/storage/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/network-filesystem-nfs/"><a class="padding" href="/storage/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/partitioning-mbr-gpt/"><a class="padding" href="/storage/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/rm-filesystem-from-partition/"><a class="padding" href="/storage/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/remove-formatting-from-highlights/"><a class="padding" href="/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-docker-nginx/"><a class="padding" href="/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/you-need-to-learn-man-pages/"><a class="padding" href="/tools/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/proxmox-ha-proxy-setup/"><a class="padding" href="/tools/proxmox-ha-proxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/learning-touch-typing/"><a class="padding" href="/tools/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5" checked><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/">Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="active hidden " data-nav-id="/containers/systemdandk8s/"><a class="padding" href="/containers/systemdandk8s/"><i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/ansible-and-podman/"><a class="padding" href="/containers/ansible-and-podman/">Ansible and Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/intro-to-containers-1/"><a class="padding" href="/containers/intro-to-containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/convert-docker-compose-to-quadlets/"><a class="padding" href="/containers/convert-docker-compose-to-quadlets/">Convert Docker Compose to Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-links/"><a class="padding" href="/containers/podman-links/">Podman Links<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-quadlets/"><a class="padding" href="/containers/podman-quadlets/">Podman Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/">Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
+            <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users-and-Groups</span></label><a class="padding default-animation" href="/users-and-groups/">Users-and-Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
+            <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/virtualization/"><input type="checkbox" id="R-section-da8ee4406de37987b502b79e5b0a9d1c" aria-controls="R-subsections-da8ee4406de37987b502b79e5b0a9d1c"><label for="R-section-da8ee4406de37987b502b79e5b0a9d1c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualizations</span></label><a class="padding default-animation" href="/virtualization/">Virtualizations<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-da8ee4406de37987b502b79e5b0a9d1c" class="collapsible-menu">
+            <li class="" data-nav-id="/virtualization/using-vagrant-on-linux/"><a class="padding" href="/virtualization/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/booknotes/"><a class="padding" href="/booknotes/"><i class='fas fa-fw fa-book'></i> Book Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/now/"><a class="padding" href="/now/"><i class='fas fa-fw fa-clock'></i> Now<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780154752" defer></script>
+    <script src="/js/theme.js?1780154752" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

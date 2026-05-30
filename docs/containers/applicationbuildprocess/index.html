@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    <meta name="description" content="7 Integrating with Existing Application Build Processes After learning how to create custom container images using Podman and Buildah, we can now focus on special use cases that can make our build workflows more efficient and portable.[]{.sentence-end} For instance, small images are a very common requirement in an enterprise environment, for performance and security reasons.[]{.sentence-end} We will explore how to achieve this goal by breaking down the build process into different stages.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="7 Integrating with Existing Application Build Processes After learning how to create custom container images using Podman and Buildah, we can now focus on special use cases that can make our build workflows more efficient and portable.[]{.sentence-end} For instance, small images are a very common requirement in an enterprise environment, for performance and security reasons.[]{.sentence-end} We will explore how to achieve this goal by breaking down the build process into different stages.">
+    <meta property="og:url" content="http://localhost:1313/containers/applicationbuildprocess/">
+    <meta property="og:description" content="7 Integrating with Existing Application Build Processes After learning how to create custom container images using Podman and Buildah, we can now focus on special use cases that can make our build workflows more efficient and portable.[]{.sentence-end} For instance, small images are a very common requirement in an enterprise environment, for performance and security reasons.[]{.sentence-end} We will explore how to achieve this goal by breaking down the build process into different stages.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Containers">
+    <meta itemprop="description" content="7 Integrating with Existing Application Build Processes After learning how to create custom container images using Podman and Buildah, we can now focus on special use cases that can make our build workflows more efficient and portable.[]{.sentence-end} For instance, small images are a very common requirement in an enterprise environment, for performance and security reasons.[]{.sentence-end} We will explore how to achieve this goal by breaking down the build process into different stages.">
+    <meta itemprop="wordCount" content="7290">
+    <title></title>
+    <link href="/containers/applicationbuildprocess/index.md" rel="alternate" type="text/markdown" title="">
+    <link href="/images/favicon.svg?1780154752" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1780154752" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1780154752" defer></script>
+    <script src="/js/search-lunr.js?1780154752" defer></script>
+    <script src="/js/search.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1780154752";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780154752" rel="stylesheet">
+    <link href="/css/theme.css?1780154752" rel="stylesheet">
+    <link href="/css/format-html.css?1780154752" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/containers\/applicationbuildprocess\/';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:1313';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script><script defer src="https://cloud.umami.is/script.js" data-website-id="d179743c-138a-4212-8906-28f70628ef95"></script>
+<style>
+:root {
+    --MENU-S-width: 15rem;
+    --MENU-M-width: 15rem;
+    --MENU-L-width: 18rem;
+    --MAIN-MAX-width: 100rem;
+}
+html {
+  zoom: 1.2;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif,
+               "Apple Color Emoji", "Segoe UI Emoji" !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500 !important;
+  letter-spacing: 0.7px;
+}
+
+code, kbd, pre, samp {
+  font-family: "Fira Code", "Hack", "Source Code Pro", Consolas, Menlo, monospace !important;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+  <body class="mobile-support html" data-origin="/containers/applicationbuildprocess/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#h2_187">Multistage builds with Dockerfiles</a></li>
+    <li><a href="#h2_188">Multistage builds with Buildah native commands</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#h2_190">Running rootless Buildah containers with volume stores</a></li>
+    <li><a href="#h2_191">Running Buildah containers with bind-mounted stores</a></li>
+    <li><a href="#h2_192">Running native Buildah commands inside containers</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#h2_194">Including Buildah in our Go build tool</a></li>
+    <li><a href="#h2_195">Running Quarkus-native executables in containers</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/containers/"><span itemprop="name">Containers</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/applicationbuildprocess/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/" title="Containers (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/ansible-and-podman/" title="Ansible and Podman (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable containers" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id=""></h1>
+
+<h1 id="h1_183" class="chapterNumber">7<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<h1 id="h1_184" class="chapterTitle">Integrating with Existing Application Build Processes<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>After learning how to create custom container images using Podman and
+Buildah, we can now focus on special use cases that can make our build
+workflows more efficient and portable.[]{.sentence-end} For instance,
+small images are a very common requirement in an enterprise environment,
+for performance and security reasons.[]{.sentence-end} We will explore
+how to achieve this goal by breaking down the build process into
+different stages.</p>
+<p>This chapter will also try to uncover scenarios where Buildah is not
+expected to run directly on a developer machine but is driven instead by
+a container orchestrator or embedded inside custom applications that are
+expected to call its libraries []{#Chapter_7.xhtml#idx_2de67b1b
+.index-entry index-entry=&ldquo;command-line interface (CLI)&quot;}or
+<strong>command-line interface</strong> (<strong>CLI</strong>).</p>
+<p>In this chapter, we're going to cover the following main topics:</p>
+<ul>
+<li>Multistage container builds</li>
+<li>Running Buildah inside a container</li>
+<li>Integrating Buildah with custom builders</li>
+</ul>
+<h1 id="h1_185" class="heading-1">Technical requirements<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Before proceeding with this chapter, a machine with a working Podman and
+Buildah installation is required.[]{.sentence-end} As stated in
+<em><a href="/containers/applicationbuildprocess/#Chapter_3.xhtml#h1_83">Chapter 3</a>{.chapref}</em>, <em>Running</em> <em>the</em> <em>First
+Container</em>, all the examples in the book are executed on a Fedora 40
+system or later versions but can be reproduced on the reader's OS of
+choice.</p>
+<p>A good understanding of the topics covered in <em><a href="/containers/applicationbuildprocess/#Chapter_6.xhtml#h1_163">Chapter
+6</a>{.chapref}</em>, <em>Meet Buildah &ndash; Building
+Containers from Scratch</em>, will be useful to easily grasp concepts
+regarding builds, both with native Buildah commands and from
+Dockerfiles.</p>
+<h1 id="h1_186" class="heading-1">Multistage container builds<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>So far, we have learned how to create[]{#Chapter_7.xhtml#idx_6382ed7d
+.index-entry index-entry=&ldquo;multistage container builds&rdquo;} builds with
+Podman and Buildah using Dockerfiles or native Buildah commands that
+unleash potential advanced building techniques.[]{.sentence-end} There
+is still an important point that we haven't yet discussed &ndash; the size
+of the images.</p>
+<p>When creating a new image, we should always take care of its final size,
+which is the result of the total number of layers and the number of
+changed files inside them.</p>
+<p>Minimal images with a small size have the great advantage of being able
+to be pulled faster from registries.[]{.sentence-end} Nevertheless, a
+large image will eat a lot of precious disk space in the host's local
+store.</p>
+<p>We already showed examples of some best practices to keep images compact
+in size, such as building from scratch, cleaning up package manager
+caches, and reducing the amount of <code>RUN</code>{.inlineCode},
+<code>COPY</code>{.inlineCode}, and <code>ADD</code>{.inlineCode} instructions to the minimum
+necessary.[]{.sentence-end} However, what happens when we need to build
+an application from its source and create a final image with the final
+artifacts?</p>
+<p>Let's say we need to build a containerized Go application &ndash; we should
+start from a base image that includes Go runtimes, copy the source code,
+and compile to produce the final binary with a series of intermediate
+steps, most notably downloading all the necessary Go packages inside the
+image cache.[]{.sentence-end} At the end of the build, we should clean
+up all the source code and the downloaded dependencies and put the final
+binary (which is statically linked in Go) in a working
+directory.[]{.sentence-end} Everything will work, but the final image
+will still include the Go runtimes included in the base image, which are
+no longer necessary at the end of the compilation process.</p>
+<p>When Docker was introduced and Dockerfiles gained momentum, this problem
+was circumvented in different ways by DevOps teams who struggled to keep
+images minimal.[]{.sentence-end} For example, <strong>binary builds</strong> were
+a[]{#Chapter_7.xhtml#idx_8c75c973 .index-entry
+index-entry=&ldquo;binary builds&rdquo;} way to inject the final artifact compiled
+externally inside the built image.[]{.sentence-end} This approach solves
+the image size problem but removes the advantage of a standardized
+environment for builds provided by runtime/compiler images.</p>
+<p>A better approach is to share volumes between containers and have the
+final container image grab the compiled artifacts from a first build
+image.</p>
+<p>To provide a standardized approach, Docker, and then the OCI
+specifications, introduced the concept of <strong>multistage
+builds</strong>.[]{.sentence-end} Multistage[]{#Chapter_7.xhtml#idx_3d94aebd
+.index-entry index-entry=&ldquo;multistage builds&rdquo;} builds, as the name
+suggests, allow users to create builds with multiple stages using
+different <code>FROM</code>{.inlineCode} instructions and have subsequent images
+grab contents from the previous ones.</p>
+<p>In the next subsections, we will explore how to achieve this result with
+Dockerfiles/Containerfiles and with Buildah's native commands.</p>
+<h2 id="h2_187" class="heading-2">Multistage builds with Dockerfiles<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>The first approach[]{#Chapter_7.xhtml#idx_dde71335 .index-entry
+index-entry=&ldquo;Dockerfiles:multistage builds&rdquo;} to multistage
+[]{#Chapter_7.xhtml#idx_64e2286e .index-entry
+index-entry=&ldquo;multistage builds:with Dockerfiles&rdquo;}builds is creating
+multiple stages in a single Dockerfile/Containerfile, with each block
+beginning with a <code>FROM</code>{.inlineCode} instruction.</p>
+<p>Build stages can copy files and folders from previous ones using the
+<code>--from</code>{.inlineCode} option to specify the source stage.</p>
+<p>The next examples show how to create a minimal multistage build for the
+Go application, with the first stage acting as a pure build context and
+the second stage copying the final artifact inside a minimal image.</p>
+<p>This example is defined in the folloing file:
+<code>Chapter07/http_hello_world/Dockerfile</code>{.inlineCode}:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># Builder image
+FROM docker.io/library/golang
+
+# Copy files for build
+COPY go.mod /go/src/hello-world/
+COPY main.go /go/src/hello-world/
+
+# Set the working directory
+WORKDIR /go/src/hello-world
+
+# Download dependencies
+RUN go get -d -v ./...
+
+# Install the package
+RUN go build -v
+
+# Runtime image
+FROM registry.access.redhat.com/ubi9/ubi-micro:latest
+COPY --from=0 /go/src/hello-world/hello-world /
+EXPOSE 8080
+
+CMD [&#34;/hello-world&#34;]</code></pre></div>
+<p>The first stage copies the source <code>main.go</code>{.inlineCode} file and the
+<code>go.mod</code>{.inlineCode} file to manage the Go module
+dependencies.[]{.sentence-end} After downloading the dependency packages
+(<code>go get -d -</code>{.inlineCode}<code>v ./</code>{.inlineCode}<code>...</code>{.inlineCode}), the
+final application is built
+(<code>go build -</code>{.inlineCode}<code>v ./...</code>{.inlineCode}).</p>
+<p>The second stage[]{#Chapter_7.xhtml#idx_fa2d69c9 .index-entry
+index-entry=&ldquo;Dockerfiles:multistage builds&rdquo;} grabs the final artifact
+(<code>/go/src/hello-world/hello-world</code>{.inlineCode}) and copies it under the
+new image root.[]{.sentence-end} To specify that the source file
+should[]{#Chapter_7.xhtml#idx_7f9a70d9 .index-entry
+index-entry=&ldquo;multistage builds:with Dockerfiles&rdquo;} be copied from the
+first stage, the <code>--from=0</code>{.inlineCode} syntax is used.</p>
+<p>In the first stage, we used the official
+<code>docker.io</code>{.inlineCode}/<code>library</code>{.inlineCode}/<code>golang</code>{.inlineCode}
+image, which includes the latest version of the Go programming
+language.[]{.sentence-end} In the second stage, we used the
+<code>ubi-micro</code>{.inlineCode} image, a minimal image from Red Hat with a
+reduced footprint, optimized for microservices and statically linked
+binaries.[]{.sentence-end} Universal Base Image will be covered in
+greater detail in <em><a href="/containers/applicationbuildprocess/#Chapter_8.xhtml#h1_199">Chapter 8</a>{.chapref}</em>,
+<em>Choosing</em> <em>the</em> <em>Container Base Image</em>.</p>
+<p>The Go []{#Chapter_7.xhtml#idx_1da3ce56 .index-entry
+index-entry=&ldquo;multistage builds:with Dockerfiles&rdquo;}application listed as
+follows is a basic web server that
+listens[]{#Chapter_7.xhtml#idx_33bc7543 .index-entry
+index-entry=&ldquo;Dockerfiles:multistage builds&rdquo;} on port
+<code>8080/tcp</code>{.inlineCode} and prints a crafted HTML page with the
+<strong>&quot;Hello World!&quot;</strong> message when it receives a <code>GET /</code>{.inlineCode}
+request:</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>For the purpose of this book, it is not necessary to be able to write or
+understand the Go programming language.[]{.sentence-end} However, a
+basic understanding of the language syntax and logic will prove to be
+very useful, since the greater part of container-related software (such
+as Podman, Docker, Buildah, Skopeo, Kubernetes, and OpenShift) is
+written in Go.</p>
+<p><code>Chapter07/http_hello_world/main.go</code>{.inlineCode}</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>package main
+
+import (
+       &#34;log&#34;
+   &#34;net/http&#34;
+)
+
+func handler(w http.ResponseWriter, r *http.Request) {
+     log.Printf(&#34;%s %s %s\n&#34;, r.RemoteAddr, r.Method, r.URL)
+     w.Header().Set(&#34;Content-Type&#34;, &#34;text/html&#34;)
+     w.Write([]byte(&#34;&lt;html&gt;\n&lt;body&gt;\n&#34;))
+     w.Write([]byte(&#34;&lt;p&gt;Hello World!&lt;/p&gt;\n&#34;))
+     w.Write([]byte(&#34;&lt;/body&gt;\n&lt;/html&gt;\n&#34;))
+}
+
+func main() {
+     http.HandleFunc(&#34;/&#34;, handler)
+     log.Println(&#34;Starting http server&#34;)
+     log.Fatal(http.ListenAndServe(&#34;:8080&#34;, nil))
+}</code></pre></div>
+<p>The application can be built using either Podman or
+Buildah.[]{.sentence-end} In this example, we chose to build the
+application with Buildah:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ cd http_hello_world
+$ buildah build -t hello-world .</code></pre></div>
+<p>Finally, we can check the resulting image size:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ buildah images --format &#39;{{.Name}} {{.Size}}&#39; \     localhost/hello-world
+localhost/hello-world   36.1 MB</code></pre></div>
+<p>The final[]{#Chapter_7.xhtml#idx_ee9f1e91 .index-entry
+index-entry=&ldquo;multistage builds:with Dockerfiles&rdquo;} image has a size of
+only 36 MB!</p>
+<p>We can improve []{#Chapter_7.xhtml#idx_91e5e581 .index-entry
+index-entry=&ldquo;Dockerfiles:multistage builds&rdquo;}our Dockerfile by adding
+custom names to the base images using the <code>AS</code>{.inlineCode}
+keyword.[]{.sentence-end} The following example is a rework of the
+previous Dockerfile following this approach, with the key elements
+highlighted in bold:</p>
+<p><code>Chapter07/http_hello_world/Dockerfile-builder</code>{.inlineCode}</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># Builder image
+FROM docker.io/library/golang AS builder
+
+# Copy files for build
+COPY go.mod /go/src/hello-world/
+COPY main.go /go/src/hello-world/
+
+# Set the working directory
+WORKDIR /go/src/hello-world
+
+# Download dependencies
+RUN go get -d -v ./...
+
+# Install the package
+RUN go build -v ./...
+
+# Runtime image
+FROM registry.access.redhat.com/ubi9/ubi-micro:latest AS srv
+COPY --from=builder /go/src/hello-world/hello-world /
+EXPOSE 8080
+
+CMD [&#34;/hello-world&#34;]</code></pre></div>
+<p>In the preceding example, the name of the builder image is set as
+<code>builder</code>{.inlineCode}, while the final image is named
+<code>srv</code>{.inlineCode}.[]{.sentence-end} Interestingly, the
+<code>COPY</code>{.inlineCode} instruction can now specify the builder as using the
+custom name with the <code>--from=builder</code>{.inlineCode} option.</p>
+<p>We can again build the container image with the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ cd http_hello_world
+$ buildah build -f ./Dockerfile-builder -t hello-world-v2 .</code></pre></div>
+<p>Dockerfile/Containerfile[]{#Chapter_7.xhtml#idx_68932a76 .index-entry
+index-entry=&ldquo;multistage builds:with Dockerfiles&rdquo;} builds are the most
+common approach but still[]{#Chapter_7.xhtml#idx_fccba0d6 .index-entry
+index-entry=&ldquo;Dockerfiles:multistage builds&rdquo;} lack some flexibility when
+it comes to implementing a custom build workflow.[]{.sentence-end} For
+those special use cases, Buildah native commands come to our rescue.</p>
+<h2 id="h2_188" class="heading-2">Multistage builds with Buildah native commands<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>As mentioned before, the multistage []{#Chapter_7.xhtml#idx_b35f60df
+.index-entry
+index-entry=&ldquo;multistage builds:with Buildah native commands&rdquo;}build
+feature is a great approach to []{#Chapter_7.xhtml#idx_e343449b
+.index-entry
+index-entry=&ldquo;Buildah native commands:multistage builds&rdquo;}produce images
+with a small footprint and a reduced attack surface.[]{.sentence-end} To
+provide greater flexibility during the build process, the Buildah native
+commands come to our rescue.[]{.sentence-end} As we mentioned earlier in
+<em><a href="/containers/applicationbuildprocess/#Chapter_6.xhtml#h1_163">Chapter 6</a>{.chapref}</em>, <em>Meet Buildah &ndash;
+Building Containers from Scratch</em>, Buildah offers a series of commands
+that replicate the behavior of the Dockerfile instructions, thus
+offering greater control over the build process when those commands are
+included in scripts or automations.</p>
+<p>The same concept applies when working with multistage builds, where we
+can also apply extra steps between the stages.[]{.sentence-end} For
+instance, we can mount the build container overlay filesystem and
+extract the built artifact to release alternate packages, all before
+building the final runtime image.</p>
+<p>The following[]{#Chapter_7.xhtml#idx_b065e1b1 .index-entry
+index-entry=&ldquo;multistage builds:with Buildah native commands&rdquo;} example
+builds the same <code>hello-world</code>{.inlineCode} Go
+[]{#Chapter_7.xhtml#idx_a3cbf824 .index-entry
+index-entry=&ldquo;Buildah native commands:multistage builds&rdquo;}application by
+translating the previous Dockerfile instructions into native Buildah
+commands, with everything inside a simple shell script:</p>
+<p><code>Chapter07/http_hello_world/buildah-commands.sh</code>{.inlineCode}</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>#!/bin/bash
+# Define builder and runtime images
+BUILDER=docker.io/library/golang
+RUNTIME=registry.access.redhat.com/ubi9/ubi-micro:latest
+
+# Create builder container
+container1=$(buildah from $BUILDER)
+
+# Copy files from host
+if [ -f go.mod ]; then
+    buildah copy $container1 &#39;go.mod&#39; &#39;/go/src/hello-world/&#39;
+else
+    exit 1
+fi
+if [ -f main.go ]; then
+    buildah copy $container1 &#39;main.go&#39; &#39;/go/src/hello-world/&#39;
+else
+    exit 1
+fi
+
+# Configure and start build
+buildah config --workingdir /go/src/hello-world $container1
+buildah run $container1 go get -d -v ./...
+buildah run $container1 go build -v ./...
+
+
+# Create runtime container
+container2=$(buildah from $RUNTIME)
+
+# Copy files from the builder container
+buildah copy --chown=1001:1001 \
+    --from=$container1 $container2 \
+    &#39;/go/src/hello-world/hello-world&#39; &#39;/&#39;
+
+# Configure exposed ports
+buildah config --port 8080 $container2
+
+# Configure default CMD
+buildah config --cmd /hello-world $container2
+
+# Configure default user
+buildah config --user=1001 $container2
+
+# Commit final image
+buildah commit $container2 helloworld
+
+# Remove build containers
+buildah rm $container1 $container2</code></pre></div>
+<p>In the preceding[]{#Chapter_7.xhtml#idx_6c3ec17e .index-entry
+index-entry=&ldquo;multistage builds:with Buildah native commands&rdquo;} example,
+we highlighted the two []{#Chapter_7.xhtml#idx_8470cabd .index-entry
+index-entry=&ldquo;Buildah native commands:multistage builds&rdquo;}working
+containers' creation commands and the related <code>container1</code>{.inlineCode}
+and <code>container2</code>{.inlineCode} variables that store the container ID.</p>
+<p>Also, note the <code>buildah copy</code>{.inlineCode} command, where we have
+defined the source container with the <code>--from</code>{.inlineCode} option, and
+used the <code>--chown</code>{.inlineCode} option to define user and group owners
+of the copied resource.[]{.sentence-end} This approach proves to be more
+flexible than the Dockerfile-based workflow, since we can enrich our
+script with variables, conditionals, and loops.</p>
+<p>For instance, we have tested with the <code>if</code>{.inlineCode} condition in the
+Bash script to check the existence of the <code>go.mod</code>{.inlineCode} and
+<code>main.go</code>{.inlineCode} files before copying them inside the working
+container dedicated to the build.</p>
+<p>Let's now add []{#Chapter_7.xhtml#idx_6dc7bf1e .index-entry
+index-entry=&ldquo;multistage builds:with Buildah native commands&rdquo;}an extra
+feature to the script.[]{.sentence-end} In the
+following[]{#Chapter_7.xhtml#idx_96322af3 .index-entry
+index-entry=&ldquo;Buildah native commands:multistage builds&rdquo;} example, we
+evolved the previous one by adding semantic versioning for the build and
+creating a version archive before starting the build of the final
+runtime image:</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>The concept of semantic versioning[]{#Chapter_7.xhtml#idx_7ec170f0
+.index-entry index-entry=&ldquo;semantic versioning:reference link&rdquo;} is aimed
+at providing a clear and standardized way to manage software versioning
+and dependency management.[]{.sentence-end} It is a set of standard
+rules whose purpose is to define how software release versions are
+applied, and follows the <em>X.Y.Z</em> versioning pattern, where <em>X</em> is the
+major version, <em>Y</em> is the minor version, and <em>Z</em> is the patch
+version.[]{.sentence-end} For more information, check out the official
+specifications:
+<a href="https://semver.org/" rel="external" target="_blank">[https://semver.org/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p><code>Chapter07/http_hello_world/buildah-commands-release.sh</code>{.inlineCode}</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>#!/bin/bash
+# Define builder and runtime images
+BUILDER=docker.io/library/golang
+RUNTIME=registry.access.redhat.com/ubi9/ubi-micro:latest
+RELEASE=1.0.0
+
+# Create builder container
+container1=$(buildah from $BUILDER)
+
+# Copy files from host
+if [ -f go.mod ]; then
+    buildah copy $container1 &#39;go.mod&#39; &#39;/go/src/hello-world/&#39;
+else
+    exit 1
+fi
+if [ -f main.go ]; then
+    buildah copy $container1 &#39;main.go&#39; &#39;/go/src/hello-world/&#39;
+else
+    exit 1
+fi
+
+# Configure and start build
+buildah config --workingdir /go/src/hello-world $container1
+buildah run $container1 go get -d -v ./...
+buildah run $container1 go build -v ./...
+# Extract build artifact and create a version archive
+buildah unshare --mount mnt=$container1 \
+    sh -c &#39;cp $mnt/go/src/hello-world/hello-world .&#39;
+cat &gt; README &lt;&lt; EOF
+Version $RELEASE release notes:
+- Implement basic features
+EOF
+tar zcf hello-world-${RELEASE}.tar.gz hello-world README
+rm -f hello-world README
+
+# Create runtime container
+container2=$(buildah from $RUNTIME)
+
+# Copy files from the builder container
+buildah copy --chown=1001:1001 \
+    --from=$container1 $container2 \
+    &#39;/go/src/hello-world/hello-world&#39; &#39;/&#39;
+
+# Configure exposed ports
+buildah config --port 8080 $container2
+
+# Configure default CMD
+buildah config --cmd /hello-world $container2
+
+# Configure default user
+buildah  config --user=1001 $container2
+
+# Commit final image
+buildah commit $container2 hello world:$RELEASE
+
+# Remove build containers
+buildah rm $container1 $container2</code></pre></div>
+<p>The key []{#Chapter_7.xhtml#idx_9bb248a7 .index-entry
+index-entry=&ldquo;multistage builds:with Buildah native commands&rdquo;}changes in
+the script are again highlighted in bold.[]{.sentence-end} First, we
+added a <code>RELEASE</code>{.inlineCode} variable that tracks the release version
+of the application.[]{.sentence-end} Then, we extracted the build
+artifact using the <code>buildah unshare</code>{.inlineCode} command, followed by
+the <code>--mount</code>{.inlineCode} option to pass the container mount
+point.[]{.sentence-end} The <code>unshare</code>{.inlineCode} user namespace was
+necessary to make the script capable of running rootless.</p>
+<p>After extracting the []{#Chapter_7.xhtml#idx_87ef9896 .index-entry
+index-entry=&ldquo;Buildah native commands:multistage builds&rdquo;}artifact, we
+created a gzipped archive using the <code>$RELEASE</code>{.inlineCode} variable
+inside the archive name and removed the temporary files.</p>
+<p>Finally, we started the build of the runtime image and committed using
+the <code>$RELEASE</code>{.inlineCode} variable again as the image tag.</p>
+<p>In this section, we have learned how to run multistage builds with
+Buildah using both Dockerfiles/Containerfiles and native
+commands.[]{.sentence-end} In the next section, we will learn how to
+isolate Buildah builds inside a container.</p>
+<h1 id="h1_189" class="heading-1">Running Buildah inside a container<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Podman and []{#Chapter_7.xhtml#idx_b57c9c0d .index-entry
+index-entry=&ldquo;Buildah:running, inside container&rdquo;}Buildah follow a
+fork/exec approach that makes them []{#Chapter_7.xhtml#idx_fbef9d6f
+.index-entry index-entry=&ldquo;container:Buildah, running&rdquo;}very easy to run
+inside a container, including rootless container scenarios.</p>
+<p>There are many use cases that imply the need for containerized
+builds.[]{.sentence-end} Nowadays, one of the most common
+adoption[]{#Chapter_7.xhtml#idx_ae890e30 .index-entry
+index-entry=&ldquo;Kubernetes cluster&rdquo;} scenarios is the application build
+workflow running on top of a <strong>Kubernetes</strong> cluster.</p>
+<p>Kubernetes is basically a container orchestrator that manages the
+scheduling of containers from a control plane over a set of
+worker[]{#Chapter_7.xhtml#idx_b70a4ec9 .index-entry
+index-entry=&ldquo;Container Runtime Interface (CRI)&rdquo;} nodes that run a
+container engine compatible with the <strong>Container Runtime Interface</strong>
+(<strong>CRI</strong>).[]{.sentence-end} Its design allows great flexibility in
+customizing networking, storage, and runtimes, and leads to the great
+flourishing of side projects that []{#Chapter_7.xhtml#idx_a78a923b
+.index-entry index-entry=&ldquo;Cloud Native Computing Foundation (CNCF)&quot;}are
+now incubating or matured inside the <strong>Cloud Native Computing
+Foundation</strong> (<strong>CNCF</strong>).</p>
+<p><strong>Vanilla</strong> Kubernetes (which is the basic community release without any
+customization or add-ons) doesn't have a
+native[]{#Chapter_7.xhtml#idx_89f729b5 .index-entry
+index-entry=&ldquo;Vanilla Kubernetes&rdquo;} build feature but offers the proper
+framework to implement one.[]{.sentence-end} Over time, many solutions
+appeared trying to address this need.</p>
+<p>For example, Red []{#Chapter_7.xhtml#idx_105d3c99 .index-entry
+index-entry=&ldquo;OpenShift&rdquo;}Hat <strong>OpenShift</strong> introduced, way back when
+Kubernetes 1.0 was released, its own build APIs and the
+<strong>Source-to-Image</strong> toolkit[]{#Chapter_7.xhtml#idx_b0d01468 .index-entry
+index-entry=&ldquo;Source-to-Image toolkit&rdquo;} to create container images from
+source code directly on top of the OpenShift cluster.</p>
+<p>Other interesting solutions are Google's <strong>kaniko</strong>,
+which[]{#Chapter_7.xhtml#idx_269c1334 .index-entry index-entry=&ldquo;kaniko&rdquo;}
+is a build tool to create container images inside a Kubernetes cluster
+that runs every build step inside user space, and <strong>Cloud Native
+Buildpacks</strong> (<strong>CNBs</strong>), which[]{#Chapter_7.xhtml#idx_ab1b0ce1
+.index-entry index-entry=&ldquo;Cloud Native Buildpacks (CNBs)&rdquo;} offer an
+approach similar to Source-to-Image with advanced multi-process and
+single-bill-of-materials management features.</p>
+<p>Besides using already-implemented solutions, we can design our own
+running Buildah inside containers that are orchestrated by
+Kubernetes.[]{.sentence-end} We can also leverage the rootless-ready
+design to implement secure build workflows.</p>
+<p>It is possible to run CI/CD pipelines on top of a Kubernetes cluster and
+embed containerized builds within a pipeline.[]{.sentence-end} One of
+the most interesting CNCF projects, <strong>Tekton Pipelines</strong>,
+offers[]{#Chapter_7.xhtml#idx_dfa52f3c .index-entry
+index-entry=&ldquo;Tekton Pipelines&rdquo;} a cloud-native approach to accomplish
+this goal.[]{.sentence-end} Tekton allows running pipelines that are
+driven by Kubernetes' custom resources &ndash; special APIs that extend the
+basic API set.</p>
+<p>Tekton Pipelines[]{#Chapter_7.xhtml#idx_d1ba1efb .index-entry
+index-entry=&ldquo;Tekton Pipelines&rdquo;} are made up of many different tasks, and
+users can either create their own or grab them from <strong>Tekton Hub</strong>
+(<a href="https://hub.tekton.dev/" rel="external" target="_blank">[https://hub.tekton.dev/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}),
+a []{#Chapter_7.xhtml#idx_4f6d8d09 .index-entry
+index-entry=&ldquo;Tekton Hub:URL&rdquo;}free repository where many pre-baked tasks
+are available to be consumed immediately, including examples from
+Buildah
+(<a href="https://hub.tekton.dev/tekton/task/buildah" rel="external" target="_blank">[https://hub.tekton.dev/tekton/task/buildah]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}).</p>
+<p>The preceding examples are useful to understand why containerized builds
+are important.[]{.sentence-end} In this book, we want to focus on the
+details of running builds within containers, with special attention paid
+to security-related constraints.</p>
+<h2 id="h2_190" class="heading-2">Running rootless Buildah containers with volume stores<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>For the examples[]{#Chapter_7.xhtml#idx_994ad4e4 .index-entry
+index-entry=&ldquo;rootless Buildah containers:running, with volume stores&rdquo;}
+in this subsection, the stable[]{#Chapter_7.xhtml#idx_8e18b321
+.index-entry
+index-entry=&ldquo;volume stores:rootless Buildah containers, running&rdquo;}
+upstream <code>quay.io/buildah/stable</code>{.inlineCode} Buildah image will be
+used.[]{.sentence-end} This image already embeds the latest stable
+Buildah binary.</p>
+<p>Let's run our first example with a rootless container that builds the
+contents of the <code>~/build</code>{.inlineCode} directory in the host and stores
+the output in a local volume named <code>storevol</code>{.inlineCode}:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run --device /dev/fuse \
+    -v ./http_hello_world:/build:z \
+    -v storevol:/var/lib/containers quay.io/buildah/stable \
+    buildah build -t build_test1 /build</code></pre></div>
+<p>This example contains some peculiar options that deserve attention:</p>
+<ul>
+<li>The <code>--device /dev/fuse</code>{.inlineCode} option loads the fuse kernel
+module in the container, which is necessary to run fuse-overlay
+commands and mount the container filesystem</li>
+<li>The <code>-v ~/build:/build:z</code>{.inlineCode} option bind-mounts the
+<code>/build</code>{.inlineCode} directory inside the container, assigning
+proper SELinux labeling with the <code>:z</code>{.inlineCode} suffix</li>
+<li>The <code>-v storevol:/var/lib/containers</code>{.inlineCode} option creates a
+fresh volume mounted on the default container store, where all the
+layers are created</li>
+</ul>
+<p>When the build[]{#Chapter_7.xhtml#idx_6d4134a5 .index-entry
+index-entry=&ldquo;rootless Buildah containers:running, with volume stores&rdquo;}
+is complete, we can run a new []{#Chapter_7.xhtml#idx_38398bbb
+.index-entry
+index-entry=&ldquo;volume stores:rootless Buildah containers, running&rdquo;}container
+using the same volume and inspect or manipulate the built image:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run --rm -v storevol:/var/lib/containers quay.io/buildah/stable buildah images
+REPOSITORY                                  TAG      IMAGE ID       CREATED          SIZE
+localhost/build_test1                       latest   3605829966b5   41 seconds ago   33.9 MB
+registry.access.redhat.com/ubi9/ubi-micro   latest   e279e18c7ef8   3 days ago       26.4 MB
+docker.io/library/golang                    latest   0457bb691895   9 days ago       862 MB</code></pre></div>
+<p>We have successfully built an image whose layers have been stored inside
+the <code>storevol</code>{.inlineCode} volume.[]{.sentence-end} To recursively list
+the content of the store, we can extract the volume mount point with the
+<code>podman volume inspect</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ ls -alR \
+$(podman volume inspect storevol --format &#39;{{.Mountpoint}}&#39;)</code></pre></div>
+<p>From now on, it is possible to launch a new Buildah container to
+authenticate with the remote registry, tag the image, and push
+it.[]{.sentence-end} In the following example, Buildah tags the
+resulting image, authenticates with the remote registry, and then pushes
+the image:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run --rm -v storevol:/var/lib/containers \
+  quay.io/buildah/stable \
+  sh -c &#39;buildah tag build_test1 \
+    registry.example.com/build_test1 \
+&amp;&amp;buildahlogin-u=&lt;USERNAME&gt; -p=&lt;PASSWORD&gt; \
+    registry.example.com &amp;&amp; \
+    buildah push registry.example.com/build_test1&#39;</code></pre></div>
+<p>When the image is successfully pushed, it is finally safe to remove the
+volume:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman volume rm storevol</code></pre></div>
+<p>Despite []{#Chapter_7.xhtml#idx_7b3f12e1 .index-entry
+index-entry=&ldquo;rootless Buildah containers:running, with volume stores&rdquo;}working
+perfectly, this approach[]{#Chapter_7.xhtml#idx_f4af9df5 .index-entry
+index-entry=&ldquo;volume stores:rootless Buildah containers, running&rdquo;} has
+some limits that are worth discussing.</p>
+<p>The first limit we can notice is that the store volume is not isolated,
+and thus any other container can access its contents.[]{.sentence-end}
+To overcome this issue, we can use SELinux's <strong>Multi-Category
+Security</strong> (<strong>MCS</strong>) with[]{#Chapter_7.xhtml#idx_4163a59a .index-entry
+index-entry=&ldquo;Multi-Category Security (MCS)&rdquo;} the <code>:Z</code>{.inlineCode}
+suffix in order to apply categories to the volume and make it accessible
+exclusively to the running container.</p>
+<p>However, since a second container would run by default with different
+category labels, we should grab the volume categories and run the second
+tag/push container with the
+<code>--security-opt label=level</code>{.inlineCode}<code>:s0</code>{.inlineCode}<code>:</code>{.inlineCode}<code>&lt;</code>{.inlineCode}<code>CAT1</code>{.inlineCode}<code>&gt;</code>{.inlineCode}<code>,</code>{.inlineCode}<code>&lt;</code>{.inlineCode}<code>CAT2</code>{.inlineCode}<code>&gt;</code>{.inlineCode}
+option.</p>
+<p>Alternatively, we can just run <code>build</code>{.inlineCode}, <code>tag</code>{.inlineCode},
+and <code>push</code>{.inlineCode} commands in one single container, as shown in
+the following example:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run --device /dev/fuse \
+    -v ~/build:/build \
+    -v secure_storevol:/var/lib/containers:Z \
+    quay.io/buildah/stable \
+    sh -c &#39;buildah build -t test2 /build &amp;&amp; \
+      buildah tag test2 registry.example.com/build_test2 &amp;&amp; \
+      buildah login -u=&lt;USERNAME&gt; \
+      -p=&lt;PASSWORD&gt; \
+      registry.example.com &amp;&amp; \
+      buildah push registry.example.com/build_test2&#39;</code></pre></div>
+<p>packt_tip
+<strong>Important</strong> <strong>note</strong></p>
+<p>In the preceding examples, we used the Buildah login by directly passing
+the username and password in the command.[]{.sentence-end} Needless to
+say, this is far from being an acceptable security practice.</p>
+<p>Instead of []{#Chapter_7.xhtml#idx_cf4c6545 .index-entry
+index-entry=&ldquo;rootless Buildah containers:running, with volume stores&rdquo;}passing
+sensitive data in the command[]{#Chapter_7.xhtml#idx_65897675
+.index-entry
+index-entry=&ldquo;volume stores:rootless Buildah containers, running&rdquo;} line,
+we can mount the authentication file that contains a valid session token
+as a volume inside the container.</p>
+<p>The next example mounts a valid <code>auth.json</code>{.inlineCode} file, stored
+under the
+<code>/run/user/</code>{.inlineCode}<code>&lt;</code>{.inlineCode}<code>UID</code>{.inlineCode}<code>&gt;</code>{.inlineCode}
+<code>tmpfs</code>{.inlineCode}, inside the build container, and the
+<code>--authfile /auth.json</code>{.inlineCode} option is then passed to the
+<code>buildah push</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run --device /dev/fuse \
+    -v ~/build:/build \
+    -v /run/user/&lt;UID&gt;/containers/auth.json:/auth.json:z \
+    -v secure_storevol:/var/lib/containers:Z \
+    quay.io/buildah/stable \
+    sh -c &#39;buildah build -t test3 /build &amp;&amp; \
+      buildah tag test3 registry.example.com/build_test3 &amp;&amp; \
+      buildah push --authfile /auth.json \
+      registry.example.com/build_test3&#39;</code></pre></div>
+<p>Finally, we have a working example that avoids exposing clear
+credentials in the commands passed to the container.</p>
+<p>To provide a working authentication file, we need to authenticate from
+the host that will run the containerized build or copy a valid
+authentication file.[]{.sentence-end} To authenticate with Podman,
+we'll use the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman login -u &lt;USERNAME&gt; -p &lt;PASSWORD&gt; &lt;REGISTRY&gt;</code></pre></div>
+<p>If the authentication process succeeds, the obtained token is stored in
+the
+<code>/run/user/</code>{.inlineCode}<code>&lt;</code>{.inlineCode}<code>UID</code>{.inlineCode}<code>&gt;</code>{.inlineCode}<code>/containers/auth.json</code>{.inlineCode}
+file, which stores a JSON-encoded object with a structure similar to the
+following example:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>{
+      &#34;auths&#34;: {
+           &#34;registry.example.com&#34;: {
+                &#34;auth&#34;: &#34;&lt;base64_encoded_token&gt;&#34;
+               }
+    }
+}</code></pre></div>
+<p>packt_tip
+<strong>Security</strong> <strong>alert!</strong></p>
+<p>If the authentication file mounted inside the container has multiple
+authentication records for different registries, they will be exposed
+inside the build container.[]{.sentence-end} This can lead to potential
+security issues, since the container will be able to authenticate on
+those registries using the tokens specified in the file.</p>
+<p>The []{#Chapter_7.xhtml#idx_347dca1c .index-entry
+index-entry=&ldquo;rootless Buildah containers:running, with volume stores&rdquo;}volume-based
+approach we just described[]{#Chapter_7.xhtml#idx_5e87b407 .index-entry
+index-entry=&ldquo;volume stores:rootless Buildah containers, running&rdquo;} has a
+small impact on the performance when compared to a native host build but
+provides better isolation of the build process, a reduced attack surface
+(thanks to the rootless execution), and standardization of the build
+environment across different hosts.</p>
+<p>Let's now inspect how to run containerized builds using bind-mounted
+stores.</p>
+<h2 id="h2_191" class="heading-2">Running Buildah containers with bind-mounted stores<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>In the highest []{#Chapter_7.xhtml#idx_02ffd63f .index-entry
+index-entry=&ldquo;Buildah containers:running, with bind-mounted stores&rdquo;}isolation
+scenario, where DevOps []{#Chapter_7.xhtml#idx_c2736ab1 .index-entry
+index-entry=&ldquo;bind-mounted stores:Buildah containers, running&rdquo;}teams
+follow a zero-trust approach, every build container should have its own
+isolated store populated at the beginning of the build and destroyed
+upon completion.[]{.sentence-end} Isolation can be easily achieved with
+SELinux MCS security.</p>
+<p>To test this approach, let's start by creating a temporary directory
+that will host the build layers.[]{.sentence-end} We also want to
+generate a random suffix for a name in order to host multiple builds
+without conflicts:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># BUILD_STORE=/var/lib/containers-$(echo $RANDOM | md5sum | head -c 8)
+# mkdir $BUILD_STORE</code></pre></div>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>The preceding example and the next builds are executed as root.</p>
+<p>We can[]{#Chapter_7.xhtml#idx_858c118c .index-entry
+index-entry=&ldquo;Buildah containers:running, with bind-mounted stores&rdquo;} now
+run the build and bind-mount []{#Chapter_7.xhtml#idx_7334fc4b
+.index-entry
+index-entry=&ldquo;bind-mounted stores:Buildah containers, running&rdquo;}the new
+directory to the <code>/var/lib/containers</code>{.inlineCode} folder inside the
+container, as well as adding the <code>:Z</code>{.inlineCode} suffix to ensure
+multi-category security isolation:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run --device /dev/fuse \
+    -v ./build:/build:z \
+    -v $BUILD_STORE:/var/lib/containers:Z \
+    -v /run/containers/0/auth.json:/auth.json \
+    quay.io/buildah/stable \
+    sh -c &#39;set -euo pipefail; \
+      buildah build -t registry.example.com/test4 /build; \
+      buildah push --authfile /auth.json \
+      registry.example.com/test4&#39;</code></pre></div>
+<p>The MCS isolation guarantees isolation from other
+containers.[]{.sentence-end} Every build container will have its own
+custom store, and this implies the need to re-pull the base image layers
+on every execution, since they are never cached.</p>
+<p>Despite being the most secure in terms of isolation, this approach also
+offers the slowest performance because of the continuous pulls of the
+base image during the build run.</p>
+<p>On the other []{#Chapter_7.xhtml#idx_c4a16f14 .index-entry
+index-entry=&ldquo;Buildah containers:running, with bind-mounted stores&rdquo;}hand,
+the less secure approach []{#Chapter_7.xhtml#idx_66586929 .index-entry
+index-entry=&ldquo;bind-mounted stores:Buildah containers, running&rdquo;}does not
+expect any store isolation, and all the build containers mount the
+default host store under
+<code>/var/lib/containers</code>{.inlineCode}.[]{.sentence-end} This approach
+provides better performance, since it allows the reuse of cached layers
+from the host store.</p>
+<p>SELinux will not allow a containerized process to access the host store;
+therefore, we need to relax SELinux security restrictions to run the
+following example using the <code>--security-opt label=disable</code>{.inlineCode}
+option.</p>
+<p>The following example runs another build using the default host store:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run --device /dev/fuse \
+  -v ./build:/build:z \
+  -v /var/lib/containers:/var/lib/containers \
+  --security-opt label=disable \
+  -v /run/containers/0/auth.json:/auth.json \
+  quay.io/buildah/stable \
+  sh -c &#39;set -euo pipefail; \
+    buildah build -t registry.example.com/test5 /build; \
+    buildah push --authfile /auth.json \
+    registry.example.com/test5&#39;</code></pre></div>
+<p>The approach described in this example is the opposite of the previous
+one &ndash; better performances but worse security isolation.</p>
+<p>A good compromise between the two implies the usage of a secondary,
+read-only image store to provide access to the cached
+layers.[]{.sentence-end} Buildah supports the usage of multiple image
+stores, and the <code>/etc/containers/storage.conf</code>{.inlineCode} file <em>inside
+the Buildah stable image</em> already configures the
+<code>/var/lib/shared</code>{.inlineCode} folder for this purpose.</p>
+<p>To prove this, we can inspect the content of the
+<code>/etc/containers/storage.conf</code>{.inlineCode} file, where the following
+section is defined:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># AdditionalImageStores is used to pass paths to additional Read/Only image stores
+# Must be comma separated list.
+additionalimagestores = [
+&#34;/var/lib/shared&#34;,
+]</code></pre></div>
+<p>This way, we []{#Chapter_7.xhtml#idx_30cb364f .index-entry
+index-entry=&ldquo;Buildah containers:running, with bind-mounted stores&rdquo;}can
+get good isolation and better[]{#Chapter_7.xhtml#idx_ef48093d
+.index-entry
+index-entry=&ldquo;bind-mounted stores:Buildah containers, running&rdquo;}
+performance, since cached images from the host will already be available
+in the read-only store.[]{.sentence-end} The read-only store can be
+pre-populated with the most used images to speed up builds, or can be
+mounted from a network share.</p>
+<p>The following example shows this approach, by bind-mounting the
+read-only store to the container and executing the build with the
+advantage of reusing pre-pulled images:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run --device /dev/fuse \
+  -v ./build:/build:z \
+  -v $BUILD_STORE:/var/lib/containers:Z \
+  -v /var/lib/containers/storage:/var/lib/shared:ro \
+  -v /run/containers/0/auth.json:/auth.json:z \
+  quay.io/buildah/stable \
+  bash -c &#39;set -euo pipefail; \
+  buildah build -t registry.example.com/test6 /build; \
+  buildah push --authfile /auth.json \
+  registry.example.com/test6&#39;</code></pre></div>
+<p>The examples shown in this subsection are also inspired by a great
+technical article written by <em>Dan Walsh</em> (one of the leads of the
+Buildah and Podman projects) on the <em>Red Hat Developer</em> blog; refer to
+the <em>Further reading</em> section for the original article
+link.[]{.sentence-end} Let's close this section with an example of
+native Buildah commands.</p>
+<h2 id="h2_192" class="heading-2">Running native Buildah commands inside containers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>We have so far []{#Chapter_7.xhtml#idx_4b912fef .index-entry
+index-entry=&ldquo;native Buildah commands:running, inside containers&rdquo;}illustrated
+examples using []{#Chapter_7.xhtml#idx_0ab12c46 .index-entry
+index-entry=&ldquo;container:native Buildah commands, running&rdquo;}Dockerfiles/Containerfiles,
+but nothing prevents us from running containerized native Buildah
+commands.[]{.sentence-end} The following example creates a custom Python
+image built from a Fedora base image:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># BUILD_STORE=/var/lib/containers-$(echo $RANDOM | md5sum | head -c 8)# mkdir $BUILD_STORE
+
+# podman run --device /dev/fuse \
+  -e REGISTRY=&lt;USER_DEFINED_REGISTRY:PORT&gt; \
+  --security-opt label=disable \
+  -v $BUILD_STORE:/var/lib/containers:Z \
+  -v /var/lib/containers/storage:/var/lib/shared:ro \
+  -v /run/containers/0:/run/containers/0 \
+  quay.io/buildah/stable \
+  sh -c &#39;set -euo pipefail; \
+    container=$(buildah from fedora); \
+    buildah run $container dnf install -y python3 python3; \
+    buildah commit $container $REGISTRY/python_demo; \
+    buildah push -authfile \
+    /run/containers/0/auth.json $REGISTRY/python_demo&#39;</code></pre></div>
+<p>From a performance standpoint, as well as the build process, nothing
+changes from the previous examples.[]{.sentence-end} As already stated,
+this approach provides more flexibility in the build operations.</p>
+<p>If the []{#Chapter_7.xhtml#idx_225c1362 .index-entry
+index-entry=&ldquo;native Buildah commands:running, inside containers&rdquo;}commands
+to be passed are too many, a good []{#Chapter_7.xhtml#idx_671d258a
+.index-entry
+index-entry=&ldquo;container:native Buildah commands, running&rdquo;}workaround can
+be to create a shell script and inject it into the Buildah image using a
+dedicated volume:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># BUILD_STORE=/var/lib/containers-$(echo $RANDOM | md5sum | head -c 8)
+# PATH_TO_SCRIPT=/path/to/script
+# REGISTRY=&lt;USER_DEFINED_REGISTRY:PORT&gt;
+# mkdir $BUILD_STORE
+# podman run --device /dev/fuse \
+  -v $BUILD_STORE:/var/lib/containers:Z \
+  -v /var/lib/containers/storage:/var/lib/shared:ro \
+  -v /run/containers/0:/run/containers/0 \
+  -v $PATH_TO_SCRIPT:/root:z \
+  quay.io/buildah/stable /root/build.sh</code></pre></div>
+<p><code>build.sh</code>{.inlineCode} is the[]{#Chapter_7.xhtml#idx_f8e36e7e
+.index-entry
+index-entry=&ldquo;native Buildah commands:running, inside containers&rdquo;} name
+of the shell script file containing []{#Chapter_7.xhtml#idx_7d55e4ea
+.index-entry
+index-entry=&ldquo;container:native Buildah commands, running&rdquo;}all the build
+custom commands.</p>
+<p>In this section, we have learned how to run Buildah in containers
+covering both volume mounts and bind mounts.[]{.sentence-end} We have
+learned how to run rootless build containers that can be easily
+integrated into pipelines or Kubernetes clusters to provide an
+end-to-end application life cycle workflow.[]{.sentence-end} This is due
+to the flexible nature of Buildah, and for the same reason, it is very
+easy to embed Buildah inside custom builders, as we will see in the next
+section.</p>
+<h1 id="h1_193" class="heading-1">Integrating Buildah with custom builders<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>As we saw in the []{#Chapter_7.xhtml#idx_a85ea92e .index-entry
+index-entry=&ldquo;Buildah:integrating, with custom builders&rdquo;}previous section
+of this chapter, Buildah is a key []{#Chapter_7.xhtml#idx_a87fa307
+.index-entry
+index-entry=&ldquo;custom builders:Buildah, integrating with&rdquo;}component of
+Podman's container ecosystem.[]{.sentence-end} Buildah is a dynamic and
+flexible tool that can be adapted to different scenarios to build
+brand-new containers.[]{.sentence-end} It has several options and
+configurations available, but our exploration is not yet finished.</p>
+<p>Podman and all the projects developed around it have been built with
+extensibility in mind, making every programmable interface available to
+be reused from the outside world.</p>
+<p>Podman, for example, inherits Buildah capabilities for building
+brand-new containers through the <code>podman build</code>{.inlineCode} command;
+with the same principle, we can embed Buildah interfaces and its engine
+in our custom builder.</p>
+<p>Let's see how to build a custom builder in the Go language; we will see
+that the process is pretty straightforward, because Podman, Buildah, and
+many other projects in this ecosystem are actually written in the Go
+language.</p>
+<h2 id="h2_194" class="heading-2">Including Buildah in our Go build tool<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>As a first step, we []{#Chapter_7.xhtml#idx_1eaf2ba2 .index-entry
+index-entry=&ldquo;Buildah:including, in Go build tool&rdquo;}need to prepare our
+development environment, downloading []{#Chapter_7.xhtml#idx_db91c436
+.index-entry index-entry=&ldquo;Go build tool:Buildah, including&rdquo;}and
+installing all the required tools and libraries for creating our custom
+build tool.</p>
+<p>packt_tip
+<strong>Important</strong> <strong>note</strong></p>
+<p>Please be aware that this is an unsupported scenario and the stability
+in terms of deprecations and changes of the Buildah Go APIs is not
+guaranteed.[]{.sentence-end} For supported and stable use cases, refer
+to the Podman REST APIs.</p>
+<p>In <em><a href="/containers/applicationbuildprocess/#Chapter_3.xhtml#h1_83">Chapter 3</a>{.chapref}</em>, <em>Running</em> <em>the First
+Container</em>, we saw various Podman installation methods.[]{.sentence-end}
+In the following section, we will use a similar procedure while going
+through the preliminary steps for building a Buildah project from
+scratch, downloading its source file to include in our custom builder.</p>
+<p>First of all, let's ensure we have all the needed packages installed on
+our development host system:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># dnf install -y golang git go-md2man btrfs-progs-devel gpgme-devel device-mapper-devel
+Fedora 40 - x86_64                                        253 kB/s |  28 kB     00:00  
+Fedora 40 openh264 (From Cisco) - x86_64                  9.5 kB/s | 989  B     00:00  
+Fedora 40 - x86_64 - Updates                              141 kB/s |  25 kB     00:00  
+Fedora 40 - x86_64 - Updates                              3.9 MB/s | 6.2 MB     00:01  
+Dependencies resolved.
+==============================================================================================================================================================================================
+ Package                                                Architecture                        Version              Repository                            Size
+==============================================================================================================================================================================================
+Installing:
+ btrfs-progs-devel                                       x86_64        6.11-1.fc40          updates                               49 k
+ device-mapper-devel                                      x86_64       1.02.199-1.fc40       updates                               41 k
+ git                                                      x86_64       2.47.0-1.fc40         updates                               52 k
+ golang                                                   x86_64        1.22.7-1.fc40         updates                              666 k
+ golang-github-cpuguy83-md2man                            x86_64        2.0.3-3.fc40          fedora                               748 k
+ gpgme-devel                                              x86_64        1.23.2-3.fc40         fedora                               167 k
+U
+                                                        
+[... omitted output]</code></pre></div>
+<p>After installing[]{#Chapter_7.xhtml#idx_91069220 .index-entry
+index-entry=&ldquo;Buildah:including, in Go build tool&rdquo;} the Go language core
+libraries and some other development []{#Chapter_7.xhtml#idx_9a13cdbf
+.index-entry index-entry=&ldquo;Go build tool:Buildah, including&rdquo;}tools, we
+are ready to create the directory structure for our project and
+initialize it:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ mkdir ~/custombuilder
+$ cd ~/custombuilder
+[custombuilder]$ export GOPATH=`pwd`</code></pre></div>
+<p>As shown in the []{#Chapter_7.xhtml#idx_3c2fa2ff .index-entry
+index-entry=&ldquo;Buildah:including, in Go build tool&rdquo;}previous example, we
+followed these steps:</p>
+<ol>
+<li>Created []{#Chapter_7.xhtml#idx_cd1ee337 .index-entry
+index-entry=&ldquo;Go build tool:Buildah, including&rdquo;}the project root
+directory</li>
+<li>Defined the Go language root path that we are going to use</li>
+</ol>
+<p>We are now ready to create our Go module that will create our customized
+container image with a few easy steps.</p>
+<p>To speed up the example and avoid any writing errors, we can download
+the Go language code that we are going to use for this test from the
+official GitHub repository of this book:</p>
+<ol>
+<li>
+<p>Go to
+<a href="https://github.com/PacktPublishing/Podman-for-DevOps" rel="external" target="_blank">[https://github.com/PacktPublishing/Podman-for-DevOps]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}
+or run the following command:</p>
+<div class="programlisting snippet-con-one highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ git clone https://github.com/PacktPublishing/Podman-for-DevOps</code></pre></div>
+</li>
+<li>
+<p>After that, copy the files provided in the
+<code>Chapter07/*</code>{.inlineCode} directory into the newly created
+<code>~/custombuilder/</code>{.inlineCode} directory.[]{.sentence-end}</p>
+<p>You should have the following files in your directory at this point:</p>
+<div class="programlisting snippet-con-one highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ cd ~/custombuilder/src/builder
+$ ls -la   
+total 148
+drwxrwxr-x. 1 alex alex     74 9 nov 15.22 .
+drwxrwxr-x. 1 alex alex     14 9 nov 14.10 ..
+-rw-rw-r--. 1 alex alex   1466 9 nov 14.10 custombuilder.go
+-rw-rw-r--. 1 alex alex    161 9 nov 15.22 go.mod
+-rw-rw-r--. 1 alex alex 135471 9 nov 15.22 go.sum
+-rw-rw-r--. 1 alex alex    337 9 nov 14.17 script.js</code></pre></div>
+<p>At this point, we can run the following command to let the Go tools
+acquire all the needed dependencies to ready the module for
+execution:</p>
+<div class="programlisting snippet-con-one highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ go mod tidy -v
+go: finding module for package github.com/containers/storage/pkg/unshare
+go: finding module for package github.com/containers/image/v5/storage[...omitted output...]</code></pre></div>
+<p>The tool analyzed the provided <code>custombuilder.go</code>{.inlineCode} file,
+and it found all the required libraries, populating the
+<code>go.mod</code>{.inlineCode} file.</p>
+<p>::: packt_tip-one
+<strong>Important</strong> <strong>note</strong></p>
+<p>Please be aware that the previous command will verify whether a
+module is available, and if it is not, the tool will start
+downloading it from the internet.[]{.sentence-end} So, be patient
+during this step!
+:::</p>
+<p>We can check []{#Chapter_7.xhtml#idx_52544037 .index-entry
+index-entry=&ldquo;Buildah:including, in Go build tool&rdquo;}that the previous
+commands downloaded all the[]{#Chapter_7.xhtml#idx_c4953ae8
+.index-entry index-entry=&ldquo;Go build tool:Buildah, including&rdquo;}
+required packages by inspecting the directory structure we created
+earlier:</p>
+<div class="programlisting snippet-con-one highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ cd ~/custombuilder
+[custombuilder]$ ls
+pkg  src
+[custombuilder]$ ls -la pkg/
+total 0
+drwxrwxr-x. 1 alex alex  28  9 nov 18.27 .
+drwxrwxr-x. 1 alex alex  12  9 nov 18.18 ..
+drwxrwxr-x. 1 alex alex  20  9 nov 18.27 linux_amd64
+drwxrwxr-x. 1 alex alex 196  9 nov 18.27 mod
+[custombuilder]$ ls -la pkg/mod/
+total 0
+drwxrwxr-x. 1 alex alex 196  9 nov 18.27 .
+drwxrwxr-x. 1 alex alex  28  9 nov 18.27 ..
+drwxrwxr-x. 1 alex alex  22  9 nov 18.18 cache
+drwxrwxr-x. 1 alex alex 918  9 nov 18.27 github.com
+drwxrwxr-x. 1 alex alex  24  9 nov 18.27 go.etcd.io
+drwxrwxr-x. 1 alex alex   2  9 nov 18.27 golang.org
+[... omitted output]
+[custombuilder]$ ls -la pkg/mod/github.com/
+[... omitted output]
+drwxrwxr-x. 1 alex alex  98  9 nov 18.27  containerd
+drwxrwxr-x. 1 alex alex  20  9 nov 18.27  containernetworking
+drwxrwxr-x. 1 alex alex 184  9 nov 18.27  containers
+drwxrwxr-x. 1 alex alex 110  9 nov 18.27  coreos
+[... omitted output]</code></pre></div>
+</li>
+</ol>
+<p>We are now[]{#Chapter_7.xhtml#idx_d63aac82 .index-entry
+index-entry=&ldquo;Buildah:including, in Go build tool&rdquo;} ready to run our
+custom builder module, but before[]{#Chapter_7.xhtml#idx_9ecc76c0
+.index-entry index-entry=&ldquo;Go build tool:Buildah, including&rdquo;} moving
+forward, let's take a look at the key elements contained in the Go
+source file.</p>
+<p>packt_tip
+<strong>Important</strong> <strong>note</strong></p>
+<p>Please consider that on Fedora 40, as well as for other Linux
+distributions, you may also need additional development packages from
+your distribution's repositories.[]{.sentence-end} For Fedora, for
+example, in order to successfully run the Go program, you may also need
+to install the <code>btrfs-progs-devel</code>{.inlineCode} and
+<code>libgpgme-devel</code>{.inlineCode} packages.[]{.sentence-end} Please refer to
+Podman's documentation for more info:</p>
+<p><a href="https://podman.io/docs/installation#build-and-run-dependencies" rel="external" target="_blank">[https://podman.io/docs/installation#build-and-run-dependencies]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</p>
+<p>If we start looking at the <code>custombuilder.go</code>{.inlineCode} file, just
+after defining the package and the libraries to use, we define the main
+function of our module.</p>
+<p>In the main function, at the beginning of the definition, we inserted a
+fundamental code block:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>  if buildah.InitReexec() {
+    return
+  }
+  unshare.MaybeReexecUsingUserNamespace(false)</code></pre></div>
+<p>This piece []{#Chapter_7.xhtml#idx_d7507867 .index-entry
+index-entry=&ldquo;Buildah:including, in Go build tool&rdquo;}of code enables the
+usage of <strong>rootless</strong> mode[]{#Chapter_7.xhtml#idx_c15a1f25 .index-entry
+index-entry=&ldquo;rootless mode&rdquo;} by []{#Chapter_7.xhtml#idx_44f82dba
+.index-entry index-entry=&ldquo;Go build tool:Buildah, including&rdquo;}leveraging
+the Go <code>unshare</code>{.inlineCode} package, available through
+<code>github.com/containers/storage/pkg/unshare</code>{.inlineCode}.</p>
+<p>To leverage the build features of Buildah, we have to instantiate
+<code>buildah.Builder</code>{.inlineCode}.[]{.sentence-end} This object has all the
+methods to define the build steps, configure the build, and finally run
+it.</p>
+<p>To create <code>Builder</code>{.inlineCode}, we need an object called
+<code>storage.Store</code>{.inlineCode} from the
+<code>github.com/containers/storage</code>{.inlineCode} package.[]{.sentence-end}
+This element is responsible for storing the intermediate and result
+container images.[]{.sentence-end} Let's see the code block we are
+discussing:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>buildStoreOptions, err := storage.DefaultStoreOptions(     )
+buildStore, err := storage.GetStore(buildStoreOptions)</code></pre></div>
+<p>As you can see from the previous example, we are getting the default
+options and passing them to the <code>storage</code>{.inlineCode} module to request
+a <code>Store</code>{.inlineCode} object.</p>
+<p>Another element we need for creating <code>Builder</code>{.inlineCode} is the
+<code>BuilderOptions</code>{.inlineCode} object.[]{.sentence-end} This element
+contains all the default and custom options we might assign to
+Buildah's <code>Builder</code>{.inlineCode}.[]{.sentence-end} Let's see how to
+define it:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>builderOpts := buildah.BuilderOptions{
+  FromImage:        &#34;node:23-alpine&#34;, // Starting image
+  Isolation:        define.IsolationChroot, // Isolation environment
+  CommonBuildOpts:  &amp;define.CommonBuildOptions{},
+  ConfigureNetwork: define.NetworkDefault,
+  SystemContext:    &amp;types.SystemContext {},
+}</code></pre></div>
+<p>In the previous code block, we defined a <code>BuilderOptions</code>{.inlineCode}
+object that contains the following:</p>
+<ul>
+<li>An initial image that we are going to use to build our target
+container image:
+<ul>
+<li>In this case, we chose the Node.js image based on the Alpine
+Linux distribution.[]{.sentence-end} This is because, in our
+example, we are simulating the build process of a Node.js
+application.</li>
+</ul>
+</li>
+<li>Isolation mode to adopt once the build starts.[]{.sentence-end} In
+this case, we are going to use chroot isolation, which fits a lot of
+build scenarios well &ndash; less isolation but fewer requirements.</li>
+<li>Some default options for the build, network, and system contexts:
+<ul>
+<li><code>SystemContext</code>{.inlineCode} objects define the information
+contained in configuration files as parameters</li>
+</ul>
+</li>
+</ul>
+<p>Now that we have all the necessary data for instantiating
+<code>Builder</code>{.inlineCode}, let's do it:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>builder, err := buildah.NewBuilder(context.TODO(), buildStore, builderOpts)</code></pre></div>
+<p>As you can see, we []{#Chapter_7.xhtml#idx_62e843e2 .index-entry
+index-entry=&ldquo;Buildah:including, in Go build tool&rdquo;}are calling the
+<code>NewBuilder</code>{.inlineCode} function, with all the
+[]{#Chapter_7.xhtml#idx_75e86ef8 .index-entry
+index-entry=&ldquo;Go build tool:Buildah, including&rdquo;}required options that we
+created in code earlier in this section, to get <code>Builder</code>{.inlineCode}
+ready to create our custom container image.</p>
+<p>We are now ready to instruct <code>Builder</code>{.inlineCode} with the required
+options to create the custom image.[]{.sentence-end} Let's first add to
+the container image the <strong>JavaScript</strong>
+file[]{#Chapter_7.xhtml#idx_689a427f .index-entry
+index-entry=&ldquo;JavaScript file&rdquo;} containing our application, for which we
+are creating this container image:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>err = builder.Add(&#34;/home/node/&#34;, false, buildah.AddAndCopyOptions{}, &#34;script.js&#34;)</code></pre></div>
+<p>We are assuming that the JavaScript main file is stored next to the Go
+module that we are writing and using in this example, and we are copying
+this file into the <code>/home/node</code>{.inlineCode} directory, which is the
+default path where the base container image expects to find this kind of
+data.</p>
+<p>The JavaScript program that we are going to copy into the container
+image and use for this test is really simple &ndash; let's inspect it:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>var http = require(&#34;http&#34;);
+http.createServer(function(request, response) {
+  response.writeHead(200, {&#34;Content-Type&#34;: &#34;text/plain&#34;});
+  response.write(&#34;Hello Podman and Buildah friends. This page is provided to you through a container running Node.js version: &#34;);
+  response.write(process.version);
+  response.end();
+}).listen(8080);</code></pre></div>
+<p>Without going deep[]{#Chapter_7.xhtml#idx_3d87ba91 .index-entry
+index-entry=&ldquo;Buildah:including, in Go build tool&rdquo;} into the JavaScript
+language syntax and its concepts, we can note, by looking at the
+JavaScript file, that we are using the HTTP library for listening on
+port <code>8080</code>{.inlineCode} for incoming requests, responding to these
+requests with a default welcome message:
+<code>Hello Podman and Buildah friends.</code>{.inlineCode}[]{.sentence-end}<code>This page is</code>{.inlineCode}<code>provided to you through a container running Node.js</code>{.inlineCode}.[]{.sentence-end}
+We also append the Node.js version to the response string.</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>Please consider []{#Chapter_7.xhtml#idx_9fdac81e .index-entry
+index-entry=&ldquo;JavaScript&rdquo;}that <strong>JavaScript</strong>, also known as <strong>JS</strong>, is a
+high-level programming language that is compiled just in
+time.[]{.sentence-end} As we stated earlier, we are not going to go deep
+into the definition of the JavaScript language or its most famous
+runtime environment, Node.js.</p>
+<p>After that, we configure the default command to run for our custom
+container image:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>builder.SetCmd([]string{&#34;node&#34;, &#34;/home/node/script.js&#34;})</code></pre></div>
+<p>We just set the []{#Chapter_7.xhtml#idx_ef92c173 .index-entry
+index-entry=&ldquo;Go build tool:Buildah, including&rdquo;}command to execute the
+Node.js execution runtime, referring to the JavaScript program that we
+just added to the container image.</p>
+<p>To commit the changes we made, we need to get the image reference that
+we are working on.[]{.sentence-end} At the same time, we will also
+define the name of the container image that <code>Builder</code>{.inlineCode} will
+create:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>imageRef, err := is.Transport.ParseStoreReference(buildStore, &#34;podmanbook/nodejs-welcome&#34;)</code></pre></div>
+<p>Now, we are ready to commit the changes and call the
+<code>commit</code>{.inlineCode} function of <code>Builder</code>{.inlineCode}:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>imageId, _, _, err := builder.Commit(context.TODO(), imageRef, define.CommitOptions{})
+fmt.Printf(&#34;Image built! %s\n&#34;, imageId)</code></pre></div>
+<p>As we can see, we just requested <code>Builder</code>{.inlineCode} to commit the
+changes, passing the image reference we obtained earlier, and then we
+finally print it as a reference.</p>
+<p>We are now ready to []{#Chapter_7.xhtml#idx_dd943bff .index-entry
+index-entry=&ldquo;Buildah:including, in Go build tool&rdquo;}run our program!
+Let's execute it:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>[builder]$ go run custombuilder.go
+Image built! e60fa98051522a51f4585e46829ad6a18df704dde774634dbc010baae4404849</code></pre></div>
+<p>We can now test the custom container image we just built:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>[builder]$ podman run -dt -p 8080:8080/tcp podmanbook/nodejs-welcome:latest
+747805c1b59558a70c4a2f1a1d258913cae5ffc08cc026c74ad3ac21aab18974
+[builder]$ curl localhost:8080
+Hello Podman and Buildah friends. This page is provided to you through a container running Node.js version: v23.1.0</code></pre></div>
+<p>As we can see in the previous []{#Chapter_7.xhtml#idx_415c8f5f
+.index-entry index-entry=&ldquo;Go build tool:Buildah, including&rdquo;}code block,
+we are running the container image we just created with the following
+options:</p>
+<ul>
+<li><code>-d</code>{.inlineCode}: Detached mode, which runs the container in the
+background</li>
+<li><code>-t</code>{.inlineCode}: Allocates a new pseudo-TTY</li>
+<li><code>-p</code>{.inlineCode}: Publishes the container port to the host system</li>
+<li><code>podmanbook/nodejs-welcome:latest</code>{.inlineCode}: The name of our
+custom container image</li>
+</ul>
+<p>Finally, we use the <code>curl</code>{.inlineCode} command-line tool for requesting
+and printing the HTTP response provided by our JavaScript program, which
+is containerized in the custom container image that we created!</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>The example described in this section is just a simple overview of all
+the great features that the Buildah Go module can enable for our custom
+image builders.[]{.sentence-end} To learn more about the various
+functions, variables, and code documentation, you can refer to the docs
+at
+<a href="https://pkg.go.dev/github.com/containers/buildah" rel="external" target="_blank">[https://pkg.go.dev/github.com/containers/buildah]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>As we saw in this section, Buildah is a really flexible tool, and with
+its libraries, it can support custom builders in many different
+scenarios.</p>
+<p>If we try to search on the internet, we can find many examples of
+Buildah supporting the creation of custom container
+images.[]{.sentence-end} Let's see some of them.</p>
+<h2 id="h2_195" class="heading-2">Running Quarkus-native executables in containers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p><strong>Quarkus</strong> is []{#Chapter_7.xhtml#idx_1ab23d45 .index-entry
+index-entry=&ldquo;Quarkus&rdquo;}defined as the Kubernetes-native Java stack
+leveraging the OpenJDK (the open Java development kit) project and the
+GraalVM project.[]{.sentence-end} GraalVM is a Java virtual machine that
+has many special features, such as the compilation of Java applications
+for fast startup and a low memory footprint.</p>
+<p>note
+<strong>Important note</strong></p>
+<p>We will not go into the details of Quarkus, GraalVM, and any other
+companion projects.[]{.sentence-end} The example that we will deep-dive
+into is only for your reference.[]{.sentence-end} We encourage you to
+learn more about these projects by going through their web pages and
+reading the related documentation.</p>
+<p>If we take a []{#Chapter_7.xhtml#idx_a3c2929f .index-entry
+index-entry=&ldquo;Quarkus-native executables:running, in container&rdquo;}look at
+the Quarkus documentation web []{#Chapter_7.xhtml#idx_d3ed306a
+.index-entry
+index-entry=&ldquo;container:Quarkus-native executables, running&rdquo;}page, we can
+easily find that, after a long tutorial in which we can learn how to
+build a Quarkus-native executable, we can then pack and execute this
+executable in a container image.</p>
+<p>The steps provided in the Quarkus documentation leverage a Maven wrapper
+with a special option.[]{.sentence-end} Maven was created as a Java
+build automation tool, but then it was also extended to other
+programming languages.[]{.sentence-end} If we take a quick look at this
+command, we will notice that <code>p</code>{.inlineCode}<code>odman</code>{.inlineCode} is
+mentioned:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ ./mvnw package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=podman</code></pre></div>
+<p>This means[]{#Chapter_7.xhtml#idx_fd661ade .index-entry
+index-entry=&ldquo;Quarkus-native executables:running, in container&rdquo;} that the
+Maven wrapper program will []{#Chapter_7.xhtml#idx_e03c28c9 .index-entry
+index-entry=&ldquo;container:Quarkus-native executables, running&rdquo;}invoke a
+Podman build to create a container image with the preconfigured
+environment shipped by the Quarkus project and the binary application
+that we are developing.</p>
+<p>Podman is mentioned because, as we saw in <em><a href="/containers/applicationbuildprocess/#Chapter_6.xhtml#h1_163">Chapter
+6</a>{.chapref}</em>, <em>Meet Buildah &ndash; Building
+Containers from Scratch</em>, it borrows Buildah's build logic by vendoring
+its libraries.</p>
+<p>To explore this example further, take a look at
+<a href="https://quarkus.io/guides/building-native-image" rel="external" target="_blank">[https://quarkus.io/guides/building-native-image]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<h1 id="h1_196" class="heading-1">Summary<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In this chapter, we have learned how to leverage Podman's companion,
+Buildah, in some advanced scenarios to support our development projects.</p>
+<p>We saw how to use Buildah for multistage container image creation, which
+allows us to create builds with multiple stages using different
+<code>FROM</code>{.inlineCode} instructions and, subsequently, to have images that
+grab contents from the previous ones.</p>
+<p>Then, we discovered that there are many use cases that imply the need
+for containerized builds.[]{.sentence-end} Nowadays, one of the most
+common adoption scenarios is the application build workflow running on
+top of a Kubernetes cluster.[]{.sentence-end} For this reason, we went
+into the details of containerizing Buildah.</p>
+<p>Finally, we learned, through a lot of interesting examples, how to
+integrate Buildah to create custom builders for container
+images.[]{.sentence-end} As we saw in this chapter, there are several
+options and methods to actually build a container image with the Podman
+ecosystem tools.[]{.sentence-end} Most of the time, we start from a base
+image to customize and extend a previous OS layer to fit our use cases.</p>
+<p>In the next chapter, we will learn more about container base images, how
+to choose them, and what to look out for when we are making our choice.</p>
+<h1 id="further-reading">Further reading<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<ul>
+<li>A list of CNCF projects:
+<a href="https://landscape.cncf.io/" rel="external" target="_blank">https://landscape.cncf.io/</a></li>
+<li>Best practices for running Buildah in a container:
+<a href="https://developers.redhat.com/blog/2019/08/14/best-practices-for-running-buildah-in-a-container" rel="external" target="_blank">https://developers.redhat.com/blog/2019/08/14/best-practices-for-running-buildah-in-a-container</a></li>
+<li>The Buildah Go module documentation:
+<a href="https://pkg.go.dev/github.com/containers/buildah" rel="external" target="_blank">https://pkg.go.dev/github.com/containers/buildah</a></li>
+<li>Quarkus-native executables:
+<a href="https://quarkus.io/guides/building-native-image" rel="external" target="_blank">https://quarkus.io/guides/building-native-image</a></li>
+</ul>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready for RHCE<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/install-ansible-using-uv/"><a class="padding" href="/ansible/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/playbooks/"><a class="padding" href="/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/hostname-patterns/"><a class="padding" href="/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/include-and-import-files/"><a class="padding" href="/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2/"><a class="padding" href="/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/user-and-groups/"><a class="padding" href="/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/storage-partitions-and-lvm/"><a class="padding" href="/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/services/"><a class="padding" href="/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimize-ansible-processing/"><a class="padding" href="/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux/"><a class="padding" href="/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/tags/"><a class="padding" href="/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/loops-and-items/"><a class="padding" href="/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/modules-for-troubleshooting/"><a class="padding" href="/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Using Variables In Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/when/"><a class="padding" href="/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/secure-shell-service-ssh/"><a class="padding" href="/cyber-security/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ansiblepuppetchef/"><a class="padding" href="/networking/ccna/ccna-notes-1/ansiblepuppetchef/">Ansible, Puppet, and Chef<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscoacls/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscoacls/">Cisco ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscocli/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscocli/">Cisco CLI<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/classfulipv4/"><a class="padding" href="/networking/ccna/ccna-notes-1/classfulipv4/">Classful IPv4<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/cloudarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/cloudarchitecture/">Cloud Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/controllerbasednetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/controllerbasednetworking/">Controller-Based Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/device-management-protocols/"><a class="padding" href="/networking/ccna/ccna-notes-1/device-management-protocols/">Device Management Protocols<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-config/">DHCP Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/">DHCP Snooping and ARP Inspection<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-syncronization/"><a class="padding" href="/networking/dns-and-time-syncronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ethernetlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/ethernetlans/">Ethernet LANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/extended-acls/"><a class="padding" href="/networking/ccna/ccna-notes-1/extended-acls/">Extended ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-services/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-services/">IP Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-transport-and-applications/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-transport-and-applications/">IP Transport and Applications<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6/">IPv6<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/">IPv6 Addressing and Subnetting<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6configuration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6configuration/">IPv6 Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6routing/">IPv6 Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lan-architecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/lan-architecture/">LAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/l2-etherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/l2-etherchannel/">Layer 2 Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/network-devices-and-connections/"><a class="padding" href="/networking/network-devices-and-connections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospf-concepts/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospf-concepts/">OSPF Concepts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfconfiguration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfconfiguration/">OSPF Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/">OSPF Network Types and Neighbors<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/restandjson/"><a class="padding" href="/networking/ccna/ccna-notes-1/restandjson/">REST and JSON<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/router_operation/"><a class="padding" href="/networking/ccna/ccna-notes-1/router_operation/">Router Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/routeroperation/"><a class="padding" href="/networking/ccna/ccna-notes-1/routeroperation/">ROuter Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lanrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/lanrouting/">Routing in the LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/rstpandetherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/rstpandetherchannel/">RSTP and Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/securing-network-devices/"><a class="padding" href="/networking/ccna/ccna-notes-1/securing-network-devices/">Securing Network Devices<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/security-architectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/security-architectures/">Security Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/softwaredefinedaccess/"><a class="padding" href="/networking/ccna/ccna-notes-1/softwaredefinedaccess/">Software-Defined Access (SDA)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/spanningtreeprotocol/"><a class="padding" href="/networking/ccna/ccna-notes-1/spanningtreeprotocol/">Spanning Tree Protocol<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/static-routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/static-routing/">Static Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchinterfaces/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchinterfaces/">Switch Interfaces<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switching/"><a class="padding" href="/networking/ccna/ccna-notes-1/switching/">Switching<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchport-security-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchport-security-config/">Switchport Security Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/tcpipbasic/"><a class="padding" href="/networking/ccna/ccna-notes-1/tcpipbasic/">TCP/IP Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/troubleshootingrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/troubleshootingrouting/">Troubleshooting Routing Issues<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/vlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/vlans/">VLANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wanarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/wanarchitecture/">WAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wansandiprouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/wansandiprouting/">WANs and IP Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessarchitectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessarchitectures/">Wireless Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_lan/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_lan/">Wireless LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessnetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessnetworking/">Wireless Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_security/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_security/">Wireless Security<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
+            <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/local-filesystems-and-swap/"><a class="padding" href="/storage/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/network-filesystem-nfs/"><a class="padding" href="/storage/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/partitioning-mbr-gpt/"><a class="padding" href="/storage/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/rm-filesystem-from-partition/"><a class="padding" href="/storage/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/remove-formatting-from-highlights/"><a class="padding" href="/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-docker-nginx/"><a class="padding" href="/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/you-need-to-learn-man-pages/"><a class="padding" href="/tools/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/proxmox-ha-proxy-setup/"><a class="padding" href="/tools/proxmox-ha-proxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/learning-touch-typing/"><a class="padding" href="/tools/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5" checked><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/">Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="active hidden " data-nav-id="/containers/applicationbuildprocess/"><a class="padding" href="/containers/applicationbuildprocess/"><i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/ansible-and-podman/"><a class="padding" href="/containers/ansible-and-podman/">Ansible and Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/intro-to-containers-1/"><a class="padding" href="/containers/intro-to-containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/convert-docker-compose-to-quadlets/"><a class="padding" href="/containers/convert-docker-compose-to-quadlets/">Convert Docker Compose to Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-links/"><a class="padding" href="/containers/podman-links/">Podman Links<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-quadlets/"><a class="padding" href="/containers/podman-quadlets/">Podman Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/">Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
+            <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users-and-Groups</span></label><a class="padding default-animation" href="/users-and-groups/">Users-and-Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
+            <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/virtualization/"><input type="checkbox" id="R-section-da8ee4406de37987b502b79e5b0a9d1c" aria-controls="R-subsections-da8ee4406de37987b502b79e5b0a9d1c"><label for="R-section-da8ee4406de37987b502b79e5b0a9d1c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualizations</span></label><a class="padding default-animation" href="/virtualization/">Virtualizations<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-da8ee4406de37987b502b79e5b0a9d1c" class="collapsible-menu">
+            <li class="" data-nav-id="/virtualization/using-vagrant-on-linux/"><a class="padding" href="/virtualization/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/booknotes/"><a class="padding" href="/booknotes/"><i class='fas fa-fw fa-book'></i> Book Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/now/"><a class="padding" href="/now/"><i class='fas fa-fw fa-clock'></i> Now<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780154752" defer></script>
+    <script src="/js/theme.js?1780154752" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

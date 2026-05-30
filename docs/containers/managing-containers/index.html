@@ -1,0 +1,1840 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    <meta name="description" content="4 Managing Running Containers In the previous chapter, we learned how to set up the environment to run containers with Podman, covering binary installation for the major distributions, system configuration files, and a first example container run to verify that our setup was correct.[]{.sentence-end} This chapter will offer a more detailed overview of container execution, how to manage and inspect running containers, and how to group containers in pods.[]{.sentence-end} This chapter is important for gaining the right knowledge and expertise to start our experience as a system administrator for container technologies.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="4 Managing Running Containers In the previous chapter, we learned how to set up the environment to run containers with Podman, covering binary installation for the major distributions, system configuration files, and a first example container run to verify that our setup was correct.[]{.sentence-end} This chapter will offer a more detailed overview of container execution, how to manage and inspect running containers, and how to group containers in pods.[]{.sentence-end} This chapter is important for gaining the right knowledge and expertise to start our experience as a system administrator for container technologies.">
+    <meta property="og:url" content="http://localhost:1313/containers/managing-containers/">
+    <meta property="og:description" content="4 Managing Running Containers In the previous chapter, we learned how to set up the environment to run containers with Podman, covering binary installation for the major distributions, system configuration files, and a first example container run to verify that our setup was correct.[]{.sentence-end} This chapter will offer a more detailed overview of container execution, how to manage and inspect running containers, and how to group containers in pods.[]{.sentence-end} This chapter is important for gaining the right knowledge and expertise to start our experience as a system administrator for container technologies.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Containers">
+    <meta itemprop="description" content="4 Managing Running Containers In the previous chapter, we learned how to set up the environment to run containers with Podman, covering binary installation for the major distributions, system configuration files, and a first example container run to verify that our setup was correct.[]{.sentence-end} This chapter will offer a more detailed overview of container execution, how to manage and inspect running containers, and how to group containers in pods.[]{.sentence-end} This chapter is important for gaining the right knowledge and expertise to start our experience as a system administrator for container technologies.">
+    <meta itemprop="wordCount" content="9643">
+    <title></title>
+    <link href="/containers/managing-containers/index.md" rel="alternate" type="text/markdown" title="">
+    <link href="/images/favicon.svg?1780154752" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1780154752" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1780154752" defer></script>
+    <script src="/js/search-lunr.js?1780154752" defer></script>
+    <script src="/js/search.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1780154752";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780154752" rel="stylesheet">
+    <link href="/css/theme.css?1780154752" rel="stylesheet">
+    <link href="/css/format-html.css?1780154752" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/containers\/managing-containers\/';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:1313';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script><script defer src="https://cloud.umami.is/script.js" data-website-id="d179743c-138a-4212-8906-28f70628ef95"></script>
+<style>
+:root {
+    --MENU-S-width: 15rem;
+    --MENU-M-width: 15rem;
+    --MENU-L-width: 18rem;
+    --MAIN-MAX-width: 100rem;
+}
+html {
+  zoom: 1.2;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif,
+               "Apple Color Emoji", "Segoe UI Emoji" !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500 !important;
+  letter-spacing: 0.7px;
+}
+
+code, kbd, pre, samp {
+  font-family: "Fira Code", "Hack", "Source Code Pro", Consolas, Menlo, monospace !important;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+  <body class="mobile-support html" data-origin="/containers/managing-containers/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#h2_118">Searching for images</a></li>
+    <li><a href="#h2_119">Pulling and viewing images</a></li>
+    <li><a href="#h2_120">Inspecting images' configurations and contents</a></li>
+    <li><a href="#h2_121">Deleting images</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#h2_123">Viewing and handling container status</a></li>
+    <li><a href="#h2_124">Pausing and unpausing containers</a></li>
+    <li><a href="#h2_125">Inspecting processes inside containers</a></li>
+    <li><a href="#h2_126">Monitoring container stats</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/containers/"><span itemprop="name">Containers</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/managing-containers/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/" title="Containers (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/ansible-and-podman/" title="Ansible and Podman (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable containers" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id=""></h1>
+
+<h1 id="h1_114" class="chapterNumber">4<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<h1 id="h1_115" class="chapterTitle">Managing Running Containers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In the previous chapter, we learned how to set up the environment to run
+containers with Podman, covering binary installation for the major
+distributions, system configuration files, and a first example container
+run to verify that our setup was correct.[]{.sentence-end} This chapter
+will offer a more detailed overview of container execution, how to
+manage and inspect running containers, and how to group containers in
+pods.[]{.sentence-end} This chapter is important for gaining the right
+knowledge and expertise to start our experience as a system
+administrator for container technologies.</p>
+<p>In this chapter, we're going to cover the following main topics:</p>
+<ul>
+<li>Managing container images</li>
+<li>Operations with running containers</li>
+<li>Inspecting container information</li>
+<li>Capturing logs from containers</li>
+<li>Executing processes into a running container</li>
+<li>Running containers in pods</li>
+</ul>
+<h1 id="h1_116" class="heading-1">Technical requirements<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Before proceeding with this chapter and its exercises, a machine with a
+working Podman instance is required.[]{.sentence-end} As stated in
+<em><a href="/containers/managing-containers/#Chapter_3.xhtml#h1_83">Chapter 3</a>{.chapref}</em>, <em>Running</em> <em>the First
+Container</em>, all the examples in the book are executed on a Fedora 40
+system, but can be reproduced on an OS of your choice.</p>
+<p>Finally, a good understanding of the topics covered in the previous
+chapters is useful to easily grasp concepts regarding OCI images and
+container execution.</p>
+<h1 id="h1_117" class="heading-1">Managing container images<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In this section, we will see how to find and pull (download) an image in
+the local system, as well as how to inspect its
+contents.[]{.sentence-end} When a container is created and run for the
+first time, Podman takes care of pulling the related image
+automatically.[]{.sentence-end} However, being able to pull and inspect
+images in advance gives []{#Chapter_4.xhtml#idx_6271db0c .index-entry
+index-entry=&ldquo;container images:managing&rdquo;}some valuable advantages, the
+first being that a container executes faster when images are already
+available in the machine's local store.</p>
+<p>As we stated in the previous chapters, containers are a way to isolate
+processes in a sandboxed environment with separate namespaces and
+resource allocation.</p>
+<p>The filesystem mounted in the container is provided by the OCI image
+described in <em><a href="/containers/managing-containers/#Chapter_2.xhtml#h1_52">Chapter 2</a>{.chapref}</em>, <em>Comparing
+Podman and Docker</em>.</p>
+<p>OCI images are stored and distributed by specialized
+[]{#Chapter_4.xhtml#idx_c8db77f3 .index-entry
+index-entry=&ldquo;container registry&rdquo;}services called container
+registries.[]{.sentence-end} A container registry stores images and
+metadata and exposes simple REST API services to enable users to push
+and pull images.</p>
+<p>There are essentially two types of registries: public and
+[]{#Chapter_4.xhtml#idx_accae7ba .index-entry
+index-entry=&ldquo;public registry&rdquo;}private.[]{.sentence-end} A <strong>public
+registry</strong> is accessible as a public service (with or without
+authentication).[]{.sentence-end} The main public registries, such as
+<code>docker.io</code>{.inlineCode}, <code>gcr.io</code>{.inlineCode}, or
+<code>quay.io</code>{.inlineCode}, are also used as the image repositories of
+larger open source projects.[]{.sentence-end} Most of these registries
+will also offer private hosting for a fee.</p>
+<p><strong>Private registries</strong> are[]{#Chapter_4.xhtml#idx_18f3de9a .index-entry
+index-entry=&ldquo;private registries&rdquo;} deployed and managed inside an
+organization and can be more focused on security and content
+filtering.[]{.sentence-end} The main container registry projects
+nowadays are graduated under the CNCF
+(<a href="https://landscape.cncf.io/card-mode?category=container-registry&grouping=category" rel="external" target="_blank">[https://landscape.cncf.io/card-mode?category=container-registry&amp;grouping=category]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;})
+and offer advanced enterprise features to manage multitenancy,
+authentication, and <strong>role-based access control</strong> (<strong>RBAC</strong>), as well as
+image vulnerability scanning and image signing.</p>
+<p>In <em><a href="/containers/managing-containers/#Chapter_9.xhtml#h1_219">Chapter 9</a>{.chapref}</em>, <em>Pushing Images to
+a Container Registry</em>, we will provide more details and examples of
+interaction with container registries.</p>
+<p>The largest part of public and private registries exposes Docker
+Registry HTTP API V2
+(<a href="https://docs.docker.com/registry/spec/api/" rel="external" target="_blank">[https://docs.docker.com/registry/spec/api/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}).[]{.sentence-end}
+This being an HTTP-based REST API, users can interact with the
+[]{#Chapter_4.xhtml#idx_7df9c3b1 .index-entry
+index-entry=&ldquo;container images:managing&rdquo;}registry with a simple
+<code>curl</code>{.inlineCode} command or design their own custom clients.</p>
+<p>Podman offers a CLI to interact with public and private container
+registries, manage logins when registry authentication is required,
+search for image repositories by passing a string pattern, and handle
+locally cached images.</p>
+<h2 id="h2_118" class="heading-2">Searching for images<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>The first command we will learn to use[]{#Chapter_4.xhtml#idx_73692bf5
+.index-entry index-entry=&ldquo;container images:searching for&rdquo;} to search
+images across multiple registries is the <code>podman search</code>{.inlineCode}
+command.[]{.sentence-end} The following example shows how to search an
+nginx image:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman search nginx</code></pre></div>
+<p>The preceding command will produce an output with many entries from all
+the whitelisted registries (see the <em>Preparing your environment</em>
+|<em>Customizing container registries'</em> <em>search lists</em> section of
+<em><a href="/containers/managing-containers/#Chapter_3.xhtml#h1_83">Chapter 3</a>{.chapref}</em>, <em>Running the First
+Container</em>).[]{.sentence-end} The output will be a little clumsy, with
+many entries from unknown and unreliable repositories.[]{.sentence-end}
+It's also worth noting that most public registries have web-based
+search that is of significantly higher quality than the results
+available through <code>podman search</code>{.inlineCode}.</p>
+<p>In general, the <code>podman search</code>{.inlineCode} command accepts the
+following pattern:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>podman search [options] TERM</code></pre></div>
+<p>Here, <code>TERM</code>{.inlineCode} is the search argument.[]{.sentence-end} The
+resulting output of a search has the following fields:</p>
+<ul>
+<li><code>INDEX</code>{.inlineCode}: The registry indexing the image</li>
+<li><code>NAME</code>{.inlineCode}: The full name of the image, including registry
+name and associated namespaces</li>
+<li><code>DESCRIPTION</code>{.inlineCode}: A short description of the image role</li>
+<li><code>STARS</code>{.inlineCode}: The number of stars given by users (available
+only on registries supporting this feature, such as
+<code>docker.io</code>{.inlineCode})</li>
+<li><code>OFFICIAL</code>{.inlineCode}: A Boolean
+to[]{#Chapter_4.xhtml#idx_14fe50a1 .index-entry
+index-entry=&ldquo;container images:searching for&rdquo;} specify if the image
+is official</li>
+<li><code>AUTOMATED</code>{.inlineCode}: A field set to <code>OK</code>{.inlineCode} if the
+image is automated</li>
+</ul>
+<p>packt_tip
+<strong>Important</strong> <strong>note</strong></p>
+<p>Never trust unknown repositories and always prefer official
+images.[]{.sentence-end} When pulling images from a niche project, try
+to understand the content of the image before running
+it.[]{.sentence-end} Remember that an attacker could hide malicious code
+that could be executed inside containers.</p>
+<p>Even trusted repositories can be compromised in some
+cases.[]{.sentence-end} In enterprise scenarios, implement image
+signature verification to avoid image tampering.</p>
+<p>It is possible to apply filters to the search and refine the
+output.[]{.sentence-end} For example, to refine the search and print
+only official images, we can add the following filtering option, which
+only prints out images with the <code>is-official</code>{.inlineCode} flag:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman search nginx --filter=is-official</code></pre></div>
+<p>This command will print one line pointing to
+<code>docker.io/library/nginx:latest</code>{.inlineCode}.[]{.sentence-end} This
+official image is maintained by the nginx community and can be used more
+confidently.</p>
+<p>Users can refine the output format of the command.[]{.sentence-end} The
+following example shows how to print only the image registry and the
+image name:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman search fedora  \
+  --filter is-official \
+  --format &#34;table {{.Index}} {{.Name}}&#34;
+
+INDEX       NAME
+docker.io   docker.io/library/fedora</code></pre></div>
+<p>The output image name has []{#Chapter_4.xhtml#idx_64f78c83 .index-entry
+index-entry=&ldquo;container images:searching for&rdquo;}a standard naming pattern
+that deserves a detailed description.[]{.sentence-end} The standard
+format is shown here:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>&lt;registry&gt;[:&lt;port&gt;]/[&lt;namespace&gt;/]&lt;name&gt;:&lt;tag&gt;</code></pre></div>
+<p>Let's describe the preceding fields in detail, as follows:</p>
+<ul>
+<li><code>registry</code>{.inlineCode}: This contains the registry the image is
+stored in.[]{.sentence-end} The nginx image in our example is stored
+in the <code>docker.io</code>{.inlineCode} public registry.[]{.sentence-end}
+Optionally, it is possible to specify a custom
+[]{#Chapter_4.xhtml#idx_b4efced1 .index-entry
+index-entry=&ldquo;Transmission Control Protocol (TCP)&quot;}port number for
+the registry.[]{.sentence-end} By default, registries expose the
+<code>5000</code>{.inlineCode} <strong>Transmission Control Protocol</strong> (<strong>TCP</strong>)
+port.</li>
+<li><code>namespace</code>{.inlineCode}: This field could be optional and provides
+a hierarchy structure that is useful for distinguishing the image
+context from the provider.[]{.sentence-end} The namespace could
+represent the parent organization, the username of the owner of the
+repository, or the image role.</li>
+<li><code>name</code>{.inlineCode}: This contains the name of the private/public
+image repository where all the tags are stored.[]{.sentence-end} It
+is often referred to as the application name (that is, nginx).</li>
+<li><code>tag</code>{.inlineCode}: Every image stored in the
+[]{#Chapter_4.xhtml#idx_e4baea6b .index-entry
+index-entry=&ldquo;Secure Hash Algorithm 256 (SHA256)&quot;}registry has a
+unique tag, mapped to a <strong>Secure Hash Algorithm 256</strong> (<strong>SHA256</strong>)
+digest.[]{.sentence-end} The generic <code>:latest</code>{.inlineCode} tag can
+be omitted in the image name.</li>
+</ul>
+<p>The generic search hides the image tags by default.[]{.sentence-end} To
+show all available tags for a given repository, we can use the
+<code>-</code>{.inlineCode}<code>list-tags</code>{.inlineCode} option for a given image name,
+as follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman search quay.io/prometheus/prometheus --list-tags
+NAME                           TAG
+quay.io/prometheus/prometheus  0.19.0
+quay.io/prometheus/prometheus  0.19.1
+quay.io/prometheus/prometheus  0.19.2
+quay.io/prometheus/prometheus  0.19.3
+quay.io/prometheus/prometheus  0.20.0
+quay.io/prometheus/prometheus  latest
+quay.io/prometheus/prometheus  main
+quay.io/prometheus/prometheus  master
+quay.io/prometheus/prometheus  v1.0.0
+  
+[...output omitted...]</code></pre></div>
+<p>This option is really useful for[]{#Chapter_4.xhtml#idx_80ca97fd
+.index-entry index-entry=&ldquo;container images:searching for&rdquo;} finding a
+specific image tag in the registry, often associated with a release
+version of the application/runtime.</p>
+<p>packt_tip
+<strong>Important</strong> <strong>note</strong></p>
+<p>Using the <code>:latest</code>{.inlineCode} tag can lead to image versioning issues
+since it is not a descriptive tag.[]{.sentence-end} Also, it is usually
+expected to point to the latest image version.[]{.sentence-end}
+Unfortunately, this is not always true since an untagged image could
+retain the latest tag while the latest pushed image could have a
+different tag.[]{.sentence-end} It is up to the repository maintainer to
+apply tags correctly.[]{.sentence-end} If the repository uses semantic
+versioning, the best option is to pull the most recent version
+tag.[]{.sentence-end} In addition to that, another risk could be the
+maintainers pushing incompatible updates to `<code>:latest</code>{.inlineCode}`
+and breaking any existing deployment.</p>
+<h2 id="h2_119" class="heading-2">Pulling and viewing images<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Once we have []{#Chapter_4.xhtml#idx_97852fc2 .index-entry
+index-entry=&ldquo;container images:pulling&rdquo;}found our desired image, it can
+be downloaded using the <code>podman pull</code>{.inlineCode} command, as follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman pull docker.io/library/nginx:latest</code></pre></div>
+<p>Notice the root user for running the[]{#Chapter_4.xhtml#idx_bac0f42f
+.index-entry index-entry=&ldquo;container images:viewing&rdquo;} Podman
+command.[]{.sentence-end} In this case, we are pulling the image as
+root, and its layers and metadata are stored in the
+<code>/var/lib/containers/storage</code>{.inlineCode} path.</p>
+<p>We can run the same command as a standard user by executing the command
+in a standard user's shell, like this:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman pull docker.io/library/nginx:latest</code></pre></div>
+<p>In this case, the image will be downloaded in the user's home directory
+under <code>$HOME/.local/share/containers/storage/</code>{.inlineCode} and will be
+available to run rootless containers for the user who executed the
+command.</p>
+<p>packt_tip
+<strong>Important</strong> <strong>note</strong></p>
+<p>You could also try pulling container images using
+aliases.[]{.sentence-end} For example, the
+`<code>podman pull nginx</code>{.inlineCode}` command without specifying the
+registry could try to resolve some of the images, and in case there are
+some doubts, a prompt pops up asking the user what registry to pull
+from.</p>
+<p>Users can inspect all locally []{#Chapter_4.xhtml#idx_f955e564
+.index-entry index-entry=&ldquo;container images:viewing&rdquo;}cached images with
+the <code>podman images</code>{.inlineCode} command,
+as[]{#Chapter_4.xhtml#idx_8eab3553 .index-entry
+index-entry=&ldquo;container images:pulling&rdquo;} illustrated here:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman images
+REPOSITORY               TAG         IMAGE ID      CREATED     SIZE
+docker.io/library/nginx  latest      7f553e8bbc89  6 days ago  196 MB
+
+[...omitted output...]</code></pre></div>
+<p>The output shows the image repository name, its tag, the image
+<strong>identifier</strong> (<strong>ID</strong>), the creation date, and the image
+size.[]{.sentence-end} It is very useful to keep an updated view of the
+images available in the local store and understand which ones are
+obsolete.</p>
+<p>The <code>podman images</code>{.inlineCode} command also supports many options (a
+complete list is available by executing the
+<code>man podman-images</code>{.inlineCode} command).[]{.sentence-end} One of the
+more interesting options is <code>-</code>{.inlineCode}<code>sort</code>{.inlineCode}, which
+can be used to sort images by size, date, ID, repository, or
+tag.[]{.sentence-end} For example, we could print images sorted by
+creation date to find out the most obsolete ones, as follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman images --sort=created</code></pre></div>
+<p>Another couple of very useful options are the
+<code>-</code>{.inlineCode}<code>all</code>{.inlineCode} (or <code>-</code>{.inlineCode}<code>a</code>{.inlineCode})
+and <code>-</code>{.inlineCode}<code>quiet</code>{.inlineCode} (or
+<code>-</code>{.inlineCode}<code>q</code>{.inlineCode}) options.[]{.sentence-end} Together,
+they can be []{#Chapter_4.xhtml#idx_59f9eadd .index-entry
+index-entry=&ldquo;container images:pulling&rdquo;}combined to print only the image
+IDs of all the locally stored images, even intermediate image layers.</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>In the context of <strong>Open Container Initiative</strong> (<strong>OCI</strong>) images,
+intermediate[]{#Chapter_4.xhtml#idx_03ab4d0a .index-entry
+index-entry=&ldquo;Open Container Initiative (OCI)&rdquo;} layers are the
+individual, read-only filesystem snapshots created during the build
+process.</p>
+<p>When you build an image (using a Dockerfile or Containerfile), each
+instruction, such as <code>RUN</code>{.inlineCode}, <code>COPY</code>{.inlineCode}, or
+<code>ADD</code>{.inlineCode}, creates a new layer.[]{.sentence-end} These layers
+are stacked on top of one another to form the final image.</p>
+<p>The command will print output[]{#Chapter_4.xhtml#idx_8e235787
+.index-entry index-entry=&ldquo;container images:viewing&rdquo;} similar to the
+following example:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman images -qa
+ad4c705f24d3
+a56f85702a94
+b5c5125e3fee
+4d7fc5917f3e
+625707533167
+f881f1aa4d65
+96ab2a326180</code></pre></div>
+<p>Listing and showing the images already pulled on a system is not the
+most interesting part of the job! Let's discover how to inspect images
+with their configuration and contents in the next section.</p>
+<h2 id="h2_120" class="heading-2">Inspecting images' configurations and contents<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>To inspect the configuration of []{#Chapter_4.xhtml#idx_28d6fcfd
+.index-entry
+index-entry=&ldquo;container images:configurations and contents, inspecting&rdquo;}a
+pulled image, the <code>podman image inspect</code>{.inlineCode} (or the shorter
+<code>podman inspect</code>{.inlineCode}) command comes to help us, as illustrated
+here:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman inspect docker.io/library/nginx:latest</code></pre></div>
+<p>The printed output will be a JSON-formatted object containing the image
+config, architecture, layers, labels, annotation, and the image build
+history.</p>
+<p>The image history shows the creation history of every layer and is very
+useful for understanding how the image was built when the Dockerfile or
+the Containerfile is not available.</p>
+<p>Since the output is a JSON object, we can extract single fields to
+collect specific data or use them as input parameters for other
+commands.</p>
+<p>The following example prints out the command executed when a container
+is created upon this image:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman inspect docker.io/library/nginx:latest \
+--format &#34;{{ .Config.Cmd }}&#34;
+[nginx -g daemon off;]</code></pre></div>
+<p>Notice that the formatted output is managed as a Go template.</p>
+<p>Sometimes, especially when troubleshooting container issues, the
+inspection of an image must go further than a simple
+[]{#Chapter_4.xhtml#idx_3788cda4 .index-entry
+index-entry=&ldquo;container images:configurations and contents, inspecting&rdquo;}configuration
+check.[]{.sentence-end} On occasions, we need to inspect the filesystem
+content of an image.[]{.sentence-end} To achieve this result, Podman
+offers the useful <code>podman image mount</code>{.inlineCode} command.</p>
+<p>The following example mounts the image and prints its mount path:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman image mount docker.io/library/nginx
+/var/lib/containers/storage/overlay/11174639fa910c6d29b6f169964a8388815d85b7908b8825946e276e7242aea5/merged</code></pre></div>
+<p>If we run a simple <code>ls</code>{.inlineCode} command in the provided path, we
+will see the image filesystem, composed from its various merged layers,
+as follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># ls -al /var/lib/containers/storage/overlay/11174639fa910c6d29b6f169964a8388815d85b7908b8825946e276e7242aea5/merged/
+total 20
+dr-xr-xr-x. 1 root root   38 Oct  9 10:04 .
+drwx------. 1 root root   46 Oct  9 10:04 ..
+lrwxrwxrwx. 1 root root    7 Sep 26 00:00 bin -&gt; usr/bin
+drwxr-xr-x. 1 root root    0 Aug 14 16:10 boot
+drwxr-xr-x. 1 root root    0 Sep 26 00:00 dev
+drwxr-xr-x. 1 root root   54 Oct  3 00:58 docker-entrypoint.d
+-rwxr-xr-x. 1 root root 1620 Oct  3 00:57 docker-entrypoint.sh
+drwxr-xr-x. 1 root root  366 Oct  3 00:58 etc
+drwxr-xr-x. 1 root root    0 Aug 14 16:10 home
+lrwxrwxrwx. 1 root root    7 Sep 26 00:00 lib -&gt; usr/lib
+lrwxrwxrwx. 1 root root    9 Sep 26 00:00 lib64 -&gt; usr/lib64
+drwxr-xr-x. 1 root root    0 Sep 26 00:00 media
+drwxr-xr-x. 1 root root    0 Sep 26 00:00 mnt
+drwxr-xr-x. 1 root root    0 Sep 26 00:00 opt
+drwxr-xr-x. 1 root root    0 Aug 14 16:10 proc
+drwx------. 1 root root   30 Sep 26 00:00 root
+drwxr-xr-x. 1 root root    8 Sep 26 00:00 run
+lrwxrwxrwx. 1 root root    8 Sep 26 00:00 sbin -&gt; usr/sbin
+drwxr-xr-x. 1 root root    0 Sep 26 00:00 srv
+drwxr-xr-x. 1 root root    0 Aug 14 16:10 sys
+drwxrwxrwt. 1 root root    0 Sep 26 00:00 tmp
+drwxr-xr-x. 1 root root   40 Sep 26 00:00 usr
+drwxr-xr-x. 1 root root   22 Sep 26 00:00 var</code></pre></div>
+<p>To unmount the image, simply run the
+<code>podman image</code>{.inlineCode}<code> unmount</code>{.inlineCode} command, as follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman image unmount docker.io/library/nginx</code></pre></div>
+<p>Mounting images in rootless mode is a bit different since this execution
+mode only supports manual mounting of the <strong>Virtual File System</strong>
+(<strong>VFS</strong>) storage driver.[]{.sentence-end} Since
+[]{#Chapter_4.xhtml#idx_664aa361 .index-entry
+index-entry=&ldquo;Virtual File System (VFS)&quot;}we are working with a default
+OverlayFS storage driver, the
+<code>mount</code>{.inlineCode}/<code>unmount</code>{.inlineCode} commands would not
+work.[]{.sentence-end} The requirement is to run the
+<code>podman unshare</code>{.inlineCode} command first.[]{.sentence-end} It
+executes a new shell process inside a new
+[]{#Chapter_4.xhtml#idx_629ea7e8 .index-entry
+index-entry=&ldquo;user ID (UID)&quot;}namespace where the current <strong>user ID</strong>
+(<strong>UID</strong>) and <strong>globally unique ID</strong> (<strong>GID</strong>) are mapped
+to[]{#Chapter_4.xhtml#idx_670b0854 .index-entry
+index-entry=&ldquo;globally unique ID (GID)&rdquo;} UID 0 and GID 0,
+respectively.[]{.sentence-end} From now on, we have elevated privileges
+to run the <code>podman mount</code>{.inlineCode} command.[]{.sentence-end} Let's
+see an example here:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman unshare
+# podman image mount docker.io/library/nginx:latest
+.local/share/containers/storage/overlay/11174639fa910c6d29b6f169964a8388815d85b7908b8825946e276e7242aea5/merged</code></pre></div>
+<p>Notice the mount point is now in the
+<code>&lt;</code>{.inlineCode}<code>username</code>{.inlineCode}<code>&gt;</code>{.inlineCode} home directory.</p>
+<p>To unmount, simply run the <code>podman </code>{.inlineCode}<code>unmount</code>{.inlineCode}
+command, as follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman image unmount docker.io/library/nginx:latest
+7f553e8bbc897571642d836b31eaf6ecbe395d7641c2b24291356ed28f3f2bd0
+# exit</code></pre></div>
+<p>The <code>exit</code>{.inlineCode} command is necessary to
+[]{#Chapter_4.xhtml#idx_a5d584bf .index-entry
+index-entry=&ldquo;container images:configurations and contents, inspecting&rdquo;}exit
+the temporary unshared namespace.</p>
+<h2 id="h2_121" class="heading-2">Deleting images<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>To delete a local store image, we can use the <code>podman rmi</code>{.inlineCode}
+command.[]{.sentence-end} The following example deletes the nginx
+image[]{#Chapter_4.xhtml#idx_a6c74e9a .index-entry
+index-entry=&ldquo;container images:deleting&rdquo;} pulled before:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman rmi docker.io/library/nginx:latest
+Untagged: docker.io/library/nginx:latest
+Deleted: 7f553e8bbc897571642d836b31eaf6ecbe395d7641c2b24291356ed28f3f2bd0</code></pre></div>
+<p>The same command works in rootless mode when executed by a standard user
+against its home local store.</p>
+<p>To remove all the cached images, use the following example, which relies
+on shell command expansion to get a full list of image IDs:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman rmi $(podman images -qa)</code></pre></div>
+<p>Notice the sharp (<code>#</code>{.inlineCode}) symbol at the beginning of the line,
+which tells us that the command is executed as root.</p>
+<p>The next command removes all images in a regular user's local cache
+(notice the dollar symbol at the beginning of the line):</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman rmi $(podman images -qa)</code></pre></div>
+<p>packt_tip
+<strong>Important</strong> <strong>note</strong></p>
+<p>The <code>podman rmi</code>{.inlineCode} command fails to remove images that are
+currently in use from a container.[]{.sentence-end} First, stop and
+delete the containers using the []{#Chapter_4.xhtml#idx_82491237
+.index-entry index-entry=&ldquo;podman rmi command&rdquo;}blocked images, and then
+run the command again.[]{.sentence-end} Alternatively, we can use the
+<code>--force</code>{.inlineCode} option, which will remove images that are in use,
+but it will also remove all containers that are using the image.</p>
+<p>Podman also offers a simpler []{#Chapter_4.xhtml#idx_75e2e8fa
+.index-entry index-entry=&ldquo;container images:deleting&rdquo;}way to clean up
+dangling or unused images&mdash;the <code>podman image prune</code>{.inlineCode}
+command.[]{.sentence-end} It deletes every image that is not in use,
+leaving only those associated with containers, running or stopped.</p>
+<p>The following example deletes all unused images without asking for
+confirmation:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo podman image prune -af</code></pre></div>
+<p>The same command applies in rootless mode, deleting only images in the
+user's home local store.[]{.sentence-end} With this, we have learned
+how to manage container images on our machine.[]{.sentence-end} Let's
+now learn how to handle and check running containers.</p>
+<h1 id="h1_122" class="heading-1">Operations with running containers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In <em><a href="/containers/managing-containers/#Chapter_2.xhtml#h1_52">Chapter 2</a>{.chapref}</em>, <em>Comparing Podman
+and Docker</em>, we learned in the <em>Running your first container</em> section
+how to run a container with basic examples, involving the execution of a
+Bash process inside a Fedora container[]{#Chapter_4.xhtml#idx_0cb0a925
+.index-entry index-entry=&ldquo;running containers:operations, performing&rdquo;}
+and an <code>httpd</code>{.inlineCode} server, which was also helpful for learning
+how to expose containers externally.</p>
+<p>We will now explore a set of commands used to monitor and check our
+running containers and gain insights into their behavior.</p>
+<h2 id="h2_123" class="heading-2">Viewing and handling container status<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Let's start by running a []{#Chapter_4.xhtml#idx_2b6156d8 .index-entry
+index-entry=&ldquo;running containers:status, viewing&rdquo;}simple container and
+exposing it on port <code>8080</code>{.inlineCode} to make it
+[]{#Chapter_4.xhtml#idx_a3e86649 .index-entry
+index-entry=&ldquo;running containers:status, handling&rdquo;}accessible externally,
+as follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run -d -p 8080:80 docker.io/library/nginx</code></pre></div>
+<p>The preceding example is run in rootless mode, but the same can be
+applied as a root user by prepending <code>sudo</code>{.inlineCode} to the
+[]{#Chapter_4.xhtml#idx_ad9d7f14 .index-entry
+index-entry=&ldquo;running containers:status, viewing&rdquo;}command.[]{.sentence-end}
+In this case, it was simply not necessary to have a container executed
+in that way.</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>Rootless containers give an extra[]{#Chapter_4.xhtml#idx_409bd810
+.index-entry index-entry=&ldquo;rootless containers&rdquo;} security
+advantage.[]{.sentence-end} If a malicious process breaks the container
+isolation, maybe leveraging a vulnerability on the host, it will at best
+gain the privileges of the user who started the rootless container.</p>
+<p>Now that our container is up and running and
+[]{#Chapter_4.xhtml#idx_b4eafd79 .index-entry
+index-entry=&ldquo;running containers:status, handling&rdquo;}ready to serve, we can
+test it by running a <code>curl</code>{.inlineCode} command on the localhost, which
+should produce an HTML default output like this:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ curl localhost:8080
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+&lt;style&gt;
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Welcome to nginx!&lt;/h1&gt;
+&lt;p&gt;If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.&lt;/p&gt;
+
+&lt;p&gt;For online documentation and support please refer to
+&lt;a href=&#34;http://nginx.org/&#34;&gt;nginx.org&lt;/a&gt;.&lt;br/&gt;
+Commercial support is available at
+&lt;a href=&#34;http://nginx.com/&#34;&gt;nginx.com&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Thank you for using nginx.&lt;/em&gt;&lt;/p&gt;
+&lt;/body&gt;</code></pre></div>
+<p>Obviously, an empty nginx server without contents to serve is useless,
+but we will learn how to serve custom contents by using volumes or
+[]{#Chapter_4.xhtml#idx_c854c8d0 .index-entry
+index-entry=&ldquo;running containers:status, handling&rdquo;}building custom images
+later, in the following chapters.</p>
+<p>The first command we can use to[]{#Chapter_4.xhtml#idx_c9a30795
+.index-entry index-entry=&ldquo;running containers:status, viewing&rdquo;} check our
+container is <code>podman ps</code>{.inlineCode}.[]{.sentence-end} This simply
+prints out useful information from the running containers, with the
+option of customizing and sorting the output.[]{.sentence-end} Let's
+run the command in our host and see what is printed, as follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman ps
+CONTAINER ID  IMAGE                           COMMAND               CREATED         STATUS         PORTS                         NAMES
+d19dbb81a0f3  docker.io/library/nginx:latest  nginx -g daemon o...  34 seconds ago  Up 34 seconds  0.0.0.0:8080-&gt;80/tcp, 80/tcp  admiring_bouman</code></pre></div>
+<p>The output produces some interesting information about running
+containers, as detailed here:</p>
+<ul>
+<li><code>CONTAINER ID</code>{.inlineCode}: Every new container gets a unique
+hexadecimal ID.[]{.sentence-end} The full ID has a length of 64
+characters, and a shortened portion of 12 characters is printed in
+the <code>podman ps</code>{.inlineCode} output.</li>
+<li><code>IMAGE</code>{.inlineCode}: The image used by the container.</li>
+<li><code>COMMAND</code>{.inlineCode}: The command executed inside the container.</li>
+<li><code>CREATED</code>{.inlineCode}: The creation date of the container.</li>
+<li><code>STATUS</code>{.inlineCode}: The current container status.</li>
+<li><code>PORTS</code>{.inlineCode}: The network ports opened in the
+container.[]{.sentence-end} When a port mapping is applied, we can
+see one or more host <code>ip</code>{.inlineCode}<code>:port</code>{.inlineCode} pairs
+mapped to the container ports with an arrow sign.[]{.sentence-end}
+For example, the
+<code>0.0.0.0:8080-</code>{.inlineCode}<code>&gt;</code>{.inlineCode}<code>80/tcp</code>{.inlineCode}
+string means that the <code>8080/tcp</code>{.inlineCode} host port is exposed
+on all the listening interfaces and is mapped to the
+<code>80/tcp</code>{.inlineCode} container port.</li>
+<li><code>NAMES</code>{.inlineCode}: The container name.[]{.sentence-end} This can
+be assigned by the user or be randomly generated by the container
+engine.</li>
+</ul>
+<p>note
+<strong>Tip</strong></p>
+<p>Notice the randomly generated name in the last column of the
+output.[]{.sentence-end} Podman continues the Docker <em>tradition</em> of
+generating random names using adjectives in the left part of the name
+and notable scientists and hackers in the right part.[]{.sentence-end}
+Indeed, Podman still uses the same
+<code>github.com/docker/docker/namesgenerator</code>{.inlineCode} Docker package,
+included in the vendor directory of the project.</p>
+<p>To get a full list of both running and stopped
+[]{#Chapter_4.xhtml#idx_97ecf975 .index-entry
+index-entry=&ldquo;running containers:status, handling&rdquo;}containers, we can add
+an <code>-</code>{.inlineCode}<code>a</code>{.inlineCode} option to the
+command.[]{.sentence-end} To demonstrate this, we
+[]{#Chapter_4.xhtml#idx_5d8330db .index-entry
+index-entry=&ldquo;running containers:status, viewing&rdquo;}first introduce the
+<code>podman stop</code>{.inlineCode} command.[]{.sentence-end} This changes the
+container status to stopped and sends a <code>SIGTERM</code>{.inlineCode} signal to
+the processes running inside the container.[]{.sentence-end} If the
+container becomes unresponsive, it sends a <code>SIGKILL</code>{.inlineCode} signal
+after a given timeout of 10 seconds.</p>
+<p>Let's try to stop the previous container and check its state by
+executing the following code:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman stop d19dbb81a0f3
+$ podman ps</code></pre></div>
+<p>This time, <code>podman ps</code>{.inlineCode} produced an empty
+output.[]{.sentence-end} This is because the container state is
+stopped.[]{.sentence-end} To get a full list of both running and stopped
+containers, run the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman ps -a
+CONTAINER ID  IMAGE                           COMMAND               CREATED             STATUS                     PORTS                         NAMES
+d19dbb81a0f3  docker.io/library/nginx:latest  nginx -g daemon o...  About a minute ago  Exited (0) 20 seconds ago  0.0.0.0:8080-&gt;80/tcp, 80/tcp  admiring_bouman</code></pre></div>
+<p>Notice the status of the container, which states that the container has
+exited with a <code>0</code>{.inlineCode} exit code.</p>
+<p>The stopped container can be resumed by running the
+<code>podman start</code>{.inlineCode} command, as follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman start d19dbb81a0f3</code></pre></div>
+<p>This command simply starts the container we stopped before again.</p>
+<p>If we now check the container status again, we will see it is up and
+running, as indicated here:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman ps
+CONTAINER ID  IMAGE                           COMMAND               CREATED             STATUS         PORTS                         NAMES
+d19dbb81a0f3  docker.io/library/nginx:latest  nginx -g daemon o...  About a minute ago  Up 13 seconds  0.0.0.0:8080-&gt;80/tcp, 80/tcp  admiring_bouman</code></pre></div>
+<p>Podman keeps the container configuration, storage, and
+[]{#Chapter_4.xhtml#idx_b8cd2e98 .index-entry
+index-entry=&ldquo;running containers:status, handling&rdquo;}metadata as long as it
+is in a stopped state.[]{.sentence-end} Anyway, when we
+resume[]{#Chapter_4.xhtml#idx_95b62e39 .index-entry
+index-entry=&ldquo;running containers:status, viewing&rdquo;} the container, we
+start a new process inside it.</p>
+<p>For more options, see[]{#Chapter_4.xhtml#idx_9bd7e1a1 .index-entry
+index-entry=&ldquo;manual (man) page&rdquo;} the related <strong>manual</strong> (<strong>man</strong>) page
+(<code>man podman-start</code>{.inlineCode}).</p>
+<p>If we simply need to restart a running container, we can use the
+<code>podman restart</code>{.inlineCode} command, as follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman restart &lt;Container_ID_or_Name&gt;</code></pre></div>
+<p>This command has the effect of immediately restarting the container,
+using the same data and process as the old one.[]{.sentence-end} While
+we reuse the filesystem and configuration, all namespaces will be
+different, which can fix many networking issues, as all configurations
+will be performed again.[]{.sentence-end} The
+<code>podman start</code>{.inlineCode} command can also be used to start containers
+that have been previously created but not run.[]{.sentence-end} To
+create a container without starting it, use the
+<code>podman create</code>{.inlineCode} command.[]{.sentence-end} The following
+example creates a container but does not start it:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman create -p 8080:80 docker.io/library/nginx</code></pre></div>
+<p>To start it, run <code>podman start</code>{.inlineCode} on the created container ID
+or name, as follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman start &lt;Container_ID_or_Name&gt;</code></pre></div>
+<p>This command is very useful for preparing an environment without running
+it or for mounting a container filesystem for a regular user (non-root),
+as in the following example:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman unshare
+$ podman container mount &lt;Container_ID_or_Name&gt;
+/home/&lt;username&gt;/.local/share/containers/storage/overlay/bf9d8df299436d80dece200a23e1b8b957f987a254a656ef94cdc56669823b5c/merged</code></pre></div>
+<p>note
+<strong>Good to</strong> <strong>know</strong></p>
+<p>The <code>podman container mount</code>{.inlineCode} command (or the shorter
+<code>podman mount</code>{.inlineCode}) is used to mount a container's root
+filesystem to a location []{#Chapter_4.xhtml#idx_516ab8fb .index-entry
+index-entry=&ldquo;podman container mount command&rdquo;}on your host
+machine.[]{.sentence-end} This allows you to browse, read, and modify
+the files inside a container directly from the host's terminal or GUI,
+without needing to execute a shell inside the container itself.</p>
+<p>Let's now introduce a very frequently used command:
+<code>podman rm</code>{.inlineCode}.[]{.sentence-end} As the name indicates, it is
+used to remove containers from the[]{#Chapter_4.xhtml#idx_2d11b376
+.index-entry index-entry=&ldquo;running containers:status, handling&rdquo;}
+host.[]{.sentence-end} By default, it removes stopped containers, but it
+can be forced to remove running[]{#Chapter_4.xhtml#idx_0f77bd93
+.index-entry index-entry=&ldquo;running containers:status, viewing&rdquo;}
+containers with the <code>-</code>{.inlineCode}<code>f</code>{.inlineCode} option.</p>
+<p>Using the container from the previous example, if we stop it again and
+issue the <code>podman rm</code>{.inlineCode} command, as illustrated in the
+following commands, all the container storage, configs, and metadata
+will be discarded:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman stop d19dbb81a0f3
+$ podman rm d19dbb81a0f3</code></pre></div>
+<p>If we now run a <code>podman ps</code>{.inlineCode} command again, even with the
+<code>-</code>{.inlineCode}<code>a</code>{.inlineCode} option, we will get an empty list, as
+illustrated here:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman ps -a
+CONTAINER ID  IMAGE       COMMAND     CREATED     STATUS      PORTS       NAMES</code></pre></div>
+<p>For more details, please inspect the command man page
+(<code>man podman-rm</code>{.inlineCode}).</p>
+<p>Sometimes, it is useful&mdash;just as with images&mdash;to print only the
+container ID with the <code>-</code>{.inlineCode}<code>q</code>{.inlineCode}
+option.[]{.sentence-end} And when combined with the
+<code>-</code>{.inlineCode}<code>a</code>{.inlineCode} option, this
+[]{#Chapter_4.xhtml#idx_3dea2cb7 .index-entry
+index-entry=&ldquo;running containers:status, handling&rdquo;}can print a list of
+all stopped and running containers on the host.[]{.sentence-end} Let's
+try another example here:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ for i in {1..5}; do podman run -d docker.io/library/nginx; done</code></pre></div>
+<p>It's interesting to notice that we[]{#Chapter_4.xhtml#idx_90accbfb
+.index-entry index-entry=&ldquo;running containers:status, viewing&rdquo;} have used
+a shell loop to start five identical containers, this time without any
+port mapping&mdash;just plain nginx containers.[]{.sentence-end} We can
+inspect their IDs with the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman ps -qa
+b38ebfed5921
+6204efc6d6b2
+762967d87657
+269f1affb699
+1161072ec559</code></pre></div>
+<p>How can we stop and remove all our running containers quickly? We can
+use <strong>shell expansion</strong> to combine it with other commands and reach the
+desired result.[]{.sentence-end} Shell expansion is a powerful tool that
+runs the command inside round parentheses and lets us pass the output
+string as arguments to the external command, as illustrated in the
+following commands:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman stop $(podman ps -qa)
+$ podman rm $(podman ps -qa)</code></pre></div>
+<p>The two commands stopped all the running containers, identified by their
+IDs, and removed them from the host.</p>
+<p>Alternatively, we can use an alias for all containers,
+<code>-a</code>{.inlineCode}, which most commands, such as
+<code>podman start</code>{.inlineCode}, <code>podman stop</code>{.inlineCode}, and
+<code>podman rm</code>{.inlineCode} support.</p>
+<p>The <code>podman ps</code>{.inlineCode} command enables users to refine their
+output by applying specific filters.[]{.sentence-end} A full list of all
+applicable filters is available on the <code>podman-ps</code>{.inlineCode} man
+page.[]{.sentence-end} A simple but useful application is the status
+filter, which enables users to print only containers in a specific
+condition.[]{.sentence-end} Possible statuses are
+<code>created</code>{.inlineCode}, <code>exited</code>{.inlineCode}, <code>paused</code>{.inlineCode},
+<code>running</code>{.inlineCode}, and <code>unknown</code>{.inlineCode}.</p>
+<p>The following example only prints containers in an <code>exited</code>{.inlineCode}
+status:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman ps --filter status=exited</code></pre></div>
+<p>Again, we can leverage the power of shell expansion to remove nothing
+but the exited containers, as follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman rm $(podman ps -qa --filter status=exited)</code></pre></div>
+<p>A similar result can be achieved with the simpler-to-remember
+<code>podman container prune</code>{.inlineCode} command shown here, which removes
+(prunes) all stopped containers from the host:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman container prune</code></pre></div>
+<p><strong>Sorting</strong> is another useful option to produce an ordered output when
+listing containers.[]{.sentence-end} The following example shows how to
+sort by []{#Chapter_4.xhtml#idx_daf5184a .index-entry
+index-entry=&ldquo;running containers:status, handling&rdquo;}container ID:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman ps -q --sort id</code></pre></div>
+<p>The <code>podman ps</code>{.inlineCode} command supports
+[]{#Chapter_4.xhtml#idx_2480e6b3 .index-entry
+index-entry=&ldquo;running containers:status, viewing&rdquo;}formatting using a Go
+template to produce custom output.[]{.sentence-end} The next example
+prints only the container IDs and the commands executed inside them:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman ps -a --format &#34;{{.ID}}  {{.Command}}&#34; --no-trunc</code></pre></div>
+<p>Also, notice the <code>--no-trunc</code>{.inlineCode} option is added to avoid
+truncating the command output.[]{.sentence-end} This is not mandatory,
+but it is useful when we have long commands executed inside the
+containers.</p>
+<p>If we simply wish to extract the host PID of the process running inside
+the running containers, we can run the following example:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman ps --format &#34;{{ .Pid }}&#34;</code></pre></div>
+<p>Instead, if we need to also find out information about the isolated
+namespaces, <code>podman ps</code>{.inlineCode} can print details about the cloned
+namespaces of[]{#Chapter_4.xhtml#idx_b7e8f009 .index-entry
+index-entry=&ldquo;running containers:status, handling&rdquo;} the running
+containers.[]{.sentence-end} This is a useful starting point for
+advanced troubleshooting and inspection.[]{.sentence-end} You can see
+the command being run here:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman ps --namespace
+CONTAINER ID  NAMES                 PID         CGROUPNS    IPC         MNT         NET         PIDNS       USERNS      UTS
+f2666ed4a46a  unruffled_hofstadter  437764      4026533088  4026533086  4026533083  4026532948  4026533087  4026532973  4026533085</code></pre></div>
+<p>This subsection covered many []{#Chapter_4.xhtml#idx_7eacb767
+.index-entry index-entry=&ldquo;running containers:status, viewing&rdquo;}common
+operations to control and view the status of
+containers.[]{.sentence-end} In the next section, we will learn how to
+pause and resume running containers.</p>
+<h2 id="h2_124" class="heading-2">Pausing and unpausing containers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>This short section covers the <code>podman pause</code>{.inlineCode} and
+<code>podman unpause</code>{.inlineCode} commands.[]{.sentence-end} Despite being a
+section related to container status handling, it is interesting to
+understand how Podman and the container runtime
+[]{#Chapter_4.xhtml#idx_e045ceaa .index-entry
+index-entry=&ldquo;running containers:pausing&rdquo;}leverage cgroups to achieve
+specific purposes.</p>
+<p>Simply put, the <code>pause</code>{.inlineCode} and <code>unpause</code>{.inlineCode} commands
+have the purpose of pausing and resuming the processes of a running
+container.[]{.sentence-end} Now, let's[]{#Chapter_4.xhtml#idx_f951a279
+.index-entry index-entry=&ldquo;running containers:unpausing&rdquo;} understand the
+difference between <code>pause</code>{.inlineCode} and <code>stop</code>{.inlineCode} commands
+in Podman.</p>
+<p>While the <code>podman stop</code>{.inlineCode} command simply sends a
+<code>SIGTERM</code>{.inlineCode}/<code>SIGKILL</code>{.inlineCode} signal to the parent
+process in the container, the <code>podman pause</code>{.inlineCode} command uses
+cgroups to pause the process without terminating it.[]{.sentence-end}
+When the container is unpaused, the same process is resumed
+transparently.</p>
+<p>note
+<strong>Tip</strong></p>
+<p>The <code>pause</code>{.inlineCode}/<code>unpause</code>{.inlineCode} low-level logic is
+implemented in the container runtime&mdash;for the more curious, this was
+the implementation in <code>crun</code>{.inlineCode} at the time of writing:</p>
+<p><a href="https://github.com/containers/crun/blob/7ef74c9330033cb884507c28fd8c267861486633/src/libcrun/cgroup.c#L1894-L1936" rel="external" target="_blank">[https://github.com/containers/crun/blob/7ef74c9330033cb884507c28fd8c267861486633/src/libcrun/cgroup.c#L1894-L1936]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</p>
+<p>The following example demonstrates the
+<code>podman </code>{.inlineCode}<code>pause</code>{.inlineCode} and <code>unpause</code>{.inlineCode}
+commands.[]{.sentence-end} First, let's start a Fedora container that
+prints a []{#Chapter_4.xhtml#idx_3d86625b .index-entry
+index-entry=&ldquo;running containers:unpausing&rdquo;}date and time string every
+<code>2</code>{.inlineCode} seconds in an endless loop, as follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run --name timer docker.io/library/fedora bash -c &#34;while true; do echo $(date); sleep 2; done&#34;</code></pre></div>
+<p>We intentionally leave the []{#Chapter_4.xhtml#idx_05aa9ae8 .index-entry
+index-entry=&ldquo;running containers:pausing&rdquo;}container running in a window
+and open a new window/tab to manage its status.[]{.sentence-end} Before
+issuing the <code>pause</code>{.inlineCode} command, let's inspect the PID by
+executing the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman ps --format &#34;{{ .Pid }}&#34; --filter name=timer
+816807</code></pre></div>
+<p>Now, let's pause the running container with the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman pause timer</code></pre></div>
+<p>If we go back to the <code>timer</code>{.inlineCode} container, we see that the
+output just paused, but the container has not exited.[]{.sentence-end}
+The <code>unpause</code>{.inlineCode} action seen here will bring it back to life:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman unpause timer</code></pre></div>
+<p>After the <code>unpause</code>{.inlineCode} action, the timer container will start
+printing date outputs again.[]{.sentence-end} Looking at the PID here,
+nothing has changed, as expected:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman ps --format &#34;{{ .Pid }}&#34; --filter name=timer
+816807</code></pre></div>
+<p>We can check the cgroups status of the paused/unpaused
+container.[]{.sentence-end} In a third tab, open a terminal with a root
+shell and access the <code>cgroupfs</code>{.inlineCode} controller hierarchy after
+replacing the correct container ID, as follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo -i
+$ cd /sys/fs/cgroup/user.slice/user-1000.slice/user@$UID.service/user.slice/libpod-&lt;CONTAINER_ID&gt;.scope/container</code></pre></div>
+<p>Now, look at the <code>cgroup.freeze</code>{.inlineCode} file
+content.[]{.sentence-end} This file holds
+a[]{#Chapter_4.xhtml#idx_122fbae0 .index-entry
+index-entry=&ldquo;running containers:unpausing&rdquo;} Boolean value and its state
+changes as we pause/unpause the []{#Chapter_4.xhtml#idx_0aa1fd10
+.index-entry index-entry=&ldquo;running containers:pausing&rdquo;}container from 0
+to 1 and vice versa.[]{.sentence-end} Try to pause and unpause the
+container again to test the changes.</p>
+<p>packt_tip
+<strong>Cleanup</strong> <strong>tip</strong></p>
+<p>Since the echo loop was issued with a
+<code>bash -</code>{.inlineCode}<code>c</code>{.inlineCode} command, we need to send a
+<code>SIGKILL</code>{.inlineCode} signal to the process.[]{.sentence-end} To do
+this, we can stop the container and wait for the 10-second timeout, or
+simply run a <code>podman kill</code>{.inlineCode} command, as follows:</p>
+<div class="programlisting snippet-con-tip highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman kill timer</code></pre></div>
+<p>Alternatively, we can even skip the 10-second timeout with the
+<code>--time 0</code>{.inlineCode} option.</p>
+<p>In this subsection, we covered in detail the most common commands to
+watch and modify a container's status.[]{.sentence-end} We can now move
+on to inspect the processes running inside the running containers.</p>
+<h2 id="h2_125" class="heading-2">Inspecting processes inside containers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>When a container is running, processes[]{#Chapter_4.xhtml#idx_3b252505
+.index-entry
+index-entry=&ldquo;running containers:inside processes, inspecting&rdquo;} inside it
+are isolated at the namespace level, but users still have total control
+of the processes running and can inspect their
+behavior.[]{.sentence-end} There are many levels of complexity in
+process inspection, but Podman offers tools that can speed up this task.</p>
+<p>Let's start with the <code>podman top</code>{.inlineCode} command: this provides a
+full view of the processes running inside a container.[]{.sentence-end}
+The following example shows the processes running inside an nginx
+container:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman top f2666ed4a46a
+USER        PID         PPID        %CPU        ELAPSED          TTY         TIME        COMMAND
+root        1           0           0.000       3m26.540290427s  ?           0s          nginx: master process nginx -g daemon off;
+nginx       26          1           0.000       3m26.540547429s  ?           0s          nginx: worker process
+nginx       27          1           0.000       3m26.540788803s  ?           0s          nginx: worker process
+nginx       28          1           0.000       3m26.540914386s  ?           0s          nginx: worker process
+nginx       29          1           0.000       3m26.541040023s  ?           0s          nginx: worker process
+nginx       30          1           0.000       3m26.541161213s  ?           0s          nginx: worker process
+nginx       31          1           0.000       3m26.541297546s  ?           0s          nginx: worker process
+nginx       32          1           0.000       3m26.54141773s   ?           0s          nginx: worker process
+nginx       33          1           0.000       3m26.541564289s  ?           0s          nginx: worker process
+nginx       34          1           0.000       3m26.541685475s  ?           0s          nginx: worker process
+nginx       35          1           0.000       3m26.541808977s  ?           0s          nginx: worker process
+nginx       36          1           0.000       3m26.541932099s  ?           0s          nginx: worker process
+nginx       37          1           0.000       3m26.54205111s   ?           0s          nginx: worker process</code></pre></div>
+<p>The result is very similar to the <code>ps</code>{.inlineCode} command output
+rather than the interactive one produced by the Linux <code>top</code>{.inlineCode}
+command.</p>
+<p>It is possible to apply custom[]{#Chapter_4.xhtml#idx_a3407789
+.index-entry
+index-entry=&ldquo;running containers:inside processes, inspecting&rdquo;}
+formatting to the output.[]{.sentence-end} The following example only
+prints PIDs, commands, and arguments:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman top f2666ed4a46a pid comm args
+PID         COMMAND     COMMAND
+1           nginx       nginx: master process nginx -g daemon off;
+26          nginx       nginx: worker process
+27          nginx       nginx: worker process
+28          nginx       nginx: worker process
+29          nginx       nginx: worker process
+30          nginx       nginx: worker process
+31          nginx       nginx: worker process
+32          nginx       nginx: worker process
+33          nginx       nginx: worker process
+34          nginx       nginx: worker process
+35          nginx       nginx: worker process
+36          nginx       nginx: worker process
+37          nginx       nginx: worker process</code></pre></div>
+<p>We may need to inspect container processes in greater
+detail.[]{.sentence-end} As we discussed earlier, in <em><a href="/containers/managing-containers/#Chapter_1.xhtml#h1_14">Chapter
+1</a>{.chapref}</em>, <em>Introduction to Container
+Technology</em>, once a brand new container is started, it will start
+assigning PIDs from number <code>0</code>{.inlineCode}, while under the hood, the
+container engine will map this container's PIDs with the real ones on
+the host.[]{.sentence-end} So, we can use the output of the
+<code>podman ps --namespace</code>{.inlineCode} command to extract the process's
+original PID in the host for a given container.[]{.sentence-end} With
+that information, we[]{#Chapter_4.xhtml#idx_d51e5760 .index-entry
+index-entry=&ldquo;running containers:inside processes, inspecting&rdquo;} can
+conduct advanced analysis.[]{.sentence-end} The following example shows
+how to attach the <code>strace</code>{.inlineCode} command, used to inspect
+processes' syscalls, to the process running inside the container:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo strace -p &lt;PID&gt;</code></pre></div>
+<p>Details about the usage of the <code>strace</code>{.inlineCode} command are beyond
+the scope of this book.[]{.sentence-end} See <code>man strace</code>{.inlineCode}
+for more advanced examples and a deeper explanation of the command
+options.</p>
+<p>Alternatively, the easiest way to gather the PID is using the
+<code>podman top</code>{.inlineCode} command as described in the next code block:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman top $CONTAINER_ID pid hpid</code></pre></div>
+<p>The <code>hpid</code>{.inlineCode} option will print the PID of the process on the
+host.</p>
+<p>Another useful command that can be easily applied to processes running
+inside a container is <code>pidstat</code>{.inlineCode}.[]{.sentence-end} Once we
+have obtained the PID, we can inspect the resource usage in this way:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ pidstat -p &lt;PID&gt; [&lt;interval&gt; &lt;count&gt;]</code></pre></div>
+<p>The integers applied at the end represent, respectively, the execution
+interval of the command and the number of times it
+[]{#Chapter_4.xhtml#idx_e7c8bed9 .index-entry
+index-entry=&ldquo;running containers:inside processes, inspecting&rdquo;}must print
+the usage stats.[]{.sentence-end} See <code>man pidstat</code>{.inlineCode} for
+more usage options.</p>
+<p>When a process in a container becomes unresponsive, it is possible to
+handle its abrupt termination with the <code>podman kill</code>{.inlineCode}
+command.[]{.sentence-end} By default, it sends a <code>SIGKILL</code>{.inlineCode}
+signal to the process inside the container.[]{.sentence-end} The
+following example creates an <code>httpd</code>{.inlineCode} container and then
+kills it:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run --name custom-webserver -d docker.io/library/httpd
+$ podman kill custom-webserver</code></pre></div>
+<p>We can optionally send custom signals (such as <code>SIGTERM</code>{.inlineCode} or
+<code>SIGHUP</code>{.inlineCode}) with the <code>--signal</code>{.inlineCode}
+option.[]{.sentence-end} Notice that a killed container is not removed
+from the host but continues to exist, is stopped, and is in an exited
+status.</p>
+<p>In <em><a href="/containers/managing-containers/#Chapter_1.xhtml#h1_14">Chapter 1</a>{.chapref}1</em>, <em>Troubleshooting
+and Monitoring Containers</em>, we will again deal with container
+troubleshooting and learn how to use advanced tools such as
+<code>nsenter</code>{.inlineCode} to inspect container processes.[]{.sentence-end}
+We'll now move on to basic container statistics commands that can be
+useful for monitoring the overall resource usage by all containers
+running in a system.</p>
+<h2 id="h2_126" class="heading-2">Monitoring container stats<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>When multiple containers are []{#Chapter_4.xhtml#idx_bb4dbca8
+.index-entry index-entry=&ldquo;running containers:stats, monitoring&rdquo;}running
+on the same host, it is crucial to monitor the amount of CPU, memory,
+disk, and network resources they are consuming in a given interval of
+time.[]{.sentence-end} The first, simpler command that an administrator
+can use is the <code>podman stats</code>{.inlineCode} command, shown here:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman stats</code></pre></div>
+<p>Without any options, the command will open a top-like, self-refreshing
+window with the stats of all the running containers.[]{.sentence-end}
+The default printed values are listed here:</p>
+<ul>
+<li><code>ID</code>{.inlineCode}: The running container ID</li>
+<li><code>NAME</code>{.inlineCode}: The running container name</li>
+<li><code>CPU %</code>{.inlineCode}: The total CPU usage as a percentage</li>
+<li><code>MEM USAGE / LIMIT</code>{.inlineCode}: Memory usage against a given limit
+(dictated by system capabilities or by cgroups-driven limits)</li>
+<li><code>MEM %</code>{.inlineCode}: The total memory usage as a percentage</li>
+<li><code>NET IO</code>{.inlineCode}: Network <strong>input/output</strong> (<strong>I/O</strong>) operations</li>
+<li><code>BLOCK IO</code>{.inlineCode}: Disk I/O operations</li>
+<li><code>PIDS</code>{.inlineCode}: The number of PIDs inside the container</li>
+<li><code>CPU TIME</code>{.inlineCode}: Total consumed CPU time</li>
+<li><code>AVG CPU %</code>{.inlineCode}: Average CPU usage as a percentage</li>
+</ul>
+<p>In case a redirect is needed, it is possible to avoid streaming a
+self-refreshing output with the <code>--no-stream</code>{.inlineCode} option, as
+follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman stats --no-stream</code></pre></div>
+<p>Anyway, having a static output of this type is not very useful for
+parsing or ingestion.[]{.sentence-end} A better approach is to apply a
+JSON or Go template formatter.[]{.sentence-end} The following example
+prints out stats in a JSON format:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman stats --format=json
+
+[
+ {
+  &#34;id&#34;: &#34;d19dbb81a0f3&#34;,
+  &#34;name&#34;: &#34;admiring_bouman&#34;,
+  &#34;cpu_time&#34;: &#34;16.773ms&#34;,
+  &#34;cpu_percent&#34;: &#34;0.01%&#34;,
+  &#34;avg_cpu&#34;: &#34;0.01%&#34;,
+  &#34;mem_usage&#34;: &#34;1.884MB / 475.4MB&#34;,
+  &#34;mem_percent&#34;: &#34;0.40%&#34;,
+  &#34;net_io&#34;: &#34;0B / 796B&#34;,
+  &#34;block_io&#34;: &#34;0B / 0B&#34;,
+  &#34;pids&#34;: &#34;2&#34;
+ }
+]</code></pre></div>
+<p>In a similar way, it is possible to customize the output fields using a
+Go template.</p>
+<p>packt_tip
+<strong>Good to</strong> <strong>know</strong></p>
+<p>The command-line option for Podman <code>--format=json</code>{.inlineCode} works on
+most commands.[]{.sentence-end} For example,
+<code>podman ps --format=json</code>{.inlineCode} for machine-readable output.</p>
+<p>The following example only []{#Chapter_4.xhtml#idx_5e7dc89c .index-entry
+index-entry=&ldquo;running containers:stats, monitoring&rdquo;}prints out the
+container ID, CPU percentage usage, total memory usage in bytes, and
+PIDs:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman stats -a --no-stream --format &#34;{{ .ID }} {{ .CPUPerc }} {{ .MemUsageBytes }} {{ .PIDs }}&#34;</code></pre></div>
+<p>In this section, we have learned how to monitor running containers and
+their isolated processes.[]{.sentence-end} The next section shows
+[]{#Chapter_4.xhtml#idx_21887b60 .index-entry
+index-entry=&ldquo;running containers:stats, monitoring&rdquo;}how to inspect
+container configurations for analysis and troubleshooting.</p>
+<h1 id="h1_127" class="heading-1">Inspecting container information<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>A running container exposes a set of []{#Chapter_4.xhtml#idx_8c22b3a5
+.index-entry
+index-entry=&ldquo;container:information, inspecting&rdquo;}configuration data and
+metadata ready to be consumed.[]{.sentence-end} Podman implements the
+<code>podman inspect</code>{.inlineCode} command to print all the container
+configurations and runtime information.[]{.sentence-end} In its simplest
+form, we can simply pass the container ID or name, like this:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman inspect &lt;Container_ID_or_Name&gt;</code></pre></div>
+<p>This command prints a JSON output with all the container
+configurations.[]{.sentence-end} For the sake of space, we will list
+some of the most notable fields here:</p>
+<ul>
+<li><code>Path</code>{.inlineCode}: The container entry point
+path.[]{.sentence-end} We will dig deeper into entry points later,
+when we analyze Dockerfiles.</li>
+<li><code>Args</code>{.inlineCode}: The arguments passed to the entry point that,
+along with <code>Path</code>{.inlineCode}, form the command executed in the
+container.</li>
+<li><code>State</code>{.inlineCode}: The container's current state, including
+crucial information such as the executed PID, the common PID, the
+OCI version, and the health check status.</li>
+<li><code>Image</code>{.inlineCode}: The ID of the image used to run the container.</li>
+<li><code>Name</code>{.inlineCode}: The container name.</li>
+<li><code>MountLabel</code>{.inlineCode}: The container mount label for SELinux.</li>
+<li><code>ProcessLabel</code>{.inlineCode}: The container process label for
+SELinux.</li>
+<li><code>EffectiveCaps</code>{.inlineCode}: Effective capabilities applied to the
+container.</li>
+<li><code>GraphDriver</code>{.inlineCode}: The type of storage driver (the default
+is <code>overlayfs</code>{.inlineCode}) and a list of overlay upper, lower, and
+merged directories.</li>
+<li><code>Mounts</code>{.inlineCode}: The actual user-specified mounts in the
+container.</li>
+<li><code>NetworkSettings</code>{.inlineCode}: The overall container network
+settings, including its internal IP address, exposed ports, and port
+mappings.</li>
+<li><code>Config</code>{.inlineCode}: The container runtime configuration,
+including environment variables, hostname, command, working
+directory, labels, and annotations.</li>
+<li><code>HostConfig</code>{.inlineCode}: The host configuration, including
+cgroups' quotas, network mode, and capabilities.</li>
+</ul>
+<p>This is a huge amount of information that, most
+[]{#Chapter_4.xhtml#idx_b2f3dc43 .index-entry
+index-entry=&ldquo;container:information, inspecting&rdquo;}of the time, is too much
+for our needs.[]{.sentence-end} When we need to extract specific fields,
+we can use the <code>--format</code>{.inlineCode} option to print only selected
+ones.[]{.sentence-end} The following example prints only the host-bound
+PID of the process executed inside the container:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman inspect &lt;ID or Name&gt; --format &#34;{{ .State.Pid }}&#34;</code></pre></div>
+<p>The result is in a Go template format.[]{.sentence-end} This allows for
+flexibility to customize the output string as we desire.</p>
+<p>The <code>podman inspect</code>{.inlineCode} command is also useful for
+understanding the behavior of the container engine and for gaining
+useful information during troubleshooting tasks.</p>
+<p>For example, when a container is launched, we learn that the
+<code>resolv.conf</code>{.inlineCode} file is mounted inside the container from a
+path that is defined in the
+<code>{</code>{.inlineCode}<code>{ .</code>{.inlineCode}<code>ResolvConfPath }}</code>{.inlineCode}
+key.[]{.sentence-end} The target path is
+<code>/run/user/</code>{.inlineCode}<code>&lt;</code>{.inlineCode}<code>UID</code>{.inlineCode}<code>&gt;</code>{.inlineCode}<code>/containers/overlay-containers/</code>{.inlineCode}<code>&lt;</code>{.inlineCode}<code>Container_ID</code>{.inlineCode}<code>&gt;</code>{.inlineCode}<code>/userdata/resolv.conf</code>{.inlineCode}
+when the container is executed in rootless mode and
+<code>/var/run/containers/storage/overlay-containers/</code>{.inlineCode}<code>&lt;</code>{.inlineCode}<code>Container_ID</code>{.inlineCode}<code>&gt;</code>{.inlineCode}<code>/userdata/resolv.conf</code>{.inlineCode}
+when in rootful mode.</p>
+<p>Other interesting information is the list of all the merged layers
+managed by <code>overlayfs</code>{.inlineCode}.[]{.sentence-end} Let's try to run
+a new container, this time in rootful mode, and find out information
+about the merged layers, as follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run --name logger -d docker.io/library/fedora bash -c &#34;while true; do echo test &gt;&gt; /tmp/test.log; sleep 5; done&#34;</code></pre></div>
+<p>This container runs a simple loop []{#Chapter_4.xhtml#idx_5cf22c4a
+.index-entry index-entry=&ldquo;container:information, inspecting&rdquo;}that writes
+a string to a text file every <code>5</code>{.inlineCode} seconds.[]{.sentence-end}
+Now, let's run a <code>podman inspect</code>{.inlineCode} command to find out
+information about <code>MergedDir</code>{.inlineCode}, which is the directory where
+all layers are merged by <code>overlayfs</code>{.inlineCode}.[]{.sentence-end} The
+related command is illustrated in the following snippet:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman inspect logger --format &#34;{{ .GraphDriver.Data.MergedDir }}&#34;
+/var/lib/containers/storage/overlay/4372e7c85d552e84e470223cd5aef0bc0fc69ffdf83f687506dff9bd93b64767/merged</code></pre></div>
+<p>Inside this directory, we can find the <code>/tmp/test.log</code>{.inlineCode}
+file, as indicated here:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># cat /var/lib/containers/storage/overlay/4372e7c85d552e84e470223cd5aef0bc0fc69ffdf83f687506dff9bd93b64767/merged/tmp/test.log
+test
+test
+test
+test
+test
+[...]</code></pre></div>
+<p>We can dig deeper&mdash;the <code>LowerDir</code>{.inlineCode}
+directory[]{#Chapter_4.xhtml#idx_9a22b902 .index-entry
+index-entry=&ldquo;container:information, inspecting&rdquo;} holds a list of the
+base image layers, as shown in the following code snippet:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman inspect logger \
+--format &#34;{{ .GraphDriver.Data.LowerDir}}&#34;
+  
+/var/lib/containers/storage/overlay/b0d5c42c12e7b1e896892f1a013ac57b467f2f25545833cf4c5ebc2a5f823845/diff</code></pre></div>
+<p>In this example, the base image is made up of only one
+layer.[]{.sentence-end} Are we going to find the log file here? Let's
+have a look:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># cat /var/lib/containers/storage/overlay/b0d5c42c12e7b1e896892f1a013ac57b467f2f25545833cf4c5ebc2a5f823845/diff/tmp/test.log
+cat: /var/lib/containers/storage/overlay/b0d5c42c12e7b1e896892f1a013ac57b467f2f25545833cf4c5ebc2a5f823845/diff/tmp/test.log: No such file or directory</code></pre></div>
+<p>We are missing the log file in this layer.[]{.sentence-end} This is
+because the <code>LowerDir</code>{.inlineCode} directory is not written and
+represents the read-only[]{#Chapter_4.xhtml#idx_cf8c934f .index-entry
+index-entry=&ldquo;container:information, inspecting&rdquo;} image
+layers.[]{.sentence-end} It is merged with an <code>UpperDir</code>{.inlineCode}
+directory that is the read-write layer of the
+container.[]{.sentence-end} With <code>podman inspect</code>{.inlineCode}, we can
+find out where it resides, as illustrated here:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman inspect logger --format &#34;{{ .GraphDriver.Data.UpperDir }}&#34;
+/var/lib/containers/storage/overlay/27d89046485db7c775b108a80072eafdf9aa63d14ee1205946d74623fc195314/diff</code></pre></div>
+<p>The output directory will contain only a bunch of files and directories,
+written since the container startup, including the
+<code>/tmp/test.log</code>{.inlineCode} file, as illustrated in the following code
+snippet:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># cat /var/lib/containers/storage/overlay/4372e7c85d552e84e470223cd5aef0bc0fc69ffdf83f687506dff9bd93b64767/diff/tmp/test.log
+test
+test
+test
+test
+
+[...]</code></pre></div>
+<p>We can now stop and remove the logger container by running the following
+command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman stop logger &amp;&amp; podman rm logger</code></pre></div>
+<p>This example was in anticipation of the container storage topic that
+will be covered in <em><a href="/containers/managing-containers/#Chapter_5.xhtml#h1_133">Chapter 5</a>{.chapref}</em>,
+<em>Implementing Storage for the Container's Data</em>.[]{.sentence-end} The
+<code>overlayfs</code>{.inlineCode} mechanisms, with the lower, upper, and merged
+directory concepts, will be analyzed in more detail.</p>
+<p>In this section, we learned how[]{#Chapter_4.xhtml#idx_73097530
+.index-entry index-entry=&ldquo;container:information, inspecting&rdquo;} to inspect
+running containers and collect runtime information and
+configurations.[]{.sentence-end} The next section is going to cover best
+practices for capturing logs from containers.</p>
+<h1 id="h1_128" class="heading-1">Capturing logs from containers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>As described earlier in this chapter, containers
+[]{#Chapter_4.xhtml#idx_68f200fd .index-entry
+index-entry=&ldquo;container:logs, capturing&rdquo;}are made of one or more
+processes that can fail, printing errors and describing their current
+state in a log file.[]{.sentence-end} But where are these logs
+[]{#Chapter_4.xhtml#idx_379f3f2b .index-entry
+index-entry=&ldquo;logs:capturing, from containers&rdquo;}stored?</p>
+<p>Well, of course, a process in a container could write its log messages
+inside a file somewhere in a temporary filesystem that the container
+engine has made available to it (if any).[]{.sentence-end} But what
+about a read-only filesystem or any permission constraints in the
+running container?</p>
+<p>A container's best practice for exposing relevant logs outside the
+container's shield actually leverages []{#Chapter_4.xhtml#idx_f1dfd452
+.index-entry index-entry=&ldquo;standard error (STDERR)&quot;}the use of
+standard[]{#Chapter_4.xhtml#idx_dd96b2bb .index-entry
+index-entry=&ldquo;standard output (STDOUT)&rdquo;} streams: <strong>standard output</strong>
+(<code>STDOUT</code>{.inlineCode}) and <strong>standard error</strong> (<code>STDERR</code>{.inlineCode}).</p>
+<p>note
+<strong>Good to</strong> <strong>know</strong></p>
+<p>Standard streams are communication[]{#Chapter_4.xhtml#idx_1f169e22
+.index-entry index-entry=&ldquo;standard streams&rdquo;} channels interconnected to
+a running process in an OS.[]{.sentence-end} When a program is run
+through an interactive shell, these streams are then directly connected
+to the user's running terminal to let input, output, and error flow
+between the terminal and the process, and vice versa.</p>
+<p>Depending on the options we use for running a brand-new container,
+Podman will act appropriately by attaching the <code>STDIN</code>{.inlineCode},
+<code>STDOUT</code>{.inlineCode}, and <code>STDERR</code>{.inlineCode} standard streams to a
+local file for storing the logs.[]{.sentence-end} For
+Linux[]{#Chapter_4.xhtml#idx_d2395eb3 .index-entry
+index-entry=&ldquo;logs:capturing, from containers&rdquo;} distributions that use
+systemd as an init manager, logs are stored in journald by default.</p>
+<p>In <em><a href="/containers/managing-containers/#Chapter_3.xhtml#h1_83">Chapter 3</a>{.chapref}</em>, <em>Running</em> <em>the</em>
+<em>First Container</em>, we saw how to run a container in the background,
+detaching from a running container.[]{.sentence-end} We used the
+<code>-d</code>{.inlineCode} option to start a container in <em>detached</em> mode through
+the <code>podman run</code>{.inlineCode} command, as illustrated here:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run -d -i -t docker.io/library/httpd</code></pre></div>
+<p>With the previous command, we are instructing Podman to start a
+container in detached mode (<code>-d</code>{.inlineCode}), with a pseudo-terminal
+attached to the <code>STDIN</code>{.inlineCode} stream (<code>-t</code>{.inlineCode}), keeping
+the standard input stream open even if there is no terminal
+[]{#Chapter_4.xhtml#idx_678a63c8 .index-entry
+index-entry=&ldquo;container:logs, capturing&rdquo;}attached yet
+(<code>-i</code>{.inlineCode}).</p>
+<p>The standard Podman behavior was to attach to <code>STDOUT</code>{.inlineCode} and
+<code>STDERR</code>{.inlineCode} streams and store any container's published data
+in a log file on the host filesystem.</p>
+<p>In the Fedora Linux distribution, starting from version 35, the
+maintainers decided to switch from <code>k8s-file</code>{.inlineCode} to
+<code>journald</code>{.inlineCode}.[]{.sentence-end} In this case, you could look
+for the logs directly using the <code>journalctl</code>{.inlineCode} command-line
+utility.</p>
+<p>If you want to take a look at the default <code>log_driver</code>{.inlineCode}
+field, you can look in the following path:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># grep ^log_driver /usr/share/containers/containers.conf
+log_driver = &#34;journald&#34;</code></pre></div>
+<p>If we are working with Podman as a root user, we can take a look at the
+log file available on the host system, executing the following steps:</p>
+<ol>
+<li>
+<p>First, we need to start our container and take note of the name
+assigned by Podman.[]{.sentence-end} The code to accomplish this is
+shown in the following snippet:</p>
+<div class="programlisting snippet-con-one highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run -d -i -t docker.io/library/httpd
+a068c7db7ff996fc74499909964c6dc6ce22a0d184659ffe5f650264cb5cb553</code></pre></div>
+</li>
+<li>
+<p>After that, we can take []{#Chapter_4.xhtml#idx_c5764c2f
+.index-entry index-entry=&ldquo;container:logs, capturing&rdquo;}our
+container's name, as follows:</p>
+<div class="programlisting snippet-con-one highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman ps
+CONTAINER ID  IMAGE                           COMMAND           CREATED         STATUS         PORTS       NAMES
+a068c7db7ff9  docker.io/library/httpd:latest  httpd-foreground  15 minutes ago  Up 15 minutes  80/tcp      cranky_wu</code></pre></div>
+</li>
+<li>
+<p>Finally, we can check the logs of our running container by asking
+<code>journald</code>{.inlineCode} with the right option,
+specifying[]{#Chapter_4.xhtml#idx_a7e1ce86 .index-entry
+index-entry=&ldquo;logs:capturing, from containers&rdquo;} the container's
+name:</p>
+<div class="programlisting snippet-con-one highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># journalctl --user -t cranky_wu
+Oct 10 09:12:42 localhost.localdomain cranky_wu[13287]: AH00558: httpd: Could not reliably determine the server&#39;s fully qualified domain name, using 10.88.0.3. Set the &#39;ServerName&#39; directiv&gt;
+Oct 10 09:12:42 localhost.localdomain cranky_wu[13287]: AH00558: httpd: Could not reliably determine the server&#39;s fully qualified domain name, using 10.88.0.3. Set the &#39;ServerName&#39; directiv&gt;
+Oct 10 09:12:42 localhost.localdomain cranky_wu[13287]: [Thu Oct 10 09:12:42.379839 2024] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.62 (Unix) configured -- resuming normal operat&gt;
+Oct 10 09:12:42 localhost.localdomain cranky_wu[13287]: [Thu Oct 10 09:12:42.380944 2024] [core:notice] [pid 1:tid 1] AH00094: Command line: &#39;httpd -D FOREGROUND&#39;</code></pre></div>
+</li>
+</ol>
+<p>Does this mean that we need to[]{#Chapter_4.xhtml#idx_9e50938b
+.index-entry index-entry=&ldquo;container:logs, capturing&rdquo;} do all this
+complex procedure every time we need to analyze the logs of our
+containers? Of course not!</p>
+<p>Podman has a <code>podman logs</code>{.inlineCode} built-in command that can easily
+discover, grab, and print the latest container logs for
+us.[]{.sentence-end} Considering[]{#Chapter_4.xhtml#idx_2694b1d1
+.index-entry index-entry=&ldquo;logs:capturing, from containers&rdquo;} the previous
+example, we can easily check the logs of our running container by
+executing the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman logs cranky_wu
+AH00558: httpd: Could not reliably determine the server&#39;s fully qualified domain name, using 10.88.0.3. Set the &#39;ServerName&#39; directive globally to suppress this message
+AH00558: httpd: Could not reliably determine the server&#39;s fully qualified domain name, using 10.88.0.3. Set the &#39;ServerName&#39; directive globally to suppress this message
+[Thu Oct 10 09:12:42.379839 2024] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.62 (Unix) configured -- resuming normal operations
+[Thu Oct 10 09:12:42.380944 2024] [core:notice] [pid 1:tid 1] AH00094: Command line: &#39;httpd -D FOREGROUND&#39;</code></pre></div>
+<p>We can also get the short ID for our running container and pass this ID
+to the <code>podman logs</code>{.inlineCode} command, as follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman ps
+CONTAINER ID  IMAGE                           COMMAND           CREATED         STATUS         PORTS       NAMES
+a068c7db7ff9  docker.io/library/httpd:latest  httpd-foreground  19 minutes ago  Up 19 minutes  80/tcp      cranky_wu
+
+# podman logs --tail 2 a068c7db7ff9
+[Thu Oct 10 09:12:42.379839 2024] [mpm_event:notice] [pid 1:tid 1] AH00489: Apache/2.4.62 (Unix) configured -- resuming normal operations
+[Thu Oct 10 09:12:42.380944 2024] [core:notice] [pid 1:tid 1] AH00094: Command line: &#39;httpd -D FOREGROUND&#39;</code></pre></div>
+<p>In the previous command, we also []{#Chapter_4.xhtml#idx_55729319
+.index-entry index-entry=&ldquo;container:logs, capturing&rdquo;}used a nice option
+of the <code>podman logs</code>{.inlineCode} command: the <code>--tail</code>{.inlineCode}
+option that let us output only the latest needed rows of the
+container's log.[]{.sentence-end} In our case, we requested the latest
+two.</p>
+<p>packt_tip
+<strong>Good to</strong> <strong>know</strong></p>
+<p>Most of the commands in Podman accept the <code>--latest</code>{.inlineCode}
+command-line option.[]{.sentence-end} This causes the command to work on
+the most recently created container, which is useful for situations like
+this.[]{.sentence-end} If you only have one container,
+<code>podman logs --latest</code>{.inlineCode} will always give the right result
+without having to look up the ID.</p>
+<p>We are now ready to move []{#Chapter_4.xhtml#idx_bdcf6f72 .index-entry
+index-entry=&ldquo;logs:capturing, from containers&rdquo;}on to the next section,
+where we will discover another useful command.</p>
+<h1 id="h1_129" class="heading-1">Executing processes into a running container<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In the <em>Podman daemonless architecture</em> section of <em><a href="/containers/managing-containers/#Chapter_2.xhtml#h1_52">Chapter
+2</a>{.chapref}</em>, <em>Comparing Podman and Docker</em>, we
+talked about the fact that Podman, as with any other container engine,
+leverages the Linux namespace functionality to correctly isolate running
+containers from each other and from the OS host as well.</p>
+<p>So, just because Podman creates a []{#Chapter_4.xhtml#idx_35056981
+.index-entry
+index-entry=&ldquo;container:processes, executing into running container&rdquo;}brand-new
+namespace for every running container, it should not be a surprise that
+we can attach to the same Linux[]{#Chapter_4.xhtml#idx_192f2777
+.index-entry index-entry=&ldquo;running containers:processes, executing&rdquo;}
+namespace of a running container, executing other processes just as in a
+full operating environment.</p>
+<p>Podman gives us the ability to execute a process in a running container
+through the <code>podman exec</code>{.inlineCode} command.</p>
+<p>Once executed, this command will internally find the right Linux
+namespace to which the target running container is
+attached.[]{.sentence-end} Having found the Linux namespace, Podman will
+execute the respective process, passed as an argument to the
+<code>podman exec</code>{.inlineCode} command, attaching it to the target Linux
+namespace.[]{.sentence-end} The final process will be in the same
+environment as the original process companion, and it will be able to
+interact with it; this preserves the security of the namespace and
+container.</p>
+<p>To understand how this works in practice, we can consider the following
+example, whereby we will first run a container and then execute a
+process beside the existing processes:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run -d -i -t docker.io/library/httpd
+e768bf9723687194329b6d6854605849529c79f1d191d3e7139ed5f4e4ae04eb
+
+# podman exec -ti e768bf9723687194329b6d6854605849529c79f1d191d3e7139ed5f4e4ae04eb /bin/bash
+root@e768bf972368:/usr/local/apache2# ps aux
+bash: ps: command not found
+root@e768bf972368:/usr/local/apache2# ls -l /proc/*/exe
+[omitted output]
+lrwxrwxrwx. 1 root root 0 Oct 10 09:36 /proc/1/exe -&gt; /usr/local/apache2/bin/httpd
+
+...</code></pre></div>
+<p>As you can see from the previous commands, we grabbed the container ID
+provided by Podman once the container was started, and we passed it to
+the <code>podman exec</code>{.inlineCode} command as an argument.</p>
+<p>The <code>podman exec</code>{.inlineCode} command
+could[]{#Chapter_4.xhtml#idx_00523267 .index-entry
+index-entry=&ldquo;container:processes, executing into running container&rdquo;} be
+really useful for troubleshooting, testing, and working with an existing
+container.[]{.sentence-end} In the preceding example, we attached an
+interactive terminal running the Bash console, and we launched the
+<code>ps</code>{.inlineCode} command for inspecting the running processes available
+in the current Linux namespace assigned to the
+container.[]{.sentence-end} However, the <code>ps</code>{.inlineCode} command was
+not available, which means that maybe[]{#Chapter_4.xhtml#idx_3148b299
+.index-entry index-entry=&ldquo;running containers:processes, executing&rdquo;} the
+developers who built this container image decided not to include the
+<code>procps</code>{.inlineCode} package to shrink the size of the
+image.[]{.sentence-end} So, to overcome the absence of the
+<code>ps</code>{.inlineCode} command, we just looked in the <code>/proc</code>{.inlineCode}
+filesystem; luckily, everything is a file in Linux, isn't it? The
+alternative could be to run a package manager inside the container and
+install the package containing the <code>ps</code>{.inlineCode} command.</p>
+<p>The <code>podman exec</code>{.inlineCode} command has many options available,
+similar to the ones provided by the <code>podman run</code>{.inlineCode}
+command.[]{.sentence-end} As you saw from the previous example, we used
+the option for getting a pseudo-terminal attached to the
+<code>STDIN</code>{.inlineCode} stream (<code>-t</code>{.inlineCode}), keeping the standard
+input stream open even if there is no terminal attached yet
+(<code>-i</code>{.inlineCode}).</p>
+<p>For more details on the available options, we can check the manual with
+the respective command, as illustrated here:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># man podman exec</code></pre></div>
+<p>We are moving forward in our journey through the container management
+world, and in the next section, we will also take a look at some of the
+capabilities that Podman offers to enable containerized workloads in the
+Kubernetes container orchestration world.</p>
+<h1 id="h1_130" class="heading-1">Running containers in pods<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>As we mentioned in <em><a href="/containers/managing-containers/#Chapter_2.xhtml#h1_52">Chapter 2</a>{.chapref}</em>,
+<em>Comparing Podman</em> <em>and</em> <em>Docker</em>, Podman offers capabilities to easily
+start adopting some basic []{#Chapter_4.xhtml#idx_8047fc6a .index-entry
+index-entry=&ldquo;running containers:in pods&rdquo;}concepts of the de facto
+container orchestrator named[]{#Chapter_4.xhtml#idx_87c753ea
+.index-entry index-entry=&ldquo;Kubernetes (k8s)&rdquo;} Kubernetes (also sometimes
+referred to as <code>k8s</code>{.inlineCode}).</p>
+<p>The pod concept was introduced with []{#Chapter_4.xhtml#idx_dc18eae4
+.index-entry index-entry=&ldquo;pods:running container&rdquo;}Kubernetes and
+represents the smallest execution unit in a Kubernetes
+cluster.[]{.sentence-end} With Podman, users can create empty pods and
+then run containers inside them easily.</p>
+<p>Grouping two or more containers inside a single pod can have many
+benefits, such as the following:</p>
+<ul>
+<li>Sharing the same network namespace, IP address included</li>
+<li>Sharing the same storage volumes for storing persistent data</li>
+<li>Sharing the same configurations</li>
+<li>Managing the containers together (starting, stopping, restarting as
+a single unit)</li>
+</ul>
+<p>In addition, placing two or more containers in the
+[]{#Chapter_4.xhtml#idx_ed0d8d01 .index-entry
+index-entry=&ldquo;inter-process communication (IPC)&quot;}same pod will actually
+enable them to share the same <strong>inter-process communication</strong> (<strong>IPC</strong>)
+Linux namespace.[]{.sentence-end} This could be really useful for
+applications that need to communicate with each other using shared
+memory.</p>
+<p>The simplest way to create a pod and start working with it is to use
+this command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman pod create --name myhttp
+7a566073adb31df12286bfa82586d82b5004396ff10a2235d9d7cf7e7a49cb9f
+# podman pod ps
+POD ID        NAME        STATUS      CREATED         INFRA ID      # OF CONTAINERS
+7a566073adb3  myhttp      Created     13 seconds ago  b5483a84d10b  1</code></pre></div>
+<p>As shown in the previous example, we create a new pod named
+<code>myhttp</code>{.inlineCode} and then check the status of the pod on our host
+system: there is just one pod in a <code>created</code>{.inlineCode} state.</p>
+<p>We can now start the pod as follows and check what will happen:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman pod start myhttp
+myhttp
+# podman pod ps
+POD ID        NAME        STATUS      CREATED             INFRA ID      # OF CONTAINERS
+7a566073adb3  myhttp      Running     About a minute ago  b5483a84d10b  1</code></pre></div>
+<p>The pod is now running, but []{#Chapter_4.xhtml#idx_e055b5b5
+.index-entry index-entry=&ldquo;running containers:in pods&rdquo;}what is Podman
+actually running? We created an empty pod without
+[]{#Chapter_4.xhtml#idx_500c8933 .index-entry
+index-entry=&ldquo;pods:running container&rdquo;}containers inside! Let's take a
+look at the running container by executing the <code>podman ps</code>{.inlineCode}
+command, as follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman ps
+CONTAINER ID  IMAGE                                    COMMAND     CREATED        STATUS             PORTS       NAMES
+b5483a84d10b  localhost/podman-pause:5.2.2-1724198400              2 minutes ago  Up About a minute              7a566073adb3-infra</code></pre></div>
+<p>The <code>podman ps</code>{.inlineCode} command is showing a running container with
+an image named <code>pause</code>{.inlineCode}.[]{.sentence-end} This container is
+run by Podman by default as an <code>infra</code>{.inlineCode}
+container.[]{.sentence-end} This kind of container does nothing&mdash;it
+just holds the namespace and lets the container engine connect to any
+other running container inside the pod.</p>
+<p>Having demystified the role of this special container inside our pods,
+we can now take a brief look at the steps required to start a
+multi-container pod.</p>
+<p>First of all, let's start by running a new container inside the
+existing pod we created in the previous example, as follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run --pod myhttp -d -i -t docker.io/library/httpd
+9c564757d9b34f6c3eb9e14672b9e6d8e639fb91707143a44356cde6ee6a4a4b</code></pre></div>
+<p>Then, we can check if the existing pod has updated the number of
+containers it contains, as illustrated in the following code snippet:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman pod ps
+POD ID        NAME        STATUS      CREATED        INFRA ID      # OF CONTAINERS
+7a566073adb3  myhttp      Running     3 minutes ago  b5483a84d10b  2</code></pre></div>
+<p>Finally, we can ask Podman for a list of running containers with the
+associated pod name, as follows:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman ps -p
+CONTAINER ID  IMAGE                                    COMMAND           CREATED         STATUS         PORTS       NAMES               POD ID        PODNAME
+b5483a84d10b  localhost/podman-pause:5.2.2-1724198400                    3 minutes ago   Up 2 minutes               7a566073adb3-infra  7a566073adb3  myhttp
+9c564757d9b3  docker.io/library/httpd:latest           httpd-foreground  37 seconds ago  Up 37 seconds              goofy_nobel         7a566073adb3  myhttp</code></pre></div>
+<p>As you can see, the two containers[]{#Chapter_4.xhtml#idx_0d1b89b0
+.index-entry index-entry=&ldquo;running containers:in pods&rdquo;} running are both
+associated with the pod []{#Chapter_4.xhtml#idx_8b2aad66 .index-entry
+index-entry=&ldquo;pods:running container&rdquo;}named <code>myhttp</code>{.inlineCode}!</p>
+<p>packt_tip
+<strong>Important</strong> <strong>note</strong></p>
+<p>Please consider periodically cleaning up the lab environment after
+completing all the examples contained in this chapter.[]{.sentence-end}
+This could help you save resources and avoid any errors when moving on
+to the next chapter's examples.[]{.sentence-end} The two commands that
+could help here are <code>podman rm -</code>{.inlineCode}<code>all --force</code>{.inlineCode}
+and <code>podman system reset</code>{.inlineCode}, which actually clean up the
+Podman environment and reset the Podman configuration to its default.</p>
+<p>For this reason, you can refer to the code provided in the
+<code>AdditionalMaterial</code>{.inlineCode} folder in the book's GitHub
+repository:
+<a href="https://github.com/PacktPublishing/Podman-for-DevOps-Second-Edition" rel="external" target="_blank">[https://github.com/PacktPublishing/Podman-for-DevOps-Second-Edition]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>With the same approach, we can add more and more containers to the same
+pod, letting them share all the data we described before.</p>
+<p>Please note that placing containers in the same pod can be beneficial in
+some cases, but this represents an anti-pattern for the container
+technology.[]{.sentence-end} In fact, as mentioned before, Kubernetes
+considers the pod the smallest computing unit to run on top of the
+distributed nodes' part of one cluster.[]{.sentence-end} This means
+that once you group two or more containers under the same pod, they will
+be executed together on the same node, and the orchestrator cannot
+balance or distribute their workload on[]{#Chapter_4.xhtml#idx_44ce2507
+.index-entry index-entry=&ldquo;running containers:in pods&rdquo;} multiple
+machines.</p>
+<p>We will explore more about Podman's features that can enable you to
+enter the container orchestration world
+through[]{#Chapter_4.xhtml#idx_ae2d66e1 .index-entry
+index-entry=&ldquo;pods:running container&rdquo;} Kubernetes in the following
+chapters!</p>
+<h1 id="h1_131" class="heading-1">Summary<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In this chapter, we started developing experience in managing
+containers, starting with container images, then working with running
+containers.[]{.sentence-end} Once our containers were running, we also
+explored the various commands available in Podman to inspect and check
+the logs and troubleshoot our containers.[]{.sentence-end} The
+operations needed to monitor and look after running containers are
+really important for any container administrator.[]{.sentence-end}
+Finally, we also took a brief look at the Kubernetes concepts available
+in Podman that let us group two or more containers under the same Linux
+namespace.[]{.sentence-end} All the concepts and examples we just went
+through will help us start our experience as a system administrator for
+container technologies.</p>
+<p>We are now ready to explore another important topic in the next chapter:
+managing storage for our containers!</p>
+<h1 id="h1_132" class="heading-1">Join us on Discord<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>For discussions around the book and to connect with your peers, join us
+on Discord at
+<a href="https://packt.link/discordcloud" rel="external" target="_blank">[packt.link/discordcloud]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}
+or scan the QR code below:</p>
+<p><a href="#R-image-42c104e6cb70e7b01b21ef8ada83e26c" class="lightbox-link"><img alt="Image" class="lazy lightbox figure-image" loading="lazy" src="images/B31467_4_1.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-42c104e6cb70e7b01b21ef8ada83e26c"><img alt="Image" class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_4_1.png"></a>{style=&ldquo;width:25%;&rdquo;}</p>
+<p>[]{#Chapter_5.xhtml}</p>
+<p>{.section .chapter}</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready for RHCE<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/install-ansible-using-uv/"><a class="padding" href="/ansible/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/playbooks/"><a class="padding" href="/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/hostname-patterns/"><a class="padding" href="/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/include-and-import-files/"><a class="padding" href="/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2/"><a class="padding" href="/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/user-and-groups/"><a class="padding" href="/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/storage-partitions-and-lvm/"><a class="padding" href="/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/services/"><a class="padding" href="/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimize-ansible-processing/"><a class="padding" href="/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux/"><a class="padding" href="/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/tags/"><a class="padding" href="/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/loops-and-items/"><a class="padding" href="/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/modules-for-troubleshooting/"><a class="padding" href="/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Using Variables In Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/when/"><a class="padding" href="/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/secure-shell-service-ssh/"><a class="padding" href="/cyber-security/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ansiblepuppetchef/"><a class="padding" href="/networking/ccna/ccna-notes-1/ansiblepuppetchef/">Ansible, Puppet, and Chef<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscoacls/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscoacls/">Cisco ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscocli/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscocli/">Cisco CLI<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/classfulipv4/"><a class="padding" href="/networking/ccna/ccna-notes-1/classfulipv4/">Classful IPv4<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/cloudarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/cloudarchitecture/">Cloud Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/controllerbasednetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/controllerbasednetworking/">Controller-Based Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/device-management-protocols/"><a class="padding" href="/networking/ccna/ccna-notes-1/device-management-protocols/">Device Management Protocols<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-config/">DHCP Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/">DHCP Snooping and ARP Inspection<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-syncronization/"><a class="padding" href="/networking/dns-and-time-syncronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ethernetlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/ethernetlans/">Ethernet LANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/extended-acls/"><a class="padding" href="/networking/ccna/ccna-notes-1/extended-acls/">Extended ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-services/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-services/">IP Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-transport-and-applications/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-transport-and-applications/">IP Transport and Applications<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6/">IPv6<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/">IPv6 Addressing and Subnetting<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6configuration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6configuration/">IPv6 Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6routing/">IPv6 Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lan-architecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/lan-architecture/">LAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/l2-etherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/l2-etherchannel/">Layer 2 Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/network-devices-and-connections/"><a class="padding" href="/networking/network-devices-and-connections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospf-concepts/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospf-concepts/">OSPF Concepts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfconfiguration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfconfiguration/">OSPF Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/">OSPF Network Types and Neighbors<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/restandjson/"><a class="padding" href="/networking/ccna/ccna-notes-1/restandjson/">REST and JSON<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/router_operation/"><a class="padding" href="/networking/ccna/ccna-notes-1/router_operation/">Router Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/routeroperation/"><a class="padding" href="/networking/ccna/ccna-notes-1/routeroperation/">ROuter Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lanrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/lanrouting/">Routing in the LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/rstpandetherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/rstpandetherchannel/">RSTP and Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/securing-network-devices/"><a class="padding" href="/networking/ccna/ccna-notes-1/securing-network-devices/">Securing Network Devices<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/security-architectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/security-architectures/">Security Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/softwaredefinedaccess/"><a class="padding" href="/networking/ccna/ccna-notes-1/softwaredefinedaccess/">Software-Defined Access (SDA)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/spanningtreeprotocol/"><a class="padding" href="/networking/ccna/ccna-notes-1/spanningtreeprotocol/">Spanning Tree Protocol<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/static-routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/static-routing/">Static Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchinterfaces/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchinterfaces/">Switch Interfaces<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switching/"><a class="padding" href="/networking/ccna/ccna-notes-1/switching/">Switching<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchport-security-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchport-security-config/">Switchport Security Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/tcpipbasic/"><a class="padding" href="/networking/ccna/ccna-notes-1/tcpipbasic/">TCP/IP Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/troubleshootingrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/troubleshootingrouting/">Troubleshooting Routing Issues<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/vlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/vlans/">VLANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wanarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/wanarchitecture/">WAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wansandiprouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/wansandiprouting/">WANs and IP Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessarchitectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessarchitectures/">Wireless Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_lan/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_lan/">Wireless LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessnetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessnetworking/">Wireless Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_security/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_security/">Wireless Security<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
+            <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/local-filesystems-and-swap/"><a class="padding" href="/storage/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/network-filesystem-nfs/"><a class="padding" href="/storage/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/partitioning-mbr-gpt/"><a class="padding" href="/storage/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/rm-filesystem-from-partition/"><a class="padding" href="/storage/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/remove-formatting-from-highlights/"><a class="padding" href="/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-docker-nginx/"><a class="padding" href="/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/you-need-to-learn-man-pages/"><a class="padding" href="/tools/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/proxmox-ha-proxy-setup/"><a class="padding" href="/tools/proxmox-ha-proxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/learning-touch-typing/"><a class="padding" href="/tools/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5" checked><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/">Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="active hidden " data-nav-id="/containers/managing-containers/"><a class="padding" href="/containers/managing-containers/"><i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/ansible-and-podman/"><a class="padding" href="/containers/ansible-and-podman/">Ansible and Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/intro-to-containers-1/"><a class="padding" href="/containers/intro-to-containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/convert-docker-compose-to-quadlets/"><a class="padding" href="/containers/convert-docker-compose-to-quadlets/">Convert Docker Compose to Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-links/"><a class="padding" href="/containers/podman-links/">Podman Links<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-quadlets/"><a class="padding" href="/containers/podman-quadlets/">Podman Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/">Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
+            <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users-and-Groups</span></label><a class="padding default-animation" href="/users-and-groups/">Users-and-Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
+            <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/virtualization/"><input type="checkbox" id="R-section-da8ee4406de37987b502b79e5b0a9d1c" aria-controls="R-subsections-da8ee4406de37987b502b79e5b0a9d1c"><label for="R-section-da8ee4406de37987b502b79e5b0a9d1c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualizations</span></label><a class="padding default-animation" href="/virtualization/">Virtualizations<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-da8ee4406de37987b502b79e5b0a9d1c" class="collapsible-menu">
+            <li class="" data-nav-id="/virtualization/using-vagrant-on-linux/"><a class="padding" href="/virtualization/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/booknotes/"><a class="padding" href="/booknotes/"><i class='fas fa-fw fa-book'></i> Book Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/now/"><a class="padding" href="/now/"><i class='fas fa-fw fa-clock'></i> Now<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780154752" defer></script>
+    <script src="/js/theme.js?1780154752" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

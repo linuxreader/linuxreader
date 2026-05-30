@@ -1,0 +1,2198 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    <meta name="description" content="10 Securing Containers Security is becoming the hottest topic of the current times.[]{.sentence-end} Enterprises and companies all over the world are making huge investments in security practices and tools that should help protect their systems from internal or external attacks.
+As we saw in Chapter 1, Introduction to Container Technology, containers and their host systems can be considered a medium to execute and keep a target application running.[]{.sentence-end} Security should be applied to all levels of the service architecture, from the base infrastructure to the target application code, all while passing through the virtualization or containerization layer.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="10 Securing Containers Security is becoming the hottest topic of the current times.[]{.sentence-end} Enterprises and companies all over the world are making huge investments in security practices and tools that should help protect their systems from internal or external attacks.
+As we saw in Chapter 1, Introduction to Container Technology, containers and their host systems can be considered a medium to execute and keep a target application running.[]{.sentence-end} Security should be applied to all levels of the service architecture, from the base infrastructure to the target application code, all while passing through the virtualization or containerization layer.">
+    <meta property="og:url" content="http://localhost:1313/containers/securingcontainers/">
+    <meta property="og:description" content="10 Securing Containers Security is becoming the hottest topic of the current times.[]{.sentence-end} Enterprises and companies all over the world are making huge investments in security practices and tools that should help protect their systems from internal or external attacks.
+As we saw in Chapter 1, Introduction to Container Technology, containers and their host systems can be considered a medium to execute and keep a target application running.[]{.sentence-end} Security should be applied to all levels of the service architecture, from the base infrastructure to the target application code, all while passing through the virtualization or containerization layer.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Containers">
+    <meta itemprop="description" content="10 Securing Containers Security is becoming the hottest topic of the current times.[]{.sentence-end} Enterprises and companies all over the world are making huge investments in security practices and tools that should help protect their systems from internal or external attacks.
+As we saw in Chapter 1, Introduction to Container Technology, containers and their host systems can be considered a medium to execute and keep a target application running.[]{.sentence-end} Security should be applied to all levels of the service architecture, from the base infrastructure to the target application code, all while passing through the virtualization or containerization layer.">
+    <meta itemprop="wordCount" content="10445">
+    <title></title>
+    <link href="/containers/securingcontainers/index.md" rel="alternate" type="text/markdown" title="">
+    <link href="/images/favicon.svg?1780154752" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1780154752" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1780154752" defer></script>
+    <script src="/js/search-lunr.js?1780154752" defer></script>
+    <script src="/js/search.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1780154752";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780154752" rel="stylesheet">
+    <link href="/css/theme.css?1780154752" rel="stylesheet">
+    <link href="/css/format-html.css?1780154752" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/containers\/securingcontainers\/';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:1313';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script><script defer src="https://cloud.umami.is/script.js" data-website-id="d179743c-138a-4212-8906-28f70628ef95"></script>
+<style>
+:root {
+    --MENU-S-width: 15rem;
+    --MENU-M-width: 15rem;
+    --MENU-L-width: 18rem;
+    --MAIN-MAX-width: 100rem;
+}
+html {
+  zoom: 1.2;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif,
+               "Apple Color Emoji", "Segoe UI Emoji" !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500 !important;
+  letter-spacing: 0.7px;
+}
+
+code, kbd, pre, samp {
+  font-family: "Fira Code", "Hack", "Source Code Pro", Consolas, Menlo, monospace !important;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+  <body class="mobile-support html" data-origin="/containers/securingcontainers/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#h2_252">The Podman Swiss Army knife &ndash; subuid and subgid</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#h2_255">Signing images with Sigstore and Podman</a></li>
+    <li><a href="#h2_256">Configuring Podman to pull signed images</a></li>
+    <li><a href="#h2_257">Testing signature verification failures</a></li>
+    <li><a href="#h2_258">Managing keys with Podman image trust commands</a></li>
+    <li><a href="#h2_259">Managing signatures with Skopeo</a></li>
+    <li><a href="#h2_260">Generating a Sigstore key with Skopeo</a></li>
+    <li><a href="#h2_261">Using Rekor and Cosign to manage image signatures</a></li>
+    <li><a href="#h2_262">Customizing Linux kernel capabilities</a></li>
+    <li><a href="#h2_263">Understanding Linux Kernel capabilities</a></li>
+    <li><a href="#h2_264">Using capabilities in containers</a></li>
+    <li><a href="#h2_265">Customizing a container's capabilities</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#h2_267">Introducing Udica</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/containers/"><span itemprop="name">Containers</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/securingcontainers/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/" title="Containers (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/ansible-and-podman/" title="Ansible and Podman (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable containers" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id=""></h1>
+
+<h1 id="h1_248" class="chapterNumber">10<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<h1 id="h1_249" class="chapterTitle">Securing Containers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Security is becoming the hottest topic of the current
+times.[]{.sentence-end} Enterprises and companies all over the world are
+making huge investments in security practices and tools that should help
+protect their systems from internal or external attacks.</p>
+<p>As we saw in <em>Chapter</em> <em>1</em>, <em>Introduction</em> <em>to</em> <em>Container</em>
+<em>Technology</em>, containers and their host systems can be considered a
+medium to execute and keep a target application
+running.[]{.sentence-end} Security should be applied to all levels of
+the service architecture, from the base infrastructure to the target
+application code, all while passing through the virtualization or
+containerization layer.</p>
+<p>In this chapter, we will look at the best practices and tools that could
+help improve the overall security of our containerization
+layer.[]{.sentence-end} In particular, we're going to cover the
+following main topics:</p>
+<ul>
+<li>Running rootless containers with Podman</li>
+<li>Avoiding running containers with UID 0</li>
+<li>Signing our container images</li>
+<li>Customizing Linux kernel capabilities</li>
+<li>Understanding SELinux interaction with containers</li>
+</ul>
+<h1 id="h1_250" class="heading-1">Technical requirements<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>To complete this chapter's examples, you will need a machine with a
+working Podman installation.[]{.sentence-end} As we mentioned in
+<em>Chapter</em> <em>3</em>, <em>Running</em> <em>the</em> <em>First</em> <em>Container</em>, all the examples in
+this book have been executed on a Fedora 40 system or later, but they
+can be reproduced on your OS of choice.</p>
+<p>Having a good understanding of the topics covered in <em>Chapter</em> <em>4</em>,
+<em>Managing</em> <em>Running</em> <em>Containers</em>, <em>Chapter</em> <em>5</em>, <em>Implementing</em>
+<em>Storage</em> <em>for</em> <em>the</em> <em>Container's</em> <em>Data</em>, and <em>Chapter</em> <em>9</em>,
+<em>Pushing</em> <em>Images</em> <em>to</em> <em>a</em> <em>Container</em> <em>Registry</em>, will help you better
+understand the container security topics discussed in this chapter.</p>
+<h1 id="h1_251" class="heading-1">Running rootless containers with Podman<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>As we briefly saw in <em>Chapter</em> <em>4,</em> <em>Managing</em> <em>Running</em> <em>Containers</em>,
+it is possible for Podman to let standard users without administrative
+privileges run containers on a Linux host.[]{.sentence-end} These
+containers are often referred to []{#Chapter_10.xhtml#idx_1f891e40
+.index-entry index-entry=&ldquo;rootless containers&rdquo;}as <strong>rootless</strong>
+<strong>containers</strong>.</p>
+<p>Rootless containers have many advantages,
+including[]{#Chapter_10.xhtml#idx_a10a7546 .index-entry
+index-entry=&ldquo;rootless containers:advantages&rdquo;} the following:</p>
+<ul>
+<li>They create an additional security layer that could block attackers
+trying to get root privileges on the host, even if the container
+engine, runtime, or orchestrator has been
+compromised.[]{.sentence-end} This enforces against container escape
+vulnerability issues, potentially any flaw that allows a process in
+a container to escape the enforced security
+constraints.[]{.sentence-end} If it happens in a rootless container,
+the escaped process can only gain non-root user privileges.</li>
+<li>They can allow many unprivileged users to run containers on the same
+host, making the most of high-performance computing environments.</li>
+</ul>
+<p>Let's think about the approach that's used by any Linux system to
+handle traditional process services.[]{.sentence-end} Usually, the
+package maintainers tend to create a dedicated user for scheduling and
+running the target process.[]{.sentence-end} If we try to install an
+Apache web server on our favorite Linux distro through the default
+package manager, then we can find out that the installed service will
+run through a dedicated user named <code>apache</code>{.inlineCode}.</p>
+<p>This approach has been the best practice for years because, from a
+security perspective, allowing fewer privileges improves security.</p>
+<p>Using the same approach but with a rootless
+container[]{#Chapter_10.xhtml#idx_e60d7a57 .index-entry
+index-entry=&ldquo;Podman&rdquo;} allows us to run the container process without the
+need for additional privilege escalation.[]{.sentence-end} Additionally,
+Podman is daemonless, so it will just create a child process.</p>
+<p>Running rootless containers in Podman is pretty straightforward and, as
+we saw in the previous chapters, many of the examples in this book can
+be run as standard unprivileged users.[]{.sentence-end} Now, let's
+learn what's behind the execution of a rootless container.</p>
+<h2 id="h2_252" class="heading-2">The Podman Swiss Army knife &ndash; subuid and subgid<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Modern Linux distributions use a version of the
+<code>shadow-utils</code>{.inlineCode} package that leverages two files:
+<code>/etc/subuid</code>{.inlineCode} and
+<code>/etc/subgid</code>{.inlineCode}.[]{.sentence-end} These
+[]{#Chapter_10.xhtml#idx_99795dd1 .index-entry
+index-entry=&ldquo;subuid&rdquo;}files are used []{#Chapter_10.xhtml#idx_72946681
+.index-entry index-entry=&ldquo;subgid&rdquo;}to determine which UIDs and GIDs can
+be used to map a user namespace.</p>
+<p>The default allocation for every user is <code>65536</code>{.inlineCode} UIDs and
+<code>65536</code>{.inlineCode} GIDs.</p>
+<p>We can run the following simple command to check how the
+<code>subuid</code>{.inlineCode} and <code>subgid</code>{.inlineCode} allocation works in
+rootless containers:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ id
+uid=1000(alex) gid=1000(alex) groups=1000(alex),10(wheel)
+$ podman run alpine cat /proc/self/uid_map /proc/self/gid_map
+Resolved &#34;alpine&#34; as an alias (/etc/containers/registries.conf.d/000-shortnames.conf)
+Trying to pull docker.io/library/alpine:latest...
+Getting image source signatures
+Copying blob 59bf1c3509f3 done
+Copying config c059bfaa84 done
+Writing manifest to image destination
+Storing signatures
+         0       1000          1
+         1     100000      65536
+         0       1000          1
+         1     100000      65536</code></pre></div>
+<p>As we can see, both files indicate that they start mapping UID and GID 0
+with the current user's UID/GID that
+we[]{#Chapter_10.xhtml#idx_9062453b .index-entry index-entry=&ldquo;subuid&rdquo;}
+just ran the container with; that is,
+<code>1000</code>{.inlineCode}.[]{.sentence-end} After that, it maps UID and GID 1,
+starting []{#Chapter_10.xhtml#idx_eb0c0a4d .index-entry
+index-entry=&ldquo;subgid&rdquo;}from <code>100000</code>{.inlineCode} and arriving at
+<code>165536</code>{.inlineCode}.[]{.sentence-end} This is calculated by summing
+the starting point, <code>100000</code>{.inlineCode}, and the default range,
+<code>65536</code>{.inlineCode}.</p>
+<p>For a comparison, let's see the same example on the host:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ id
+uid=1000(alex) gid=1000(alex) groups=1000(alex),10(wheel)
+$ cat /proc/self/uid_map /proc/self/gid_map
+         0          0 4294967295
+         0          0 4294967295</code></pre></div>
+<p>Because it starts at <code>0</code>{.inlineCode} for both sides and covers the full
+range of 32-bit UID available on Linux, <code>4294967295</code>{.inlineCode}, it
+means UID/GID 1000 on the host system is seen as UID/GID 1000 by the
+process.[]{.sentence-end} There is no translation happening.</p>
+<p>Using rootless containers is not the only best practice we can implement
+for our container environments.[]{.sentence-end} In the next section,
+we'll learn why we shouldn't run a container with UID
+<code>0</code>{.inlineCode}.</p>
+<h1 id="h1_253" class="heading-1">Avoiding running containers with UID 0<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Container runtimes can be[]{#Chapter_10.xhtml#idx_86dc9fb1 .index-entry
+index-entry=&ldquo;running containers:avoiding, with UID 0&rdquo;} instructed to run
+processes inside []{#Chapter_10.xhtml#idx_d5801c0c .index-entry
+index-entry=&ldquo;UID 0:running containers, avoiding&rdquo;}a container with a user
+ID different from the one that initially created the
+container.[]{.sentence-end} Running the processes inside the container
+as a non-root user can be helpful for security
+purposes.[]{.sentence-end} While container runtimes use Linux namespaces
+to isolate processes, a vulnerability in the container engine or the
+kernel could allow a root user (UID <code>0</code>{.inlineCode} in the container)
+to <em>break out</em> of the container and gain the same privileges as the host
+root user (UID <code>0</code>{.inlineCode} in the host).[]{.sentence-end} Using an
+unprivileged user (with a non-0 UID) in a container can limit the
+privilege escalation and thus the attack surface inside and outside the
+container.</p>
+<p>By default, a Dockerfile and Containerfile may set the default user as
+root (that is, <code>UID=0</code>{.inlineCode}).[]{.sentence-end} To avoid this, we
+can leverage the <code>USER</code>{.inlineCode} instruction in those build files &ndash;
+for example, <code>USER</code>{.inlineCode}<code> </code>{.inlineCode}<code>1001</code>{.inlineCode} &ndash;
+to instruct Buildah or other container build tools to build and run the
+container image using that particular user (with UID
+<code>1001</code>{.inlineCode}).[]{.sentence-end} As explained before, a potential
+container breakout from the container will allow, in the worst case,
+access to the files and resources of the host user with the same UID,
+<code>1001</code>{.inlineCode}.</p>
+<p>If we want to force a specific UID, we need to adjust the permissions of
+any file, folder, or mount we plan to use with our running containers.</p>
+<p>Now, let's learn how to adapt an existing image so that it can be run
+with a standard user.</p>
+<p>We can leverage some prebuilt images on Docker Hub or pick one of the
+official nginx container images.[]{.sentence-end} First, we need to
+create a basic <code>nginx</code>{.inlineCode} configuration file:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ cat hello-podman.conf
+server {
+    listen 80;
+
+    location / {
+        default_type text/plain;
+        expires -1;
+        return 200 &#39;Hello Podman user!\nServer address: $server_addr:$server_port\n&#39;;
+    }
+}</code></pre></div>
+<p>The <code>nginx</code>{.inlineCode} configuration []{#Chapter_10.xhtml#idx_bb9fca16
+.index-entry index-entry=&ldquo;running containers:avoiding, with UID 0&rdquo;}file
+is really simple: we define the listening
+[]{#Chapter_10.xhtml#idx_4b51dd61 .index-entry
+index-entry=&ldquo;UID 0:running containers, avoiding&rdquo;}port
+(<code>80</code>{.inlineCode}) and the content message to return once a request
+arrives on the server.</p>
+<p>Then, we can create a simple Dockerfile to leverage one of the official
+nginx container images:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ cat Dockerfile
+FROM docker.io/library/nginx:mainline-alpine
+RUN rm /etc/nginx/conf.d/*
+ADD hello-podman.conf /etc/nginx/conf.d/</code></pre></div>
+<p>The Dockerfile contains three instructions:</p>
+<ul>
+<li><code>FROM</code>{.inlineCode}: For selecting the official nginx image</li>
+<li><code>RUN</code>{.inlineCode}: For cleaning the configuration directory of any
+default config example</li>
+<li><code>ADD</code>{.inlineCode}: For copying the configuration file that we just
+created</li>
+</ul>
+<p>Now, let's build the[]{#Chapter_10.xhtml#idx_f66908fc .index-entry
+index-entry=&ldquo;running containers:avoiding, with UID 0&rdquo;}
+container[]{#Chapter_10.xhtml#idx_635ad8e5 .index-entry
+index-entry=&ldquo;UID 0:running containers, avoiding&rdquo;} image with Buildah:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ buildah bud -t nginx-root:latest -f .
+STEP 1/3: FROM docker.io/library/nginx:mainline-alpine
+STEP 2/3: RUN rm /etc/nginx/conf.d/*
+STEP 3/3: ADD hello-podman.conf /etc/nginx/conf.d/
+COMMIT nginx-root:latest
+Getting image source signatures
+Copying blob 8d3ac3489996 done
+...
+Copying config 21c5f7d8d7 done
+Writing manifest to image destination
+Storing signatures
+--&gt; 21c5f7d8d70
+Successfully tagged localhost/nginx-root:latest
+21c5f7d8d709e7cfdf764a14fd6e95fb4611b2cde52b57aa46d43262a6489f41</code></pre></div>
+<p>Once you've built the image, name it
+<code>nginx-root</code>{.inlineCode}.[]{.sentence-end} Now, we are ready to run our
+container:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run --name myrootnginx -p 127.0.0.1::80 -d nginx-root
+364ec7f5979a5059ba841715484b7238db3313c78c5c577629364aa46b6d9bdc</code></pre></div>
+<p>Here, we used the <code>–p</code>{.inlineCode} option to publish the port and make
+it reachable from the host.[]{.sentence-end} Let's find out which local
+port has been chosen, randomly, in the host system:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman port myrootnginx 80
+127.0.0.1:38029</code></pre></div>
+<p>Finally, let's call our containerized web server:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ curl localhost:38029
+Hello Podman user!
+Server address: 10.0.2.100:80</code></pre></div>
+<p>The container is finally running, but what user is our container using?
+Let's find out:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman ps | grep root
+364ec7f5979a  localhost/nginx-root:latest  nginx -g daemon o...  55 minutes ago  Up 55 minutes ago  0.0.0.0:38029-&gt;80/tcp      myrootnginx
+$ podman exec 364ec7f5979a id
+uid=0(root) gid=0(root)</code></pre></div>
+<p>As expected, the []{#Chapter_10.xhtml#idx_7efb90c0 .index-entry
+index-entry=&ldquo;running containers:avoiding, with UID 0&rdquo;}container is
+running as root!</p>
+<p>Now, let's make a few[]{#Chapter_10.xhtml#idx_3aef7dc5 .index-entry
+index-entry=&ldquo;UID 0:running containers, avoiding&rdquo;} edits to change the
+user.[]{.sentence-end} First, we need to change the listening port in
+the nginx server configuration:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ cat hello-podman.conf
+server {
+    listen 8080;
+
+    location / {
+        default_type text/plain;
+        expires -1;
+        return 200 &#39;Hello Podman user!\nServer address: $server_addr:$server_port\n&#39;;
+    }
+}</code></pre></div>
+<p>Here, we replaced the listening port (<code>80</code>{.inlineCode}) with
+<code>8080</code>{.inlineCode}; we cannot use a port that's below
+<code>1024</code>{.inlineCode} with unprivileged users.</p>
+<p>Then, we need to edit our Dockerfile:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ cat Dockerfile
+FROM docker.io/library/nginx:mainline-alpine
+RUN rm /etc/nginx/conf.d/*
+ADD hello-podman.conf /etc/nginx/conf.d/
+
+RUN chmod -R a+w /var/cache/nginx/ \
+        &amp;&amp; touch /var/run/nginx.pid \
+        &amp;&amp; chmod a+w /var/run/nginx.pid
+EXPOSE 8080
+USER nginx</code></pre></div>
+<p>As you can see, we fixed the permissions for the main file and folder on
+the nginx server, exposed the new <code>8080</code>{.inlineCode} port, and set the
+default user to an nginx one.</p>
+<p>Now, we are []{#Chapter_10.xhtml#idx_61141b46 .index-entry
+index-entry=&ldquo;running containers:avoiding, with UID 0&rdquo;}ready to build a
+brand-new container image.[]{.sentence-end} Let's
+[]{#Chapter_10.xhtml#idx_8c127501 .index-entry
+index-entry=&ldquo;UID 0:running containers, avoiding&rdquo;}call it
+<code>nginx-user</code>{.inlineCode}:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ buildah bud -t nginx-user:latest -f .
+STEP 1/6: FROM docker.io/library/nginx:mainline-alpine
+STEP 2/6: RUN rm /etc/nginx/conf.d/*
+STEP 3/6: ADD hello-podman.conf /etc/nginx/conf.d/
+STEP 4/6: RUN chmod -R a+w /var/cache/nginx/         &amp;&amp; touch /var/run/nginx.pid         &amp;&amp; chmod a+w /var/run/nginx.pid
+STEP 5/6: EXPOSE 8080
+STEP 6/6: USER nginx
+COMMIT nginx-user:latest
+Getting image source signatures
+Copying blob 8d3ac3489996 done
+...
+Copying config 7628852470 done
+Writing manifest to image destination
+Storing signatures
+--&gt; 76288524704
+Successfully tagged localhost/nginx-user:latest
+762885247041fd233c7b66029020c4da8e1e254288e1443b356cbee4d73adf3e</code></pre></div>
+<p>Now, we can run the container:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run --name myusernginx -p 127.0.0.1::8080 -d nginx-user
+299e0fb727f339d87dd7ea67eac419905b10e36181dc1ca7e35dc7d0a9316243</code></pre></div>
+<p>Find the associated random host port and check whether the web server is
+working:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman port myusernginx 8080
+127.0.0.1:42209
+$ curl 127.0.0.1:42209
+Hello Podman user!
+Server address: 10.0.2.100:8080</code></pre></div>
+<p>Finally, let's[]{#Chapter_10.xhtml#idx_1b6c0b12 .index-entry
+index-entry=&ldquo;running containers:avoiding, with UID 0&rdquo;} see whether we
+changed the user that's running the []{#Chapter_10.xhtml#idx_ef44ec62
+.index-entry index-entry=&ldquo;UID 0:running containers, avoiding&rdquo;}target
+process in our container:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman ps | grep user
+299e0fb727f3  localhost/nginx-user:latest  nginx -g daemon o...  38 minutes ago  Up 38 minutes ago  127.0.0.1:42209-&gt;8080/tcp  myusernginx
+$ podman exec 299e0fb727f3 id
+uid=101(nginx) gid=101(nginx) groups=101(nginx)</code></pre></div>
+<p>As you can see, our container is running as an unprivileged user, which
+is what we wanted.</p>
+<p>If you want to look at a ready-to-use example of this, please go to this
+book's GitHub repository:
+<a href="https://github.com/PacktPublishing/Podman-for-DevOps" rel="external" target="_blank">[https://github.com/PacktPublishing/Podman-for-DevOps]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>Unfortunately, security is not all about permissions and users &ndash; we
+also need to take care of the base image and its source and check
+container image signatures.[]{.sentence-end} We'll learn about this in
+the next section.</p>
+<h1 id="h1_254" class="heading-1">Signing our container images<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>When we're dealing with[]{#Chapter_10.xhtml#idx_e664477f .index-entry
+index-entry=&ldquo;container images:signing&rdquo;} images that have been pulled
+from external registries, we will have some security concerns related to
+the potential attack tactics that have been conducted on the containers
+(see [<em>1</em>] in the <em>Further</em> <em>reading</em> section), especially
+masquerading techniques, which help the attacker manipulate image
+components to make them appear legitimate.[]{.sentence-end} This could
+also happen due[]{#Chapter_10.xhtml#idx_3d754214 .index-entry
+index-entry=&ldquo;man-in-the-middle (MITM) attack&rdquo;} to a
+<strong>man-in-the-middle</strong> (<strong>MITM</strong>) attack being conducted by an attacker
+over the wire.</p>
+<p>To prevent certain kinds of attacks while you're managing containers,
+the best solution is to use a detached image signature to trust the
+image provider and guarantee its reliability.</p>
+<p>When an image is pulled, Podman can verify the validity of the
+signatures and reject images without valid
+[]{#Chapter_10.xhtml#idx_055dbd15 .index-entry
+index-entry=&ldquo;container images:signing&rdquo;}signatures.</p>
+<p>Now, let's learn how to implement a basic image signature workflow.</p>
+<h2 id="h2_255" class="heading-2">Signing images with Sigstore and Podman<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>In this section, we will create a basic Sigstore key pair and configure
+Podman to push and sign the image while storing the signature in a
+staging store.[]{.sentence-end} For the sake of clarity, we will run a
+registry using the basic Docker Registry V2 container image without any
+customization.</p>
+<p>Before testing the[]{#Chapter_10.xhtml#idx_547112f7 .index-entry
+index-entry=&ldquo;container images:signing, with Podman&rdquo;} image pull and
+signature validation workflow, we[]{#Chapter_10.xhtml#idx_725bdc6e
+.index-entry index-entry=&ldquo;container images:signing, with Sigstore&rdquo;} will
+look at how Podman handles the []{#Chapter_10.xhtml#idx_a35bd95d
+.index-entry index-entry=&ldquo;Sigstore:container images, signing&rdquo;}signature
+as an <strong>OCI artifact</strong> or via a[]{#Chapter_10.xhtml#idx_5d0fcdf8
+.index-entry index-entry=&ldquo;OCI artifact&rdquo;}
+separate[]{#Chapter_10.xhtml#idx_3aeb52c2 .index-entry
+index-entry=&ldquo;Podman:container images, signing&rdquo;} web server.</p>
+<p>To create image signatures with <strong>Sigstore</strong>, we
+[]{#Chapter_10.xhtml#idx_89c89166 .index-entry
+index-entry=&ldquo;Sigstore&rdquo;}need to create a valid key pair or use an
+existing one.[]{.sentence-end} For this reason, we will provide a short
+recap on asymmetric key pairs to help you understand how image
+signatures work.</p>
+<p>A key pair is composed of a private key and a public
+key.[]{.sentence-end} The public key can be shared universally, while
+[]{#Chapter_10.xhtml#idx_31a5f24a .index-entry
+index-entry=&ldquo;private key&rdquo;}the private key is kept private and never
+shared with anybody.[]{.sentence-end} The <strong>private key</strong> is used
+by[]{#Chapter_10.xhtml#idx_0e53eb66 .index-entry index-entry=&ldquo;sender&rdquo;}
+the <strong>sender</strong> (the image builder) to sign the image.[]{.sentence-end}
+In this way, anyone with access to the []{#Chapter_10.xhtml#idx_a43234e2
+.index-entry index-entry=&ldquo;public key&rdquo;}corresponding <strong>public key</strong> can
+verify that the image was not tampered with and truly originated from
+the sender.</p>
+<p>We can easily translate this concept into container images: the image
+owner who pushes it to the remote registry can sign it using a keypair
+and store the detached signature on a signature store that is publicly
+accessible by users.[]{.sentence-end} Here, the signature is separated
+by the image itself &ndash; the registry will store the image blobs while the
+signature store will hold and expose the image signatures.</p>
+<p>Users who are pulling the image will be able to validate the image
+signature using the previously shared public key.</p>
+<p>Now, let's []{#Chapter_10.xhtml#idx_6fdb0586 .index-entry
+index-entry=&ldquo;Cosign&rdquo;}go back to creating the Sigstore key
+pair.[]{.sentence-end} We are going to create a simple one with the
+<strong>Cosign</strong> utility, a lightweight tool designed specifically for signing
+and verifying container images.[]{.sentence-end} It
+[]{#Chapter_10.xhtml#idx_638faa7d .index-entry
+index-entry=&ldquo;Open Container Initiative (OCI)&quot;}adheres to <strong>Open
+Container Initiative</strong> (<strong>OCI</strong>) standards, ensuring compatibility and
+seamless integration with popular container registries.</p>
+<p>Let's start with Cosign installation and
+configuration.[]{.sentence-end} As usual, there are several installation
+methods available; here, we are reporting the most structured way to
+install it via a package manager in your operating system:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code> $ LATEST_VERSION=$(curl https://api.github.com/repos/sigstore/cosign/releases/latest | grep tag_name | cut -d : -f2 | tr -d &#34;v\&#34;, &#34;)
+ $ curl -O -L &#34;https://github.com/sigstore/cosign/releases/latest/download/cosign-${LATEST_VERSION}-1.x86_64.rpm&#34;
+ $ sudo rpm -ivh cosign-${LATEST_VERSION}-1.x86_64.rpm</code></pre></div>
+<p>We can []{#Chapter_10.xhtml#idx_4f3b59dd .index-entry
+index-entry=&ldquo;Sigstore:container images, signing&rdquo;}check if the
+[]{#Chapter_10.xhtml#idx_9ef2ed54 .index-entry
+index-entry=&ldquo;container images:signing, with Sigstore&rdquo;}installation was
+[]{#Chapter_10.xhtml#idx_7189c41f .index-entry
+index-entry=&ldquo;Podman:container images, signing&rdquo;}successful by running the
+following []{#Chapter_10.xhtml#idx_aaac2101 .index-entry
+index-entry=&ldquo;container images:signing, with Podman&rdquo;}command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code> $ cosign version
+...
+cosign: A tool for Container Signing, Verification and Storage in an OCI registry.
+
+GitVersion:    v3.0.4
+GitCommit:     6832fba4928c1ad69400235bbc41212de5006176
+GitTreeState:  clean
+BuildDate:     2026-01-09T21:17:16Z
+GoVersion:     go1.25.5
+Compiler:      gc
+Platform:      linux/amd64</code></pre></div>
+<p>We are now ready to generate our first key pair by running the following
+command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$  cosign generate-key-pair</code></pre></div>
+<p>The preceding command will ask you to provide a <strong>passphrase</strong> to
+[]{#Chapter_10.xhtml#idx_ca8ee077 .index-entry
+index-entry=&ldquo;passphrase&rdquo;}protect your private key.[]{.sentence-end}
+Unlike GPG, which manages keys in a hidden system database, Cosign
+simply generates two files in your current directory.</p>
+<p>The key pair's output should be similar to the following:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code> $ cosign generate-key-pair
+Enter password for private key:
+Enter password for private key again:
+Private key written to cosign.key
+Public key written to cosign.pub</code></pre></div>
+<p>The files are already in a []{#Chapter_10.xhtml#idx_b0a7ccbe
+.index-entry index-entry=&ldquo;Privacy Enhanced Mail (PEM)&quot;}standard
+<strong>Privacy Enhanced Mail</strong> (<strong>PEM</strong>) format, and there is no need to
+perform extra export steps.[]{.sentence-end} The
+<code>cosign.pub</code>{.inlineCode} file will be useful later, when we define the
+image signatures' verification policy.[]{.sentence-end} The
+<code>cosign.key</code>{.inlineCode} file contains your private key and must be
+kept secure, as it is used to sign your images during the push process.</p>
+<p>Once the key pair has[]{#Chapter_10.xhtml#idx_3d473f18 .index-entry
+index-entry=&ldquo;container images:signing, with Podman&rdquo;} been generated, we
+can create a basic registry []{#Chapter_10.xhtml#idx_86772534
+.index-entry index-entry=&ldquo;container images:signing, with Sigstore&rdquo;}that
+will host our container images.[]{.sentence-end} To
+do[]{#Chapter_10.xhtml#idx_81bf9638 .index-entry
+index-entry=&ldquo;Sigstore:container images, signing&rdquo;} so, we will reuse the
+basic example[]{#Chapter_10.xhtml#idx_6f92bf1e .index-entry
+index-entry=&ldquo;Podman:container images, signing&rdquo;} from <em>Chapter</em> <em>9</em>,
+<em>Pushing</em> <em>Images</em> <em>to</em> <em>a</em> <em>Container</em> <em>Registry</em>, and run the
+following command as root:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ mkdir ./registry_data
+$ podman run -d \
+   --name local_registry \
+   -p 5000:5000 \
+   -v ./registry_data:/var/lib/registry:z \
+   --restart=always registry:2</code></pre></div>
+<p>We now have a local registry without authentication that can be used to
+push the test images.[]{.sentence-end} As we mentioned previously, the
+registry is unaware of the image's detached signature.</p>
+<p>Podman must be able to write signatures on a staging
+sigstore.[]{.sentence-end} There is already a default configuration in
+the <code>/etc/containers/registries.d/default.yaml</code>{.inlineCode} file, which
+looks as follows:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>default-docker:
+#  sigstore: file:///var/lib/containers/sigstore
+  sigstore-staging: file:///var/lib/containers/sigstore
+  use-sigstore-attachments: true</code></pre></div>
+<p>The <code>sigstore-staging</code>{.inlineCode} path is where Podman writes image
+signatures; this path must be a writable folder, and it is possible to
+customize it or keep the default configuration as is.[]{.sentence-end}
+The <code>use-sigstore-attachments: true</code>{.inlineCode} option gives Podman
+permissions to upload sigstores as sidecar files compatible with the OCI
+artifact format.</p>
+<p>For rootless users, defining a custom path in the home directory allows
+Podman to successfully write signatures without requiring elevated
+privileges.</p>
+<p>If we want to create multiple user-related sigstores, we can create the
+<code>$HOME/.config/containers/registries.d/default.yaml</code>{.inlineCode} file
+and define a custom <code>sigstore-staging</code>{.inlineCode} path in the user's
+home directory, following the same syntax that was shown in the previous
+example.[]{.sentence-end} This will allow users to run Podman in
+rootless mode and successfully write to their sigstore.</p>
+<p>note
+<strong>Important</strong></p>
+<p>In Podman 5.x, the preferred method is to store signatures directly in
+the registry as OCI artifacts.[]{.sentence-end} This removes the need to
+manage a separate <em>sigstore</em> directory or worry about cross-user
+filesystem permissions.</p>
+<p>Since we want to []{#Chapter_10.xhtml#idx_91845d50 .index-entry
+index-entry=&ldquo;container images:signing, with Podman&rdquo;}demonstrate the
+native integration between []{#Chapter_10.xhtml#idx_9127120c
+.index-entry
+index-entry=&ldquo;container images:signing, with Sigstore&rdquo;}Podman and Cosign,
+we will use the keys we[]{#Chapter_10.xhtml#idx_9642b985 .index-entry
+index-entry=&ldquo;Sigstore:container images, signing&rdquo;} generated to sign the
+image during the push process.[]{.sentence-end}
+Unlike[]{#Chapter_10.xhtml#idx_ce3d09a6 .index-entry
+index-entry=&ldquo;Podman:container images, signing&rdquo;} older GPG-based
+workflows, Podman 5.x allows rootless users to sign and push images
+seamlessly as long as they have access to their
+<code>cosign.key</code>{.inlineCode} file.</p>
+<p>The following example shows the Dockerfile of a custom
+<code>httpd</code>{.inlineCode} image that's been built using UBI 9:</p>
+<p><code>Chapter11/image_signature/Dockerfile</code>{.inlineCode}</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>FROM registry.access.redhat.com/ubi9
+# Update image and install httpd
+RUN yum install -y httpd &amp;&amp; yum clean all
+# Expose the default httpd port 80
+EXPOSE 80
+# Run the httpd
+CMD [&#34;/usr/sbin/httpd&#34;, &#34;-DFOREGROUND&#34;]</code></pre></div>
+<p>To build the image, we can run the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ cd Chapter11/image_signature
+$ podman build -t custom_httpd .</code></pre></div>
+<p>Now, we can tag the image with the local registry name:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman tag custom_httpd localhost:5000/custom_httpd</code></pre></div>
+<p>Finally, it's time to push the []{#Chapter_10.xhtml#idx_529c9863
+.index-entry index-entry=&ldquo;container images:signing, with Sigstore&rdquo;}image
+to the temporary registry and sign it []{#Chapter_10.xhtml#idx_822721de
+.index-entry index-entry=&ldquo;container images:signing, with Podman&rdquo;}using
+the generated key pair.[]{.sentence-end} The <code>--sign-by</code>{.inlineCode}
+option []{#Chapter_10.xhtml#idx_04073a69 .index-entry
+index-entry=&ldquo;Podman:container images, signing&rdquo;}allows users to pass a
+valid key pair that's been identified
+by[]{#Chapter_10.xhtml#idx_331de19d .index-entry
+index-entry=&ldquo;Sigstore:container images, signing&rdquo;} the user's email:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman push \
+   --tls-verify=false \
+   --sign-by-sigstore-private-key ./cosign.key \
+   localhost:5000/custom_httpd
+Getting image source signatures
+Copying blob 3ba8c926eef9 done
+Copying blob a59107c02e1f done
+Copying blob 352ba846236b done
+Copying config 569b015109 done
+Writing manifest to image destination
+Creating signature: Signing image using a sigstore signature
+
+Storing signatures</code></pre></div>
+<p>The preceding[]{#Chapter_10.xhtml#idx_259b9125 .index-entry
+index-entry=&ldquo;container images:signing, with Podman&rdquo;} code successfully
+pushed the image blobs to the []{#Chapter_10.xhtml#idx_27b9410f
+.index-entry
+index-entry=&ldquo;container images:signing, with Sigstore&rdquo;}registry and
+stored the image signature.[]{.sentence-end} With that,
+we[]{#Chapter_10.xhtml#idx_14c44362 .index-entry
+index-entry=&ldquo;Sigstore:container images, signing&rdquo;} have successfully
+pushed and signed the []{#Chapter_10.xhtml#idx_333e682c .index-entry
+index-entry=&ldquo;Podman:container images, signing&rdquo;}image, making it more
+secure for future use.[]{.sentence-end} Now, let's learn how to
+configure Podman to retrieve signed images.</p>
+<h2 id="h2_256" class="heading-2">Configuring Podman to pull signed images<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>To successfully[]{#Chapter_10.xhtml#idx_bad368ea .index-entry
+index-entry=&ldquo;Podman:configuring, to pull signed images&rdquo;} pull a signed
+image, Podman must be able to retrieve the signature from a signature
+store and have access to a public key to verify it.</p>
+<p>In the modern Sigstore workflow used by Podman 5.x, the registry is
+<em>signature aware</em>.[]{.sentence-end} This means that when you push an
+image with a signature, Podman stores that signature directly in the
+registry as an OCI artifact (a sidecar object).</p>
+<p>Because the signature is now stored alongside the image, we no longer
+need to maintain an external web server or a separate directory to host
+signature files.[]{.sentence-end} This greatly simplifies the DevOps
+pipeline, as the registry becomes the single source of truth for both
+the image layers and their cryptographic proof.</p>
+<p>Now, let's configure Podman for image pulling by defining which
+registries are allowed to use this feature.[]{.sentence-end} Unlike the
+legacy <em>detached</em> model, Podman 5.x can retrieve signatures directly
+from the registry.[]{.sentence-end} To ensure Podman looks for these
+integrated signatures, we edit the
+<code>/etc/containers/registries.d/default.yaml</code>{.inlineCode} file to enable
+Sigstore attachments:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>docker:
+  localhost:5000:
+    use-sigstore-attachments: true
+  http://localhost:8080/</code></pre></div>
+<p>While we are using integrated signatures for our local registry, you can
+still define external signature stores for other
+registries.[]{.sentence-end} For example, the following code shows how
+Podman locates signatures for the public Red Hat registry:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>docker:
+  registry.access.redhat.com:
+    sigstore: https://access.redhat.com/webassets/docker/content/sigstore</code></pre></div>
+<p>Before we test the image pulls, we must implement the public key that's
+used by Podman to verify the signatures.[]{.sentence-end} This public
+key (<code>cosign.pub</code>{.inlineCode}) must be stored in the host that pulls
+the image and belongs to the key pair that's used to sign the image.</p>
+<p>The configuration []{#Chapter_10.xhtml#idx_10141e62 .index-entry
+index-entry=&ldquo;Podman:configuring, to pull signed images&rdquo;}file that's
+used to enforce these security rules is
+<code>/etc/containers/policy.json</code>{.inlineCode}.</p>
+<p>The following code shows a custom configuration that requires a valid
+Sigstore signature for any image pulled from
+<code>localhost</code>{.inlineCode}<code>:5000</code>{.inlineCode}:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>{
+    &#34;default&#34;: [
+        {
+            &#34;type&#34;: &#34;insecureAcceptAnything&#34;
+        }
+    ],
+    &#34;transports&#34;: {
+        &#34;docker&#34;: {
+            &#34;localhost:5000&#34;: [
+                {
+                    &#34;type&#34;: &#34; sigstoreSigned &#34;,
+                   
+                    &#34;keyPath&#34;: &#34;/etc/pki/containers/cosign.pub&#34;,
+                    &#34;signedIdentity&#34;: { &#34;type&#34;: &#34;matchRepository&#34; }
+                }
+            ]
+        },
+        &#34;docker-daemon&#34;: {
+            &#34;&#34;: [
+                {
+                    &#34;type&#34;: &#34;insecureAcceptAnything&#34;
+                }
+            ]
+        }
+    }
+}</code></pre></div>
+<p>To verify the signatures of images that have been pulled from
+<code>localhost</code>{.inlineCode}<code>:5000</code>{.inlineCode}, we can use a public key
+that's stored in the path defined by the <code>keyPath</code>{.inlineCode}
+field.[]{.sentence-end} The public key must exist in the defined path
+and be readable by Podman.</p>
+<p>It is also important to note the <code>insecureAcceptAnything</code>{.inlineCode}
+instruction in the <code>default</code>{.inlineCode} section.[]{.sentence-end} The
+<code>default</code>{.inlineCode} key represents the global fallback policy for
+Podman.[]{.sentence-end} If it tries to pull an image and doesn't find
+a specific rule for that registry (like the one we created for
+<code>localhost</code>{.inlineCode}<code>:5000</code>{.inlineCode}), it defaults to this
+instruction, which tells Podman not to perform any cryptographic
+checks.[]{.sentence-end} In a security context, this line is the
+equivalent of leaving your front door wide open and hanging a <em>Welcome</em>
+sign for everyone.</p>
+<p>Most Linux distributions []{#Chapter_10.xhtml#idx_2ddb75fe .index-entry
+index-entry=&ldquo;Podman:configuring, to pull signed images&rdquo;}ship with this
+configuration enabled by default to ensure a smooth <em>out-of-the-box</em>
+experience.</p>
+<p>Now, we are ready to test the image pull and verify its
+signature.[]{.sentence-end} Ensure your <code>cosign.pub</code>{.inlineCode} file
+is in the path defined in your policy, then run the following:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman pull --tls-verify=false localhost:5000/custom_httpd
+Getting image source signatures
+Checking if image destination supports signatures
+Copying blob 23fdb56daf15 skipped: already exists
+Copying blob d4f13fad8263 skipped: already exists
+Copying blob 96b0fdd0552f done
+Copying config 569b015109 done
+Writing manifest to image destination
+Storing signatures
+569b015109d457ae5fabb969fd0dc3cce10a3e6683ab60dc10505fc2d68e769f</code></pre></div>
+<p>The image was []{#Chapter_10.xhtml#idx_a3a4e5c6 .index-entry
+index-entry=&ldquo;Podman:configuring, to pull signed images&rdquo;}successfully
+pulled into the local store after signature verification using the
+public key provided.[]{.sentence-end} If the signature had been missing
+or tampered with, Podman would have rejected the pull immediately.</p>
+<p>Now, let's see how Podman behaves when it is unable to correctly verify
+the signature.</p>
+<h2 id="h2_257" class="heading-2">Testing signature verification failures<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>A security policy is only as []{#Chapter_10.xhtml#idx_31b84d20
+.index-entry index-entry=&ldquo;signature verification failures:testing&rdquo;}good
+as its ability to block untrusted content.[]{.sentence-end} To verify
+that our policy is working, we should test what happens when
+verification fails.[]{.sentence-end} First, let's remove our local
+image to ensure Podman is forced to pull it from the registry and
+perform the check:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman rmi localhost:5000/custom_httpd</code></pre></div>
+<p>What happens if an image exists in the registry but has not been signed?
+We can simulate this by pushing the same image with a different tag
+without using the <code>--sign-by</code>{.inlineCode} flag and then trying to pull
+the image again:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman tag custom_httpd localhost:5000/custom_httpd:unsigned
+$ podman push --tls-verify=false localhost:5000/custom_httpd:unsigned
+$ podman pull --tls-verify=false localhost:5000/custom_httpd:unsigned
+Error: unable to copy from source docker://localhost:5000/custom_httpd:unsigned: Source image rejected: A signature was required, but no signature exists</code></pre></div>
+<p>The preceding error demonstrates that since our
+<code>policy.json</code>{.inlineCode} requires a signature for any image from
+<code>localhost</code>{.inlineCode}<code>:5000</code>{.inlineCode}, Podman will automatically
+reject it.</p>
+<p>Another common failure occurs when the public key used for verification
+does not match the private key used for signing.[]{.sentence-end} To
+test this, we can modify our
+<code>/etc/containers/p</code>{.inlineCode}<code>olicy.json</code>{.inlineCode} file to point
+to an incorrect public key.[]{.sentence-end} For example, we could
+temporarily point <code>keyPath</code>{.inlineCode} to a public key from another
+project or generate a dummy key:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># Generate a dummy &#34;wrong&#34; key
+$ cosign generate-key-pair --output-key-prefix dummy</code></pre></div>
+<p>Update <code>/etc/containers/policy.json</code>{.inlineCode} to use the
+<code>dummy.pub</code>{.inlineCode} public key, then try to pull the original
+signed image:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman pull --tls-verify=false localhost:5000/custom_httpd
+Error: Source image rejected: Invalid signature: key mismatch</code></pre></div>
+<p>These errors confirm that Podman is actively enforcing the trust
+relationship.[]{.sentence-end} In a production environment, this
+prevents <em>man-in-the-middle</em> attacks or the accidental deployment of
+unvetted images.</p>
+<p>note
+<strong>Important</strong></p>
+<p>Do not forget to restore the valid public key in the
+<code>/etc/containers/policy.json</code>{.inlineCode} file before proceeding with
+the following examples.</p>
+<p>Podman offers[]{#Chapter_10.xhtml#idx_d651880e .index-entry
+index-entry=&ldquo;signature verification failures:testing&rdquo;} even more
+granular control over these policies and also offers dedicated CLI
+commands to help you customize security policies, which we'll see in
+the next subsection.</p>
+<h2 id="h2_258" class="heading-2">Managing keys with Podman image trust commands<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>It is possible to edit []{#Chapter_10.xhtml#idx_0a39816b .index-entry
+index-entry=&ldquo;Podman image trust commands:keys, managing&rdquo;}the
+<code>/etc/containers/policy.json</code>{.inlineCode} file and modify its JSON
+objects to add or remove configurations for
+[]{#Chapter_10.xhtml#idx_4f60b969 .index-entry
+index-entry=&ldquo;keys:managing, with Podman image trust commands&rdquo;}dedicated
+registries.[]{.sentence-end} However, manual editing can be error-prone
+and hard to automate in a fast-moving DevOps environment.</p>
+<p>Alternatively, we can use the
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>image</code>{.inlineCode}<code> </code>{.inlineCode}<code>trust</code>{.inlineCode}
+command to dump or modify the current configuration.</p>
+<p>The following code shows how to print the current configuration with the
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>image</code>{.inlineCode}<code> </code>{.inlineCode}<code>trust</code>{.inlineCode}<code> </code>{.inlineCode}<code>show</code>{.inlineCode}
+command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman image trust show
+http://localhost:8080/
+TRANSPORT      NAME            TYPE            ID          STORE
+all            default         accept                     
+repository     localhost:5000  sigstoreSigned  N/A        
+docker-daemon                  accept                     </code></pre></div>
+<p>It is also possible to configure new trusts.[]{.sentence-end} For
+example, we can add the Red Hat public GPG key to check the signature of
+UBI images.</p>
+<p>First, we need to download the Red Hat public key:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo wget -O /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat \
+  https://www.redhat.com/security/data/fd431d51.txt</code></pre></div>
+<p>note
+<strong>Note</strong></p>
+<p>Red Hat's product signing keys, including the one that was used in this
+example, can be found at
+<a href="https://access.redhat.com/security/team/key" rel="external" target="_blank">[https://access.redhat.com/security/team/key]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>After[]{#Chapter_10.xhtml#idx_7f19a49a .index-entry
+index-entry=&ldquo;Podman image trust commands:keys, managing&rdquo;} downloading
+the key, we must configure []{#Chapter_10.xhtml#idx_dbd1f214
+.index-entry
+index-entry=&ldquo;keys:managing, with Podman image trust commands&rdquo;}the image
+trust for UBI 9 images that have been pulled from
+<code>registry.access.redhat.com</code>{.inlineCode} using the
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>image</code>{.inlineCode}<code> </code>{.inlineCode}<code>trust</code>{.inlineCode}<code> </code>{.inlineCode}<code>set</code>{.inlineCode}
+command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo podman image trust set -f /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat registry.access.redhat.com/ubi9</code></pre></div>
+<p>After running the preceding command, the
+<code>/etc/containers/policy.json</code>{.inlineCode} file will change, as follows:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>{
+    &#34;default&#34;: [
+        {
+            &#34;type&#34;: &#34;insecureAcceptAnything&#34;
+        }
+    ],
+    &#34;transports&#34;: {
+        &#34;docker&#34;: {
+            &#34;localhost:5000&#34;: [
+                {
+                   
+                     &#34;type&#34;: &#34;sigstoreSigned&#34;,
+                    &#34;keyPath&#34;: &#34;/etc/pki/containers/cosign.pub&#34;,
+                    &#34;signedIdentity&#34;: {
+                        &#34;type&#34;: &#34;matchRepository&#34;
+                    }
+                }
+            ],
+            &#34;registry.access.redhat.com/ubi9&#34;: [
+                {
+                    &#34;type&#34;: &#34;signedBy&#34;,
+                    &#34;keyType&#34;: &#34;GPGKeys&#34;,
+                    &#34;keyPath&#34;: &#34;/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat&#34;
+                }
+            ]
+        },
+        &#34;docker-daemon&#34;: {
+            &#34;&#34;: [
+                {
+                    &#34;type&#34;: &#34;insecureAcceptAnything&#34;
+                }
+            ]
+        }
+    }</code></pre></div>
+<p>Note that the entry that's related to
+<code>registry.access.redhat.com/</code>{.inlineCode}<code>ubi</code>{.inlineCode}<code>9</code>{.inlineCode}
+and the public key that was used []{#Chapter_10.xhtml#idx_802088c9
+.index-entry index-entry=&ldquo;Podman image trust commands:keys, managing&rdquo;}to
+verify the image signatures have been []{#Chapter_10.xhtml#idx_fd87eed6
+.index-entry
+index-entry=&ldquo;keys:managing, with Podman image trust commands&rdquo;}added to
+the file.</p>
+<p>The Red Hat sigstore configuration for this registry is already
+available in the
+<code>/etc/containers/registries.d/</code>{.inlineCode}<code>registry.access.redhat.com</code>{.inlineCode}<code>.</code>{.inlineCode}<code>yaml</code>{.inlineCode}
+file, installed with the Podman package:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>docker:
+  registry.access.redhat.com:
+    sigstore: https://access.redhat.com/webassets/docker/content/sigstore</code></pre></div>
+<p>note
+<strong>Tip</strong></p>
+<p>Red Hat related registry files have been included in the
+<code>github.com/</code>{.inlineCode}<code>containers/common</code>{.inlineCode} repository to
+allow easier integration with Red Hat's ecosystem.</p>
+<p>It is possible to create custom registry configuration files for
+different providers in the <code>/etc/containers/registries.d</code>{.inlineCode}
+folder.[]{.sentence-end} For example, the preceding example could be
+defined in a dedicated
+<code>/etc/containers/registries.d/redhat.yaml</code>{.inlineCode}
+file.[]{.sentence-end} This allows you to easily maintain and version
+registry sigstore configurations.</p>
+<p>From now on, every []{#Chapter_10.xhtml#idx_1f1f35f8 .index-entry
+index-entry=&ldquo;Podman image trust commands:keys, managing&rdquo;}time a UBI9
+image is pulled []{#Chapter_10.xhtml#idx_0e70b724 .index-entry
+index-entry=&ldquo;keys:managing, with Podman image trust commands&rdquo;}from
+<code>registry.access.redhat.com</code>{.inlineCode}, its signature will be pulled
+from the Red Hat signature store and validated using the provided public
+key.</p>
+<p>So far, we have looked at examples of managing keys in Podman, but it is
+also possible to manage signature verification with
+Skopeo.[]{.sentence-end} In the next subsection, we are going to look at
+some basic examples.</p>
+<h2 id="h2_259" class="heading-2">Managing signatures with Skopeo<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>We can verify an image signature []{#Chapter_10.xhtml#idx_faa5c07e
+.index-entry index-entry=&ldquo;Skopeo&rdquo;}using <strong>Skopeo</strong> when we're pulling
+an image from a valid transport.</p>
+<p>The following []{#Chapter_10.xhtml#idx_f548bbed .index-entry
+index-entry=&ldquo;Skopeo:signatures, managing&rdquo;}example uses the
+<code>skopeo</code>{.inlineCode}<code> </code>{.inlineCode}<code>copy</code>{.inlineCode} command to pull
+the image from []{#Chapter_10.xhtml#idx_c73c1d49 .index-entry
+index-entry=&ldquo;signatures:managing, with Skopeo&rdquo;}our registry to the local
+store.[]{.sentence-end} This command has the same effects as using a
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>pull</code>{.inlineCode} command but
+allows more control over the source and destination transports:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ skopeo copy --src-tls-verify=false \
+  docker://localhost:5000/custom_httpd \
+  containers-storage:localhost:5000/custom_httpd</code></pre></div>
+<p>Skopeo []{#Chapter_10.xhtml#idx_0f0c2746 .index-entry
+index-entry=&ldquo;Skopeo:signatures, managing&rdquo;}does not need any further
+configuration because it automatically []{#Chapter_10.xhtml#idx_79d99b4e
+.index-entry index-entry=&ldquo;signatures:managing, with Skopeo&rdquo;}references
+the public key path defined in
+<code>/etc/containers/policy.json</code>{.inlineCode}.[]{.sentence-end} If the
+signature in the registry does not match our public key, Skopeo will
+refuse to copy the image.</p>
+<p>We can also use Skopeo to sign an image with our private key before
+copying it to a transport:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ skopeo copy \
+   --dest-tls-verify=false \
+   --sign-by-sigstore-private-key ./cosign.key \
+   containers-storage:localhost:5000/custom_httpd \
+   docker://localhost:5000/custom_httpd</code></pre></div>
+<p>In this section, we learned how to verify image signatures and avoid
+potential MITM attacks.[]{.sentence-end} In the next section, we will
+see how to simplify the keys' creation process with the help of Skopeo.</p>
+<h2 id="h2_260" class="heading-2">Generating a Sigstore key with Skopeo<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Skopeo provides []{#Chapter_10.xhtml#idx_b35d65cb .index-entry
+index-entry=&ldquo;Sigstore key:generating, with Skopeo&rdquo;}a useful option that
+simplifies the creation of keys for[]{#Chapter_10.xhtml#idx_2e721061
+.index-entry index-entry=&ldquo;Skopeo:Sigstore key, generating&rdquo;} signing
+container images.</p>
+<p>First of all, let's create a directory for holding the public and
+private keys we are going to generate:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ mkdir .skopeo</code></pre></div>
+<p>We are now ready to leverage Skopeo for the keys' creation process:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ skopeo generate-sigstore-key --output-prefix .skopeo/sig-ubi8-httpd
+Passphrase for key .skopeo/sig-ubi8-httpd.private:
+Key written to &#34;.skopeo/sig-ubi8-httpd.private&#34; and &#34;.skopeo/sig-ubi8-httpd.pub&#34;</code></pre></div>
+<p>The []{#Chapter_10.xhtml#idx_033dcb09 .index-entry
+index-entry=&ldquo;Sigstore key:generating, with Skopeo&rdquo;}command will also ask
+for a passphrase in case we want to []{#Chapter_10.xhtml#idx_b88dc48c
+.index-entry index-entry=&ldquo;Skopeo:Sigstore key, generating&rdquo;}increase the
+security level of the key.[]{.sentence-end} Once we generate a brand-new
+couple of private and public keys, we can then follow the previous
+sections for signing the container images and trust the content pulled
+by container registries.</p>
+<p>We just learned the basics of signing and managing container
+images.[]{.sentence-end} In the next section, we will take a look at how
+the open source community tried to help in this process by creating a
+set of tools for image signature management.</p>
+<h2 id="h2_261" class="heading-2">Using Rekor and Cosign to manage image signatures<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>This section explores how to leverage Cosign and Rekor to establish a
+robust and trustworthy system for managing container image signatures,
+significantly bolstering the security of your software supply chain.</p>
+<p>Before diving into the implementation, let's clarify the roles of these
+two key players:</p>
+<ul>
+<li><strong>Cosign</strong>: A[]{#Chapter_10.xhtml#idx_2b0cff55 .index-entry
+index-entry=&ldquo;Cosign&rdquo;} lightweight tool designed specifically for
+signing and verifying container images.[]{.sentence-end} It adheres
+[]{#Chapter_10.xhtml#idx_aac688a9 .index-entry
+index-entry=&ldquo;Open Container Initiative (OCI)&quot;}to <strong>Open</strong>
+<strong>Container</strong> <strong>Initiative</strong> (<strong>OCI</strong>) standards, ensuring
+compatibility and seamless integration with popular container
+registries.</li>
+<li><strong>Rekor</strong>: A []{#Chapter_10.xhtml#idx_c959fe80 .index-entry
+index-entry=&ldquo;Rekor&rdquo;}transparency log server that provides an
+immutable record of all metadata generated during the signing
+process.[]{.sentence-end} This immutability guarantees the integrity
+of signatures, preventing any retroactive tampering or revocation.</li>
+</ul>
+<p>We already []{#Chapter_10.xhtml#idx_8f55a338 .index-entry
+index-entry=&ldquo;Rekor:image signatures, managing&rdquo;}have our
+<code>cosign</code>{.inlineCode} binary installed on the system.[]{.sentence-end}
+For this[]{#Chapter_10.xhtml#idx_9486cc61 .index-entry
+index-entry=&ldquo;Cosign:image signatures, managing&rdquo;} example, we are not
+going to deploy a Rekor server, even[]{#Chapter_10.xhtml#idx_61c98368
+.index-entry index-entry=&ldquo;image signatures:managing, with Rekor&rdquo;} though
+the project page explains in detail all
+the[]{#Chapter_10.xhtml#idx_14fce412 .index-entry
+index-entry=&ldquo;image signatures:managing, with Cosign&rdquo;} prerequisites
+needed.[]{.sentence-end} Instead, we are going to leverage the public
+Rekor server offered by the open source community, available at
+<a href="https://rekor.sigstore.dev" rel="external" target="_blank">[https://rekor.sigstore.dev]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>We are now ready to test both Cosign and Rekor for signing our first
+container image with the help of these tools.</p>
+<p>We are going to sign the container image we created earlier,
+<code>custom_httpd</code>{.inlineCode}, through the <code>sig-ubi8-httpd</code>{.inlineCode}
+key created through Skopeo.[]{.sentence-end} We execute the signature
+process through the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code> $ cosign sign --key .cosign.key quay.io/alezzandro/ubi9-httpd@sha256:cda838d6ef3ddf951c1c7f1086d1aa1ed895159a4e794b8629da66b35b94c83f
+Enter password for private key:
+...
+tlog entry created with index: 165166231
+Pushing signature to: quay.io/alezzandro/ubi9-httpd</code></pre></div>
+<p>As shown in the previous command, the best practice is to sign a
+container image based on its digest.[]{.sentence-end} This avoids any
+mismatch if we override an image tag with a newer release.</p>
+<p>note
+<strong>Note</strong></p>
+<p>The previous command requires that the container image resides in a
+container registry that is also capable of handling the image
+signatures.[]{.sentence-end} You should be authenticated against the
+container image registry, and you should have the right permissions for
+executing these actions.</p>
+<p>Behind the[]{#Chapter_10.xhtml#idx_d8f65457 .index-entry
+index-entry=&ldquo;Rekor:image signatures, managing&rdquo;} scenes, Cosign generates
+a cryptographic signature []{#Chapter_10.xhtml#idx_6d884a24 .index-entry
+index-entry=&ldquo;Cosign:image signatures, managing&rdquo;}for your container image
+and creates an entry in[]{#Chapter_10.xhtml#idx_b5c4587c .index-entry
+index-entry=&ldquo;image signatures:managing, with Rekor&rdquo;} the Rekor public
+server log, recording the[]{#Chapter_10.xhtml#idx_802ea7c9 .index-entry
+index-entry=&ldquo;image signatures:managing, with Cosign&rdquo;} signature along
+with crucial metadata such as the image digest, public key used for
+signing, and timestamp.</p>
+<p>Let's inspect the image signature and its log stored on the Rekor
+public server.</p>
+<p>First, we are going to download one of the latest Rekor command-line
+interfaces from the public GitHub repository:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code> $ curl -O -L https://github.com/sigstore/rekor/releases/download/v1.3.8/rekor-cli-linux-amd64
+ $ chmod +x rekor-cli-linux-amd64</code></pre></div>
+<p>We are now ready to query the Rekor public server with the following
+command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code> $ ./rekor-cli-linux-amd64 get --log-index 165166231
+LogID: c0d23d6ad406973f9559f3ba2d1ca01f84147d8ffc5b8445c224f98b9591801d
+Index: 165166231
+IntegratedTime: 2025-01-24T11:20:22Z
+UUID: 108e9186e8c5677af3fa03b736ca86f4605e0229fb620863ff8d0b550db9e43f0aad3b2da8c0df4f
+Body: {
+... omitted output ...
+      }
+    }
+  }
+}</code></pre></div>
+<p>Finally, we[]{#Chapter_10.xhtml#idx_351fe156 .index-entry
+index-entry=&ldquo;Rekor:image signatures, managing&rdquo;} can verify the
+image[]{#Chapter_10.xhtml#idx_5a768240 .index-entry
+index-entry=&ldquo;image signatures:managing, with Rekor&rdquo;} signature with
+[]{#Chapter_10.xhtml#idx_29f99a5a .index-entry
+index-entry=&ldquo;image signatures:managing, with Cosign&rdquo;}the Cosign
+command-line []{#Chapter_10.xhtml#idx_487ae5bd .index-entry
+index-entry=&ldquo;Cosign:image signatures, managing&rdquo;}tool:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code> $ cosign verify --key ./cosign.pub quay.io/alezzandro/ubi9-httpd@sha256:cda838d6ef3ddf951c1c7f1086d1aa1ed895159a4e794b8629da66b35b94c83f
+
+Verification for quay.io/alezzandro/ubi9-httpd@sha256:cda838d6ef3ddf951c1c7f1086d1aa1ed895159a4e794b8629da66b35b94c83f --
+The following checks were performed on each of these signatures:
+  - The cosign claims were validated
+  - Existence of the claims in the transparency log was verified offline
+  - The signatures were verified against the specified public key
+    
+[{&#34;critical&#34;:{&#34;identity&#34;:{&#34;docker-reference&#34;:&#34;quay.io/alezzandro/ubi9-httpd&#34;},&#34;image&#34;:{&#34;docker-manifest-digest&#34;:&#34;sha256:cda838d6ef3ddf951c1c7f1086d1aa1ed895159a4e794b8629da66b35b94c83f&#34;},&#34;type&#34;:&#34;cosign container image signature&#34;},
+... omitted output</code></pre></div>
+<p>As shown before, the Rekor log provides an undeniable audit trail,
+preventing anyone from denying their involvement in signing an
+image.[]{.sentence-end} Anyone can independently audit the Rekor log to
+verify the authenticity and integrity of image
+signatures.[]{.sentence-end} Rekor adds a critical layer of security,
+making it significantly harder for attackers to compromise your image
+signing process.</p>
+<p>To maximize efficiency and security, we can integrate Cosign and Rekor
+into our CI/CD pipelines.[]{.sentence-end} This automation ensures that
+all images are signed and verified as part of your development workflow.</p>
+<p>Finally, by []{#Chapter_10.xhtml#idx_551498c0 .index-entry
+index-entry=&ldquo;Rekor:image signatures, managing&rdquo;}combining Cosign and
+Rekor, you can establish a robust []{#Chapter_10.xhtml#idx_665151c1
+.index-entry index-entry=&ldquo;Cosign:image signatures, managing&rdquo;}and
+transparent system for managing
+container[]{#Chapter_10.xhtml#idx_64f53a2b .index-entry
+index-entry=&ldquo;image signatures:managing, with Rekor&rdquo;} image signatures,
+significantly strengthening[]{#Chapter_10.xhtml#idx_86df5871
+.index-entry index-entry=&ldquo;image signatures:managing, with Cosign&rdquo;} your
+software supply chain against potential threats.</p>
+<p>In the next section, we'll shift focus and learn how to execute the
+container's runtime by customizing Linux kernel capabilities.</p>
+<h2 id="h2_262" class="heading-2">Customizing Linux kernel capabilities<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Capabilities are features[]{#Chapter_10.xhtml#idx_a8162b48 .index-entry
+index-entry=&ldquo;Linux kernel:capabilities, customizing&rdquo;} that were
+introduced in Linux kernel 2.2 with the purpose of splitting elevated
+privileges into single units that can be arbitrarily assigned to a
+process or thread.</p>
+<p>Instead of running a process as a fully privileged instance with
+effective UID 0, we can assign a limited subset of specific capabilities
+to an unprivileged process.[]{.sentence-end} By providing more granular
+control over the security []{#Chapter_10.xhtml#idx_f2565091 .index-entry
+index-entry=&ldquo;Linux kernel:capabilities, customizing&rdquo;}context of the
+process's execution, this approach helps mitigate potential attack
+tactics.</p>
+<p>Before we discuss the capabilities of containers, let's recap how they
+work in a Linux system so that we understand their inner logic.</p>
+<h2 id="h2_263" class="heading-2">Understanding Linux Kernel capabilities<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Capabilities are []{#Chapter_10.xhtml#idx_c52fde46 .index-entry
+index-entry=&ldquo;Linux kernel:capabilities&rdquo;}associated with the file
+executables using extended attributes (see
+<code>man</code>{.inlineCode}<code> </code>{.inlineCode}<code>xattr</code>{.inlineCode}) and are granted
+to the resulting process upon an <code>execve()</code>{.inlineCode} system call,
+subject to the kernel's capability transition rules.</p>
+<p>The list of available capabilities is quite large and still growing; it
+includes very specific actions that can be performed by a
+thread.[]{.sentence-end} Some basic examples are as follows:</p>
+<ul>
+<li><code>CAP_CHOWN</code>{.inlineCode}: This capability allows a thread to modify
+a file's UID and GID.</li>
+<li><code>CAP_KILL</code>{.inlineCode}: This capability allows you to bypass the
+permission checks to send a signal to a process.</li>
+<li><code>CAP_MKNOD</code>{.inlineCode}: This capability allows you to create a
+special file with the <code>mknod(</code>{.inlineCode}<code>)</code>{.inlineCode} syscall.</li>
+<li><code>CAP_NET_ADMIN</code>{.inlineCode}: This capability allows you to operate
+various privileged actions on the system's network configuration,
+including changing the interface configuration, enabling/disabling
+promiscuous mode for an interface, editing routing tables, and
+enabling/disabling multicasting.</li>
+<li><code>CAP_NET_RAW</code>{.inlineCode}: This capability allows a thread to use
+RAW and PACKET sockets.[]{.sentence-end} It can be used by programs
+such as <code>ping</code>{.inlineCode} to send ICMP packets without the need
+for elevated privileges.</li>
+<li><code>CAP_SYS_CHROOT</code>{.inlineCode}: This capability allows you to use the
+<code>chroot(</code>{.inlineCode}<code>)</code>{.inlineCode} syscall and change mount
+namespaces with the <code>setns()</code>{.inlineCode} syscall.</li>
+<li><code>CAP_SYS_ADMIN</code>{.inlineCode}: This capability allows near-total root
+privileges, allowing processes to mount filesystems and bypass
+critical container isolation.[]{.sentence-end} Granting this
+capability allows containers to bypass vital isolation layers,
+effectively giving a process full control over the host's
+underlying kernel.</li>
+<li><code>CAP_DAC_OVERRIDE</code>{.inlineCode}: This capability allows you to
+bypass <strong>discretionary</strong> <strong>access</strong> <strong>control</strong> (<strong>DAC</strong>)
+checks[]{#Chapter_10.xhtml#idx_951ad619 .index-entry
+index-entry=&ldquo;discretionary access control (DAC)&rdquo;} for file read,
+write, and execution.</li>
+<li><code>CAP_BPF</code>{.inlineCode}: Introduced in kernel 5.8, this capability
+employs privileged BPF operations.</li>
+</ul>
+<p>For more details and an extensive []{#Chapter_10.xhtml#idx_71306e73
+.index-entry index-entry=&ldquo;Linux kernel:capabilities&rdquo;}list of available
+capabilities, see the relevant man page
+(<code>man</code>{.inlineCode}<code> </code>{.inlineCode}<code>capabilities</code>{.inlineCode}).</p>
+<p>To assign a capability to an executable, we can use the
+<code>setcap</code>{.inlineCode} command, as shown in the following example, where
+<code>CAP_NET_ADMIN</code>{.inlineCode} and <code>CAP_NET_RAW</code>{.inlineCode} are being
+permitted in the <code>/usr/bin/ping</code>{.inlineCode} executable:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo setcap &#39;cap_net_admin,cap_net_raw+p&#39; /usr/bin/ping</code></pre></div>
+<p>The <code>+p</code>{.inlineCode} flag in the preceding command indicates that the
+capabilities have been set to <strong>Permitted</strong>.</p>
+<p>To inspect the capabilities of a file, we can use the
+<code>getcap</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ getcap /usr/bin/ping
+/usr/bin/ping cap_net_admin,cap_net_raw=p</code></pre></div>
+<p>See <code>man</code>{.inlineCode}<code> </code>{.inlineCode}<code>getcap</code>{.inlineCode} and
+<code>man</code>{.inlineCode}<code> </code>{.inlineCode}<code>setcap</code>{.inlineCode} for more details
+about these utilities.</p>
+<p>We can inspect the active capabilities of a running process by looking
+at the
+<code>/proc/</code>{.inlineCode}<code>&lt;</code>{.inlineCode}<code>PID</code>{.inlineCode}<code>&gt;</code>{.inlineCode}<code>/status</code>{.inlineCode}
+file.[]{.sentence-end} In the following code, we are launching a
+<code>ping</code>{.inlineCode} command after setting the
+<code>CAP_NET_ADMIN</code>{.inlineCode} and <code>CAP_NET_RAW</code>{.inlineCode}
+capabilities.[]{.sentence-end} We want to launch the process in the
+background and check its current capabilities:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ ping example.com &gt; /dev/null 2&gt;&amp;1 &amp;
+$ grep &#39;Cap.*&#39; /proc/$(pgrep ping)/status
+CapInh: 0000000000000000
+CapPrm: 0000000000003000
+CapEff: 0000000000000000
+CapBnd: 000000ffffffffff
+CapAmb: 0000000000000000</code></pre></div>
+<p>Here, we are[]{#Chapter_10.xhtml#idx_7c1a0338 .index-entry
+index-entry=&ldquo;Linux kernel:capabilities&rdquo;} interested in evaluating the
+bitmap in the <code>CapPrm</code>{.inlineCode} field, which represents the
+permitted capabilities.[]{.sentence-end} To get a user-friendly value,
+we can use the <code>capsh</code>{.inlineCode} command to decode the bitmap hex
+value:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ capsh --decode=0000000000003000
+0x0000000000003000=cap_net_admin,cap_net_raw</code></pre></div>
+<p>The result is similar to the output of the <code>getcap</code>{.inlineCode} command
+in the <code>/usr/bin/ping</code>{.inlineCode} file, demonstrating that executing
+the command propagated the file's permitted capabilities to its process
+instance.</p>
+<p>For a full list of the constants that were used to set the bitmaps, as
+well as their capabilities, see the following kernel header file:
+<a href="https://github.com/torvalds/linux/blob/master/include/uapi/linux/capability.h" rel="external" target="_blank">[https://github.com/torvalds/linux/blob/master/include/uapi/linux/capability.h]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>packt_tip
+<strong>Tip</strong></p>
+<p>Older versions in distributions such as RHEL and CentOS used the
+preceding configuration to allow <code>ping</code>{.inlineCode} to send ICMP
+packets with access from all users without them being executed as
+privileged processes with
+<code>setuid</code>{.inlineCode}<code> </code>{.inlineCode}<code>0</code>{.inlineCode}.[]{.sentence-end}
+This was an insecure approach where an attacker could leverage a
+vulnerability or bug in the executable to escalate privileges and gain
+control of the system.</p>
+<p>Fedora introduced a new and more secure approach since version 31
+that's based on using the <code>net.ipv4.ping_group_range</code>{.inlineCode}
+Linux kernel parameter.[]{.sentence-end} By setting an extensive range
+that covers all system groups, this parameter allows users to send ICMP
+packets without the need to enable the <code>CAP_NET_ADMIN</code>{.inlineCode} and
+<code>CAP_NET_RAW</code>{.inlineCode} capabilities.[]{.sentence-end} This approach
+was inherited by RHEL and many other similar distributions and the new,
+more secure standard.</p>
+<p>For more details, see the following wiki page from the Fedora Project:
+<a href="https://fedoraproject.org/wiki/Changes/EnableSysctlPingGroupRange" rel="external" target="_blank">[https://fedoraproject.org/wiki/Changes/EnableSysctlPingGroupRange]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>Now that we've provided a high-level description of the Linux kernel's
+capabilities, let's learn how they are applied to containers.</p>
+<h2 id="h2_264" class="heading-2">Using capabilities in containers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Capabilities []{#Chapter_10.xhtml#idx_57eb1492 .index-entry
+index-entry=&ldquo;Linux kernel:capabilities, using in containers&rdquo;}can be
+applied inside containers to allow targeted actions to take
+place.[]{.sentence-end} By default, Podman runs containers using a set
+of Linux kernel capabilities[]{#Chapter_10.xhtml#idx_9b2f76c3
+.index-entry index-entry=&ldquo;containers:Linux kernel capabilities, using&rdquo;}
+that are defined in the
+<code>/usr/share/containers/containers.conf</code>{.inlineCode}
+file.[]{.sentence-end} At the time of writing, the following
+capabilities are enabled and declared inside this file (with comments):</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>#default_capabilities = [
+#    &#34;CHOWN&#34;,
+#    &#34;DAC_OVERRIDE&#34;,
+#    &#34;FOWNER&#34;,
+#    &#34;FSETID&#34;,
+#    &#34;KILL&#34;,
+#    &#34;NET_BIND_SERVICE&#34;,
+#    &#34;SETFCAP&#34;,
+#    &#34;SETGID&#34;,
+#    &#34;SETPCAP&#34;,
+#    &#34;SETUID&#34;,
+#    &#34;SYS_CHROOT&#34;
+#]</code></pre></div>
+<p>We can run a simple test to verify that those capabilities have been
+effectively applied to a process running inside a
+container.[]{.sentence-end} For this test, we will use the official
+nginx image:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run -d --name cap_test docker.io/library/nginx
+$ podman exec -it cap_test sh -c &#39;grep Cap /proc/1/status&#39;
+CapInh: 0000000000000000    
+CapPrm: 00000000800405fb
+CapEff: 00000000800405fb
+CapBnd: 00000000800405fb
+CapAmb: 0000000000000000</code></pre></div>
+<p>Here is []{#Chapter_10.xhtml#idx_c31942e7 .index-entry
+index-entry=&ldquo;Linux kernel:capabilities, using in containers&rdquo;}what each
+line represents for the process:</p>
+<ul>
+<li><code>CapInh</code>{.inlineCode} (<strong>inheritable</strong>): These are
+[]{#Chapter_10.xhtml#idx_0da7f7e0 .index-entry
+index-entry=&ldquo;containers:Linux kernel capabilities, using&rdquo;}capabilities
+that can be preserved across an
+<code>execve</code>{.inlineCode}.[]{.sentence-end} In this case, it's all
+zeros, meaning no capabilities will be automatically inherited by a
+child process unless specifically configured.</li>
+<li><code>CapPrm</code>{.inlineCode} (<strong>permitted</strong>): This is the <em>limiting
+set</em>.[]{.sentence-end} It defines the maximum capabilities the
+process can actually use.[]{.sentence-end} The process can move
+capabilities from this set into the <em>effective</em> set.</li>
+<li><code>CapEff</code>{.inlineCode} (<strong>effective</strong>): This is the set the kernel
+actually checks.[]{.sentence-end} For example, if a process tries to
+change the system clock, the kernel looks at the bit for
+<code>CAP_SYS_TIME</code>{.inlineCode} in this specific set.[]{.sentence-end}
+Since this matches <code>CapPrm</code>{.inlineCode}, the process is currently
+<em>active</em> with all its allowed privileges.</li>
+<li><code>CapBnd</code>{.inlineCode} (<strong>bounding</strong>): This is a mechanism used to
+limit the capabilities a process can ever gain.[]{.sentence-end} You
+cannot <em>promote</em> a capability into your <em>permitted</em> set if it isn't
+already in your <em>bounding</em> set.</li>
+<li><code>CapAmb</code>{.inlineCode} (<strong>ambient</strong>): A newer set (added in Linux
+4.3) that solves the problem of localizing capabilities for non-root
+users.[]{.sentence-end} It allows capabilities to be preserved when
+running a program that is not <code>setuid</code>{.inlineCode}.</li>
+</ul>
+<p>Here, we have extracted the current capabilities from the parent nginx
+process (running with <code>PID</code>{.inlineCode}<code> </code>{.inlineCode}<code>1</code>{.inlineCode}
+inside the container).[]{.sentence-end} Now, we can check the bitmap
+with the <code>capsh</code>{.inlineCode} utility:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ capsh --decode=00000000800405fb
+0x00000000800405fb=cap_chown,cap_dac_override,cap_fowner,cap_fsetid,cap_kill,cap_setgid,cap_setuid,cap_setpcap,cap_net_bind_service,cap_sys_chroot,cap_setfcap</code></pre></div>
+<p>The preceding[]{#Chapter_10.xhtml#idx_0b27a2c9 .index-entry
+index-entry=&ldquo;Linux kernel:capabilities, using in containers&rdquo;} list of
+capabilities is the same as the list []{#Chapter_10.xhtml#idx_6f4d1898
+.index-entry
+index-entry=&ldquo;containers:Linux kernel capabilities, using&rdquo;}that was
+defined in the default Podman configuration.[]{.sentence-end} Note that
+the capabilities are applied in both rootless and rootful mode.</p>
+<p>note
+<strong>Note</strong></p>
+<p>If you're curious, the capabilities for the containerized process(es)
+are set up by the container runtime, which is either <code>runc</code>{.inlineCode}
+or <code>crun</code>{.inlineCode}, based on the distribution.</p>
+<p>Now that we know how capabilities are configured and applied inside
+containers, let's learn how to customize a container's capabilities.</p>
+<h2 id="h2_265" class="heading-2">Customizing a container's capabilities<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>We can add or drop []{#Chapter_10.xhtml#idx_2f2096a3 .index-entry
+index-entry=&ldquo;containers:capabilities, customizing&rdquo;}capabilities either
+at runtime or statically.</p>
+<p>To statically change the default capabilities, we can simply edit the
+<code>default_capabilities</code>{.inlineCode} field in the
+<code>/usr/share/containers/containers.conf</code>{.inlineCode} file and add or
+remove them according to our desired results.</p>
+<p>To modify capabilities at runtime, we can use the
+<code>-</code>{.inlineCode}<code>cap-add</code>{.inlineCode} and
+<code>-</code>{.inlineCode}<code>cap-drop</code>{.inlineCode} options, both of which are
+provided by the <code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>run</code>{.inlineCode}
+command.</p>
+<p>The following code removes the <code>CAP_DAC_OVERRIDE</code>{.inlineCode}
+capability from a container:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run -d --name cap_test2 --cap-drop=DAC_OVERRIDE docker.io/library/nginx</code></pre></div>
+<p>If we look at the capability bitmaps again, we will see that they were
+updated accordingly:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman exec cap_test2 sh -c &#39;grep Cap /proc/1/status&#39;
+CapInh: 0000000000000000
+CapPrm: 00000000800405f9
+CapEff: 00000000800405f9
+CapBnd: 00000000800405f9
+CapAmb: 0000000000000000
+$ capsh --decode=00000000800405f9
+0x00000000800405f9=cap_chown,cap_fowner,cap_fsetid,cap_kill,cap_setgid,cap_setuid,cap_setpcap,cap_net_bind_service,cap_sys_chroot,cap_setfcap</code></pre></div>
+<p>It is possible to pass the <code>--cap-add</code>{.inlineCode} and
+<code>--cap-drop</code>{.inlineCode} options multiple times:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run -d --name cap_test3 \
+   --cap-drop=KILL \
+   --cap-drop=DAC_OVERRIDE \
+   --cap-add=NET_RAW \
+   --cap-add=NET_ADMIN \
+   docker.io/library/nginx</code></pre></div>
+<p>When we're dealing []{#Chapter_10.xhtml#idx_cd719e41 .index-entry
+index-entry=&ldquo;containers:capabilities, customizing&rdquo;}with capabilities, we
+must be careful when dropping a default capability.[]{.sentence-end} The
+following code shows an error in the nginx container when dropping the
+<code>CAP_CHOWN</code>{.inlineCode} capability:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run --name cap_test4 \
+  --cap-drop=CHOWN \
+  docker.io/library/nginx
+/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+10-listen-on-ipv6-by-default.sh: info: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+/docker-entrypoint.sh: Configuration complete; ready for start up
+2022/01/06 23:19:39 [emerg] 1#1: chown(&#34;/var/cache/nginx/client_temp&#34;, 101) failed (1: Operation not permitted)
+nginx: [emerg] chown(&#34;/var/cache/nginx/client_temp&#34;, 101) failed (1: Operation not permitted)</code></pre></div>
+<p>Here, the container fails.[]{.sentence-end} From the output, we can see
+that the nginx process was unable to show the
+<code>/var/cache/nginx/client_temp</code>{.inlineCode} directory.[]{.sentence-end}
+This is a direct consequence of the <code>CAP_CHOWN</code>{.inlineCode} capability
+being removed.</p>
+<p>Capabilities can be applied to a rootless container, but they are
+namespaced capabilities, which are more limited than regular ones and
+are unable to perform actions that would alter the host
+system.[]{.sentence-end} For []{#Chapter_10.xhtml#idx_281c4246
+.index-entry index-entry=&ldquo;containers:capabilities, customizing&rdquo;}example,
+if we try to apply the <code>CAP_MKNOD</code>{.inlineCode} capability to a rootless
+container, any attempt to create a special file inside a rootless
+container won't be allowed by the kernel:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run -it --cap-add=MKNOD \
+  docker.io/library/busybox /bin/sh
+/ # mkdir -p /test/dev
+/ # mknod -m 666 /test/dev/urandom c 1 8
+mknod: /test/dev/urandom: Operation not permitted</code></pre></div>
+<p>Instead, if we run the container with elevated root privileges, the
+capability can be assigned successfully:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run -it --cap-add=MKNOD \
+  docker.io/library/busybox /bin/sh
+/ # mkdir -p /test/dev
+/ # mknod -m 666 /test/dev/urandom c 1 8
+/ # stat /test/dev/urandom
+File: /test/dev/urandom
+  Size: 0          Blocks: 0          IO Block: 4096   character special file
+Device: 31h/49d Inode: 530019      Links: 1     Device type: 1,8
+Access: (0666/crw-rw-rw-)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2022-01-06 23:50:06.056650747 +0000
+Modify: 2022-01-06 23:50:06.056650747 +0000
+Change: 2022-01-06 23:50:06.056650747 +0000</code></pre></div>
+<p>note
+<strong>Note</strong></p>
+<p>Generally, adding capabilities to containers implies enlarging the
+potential attack surface that a malicious attacker could
+use.[]{.sentence-end} If it's not necessary, it is a good practice to
+keep the default capabilities and drop the unwanted ones once the
+potential side effects have been analyzed.</p>
+<p>In this section, we learned how to manage capabilities inside
+containers.[]{.sentence-end} However, capabilities are not the only
+security aspect to consider when you're securing
+containers.[]{.sentence-end} SELinux, as we will learn in the next
+section, has a crucial role in guaranteeing container isolation.</p>
+<h1 id="h1_266" class="heading-1">Understanding SELinux interaction with containers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In this section, we will discuss SELinux
+[]{#Chapter_10.xhtml#idx_60b2409d .index-entry
+index-entry=&ldquo;Udica&rdquo;}policies and introduce <strong>Udica</strong>, a tool that's
+used to generate SELinux profiles for containers.</p>
+<p>SELinux works directly in kernel space and manages object isolation
+while following a least-privilege model that contains a series of
+<strong>policies</strong> that []{#Chapter_10.xhtml#idx_0b3cc4fb .index-entry
+index-entry=&ldquo;policies&rdquo;}can handle enforcing or
+exceptions.[]{.sentence-end} To define these objects, SELinux uses
+labels that[]{#Chapter_10.xhtml#idx_0e2a5287 .index-entry
+index-entry=&ldquo;types&rdquo;} define <strong>types</strong>.[]{.sentence-end} By default,
+SELinux works in <strong>Enforcing</strong> mode,
+denying[]{#Chapter_10.xhtml#idx_cc33ad43 .index-entry
+index-entry=&ldquo;Enforcing mode&rdquo;} access to resources with a series of
+exceptions defined by policies.[]{.sentence-end} To disable
+<strong>Enforcing</strong> mode, SELinux can be put in <strong>Permissive</strong> mode, where
+[]{#Chapter_10.xhtml#idx_95c0d167 .index-entry
+index-entry=&ldquo;Permissive mode&rdquo;}violations are only audited, without them
+being blocked.</p>
+<p>note
+<strong>Security</strong> <strong>alert</strong></p>
+<p>As we mentioned previously, switching SELinux to <strong>Permissive</strong> mode or
+completely disabling it is <em>not</em> <em>good</em> <em>practice,</em> as it opens you up
+to potential security threats.[]{.sentence-end} Instead of doing that,
+users should create custom policies to manage the necessary exceptions.</p>
+<p>By default, SELinux uses[]{#Chapter_10.xhtml#idx_19433bd5 .index-entry
+index-entry=&ldquo;targeted policy type&rdquo;} a <strong>targeted</strong> policy type, which
+tries to target and confine []{#Chapter_10.xhtml#idx_9d4d6977
+.index-entry index-entry=&ldquo;SELinux interaction:with containers&rdquo;}specific
+object types (processes, files, devices, and so on)
+using[]{#Chapter_10.xhtml#idx_1905e269 .index-entry
+index-entry=&ldquo;containers:SELinux interaction&rdquo;} a set of predefined
+policies.</p>
+<p>SELinux allows different kinds of access control.[]{.sentence-end} They
+can be summarized as follows:</p>
+<ul>
+<li><strong>Type</strong> <strong>Enforcement</strong> (<strong>TE</strong>): This controls access to resources
+according to process and file types.[]{.sentence-end} This is
+the[]{#Chapter_10.xhtml#idx_df1f2ef5 .index-entry
+index-entry=&ldquo;access control, SELinux:Type Enforcement (TE)&rdquo;} main
+use case of SELinux access control.</li>
+<li><strong>Role-Based</strong> <strong>Access</strong> <strong>Control</strong> (<strong>RBAC</strong>): This controls
+access to resources using SELinux []{#Chapter_10.xhtml#idx_60e9fc60
+.index-entry
+index-entry=&ldquo;access control, SELinux:Role-Based Access Control (RBAC)&quot;}users
+(which can be mapped to real system users) and their associated
+SELinux roles.</li>
+<li><strong>Multi-Level</strong> <strong>Security</strong> (<strong>MLS</strong>): This grants all processes
+with the same sensitivity level read/write access
+to[]{#Chapter_10.xhtml#idx_b935c1be .index-entry
+index-entry=&ldquo;access control, SELinux:Multi-Level Security (MLS)&rdquo;}
+the resources.</li>
+<li><strong>Multi-Category</strong> <strong>Security</strong> (<strong>MCS</strong>):
+This[]{#Chapter_10.xhtml#idx_8803eced .index-entry
+index-entry=&ldquo;access control, SELinux:Multi-Category Security (MCS)&rdquo;}
+controls access using <strong>categories</strong>, which are plain text labels
+that are applied to resources.[]{.sentence-end} Categories
+[]{#Chapter_10.xhtml#idx_27f2ab24 .index-entry
+index-entry=&ldquo;categories&rdquo;}are used to create compartments of objects,
+along with the other SELinux labels.[]{.sentence-end} Only processes
+that belong to the same category can access a given
+resource.[]{.sentence-end} In <em>Chapter</em> <em>5</em>, <em>Implementing</em>
+<em>Storage</em> <em>for</em> <em>the</em> <em>Container's</em> <em>Data</em>, we discussed MCS and
+how we can map categories to resources that have been accessed by
+containers.</li>
+</ul>
+<p>With type[]{#Chapter_10.xhtml#idx_f0c6c3d1 .index-entry
+index-entry=&ldquo;SELinux interaction:with containers&rdquo;} enforcement, the
+system files receive labels[]{#Chapter_10.xhtml#idx_79f3d891
+.index-entry index-entry=&ldquo;types&rdquo;} called <strong>types</strong>, while processes
+receive labels[]{#Chapter_10.xhtml#idx_5a503819 .index-entry
+index-entry=&ldquo;domains&rdquo;} called <strong>domains</strong>.[]{.sentence-end} A process
+that belongs to a domain can be allowed to access a file that belongs to
+a given type, and this access can be audited by SELinux.</p>
+<p>For example, according []{#Chapter_10.xhtml#idx_9ad34420 .index-entry
+index-entry=&ldquo;containers:SELinux interaction&rdquo;}to SELinux, the Apache
+<code>httpd</code>{.inlineCode} process, which is labeled with the
+<code>httpd_t</code>{.inlineCode} domain, can access files or directories with
+<code>httpd_sys_content_t</code>{.inlineCode} labels.</p>
+<p>An SELinux-type policy is based on the following pattern:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>POLICY DOMAIN TYPE:CLASS OPERATION;</code></pre></div>
+<p>Here, <code>POLICY</code>{.inlineCode} is the kind of policy (<code>allow</code>{.inlineCode},
+<code>allowxperm</code>{.inlineCode}, <code>auditallow</code>{.inlineCode},
+<code>neverallow</code>{.inlineCode}, <code>dontaudit</code>{.inlineCode}, and so on),
+<code>DOMAIN</code>{.inlineCode} is the process domain, <code>TYPE</code>{.inlineCode} is the
+resource type context, <code>CLASS</code>{.inlineCode} is the object category (for
+example, <code>file</code>{.inlineCode}, <code>dir</code>{.inlineCode},
+<code>lnk_file</code>{.inlineCode}, <code>chr_file</code>{.inlineCode},
+<code>blk_file</code>{.inlineCode}, <code>sock_file</code>{.inlineCode}, or
+<code>fifo_file</code>{.inlineCode}), and <code>OPERATION</code>{.inlineCode} is a list of
+actions that are handled by the policy (for example,
+<code>open</code>{.inlineCode}, <code>read</code>{.inlineCode}, <code>use</code>{.inlineCode},
+<code>lock</code>{.inlineCode}, <code>getattr</code>{.inlineCode}, or <code>revc</code>{.inlineCode}).</p>
+<p>The following example shows a basic <code>allow</code>{.inlineCode} rule:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>allow myapp_t myapp_log_t:file { read_file_perms append_file_perms };</code></pre></div>
+<p>In this example, the[]{#Chapter_10.xhtml#idx_463e675d .index-entry
+index-entry=&ldquo;SELinux interaction:with containers&rdquo;} process that's
+running in the <code>myapp_t</code>{.inlineCode} domain is allowed to access files
+of the <code>myapp_log_t</code>{.inlineCode} type and perform the
+<code>read_file_perms</code>{.inlineCode} and <code>append_file_perms</code>{.inlineCode}
+actions.</p>
+<p>SELinux manages policies in a modular fashion, allowing users to
+dynamically load and unload policy modules without the need to recompile
+the whole policy set every time.[]{.sentence-end} Policies can be loaded
+and unloaded using the <code>semodule</code>{.inlineCode} utility, as shown in the
+following example, which shows an example of loading a custom policy:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># semodule -i custompolicy.pp</code></pre></div>
+<p>The <code>semodule</code>{.inlineCode} utility can also be used to view all the
+loaded policies:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># semodule -l</code></pre></div>
+<p>On Fedora, CentOS, RHEL, and []{#Chapter_10.xhtml#idx_5b5dc7b7
+.index-entry index-entry=&ldquo;containers:SELinux interaction&rdquo;}derivative
+distributions, the current binary policy is installed under the
+<code>/etc/selinux/targeted/policy</code>{.inlineCode} directory in a file named
+<code>polixy.XX</code>{.inlineCode}, with <code>XX</code>{.inlineCode} representing the policy
+version.</p>
+<p>On the same distributions, container policies are defined inside the
+<code>container-selinux</code>{.inlineCode} package, which contains the already
+compiled SELinux module.[]{.sentence-end} The source code of the package
+is available on GitHub if you wish to look at it in more detail:
+<a href="https://github.com/containers/container-selinux" rel="external" target="_blank">[https://github.com/containers/container-selinux]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>By looking at the repository's content, we will find the three most
+important policy source files for developing any module:</p>
+<ul>
+<li><code>container.fc</code>{.inlineCode}: This file defines the files and
+directories that are bound to the types defined in the module.</li>
+<li><code>container.te</code>{.inlineCode}: This file defines the policy rules,
+attributes, and aliases.</li>
+<li><code>container.if</code>{.inlineCode}: This file defines the module
+interface.[]{.sentence-end} It contains a set of public macro
+functions that are exposed by the module.</li>
+</ul>
+<p>A process that's running inside a container is labeled with the
+<code>container_t</code>{.inlineCode} domain.[]{.sentence-end} It has read/write
+access to resources labeled with the <code>container_file_t</code>{.inlineCode}
+type context and read/execute access to resources labeled with the
+<code>container_share_t</code>{.inlineCode} type context.</p>
+<p>When a container is executed, the <code>podman</code>{.inlineCode} process, as well
+as the container runtime and the <code>conmon</code>{.inlineCode} process, run with
+the <code>container_runtime_t</code>{.inlineCode} domain type and are allowed to
+execute processes that []{#Chapter_10.xhtml#idx_2b4cf7f4 .index-entry
+index-entry=&ldquo;SELinux interaction:with containers&rdquo;}transition only to
+specific types.[]{.sentence-end} Those types are
+grouped[]{#Chapter_10.xhtml#idx_7fe2566d .index-entry
+index-entry=&ldquo;containers:SELinux interaction&rdquo;} in the
+<code>container_domain</code>{.inlineCode} attribute and can be inspected with the
+<code>seinfo</code>{.inlineCode} utility (installed with the
+<code>setools-console</code>{.inlineCode} package on Fedora), as shown in the
+following code:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ seinfo -a container_domain -x
+Type Attributes: 1
+  attribute container_domain;
+    container_device_plugin_init_t
+    container_device_plugin_t
+    container_device_t
+    container_engine_t
+    container_init_t
+    container_kvm_t
+    container_logreader_t
+    container_logwriter_t
+    container_t
+    container_userns_t</code></pre></div>
+<p>The <code>container_domain</code>{.inlineCode} attribute is declared in the
+<code>container.te</code>{.inlineCode} source file in the
+<code>container-policy</code>{.inlineCode} repository using the
+<code>attribute</code>{.inlineCode} keyword:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>attribute container_domain;
+attribute container_user_domain;
+attribute container_net_domain;</code></pre></div>
+<p>The preceding attributes are mapped to the <code>container_t</code>{.inlineCode}
+type using a <code>typeattribute</code>{.inlineCode} declaration:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>typeattribute container_t container_domain, container_net_domain, container_user_domain;</code></pre></div>
+<p>Using this approach, SELinux guarantees process isolation across
+containers and between a container and its host.[]{.sentence-end} In
+this way, a process escaping the container (maybe exploiting a
+vulnerability) cannot access resources on the host or inside other
+containers.</p>
+<p>When a container is[]{#Chapter_10.xhtml#idx_f2660d37 .index-entry
+index-entry=&ldquo;SELinux interaction:with containers&rdquo;} created, the image's
+read-only layers, which form[]{#Chapter_10.xhtml#idx_0f7abb49
+.index-entry index-entry=&ldquo;containers:SELinux interaction&rdquo;} the
+<code>OverlayFS</code>{.inlineCode} set of <code>LowerDirs</code>{.inlineCode}, are labeled
+with the <code>container_ro_file_t</code>{.inlineCode} type, which prevents the
+container from writing inside those directories.[]{.sentence-end} At the
+same time, <code>MergedDir</code>{.inlineCode}, which is the sum of
+<code>LowerDirs</code>{.inlineCode} and <code>UpperDir</code>{.inlineCode}, is writable and
+labeled as <code>container_file_t</code>{.inlineCode}.</p>
+<p>To prove this, let's run a <strong>rootful</strong>
+container[]{#Chapter_10.xhtml#idx_894bbad6 .index-entry
+index-entry=&ldquo;rootful container&rdquo;} with the <code>c1</code>{.inlineCode} and
+<code>c2</code>{.inlineCode} MCS categories:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run -d --name selinux_test1 --security-opt label=level:s0:c1,c2 nginx</code></pre></div>
+<p>Now, we can find all the files labeled as
+<code>container_file_t:s0:c1</code>{.inlineCode}<code>,c2</code>{.inlineCode} under the host
+filesystem:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>#
+# find /var/lib/containers/storage/overlay -type f -context &#39;*container_file_t:s0:c1,c2*&#39; -printf &#39;%-50Z%p\n&#39;
+system_u:object_r:container_file_t:s0:c1,c2       /var/lib/containers/storage/overlay/4b147975bb5c336b10e71d21c49fe88ddb00d0569b77ddab1d7737f80056677b/merged/lib/x86_64-linux-gnu/libreadline.so.8.1
+system_u:object_r:container_file_t:s0:c1,c2       /var/lib/containers/storage/overlay/4b147975bb5c336b10e71d21c49fe88ddb00d0569b77ddab1d7737f80056677b/merged/lib/x86_64-linux-gnu/libhistory.so.8.1
+system_u:object_r:container_file_t:s0:c1,c2       /var/lib/containers/storage/overlay/4b147975bb5c336b10e71d21c49fe88ddb00d0569b77ddab1d7737f80056677b/merged/lib/x86_64-linux-gnu/libexpat.so.1.6.12
+system_u:object_r:container_file_t:s0:c1,c2       /var/lib/containers/storage/overlay/4b147975bb5c336b10e71d21c49fe88ddb00d0569b77ddab1d7737f80056677b/merged/lib/udev/rules.d/96-e2scrub.rules
+system_u:object_r:container_file_t:s0:c1,c2       /var/lib/containers/storage/overlay/4b147975bb5c336b10e71d21c49fe88ddb00d0569b77ddab1d7737f80056677b/merged/lib/terminfo/r/rxvt-unicode-256color
+system_u:object_r:container_file_t:s0:c1,c2       /var/lib/containers/storage/overlay/4b147975bb5c336b10e71d21c49fe88ddb00d0569b77ddab1d7737f80056677b/merged/lib/terminfo/r/rxvt-unicode
+[…output omitted...]</code></pre></div>
+<p>As expected, the <code>container_file_t</code>{.inlineCode} label, which is
+associated with the <code>c1</code>{.inlineCode} and <code>c2</code>{.inlineCode} categories,
+is applied to all[]{#Chapter_10.xhtml#idx_724921fb .index-entry
+index-entry=&ldquo;SELinux interaction:with containers&rdquo;} the files under the
+<code>MergedDir</code>{.inlineCode} container.</p>
+<p>At the same time, we []{#Chapter_10.xhtml#idx_e27f8a07 .index-entry
+index-entry=&ldquo;containers:SELinux interaction&rdquo;}can demonstrate that the
+container's <code>LowerDirs</code>{.inlineCode} are labeled as
+<code>container_ro_file_t</code>{.inlineCode}.[]{.sentence-end} First, we need to
+extract the container's <code>LowerDirs</code>{.inlineCode} list:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman inspect selinux_test1 \
+  --format &#39;{{.GraphDriver.Data.LowerDir}}&#39;
+/var/lib/containers/storage/overlay/9566cbcf1773eac59951c14c52156a6164db1b0d8026d015e193774029db18a5/diff:/var/lib/containers/storage/overlay/24de59cced7931bbcc0c4a34d4369c15119a0b8b180f98a0434fa76a6dfcd490/diff:/var/lib/containers/storage/overlay/1bb84245b98b7e861c91ed4319972ed3287bdd2ef02a8657c696a76621854f3b/diff:/var/lib/containers/storage/overlay/97f26271fef21bda129ac431b5f0faa03ae0b2b50bda6af969315308fc16735b/diff:/var/lib/containers/storage/overlay/768ef71c8c91e4df0aa1caf96764ceec999d7eb0aa584e241246815c1fa85435/diff:/var/lib/containers/storage/overlay/2edcec3590a4ec7f40cf0743c15d78fb39d8326bc029073b41ef9727da6c851f/diff</code></pre></div>
+<p>The rightmost directory represents the container's lowest layer and is
+usually the base filesystem tree of the image.[]{.sentence-end} Let's
+inspect the type context of this directory:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># ls -alZ /var/lib/containers/storage/overlay/2edcec3590a4ec7f40cf0743c15d78fb39d8326bc029073b41ef9727da6c851f/diff
+total 84
+dr-xr-xr-x. 21 root root unconfined_u:object_r:container_ro_file_t:s0 4096 Jan  5 23:16 .
+drwx------.  6 root root unconfined_u:object_r:container_ro_file_t:s0 4096 Jan  5 23:16 ..
+drwxr-xr-x.  2 root root unconfined_u:object_r:container_ro_file_t:s0 4096 Dec 20 00:00 bin
+drwxr-xr-x.  2 root root unconfined_u:object_r:container_ro_file_t:s0 4096 Dec 11 17:25 boot
+drwxr-xr-x.  2 root root unconfined_u:object_r:container_ro_file_t:s0 4096 Dec 20 00:00 dev
+drwxr-xr-x. 30 root root unconfined_u:object_r:container_ro_file_t:s0 4096 Dec 20 00:00 etc
+drwxr-xr-x.  2 root root unconfined_u:object_r:container_ro_file_t:s0 4096 Dec 11 17:25 home
+drwxr-xr-x.  8 root root unconfined_u:object_r:container_ro_file_t:s0 4096 Dec 20 00:00 lib
+[...omitted output...]</code></pre></div>
+<p>The preceding output also []{#Chapter_10.xhtml#idx_afb7d5a1 .index-entry
+index-entry=&ldquo;containers:SELinux interaction&rdquo;}shows another interesting
+aspect: since the <code>LowerDir</code>{.inlineCode}
+layers[]{#Chapter_10.xhtml#idx_e41318cd .index-entry
+index-entry=&ldquo;SELinux interaction:with containers&rdquo;} are shared across
+multiple containers that use the same image, we won't find any MCS
+categories that have been applied here.</p>
+<p>Containers do not have read/write access to files or directories that
+are not labeled as <code>container_file_t</code>{.inlineCode}.[]{.sentence-end}
+Previously, we saw that it is possible to relabel those files by
+applying the <code>:z</code>{.inlineCode} suffix to mounted volumes or by manually
+relabeling them in advance before running the containers.</p>
+<p>However, relabeling []{#Chapter_10.xhtml#idx_426d60ac .index-entry
+index-entry=&ldquo;SELinux interaction:with containers&rdquo;}crucial directories
+such as <code>/home</code>{.inlineCode} or <code>/var/logs</code>{.inlineCode} is
+a[]{#Chapter_10.xhtml#idx_fe9ae000 .index-entry
+index-entry=&ldquo;containers:SELinux interaction&rdquo;} very bad idea since many
+other non-containerized processes won't be able to access them anymore.</p>
+<p>The only solution is to manually create custom policies that override
+the default behavior.[]{.sentence-end} However, this is too complex to
+manage in everyday use and production environments.</p>
+<p>Luckily, we can solve this limitation with a tool that generates custom
+SELinux security profiles for our []{#Chapter_10.xhtml#idx_083dc56c
+.index-entry index-entry=&ldquo;Udica&rdquo;}containers: <strong>Udica</strong>.</p>
+<h2 id="h2_267" class="heading-2">Introducing Udica<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Udica is an []{#Chapter_10.xhtml#idx_2886b87d .index-entry
+index-entry=&ldquo;Udica&rdquo;}open source project
+(<a href="https://github.com/containers/udica" rel="external" target="_blank">[https://github.com/containers/udica]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;})
+that was created by Lukas Vrabec, SELinux evangelist and team leader of
+the SELinux and Security Special Projects engineering teams at Red Hat.</p>
+<p>Udica aims to overcome the rigid policy limitations that were described
+previously by generating SELinux profiles for containers and allowing
+them to access resources that would normally be prevented with the
+common <code>container_t</code>{.inlineCode} domain.</p>
+<p>To install Udica on Fedora, simply run the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo dnf install -y udica setools-console container-selinux</code></pre></div>
+<p>On other distributions, Udica can be installed from its source by
+running the following commands:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo dnf install -y setools-console git container-selinux
+$ git clone
+$ cd udica &amp;&amp; sudo python3 ./setup.py install</code></pre></div>
+<p>To demonstrate how Udica works, we are going to create a container that
+writes to the <code>/var/log</code>{.inlineCode} directory of the host, which is
+bind-mounted when the container is created.[]{.sentence-end} By default,
+the process with the <code>container_t</code>{.inlineCode} domain would not be able
+to write a directory labeled with the <code>var_log_t</code>{.inlineCode} type.</p>
+<p>The following script, which has been executed inside the container, is
+an endless loop that writes a log line composed of the current date and
+a counter:</p>
+<p><code>Chapter10/custom_logger/logger.sh</code>{.inlineCode}</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>#!/bin/bash
+set -euo pipefail
+trap &#34;echo Exited; exit;&#34; SIGINT SIGTERM
+
+# Run an endless loop writing a simple log entry with date
+count=1
+while true; do
+echo &#34;$(date +%y/%m/%d_%H:%M:%S) - Line #$count&#34; | tee -a /var/log/custom.log
+  count=$((count+1))
+  sleep 2
+done</code></pre></div>
+<p>The preceding script uses the
+<code>set</code>{.inlineCode}<code> </code>{.inlineCode}<code>-euo</code>{.inlineCode}<code> </code>{.inlineCode}<code>pipefail</code>{.inlineCode}
+option to exit immediately in case an error occurs, and the
+<code>tee</code>{.inlineCode} utility to write the command's output both to
+standard output and the <code>/var/log/custom.log</code>{.inlineCode} file in
+append mode.[]{.sentence-end} The <code>count</code>{.inlineCode} variable
+increments on each loop cycle.</p>
+<p>The Dockerfile for this []{#Chapter_10.xhtml#idx_d0932e8e .index-entry
+index-entry=&ldquo;Udica&rdquo;}container is kept minimal &ndash; it just copies the
+logger script and executes it at container startup:</p>
+<p><code>Chapter10/custom_logger/Dockerfile</code>{.inlineCode}</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>FROM docker.io/library/fedora
+# Copy the logger.sh script
+COPY --chmod=755 logger.sh /
+# Exec the logger.sh script
+CMD [&#34;/logger.sh&#34;]</code></pre></div>
+<p>note
+<strong>Important</strong></p>
+<p>The <code>logger.sh</code>{.inlineCode} script is copied with the
+<code>--chmod=755</code>{.inlineCode} option to set up the proper executable
+permissions so that it can be launched correctly at container startup.</p>
+<p>The container image is built with the name <code>custom_logger</code>{.inlineCode}:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># cd /Chapter10/custom_logger
+# buildah build -t custom_logger .</code></pre></div>
+<p>Now, it's time to test the container and see how it
+behaves.[]{.sentence-end} The <code>/var/log</code>{.inlineCode} directory is
+bind-mounted with <code>rw</code>{.inlineCode} permissions to the container path
+<code>/var/log</code>{.inlineCode}, without this altering its type
+context.[]{.sentence-end} We should keep the execution in the foreground
+to see the immediate output:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run -v /var/log:/var/log:rw \
+  --name custom_logger1 custom_logger
+tee: /var/log/custom.log: Permission denied
+22/01/08_09:09:33 - Custom log event #1</code></pre></div>
+<p>As expected, the script failed to write to the target
+file.[]{.sentence-end} We could fix this by changing the directory type
+context to <code>container_file_t</code>{.inlineCode}, but, as we learned
+previously, this is a poor idea since it would prevent other processes
+from writing their logs.</p>
+<p>Instead, we can use []{#Chapter_10.xhtml#idx_c0d3cd2d .index-entry
+index-entry=&ldquo;Udica&rdquo;}Udica to generate a custom SELinux security profile
+for the container.[]{.sentence-end} In the following code, the container
+specs are exported to a <code>container.json</code>{.inlineCode} file and then
+parsed by Udica to generate a custom profile called
+<code>custom_logger</code>{.inlineCode}:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman inspect custom_logger1 &gt; container.json
+# udica -j container.json custom_logger
+Policy custom_logger created!
+
+Please load these modules using:
+# semodule -i custom_logger.cil /usr/share/udica/templates/{base_container.cil,log_container.cil}
+Restart the container with: &#34;--security-opt label=type:custom_logger.process&#34; parameter</code></pre></div>
+<p>Once the profile has been generated, Udica outputs the instructions to
+configure the container.[]{.sentence-end} First, we need to load the new
+custom policy using the <code>semodule</code>{.inlineCode}
+utility.[]{.sentence-end} The generated[]{#Chapter_10.xhtml#idx_9abeb5ea
+.index-entry index-entry=&ldquo;Common Intermediate Language (CIL)&rdquo;} file is
+in <strong>Common</strong> <strong>Intermediate</strong> <strong>Language</strong> (<strong>CIL</strong>) format, an
+intermediate policy language for SELinux.[]{.sentence-end} Along with
+the generated CIL file, the example loads some Udica templates,
+<code>/usr/share/udica/templates/base_container.cil</code>{.inlineCode} and
+<code>/usr/share/udica/templates/log_container.cil</code>{.inlineCode}, whose rules
+are inherited in the custom container policy file.</p>
+<p>Let's load the modules using the suggested command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># semodule -i custom_logger.cil /usr/share/udica/templates/{base_container.cil,log_container.cil}</code></pre></div>
+<p>After loading the modules[]{#Chapter_10.xhtml#idx_5ef194a7 .index-entry
+index-entry=&ldquo;Udica&rdquo;} in SELinux, we are ready to run the container with
+the custom <code>custom_logger.process</code>{.inlineCode} label, which is passed
+as an argument to Podman's <code>--security-opt</code>{.inlineCode} option.</p>
+<p>All the other container options were kept identical, except for its
+name, which has been updated to <code>custom_logger2</code>{.inlineCode} to
+differentiate it from the previous instance:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run -v /var/log:/var/log:rw \
+  --name custom_logger2 \
+  --security-opt label=type:custom_logger.process \
+  custom_logger
+22/01/08_09:05:19 - Line #1
+22/01/08_09:05:21 - Line #2
+22/01/08_09:05:23 - Line #3
+22/01/08_09:05:25 - Line #5
+[...Omitted output...]</code></pre></div>
+<p>This time, the script successfully wrote to the
+<code>/var/log/custom.log</code>{.inlineCode} file thanks to the custom profile
+that was generated with Udica.</p>
+<p>Note that the container processes are not running with the
+<code>container_t</code>{.inlineCode} domain, but with the new
+<code>custom_logger.process</code>{.inlineCode} superset, which includes additional
+rules on top of the default.</p>
+<p>We can confirm this by running the following command on the host:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># ps auxZ | grep &#39;custom_logger.process&#39;
+unconfined_u:system_r:container_runtime_t:s0-s0:c0.c1023 root 26546 0.1  0.6 1365088 53768 pts/0 Sl+ 09:16   0:00 podman run -v /var/log:/var/log:rw --security-opt label=type:custom_logger.process custom_logger system_u:system_r:custom_logger.process:s0:c159,c258 root 26633 0.0  0.0 4180 3136 ? Ss 09:16   0:00 /bin/bash /logger.sh
+system_u:system_r:custom_logger.process:s0:c159,c258 root 26881 0.0  0.0 2640 1104 ? S 09:18   0:00 sleep 2</code></pre></div>
+<p>Udica creates[]{#Chapter_10.xhtml#idx_6c429514 .index-entry
+index-entry=&ldquo;Udica&rdquo;} the custom policy by parsing the JSON spec file and
+looking for the container mount points, ports, and
+capabilities.[]{.sentence-end} Let's look at the content of the
+generated <code>custom_logger.cil</code>{.inlineCode} file from our example:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>(block custom_logger
+    (blockinherit container)
+    (allow process process ( capability ( chown dac_override fowner fsetid kill net_bind_service setfcap setgid setpcap setuid sys_chroot )))
+
+    (blockinherit log_rw_container)</code></pre></div>
+<p>The CIL language syntax is beyond the scope of this book, but we can
+still notice some interesting things:</p>
+<ul>
+<li>The <code>custom_logger</code>{.inlineCode} profile is defined by a
+<code>block</code>{.inlineCode} statement</li>
+<li>The <code>allow</code>{.inlineCode} rule enables the default capabilities for
+the container</li>
+<li>The policy inherits the <code>container</code>{.inlineCode} and
+<code>log_rw_container</code>{.inlineCode} blocks with the
+<code>blockinherit</code>{.inlineCode} statements</li>
+</ul>
+<p>The generated CIL file inherits the blocks that have been defined in the
+available Udica templates, each one focused on specific
+actions.[]{.sentence-end} On Fedora, the templates are installed via the
+<code>container-selinux</code>{.inlineCode} package and are available in the
+<code>/usr/share/udica/templates/</code>{.inlineCode} folder:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># ls -1 /usr/share/udica/templates/
+base_container.cil
+config_container.cil
+home_container.cil
+log_container.cil
+net_container.cil
+tmp_container.cil
+tty_container.cil
+virt_container.cil
+x_container.cil</code></pre></div>
+<p>The available templates are implemented for common scenarios, such as
+accessing log directories or user homes, or even opening network
+ports.[]{.sentence-end} Among them, the
+<code>base_container.cil</code>{.inlineCode} template is always included by all the
+Udica-generated policies as the base building block that's used to
+generate the custom policies.</p>
+<p>According to the behavior of the container that's derived from the spec
+file, other templates are included.[]{.sentence-end} For example, the
+policy inherits the <code>log_rw_container</code>{.inlineCode} block from the
+<code>log_container.cil</code>{.inlineCode} template to let the custom logger
+container access the <code>/var/log</code>{.inlineCode} directory.</p>
+<p>Udica is a []{#Chapter_10.xhtml#idx_ce3668a4 .index-entry
+index-entry=&ldquo;Udica&rdquo;}great tool for addressing container isolation issues
+and helps administrators address SELinux confinement use cases by
+overcoming the complexity of writing rules manually.</p>
+<p>Generated security profiles can also be versioned inside a GitHub
+repository and reused for similar containers on different hosts.</p>
+<h1 id="h1_268" class="heading-1">Summary<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In this chapter, we learned how to develop and apply techniques to
+improve the overall security of our container-based service
+architecture.[]{.sentence-end} We learned how leveraging rootless
+containers and avoiding UID 0 can reduce the attack surface of our
+services.[]{.sentence-end} Then, we learned how to sign and trust
+container images to avoid MITM attacks.[]{.sentence-end} Finally, we
+went under the hood of containers' tools and looked at the Linux
+kernel's capabilities and the SELinux subsystem, which can help us
+fine-tune various security aspects for our running containers.</p>
+<p>Now that we've done a deep dive into security, we are ready to move on
+to the next chapter, where we will take an advanced look at networking
+for containers.</p>
+<h1 id="h1_269" class="heading-1">Further reading<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>For more information about the topics that were covered in this chapter,
+take a look at the following resources:</p>
+<ul>
+<li>MITRE ATT&amp;CK Container Matrix:
+<a href="https://attack.mitre.org/matrices/enterprise/containers/" rel="external" target="_blank">[https://attack.mitre.org/matrices/enterprise/containers/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>Sigstore project home page:
+<a href="https://docs.sigstore.dev/" rel="external" target="_blank">[https://docs.sigstore.dev/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>Podman image signing tutorial:
+<a href="https://github.com/containers/podman/blob/main/docs/tutorials/image_signing.md" rel="external" target="_blank">[https://github.com/containers/podman/blob/main/docs/tutorials/image_signing.md]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>Lukas Vrabec's blog:
+<a href="https://lukas-vrabec.com/" rel="external" target="_blank">[https://lukas-vrabec.com/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>CIL introduction and design principles:
+<a href="https://github.com/SELinuxProject/cl/wiki" rel="external" target="_blank">[https://github.com/SELinuxProject/cl/wiki]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>Udica introduction on Red Hat's blog:
+<a href="https://www.redhat.com/en/blog/generate-selinux-policies-containers-with-udica" rel="external" target="_blank">[https://www.redhat.com/en/blog/generate-selinux-policies-containers-with-udica]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+</ul>
+<h1 id="h1_270" class="heading-1">Join us on Discord<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>For discussions around the book and to connect with your peers, join us
+on Discord at
+<a href="https://packt.link/discordcloud" rel="external" target="_blank">[packt.link/discordcloud]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}
+or scan the QR code below:</p>
+<p><a href="#R-image-47d14f6d75d7486acf889a9e72377d05" class="lightbox-link"><img alt="Image" class="lazy lightbox figure-image" loading="lazy" src="images/B31467_10_1.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-47d14f6d75d7486acf889a9e72377d05"><img alt="Image" class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_10_1.png"></a>{style=&ldquo;width:25%;&rdquo;}</p>
+<p>[]{#Part_3.xhtml}</p>
+<p>{.section .part}</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready for RHCE<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/install-ansible-using-uv/"><a class="padding" href="/ansible/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/playbooks/"><a class="padding" href="/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/hostname-patterns/"><a class="padding" href="/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/include-and-import-files/"><a class="padding" href="/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2/"><a class="padding" href="/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/user-and-groups/"><a class="padding" href="/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/storage-partitions-and-lvm/"><a class="padding" href="/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/services/"><a class="padding" href="/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimize-ansible-processing/"><a class="padding" href="/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux/"><a class="padding" href="/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/tags/"><a class="padding" href="/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/loops-and-items/"><a class="padding" href="/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/modules-for-troubleshooting/"><a class="padding" href="/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Using Variables In Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/when/"><a class="padding" href="/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/secure-shell-service-ssh/"><a class="padding" href="/cyber-security/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ansiblepuppetchef/"><a class="padding" href="/networking/ccna/ccna-notes-1/ansiblepuppetchef/">Ansible, Puppet, and Chef<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscoacls/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscoacls/">Cisco ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscocli/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscocli/">Cisco CLI<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/classfulipv4/"><a class="padding" href="/networking/ccna/ccna-notes-1/classfulipv4/">Classful IPv4<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/cloudarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/cloudarchitecture/">Cloud Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/controllerbasednetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/controllerbasednetworking/">Controller-Based Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/device-management-protocols/"><a class="padding" href="/networking/ccna/ccna-notes-1/device-management-protocols/">Device Management Protocols<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-config/">DHCP Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/">DHCP Snooping and ARP Inspection<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-syncronization/"><a class="padding" href="/networking/dns-and-time-syncronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ethernetlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/ethernetlans/">Ethernet LANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/extended-acls/"><a class="padding" href="/networking/ccna/ccna-notes-1/extended-acls/">Extended ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-services/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-services/">IP Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-transport-and-applications/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-transport-and-applications/">IP Transport and Applications<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6/">IPv6<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/">IPv6 Addressing and Subnetting<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6configuration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6configuration/">IPv6 Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6routing/">IPv6 Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lan-architecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/lan-architecture/">LAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/l2-etherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/l2-etherchannel/">Layer 2 Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/network-devices-and-connections/"><a class="padding" href="/networking/network-devices-and-connections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospf-concepts/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospf-concepts/">OSPF Concepts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfconfiguration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfconfiguration/">OSPF Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/">OSPF Network Types and Neighbors<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/restandjson/"><a class="padding" href="/networking/ccna/ccna-notes-1/restandjson/">REST and JSON<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/router_operation/"><a class="padding" href="/networking/ccna/ccna-notes-1/router_operation/">Router Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/routeroperation/"><a class="padding" href="/networking/ccna/ccna-notes-1/routeroperation/">ROuter Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lanrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/lanrouting/">Routing in the LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/rstpandetherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/rstpandetherchannel/">RSTP and Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/securing-network-devices/"><a class="padding" href="/networking/ccna/ccna-notes-1/securing-network-devices/">Securing Network Devices<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/security-architectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/security-architectures/">Security Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/softwaredefinedaccess/"><a class="padding" href="/networking/ccna/ccna-notes-1/softwaredefinedaccess/">Software-Defined Access (SDA)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/spanningtreeprotocol/"><a class="padding" href="/networking/ccna/ccna-notes-1/spanningtreeprotocol/">Spanning Tree Protocol<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/static-routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/static-routing/">Static Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchinterfaces/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchinterfaces/">Switch Interfaces<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switching/"><a class="padding" href="/networking/ccna/ccna-notes-1/switching/">Switching<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchport-security-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchport-security-config/">Switchport Security Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/tcpipbasic/"><a class="padding" href="/networking/ccna/ccna-notes-1/tcpipbasic/">TCP/IP Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/troubleshootingrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/troubleshootingrouting/">Troubleshooting Routing Issues<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/vlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/vlans/">VLANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wanarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/wanarchitecture/">WAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wansandiprouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/wansandiprouting/">WANs and IP Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessarchitectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessarchitectures/">Wireless Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_lan/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_lan/">Wireless LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessnetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessnetworking/">Wireless Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_security/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_security/">Wireless Security<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
+            <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/local-filesystems-and-swap/"><a class="padding" href="/storage/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/network-filesystem-nfs/"><a class="padding" href="/storage/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/partitioning-mbr-gpt/"><a class="padding" href="/storage/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/rm-filesystem-from-partition/"><a class="padding" href="/storage/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/remove-formatting-from-highlights/"><a class="padding" href="/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-docker-nginx/"><a class="padding" href="/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/you-need-to-learn-man-pages/"><a class="padding" href="/tools/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/proxmox-ha-proxy-setup/"><a class="padding" href="/tools/proxmox-ha-proxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/learning-touch-typing/"><a class="padding" href="/tools/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5" checked><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/">Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="active hidden " data-nav-id="/containers/securingcontainers/"><a class="padding" href="/containers/securingcontainers/"><i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/ansible-and-podman/"><a class="padding" href="/containers/ansible-and-podman/">Ansible and Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/intro-to-containers-1/"><a class="padding" href="/containers/intro-to-containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/convert-docker-compose-to-quadlets/"><a class="padding" href="/containers/convert-docker-compose-to-quadlets/">Convert Docker Compose to Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-links/"><a class="padding" href="/containers/podman-links/">Podman Links<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-quadlets/"><a class="padding" href="/containers/podman-quadlets/">Podman Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/">Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
+            <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users-and-Groups</span></label><a class="padding default-animation" href="/users-and-groups/">Users-and-Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
+            <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/virtualization/"><input type="checkbox" id="R-section-da8ee4406de37987b502b79e5b0a9d1c" aria-controls="R-subsections-da8ee4406de37987b502b79e5b0a9d1c"><label for="R-section-da8ee4406de37987b502b79e5b0a9d1c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualizations</span></label><a class="padding default-animation" href="/virtualization/">Virtualizations<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-da8ee4406de37987b502b79e5b0a9d1c" class="collapsible-menu">
+            <li class="" data-nav-id="/virtualization/using-vagrant-on-linux/"><a class="padding" href="/virtualization/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/booknotes/"><a class="padding" href="/booknotes/"><i class='fas fa-fw fa-book'></i> Book Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/now/"><a class="padding" href="/now/"><i class='fas fa-fw fa-clock'></i> Now<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780154752" defer></script>
+    <script src="/js/theme.js?1780154752" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

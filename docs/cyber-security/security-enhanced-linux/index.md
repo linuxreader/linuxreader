@@ -1,7 +1,6 @@
 # Security Enhanced Linux
 
-## SELinux Terminology 
-
+## SELinux Terminology   
 - Implementation of the Mandatory Access Control (MAC) architecture
 	- developed by the U.S. National Security Agency (NSA)
 	- flexible, enriched, and granular security controls in Linux. 
@@ -831,7 +830,7 @@ WIll show avc denied if denied.
 
 The following is a sample denial record from the same file in raw format:
 
-![](/images/image-C7TMRBJO%201.jpg)
+![](../../../images/image-C7TMRBJO%201%201.jpg)
 
 - AVC type
 - Related to the `passwd` command (comm) 
@@ -843,7 +842,7 @@ The following is a sample denial record from the same file in raw format:
 
 Use `sealert` to analyze (`-a`) all **AVC** records in the *audit.log* file. This command produces a formatted report with all relevant details:
 
-![](/images/image-WYWDQX1V%201.jpg)
+![](../../../images/image-WYWDQX1V%201%201.jpg)
 
 ## SELinux DIY Labs
 

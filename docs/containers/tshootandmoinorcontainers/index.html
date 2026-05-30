@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    <meta name="description" content="Part 3 Managing and Integrating Containers Securely In this part of the book, you will learn how to troubleshoot, monitor, and create advanced configurations for the running containers on the operating system host.
+This part of the book includes the following chapters:">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="Part 3 Managing and Integrating Containers Securely In this part of the book, you will learn how to troubleshoot, monitor, and create advanced configurations for the running containers on the operating system host.
+This part of the book includes the following chapters:">
+    <meta property="og:url" content="http://localhost:1313/containers/tshootandmoinorcontainers/">
+    <meta property="og:description" content="Part 3 Managing and Integrating Containers Securely In this part of the book, you will learn how to troubleshoot, monitor, and create advanced configurations for the running containers on the operating system host.
+This part of the book includes the following chapters:">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Containers">
+    <meta itemprop="description" content="Part 3 Managing and Integrating Containers Securely In this part of the book, you will learn how to troubleshoot, monitor, and create advanced configurations for the running containers on the operating system host.
+This part of the book includes the following chapters:">
+    <meta itemprop="wordCount" content="8243">
+    <title></title>
+    <link href="/containers/tshootandmoinorcontainers/index.md" rel="alternate" type="text/markdown" title="">
+    <link href="/images/favicon.svg?1780154752" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1780154752" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1780154752" defer></script>
+    <script src="/js/search-lunr.js?1780154752" defer></script>
+    <script src="/js/search.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1780154752";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780154752" rel="stylesheet">
+    <link href="/css/theme.css?1780154752" rel="stylesheet">
+    <link href="/css/format-html.css?1780154752" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/containers\/tshootandmoinorcontainers\/';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:1313';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script><script defer src="https://cloud.umami.is/script.js" data-website-id="d179743c-138a-4212-8906-28f70628ef95"></script>
+<style>
+:root {
+    --MENU-S-width: 15rem;
+    --MENU-M-width: 15rem;
+    --MENU-L-width: 18rem;
+    --MAIN-MAX-width: 100rem;
+}
+html {
+  zoom: 1.2;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif,
+               "Apple Color Emoji", "Segoe UI Emoji" !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500 !important;
+  letter-spacing: 0.7px;
+}
+
+code, kbd, pre, samp {
+  font-family: "Fira Code", "Hack", "Source Code Pro", Consolas, Menlo, monospace !important;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+  <body class="mobile-support html" data-origin="/containers/tshootandmoinorcontainers/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#h2_277">Permission denied while using storage volumes</a>
+      <ul>
+        <li><a href="#h3_278">The SELinux layer: security contexts</a></li>
+        <li><a href="#h3_280">The rootless layer: user namespaces (UID/GID)</a></li>
+      </ul>
+    </li>
+    <li><a href="#h2_285">Issues with the ping command in rootless containers</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#h2_288">Troubleshooting builds from Dockerfiles</a></li>
+    <li><a href="#h2_289">Troubleshooting builds with Buildah-native commands</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#h2_291">Troubleshooting a database client with nsenter</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/containers/"><span itemprop="name">Containers</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/tshootandmoinorcontainers/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/" title="Containers (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/ansible-and-podman/" title="Ansible and Podman (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable containers" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id=""></h1>
+
+<h1 id="h1_271" class="partNumber">Part 3<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<h1 id="h1_272" class="partTitle">Managing and Integrating Containers Securely<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In this part of the book, you will learn how to troubleshoot, monitor,
+and create advanced configurations for the running containers on the
+operating system host.</p>
+<p>This part of the book includes the following chapters:</p>
+<ul>
+<li><em><a href="/containers/tshootandmoinorcontainers/#Chapter_11.xhtml#h1_273">Chapter 11</a>{.chapref}</em>, <em>Troubleshooting
+and Monitoring Containers</em></li>
+<li><em><a href="/containers/tshootandmoinorcontainers/#Chapter_12.xhtml#h1_295">Chapter 12</a>{.chapref}</em>, <em>Implementing
+Container Networking Concepts</em></li>
+<li><em><a href="/containers/tshootandmoinorcontainers/#Chapter_13.xhtml#h1_314">Chapter 13</a>{.chapref}</em>, <em>Docker</em>
+<em>Migration Tips and Tricks</em></li>
+<li><em><a href="/containers/tshootandmoinorcontainers/#Chapter_14.xhtml#h1_330">Chapter 14</a>{.chapref}</em>, <em>Interacting
+with</em> <em>systemd</em> <em>and</em> <em>Kubernetes</em></li>
+<li><em><a href="/containers/tshootandmoinorcontainers/#Chapter_15.xhtml#h1_348">Chapter 15</a>{.chapref}</em>, <em>Managing</em>
+<em>Your</em> <em>Container,</em> <em>Kubernetes, and AI Workloads from a Graphical
+Interface</em></li>
+</ul>
+<p>[]{#Chapter_11.xhtml}</p>
+<p>{.section .chapter-first}</p>
+<h1 id="h1_273" class="chapterNumber">11<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<h1 id="h1_274" class="chapterTitle">Troubleshooting and Monitoring Containers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Running a container could be mistaken as the ultimate goal for a DevOps
+team, but instead, this is only the first step of a long
+journey.[]{.sentence-end} System administrators should ensure that their
+systems are working properly to keep services up and running; in the
+same way, the DevOps team should ensure that their containers are
+working properly.</p>
+<p>In container management activities, having the right knowledge of
+troubleshooting techniques could really help minimize any impact on the
+final services, reducing downtime.[]{.sentence-end} Talking of issues
+and troubleshooting, a good practice is to keep monitoring containers to
+easily intercept any issues or errors to speed up recovery.</p>
+<p>In this chapter, we're going to cover the following main topics:</p>
+<ul>
+<li>Troubleshooting running containers</li>
+<li>Monitoring containers with health checks</li>
+<li>Inspecting our container build results</li>
+<li>Advanced troubleshooting with <code>nsenter</code>{.inlineCode}</li>
+</ul>
+<h1 id="h1_275" class="heading-1">Technical requirements<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Before proceeding with the chapter information and examples, a machine
+with a working Podman installation is required.[]{.sentence-end} As
+stated in <em>Chapter</em> <em>3</em>, <em>Running</em> <em>the</em> <em>First</em> <em>Container</em>, all the
+examples in the book are executed on a Fedora 40 system or later, but
+can be reproduced on your OS of choice.</p>
+<p>A good understanding of the topics covered in <em>Chapter</em> <em>4</em>, <em>Managing</em>
+<em>Running</em> <em>Containers</em>, and <em>Chapter</em> <em>5</em>, <em>Implementing</em> <em>Storage</em>
+<em>for</em> <em>the</em> <em>Container's</em> <em>Data</em>, will be useful to easily grasp
+concepts relating to container registries.</p>
+<h1 id="h1_276" class="heading-1">Troubleshooting running containers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Troubleshooting []{#Chapter_11.xhtml#idx_b463104f .index-entry
+index-entry=&ldquo;containers:troubleshooting&rdquo;}containers is an important
+practice that we need experience with to solve common issues and
+investigate any bugs we may encounter on the container layer or in the
+application running inside our containers.</p>
+<p>Starting from <em>Chapter</em> <em>3</em>, <em>Running</em> <em>the</em> <em>First</em> <em>Container</em>, we
+started working with basic Podman commands for running and then
+inspecting containers on our host system.[]{.sentence-end} We saw how we
+can collect logs with the
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>logs</code>{.inlineCode} command, and we
+also learned how to use the information provided by the
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>inspect</code>{.inlineCode}
+command.[]{.sentence-end} Finally, we should also consider taking a look
+at the output of the useful
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>system</code>{.inlineCode}<code> </code>{.inlineCode}<code>df</code>{.inlineCode}
+command, which will report storage usage for our containers and images,
+and also the useful
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>info</code>{.inlineCode} command, which
+will show useful information on the host where we are running Podman.</p>
+<p>In general, we should always consider that the running container is just
+a process on the host system, so we always have all the tools and
+commands available for troubleshooting the underlying OS and its
+available resources.</p>
+<p>A best practice for troubleshooting containers could be a top-down
+approach, analyzing the application layer first, then moving to the
+container layer, and finally down to the base host system.</p>
+<p>At the container level, many of the issues that we may encounter have
+been summarized by the Podman project team in a comprehensive list on
+the project page (refer to the link shared in the <em>Further reading</em>
+section).[]{.sentence-end} We will cover some of the more useful ones in
+the following sections.</p>
+<h2 id="h2_277" class="heading-2">Permission denied while using storage volumes<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>A very common issue that we may[]{#Chapter_11.xhtml#idx_15d42a5d
+.index-entry index-entry=&ldquo;storage permissions:issues&rdquo;} encounter during
+our activities on RHEL, Fedora, or any Linux distribution that uses the
+SELinux security subsystem is related to storage
+permissions.[]{.sentence-end} The error described as follows is
+triggered when SELinux is set to <code>Enforcing</code>{.inlineCode} mode, which is
+also the suggested approach to fully guarantee the mandatory access
+security features of SELinux.</p>
+<h3 id="h3_278" class="heading-3">The SELinux layer: security contexts<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>The first barrier is often the[]{#Chapter_11.xhtml#idx_6566c16e
+.index-entry index-entry=&ldquo;SELinux layer&rdquo;} SELinux security
+subsystem.[]{.sentence-end} SELinux uses labels (extended filesystem
+attributes) to ensure that processes in one container cannot <em>break out</em>
+and access files belonging to the host []{#Chapter_11.xhtml#idx_0588219b
+.index-entry index-entry=&ldquo;security contexts&rdquo;}or other containers.</p>
+<p>By default, if you create a directory on your host and mount it into a
+container, the containerized process will not have the correct SELinux
+label to interact with it.</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ mkdir ~/mycontent
+$ podman run -v ~/mycontent:/content fedora \
+touch /content/file
+touch: cannot touch &#39;/content/file&#39;: Permission denied</code></pre></div>
+<p>As we can see, the <code>touch</code>{.inlineCode} command reports a
+<code>Permission</code>{.inlineCode}<code> </code>{.inlineCode}<code>denied</code>{.inlineCode} error,
+because actually, it cannot write in the filesystem.</p>
+<p>As we saw in detail in <em>Chapter</em> <em>5</em>, <em>Implementing</em> <em>Storage</em> <em>for</em>
+<em>the</em> <em>Container's</em> <em>Data</em>, SELinux recursively applies labels to files
+and directories to define their context.[]{.sentence-end} Those labels
+are usually stored as extended filesystem attributes.[]{.sentence-end}
+SELinux uses contexts to manage policies and define which processes can
+access a specific resource.</p>
+<p>The container we just ran got its own Linux namespace and an SELinux
+label that is completely different from the local user in the Fedora
+workstation, which is why we actually got that error before.</p>
+<p>Without a proper label, the SELinux system prevents the processes
+running in the container from accessing the content.[]{.sentence-end}
+This is also because Podman does not change the labels set by the OS if
+not explicitly requested through a command option.</p>
+<h4 id="h4_279" class="heading-4">The fix: relabeling with :z and :Z<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>To let Podman change the label for a[]{#Chapter_11.xhtml#idx_f58dd7bd
+.index-entry index-entry=&ldquo;storage permissions:fix&rdquo;} container, we can
+use either of two suffixes, <code>:z</code>{.inlineCode} or <code>:Z</code>{.inlineCode}, for
+the volume mount.[]{.sentence-end} These options tell Podman to relabel
+file objects on the volume.</p>
+<p>To tell Podman to automatically adjust the SELinux labels for the
+mounted volume, we use the <code>:z</code>{.inlineCode} or <code>:Z</code>{.inlineCode}
+suffixes:</p>
+<ul>
+<li>
+<p><code>:z</code>{.inlineCode} (Shared): Tells Podman that the volume content
+will be shared among multiple containers.[]{.sentence-end} It
+applies a shared content label.</p>
+</li>
+<li>
+<p><code>:Z</code>{.inlineCode} (Private): Tells Podman to apply a private,
+unshared label.[]{.sentence-end} This is the more secure choice if
+only one container needs access to that specific
+data.[]{.sentence-end} The command would result in something like
+this:</p>
+<div class="programlisting snippet-con-one highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># Using :Z to grant exclusive access to the container
+$ podman run -v ~/mycontent:/content:Z fedora \
+touch /content/file</code></pre></div>
+</li>
+</ul>
+<p>As we can see, the command didn't report any error; it worked.</p>
+<h3 id="h3_280" class="heading-3">The rootless layer: user namespaces (UID/GID)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Even if[]{#Chapter_11.xhtml#idx_83ed4f3d .index-entry
+index-entry=&ldquo;storage permissions:issues&rdquo;} you solve the SELinux issue,
+you may still encounter
+<code>P</code>{.inlineCode}<code>ermission denied</code>{.inlineCode}.[]{.sentence-end} In a
+rootless environment, this is usually due
+to[]{#Chapter_11.xhtml#idx_a5dbbb99 .index-entry
+index-entry=&ldquo;user namespaces&rdquo;} how Podman maps users between the host
+and the container &ndash; a feature called <strong>user</strong> <strong>namespaces</strong>.</p>
+<p>In the world of []{#Chapter_11.xhtml#idx_c76b4068 .index-entry
+index-entry=&ldquo;User IDs (UIDs)&quot;}Linux containers, a user namespace is a
+kernel feature that provides isolation of <strong>User IDs</strong> (<strong>UIDs</strong>) and
+<strong>Group IDs</strong> (<strong>GIDs</strong>).[]{.sentence-end}
+It[]{#Chapter_11.xhtml#idx_8b3066bd .index-entry
+index-entry=&ldquo;Group IDs (GIDs)&rdquo;} essentially allows a process to have a
+different identity inside the namespace than it has on the host system.</p>
+<p>In a rootless setup, you are <em>you</em> on the host (for example,
+<code>UID</code>{.inlineCode}<code> 1000</code>{.inlineCode}), but inside the container, you
+usually appear as root
+(<code>UID</code>{.inlineCode}<code> 0</code>{.inlineCode}).[]{.sentence-end} However, your
+&quot;root&quot; identity inside the container is actually an alias for your
+user on the host.[]{.sentence-end} If the container tries to run a
+process as a different user (such as a <code>MySQL</code>{.inlineCode} or
+<code>nginx</code>{.inlineCode} user with <code>UID</code>{.inlineCode}<code> 999</code>{.inlineCode}),
+that UID might not have permission to write to the host folder you just
+mounted.</p>
+<h4 id="h4_281" class="heading-4">Identifying the mismatch<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>You can see this []{#Chapter_11.xhtml#idx_c9efe129 .index-entry
+index-entry=&ldquo;storage permissions:issues&rdquo;}mapping in action using
+<code>podman</code>{.inlineCode}<code> top</code>{.inlineCode}.[]{.sentence-end} If you run a
+container as a specific user, Podman maps that ID to a high-range
+<em>sub-UID</em> on your host, defined
+in<code> </code>{.inlineCode}<code>/</code>{.inlineCode}<code>etc</code>{.inlineCode}<code>/</code>{.inlineCode}<code>subuid</code>{.inlineCode}.</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run -d --name web -v ~/data:/data:Z nginx
+$ podman top web user,huser
+USER    HUSER
+root    1000      # Inside is root, outside is your local user
+nginx   100098    # Inside is nginx (999), outside is a sub-UID</code></pre></div>
+<p>In this example, the <code>nginx</code>{.inlineCode} process inside the container
+is actually running as host
+<code>UID</code>{.inlineCode}<code> </code>{.inlineCode}<code>100098</code>{.inlineCode}.[]{.sentence-end}
+Since your host folder <code>~/data</code>{.inlineCode} is likely owned by
+<code>UID</code>{.inlineCode}<code> </code>{.inlineCode}<code>1000</code>{.inlineCode}, the
+<code>nginx</code>{.inlineCode} user is blocked.</p>
+<h4 id="h4_282" class="heading-4">The fix: the :U flag<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>The most efficient way[]{#Chapter_11.xhtml#idx_1a5de287 .index-entry
+index-entry=&ldquo;storage permissions:fix&rdquo;} to solve this in modern Podman,
+version 3.1 and later, is the <code>:U</code>{.inlineCode} mount
+option.[]{.sentence-end} This tells Podman to automatically
+<code>chown</code>{.inlineCode}, change ownership, of the host directory to match
+the UID and GID used inside the container.</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run -v ~/mycontent:/content:Z,U fedora touch /content/file</code></pre></div>
+<h4 id="h4_283" class="heading-4">The fix: podman unshare<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>If you need to manually fix permissions for a host directory so a
+rootless container can use it, you cannot simply use the standard
+<code>sudo</code>{.inlineCode}<code> </code>{.inlineCode}<code>chown</code>{.inlineCode}.[]{.sentence-end}
+You must use
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>unshare</code>{.inlineCode}, which
+executes a command inside the same user namespace the container uses.</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># This sets the host directory to be owned by the internal &#39;root&#39; of the container
+$ podman unshare chown -R 0:0 ~/mycontent</code></pre></div>
+<h4 id="h4_284" class="heading-4">The fix: --userns=keep-id<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>If your containerized application needs to see the exact same UID as
+your host user, common for development tools, use the
+<code>--</code>{.inlineCode}<code>userns</code>{.inlineCode}<code>=keep-id</code>{.inlineCode}
+flag.[]{.sentence-end} This ensures that
+<code>UID</code>{.inlineCode}<code> 1000</code>{.inlineCode} on the host remains
+<code>UID</code>{.inlineCode}<code> 1000</code>{.inlineCode} inside the container.</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run --userns=keep-id -v ~/mycontent:/content:Z fedora ...</code></pre></div>
+<p>Depending on the issue []{#Chapter_11.xhtml#idx_ef807ec4 .index-entry
+index-entry=&ldquo;storage permissions:fix&rdquo;}you encounter, you may have one or
+multiple ways to overcome and fix the issue to continue to
+work.[]{.sentence-end} Let's continue to see how to troubleshoot other
+issues in the next section.</p>
+<h2 id="h2_285" class="heading-2">Issues with the ping command in rootless containers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>On some hardened Linux []{#Chapter_11.xhtml#idx_5dda1f95 .index-entry
+index-entry=&ldquo;ping command:issues&rdquo;}systems, the <code>ping</code>{.inlineCode}
+command execution could be limited to only a restricted group of
+users.[]{.sentence-end} This could cause the failure of the
+<code>ping</code>{.inlineCode} command used in a container.</p>
+<p>As we saw in <em>Chapter</em> <em>3</em>, <em>Running</em> <em>the</em> <em>First</em> <em>Container</em>, when
+starting the container, the base OS will associate with it a different
+user ID from the one used in the container itself.[]{.sentence-end} The
+user ID associated with the container might fall outside the allowed
+range of user IDs permitted to use the <code>ping</code>{.inlineCode} command.</p>
+<p>In a Fedora workstation installation, the default configuration will
+allow any container to run the <code>ping</code>{.inlineCode} command without
+issues.[]{.sentence-end} To manage restrictions on the usage of the
+<code>ping</code>{.inlineCode} command, Fedora uses the
+<code>ping_group_range</code>{.inlineCode} kernel parameter, which defines the
+allowed system groups that can execute the <code>ping</code>{.inlineCode} command.</p>
+<p>If we take a look at a just-installed Fedora workstation, the default
+range is the following:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ cat /proc/sys/net/ipv4/ping_group_range
+0      2147483647</code></pre></div>
+<p>So, nothing to worry about for a brand-new Fedora
+system.[]{.sentence-end} But what about if the range is smaller than
+this one?</p>
+<p>Well, we test this behavior by changing the allowed range with a simple
+command.[]{.sentence-end} In this example, we are going to restrict the
+range and see that the <code>ping</code>{.inlineCode} command will actually fail
+then:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo sysctl -w &#34;net.ipv4.ping_group_range=0 0&#34;</code></pre></div>
+<p>Just in case the range is smaller than the one reported in the previous
+output, we can make it persistent by adding a file to
+<code>/</code>{.inlineCode}<code>etc</code>{.inlineCode}<code>/</code>{.inlineCode}<code>sysctl.d</code>{.inlineCode}
+that contains
+<code>net.ipv4.ping_group_range</code>{.inlineCode}<code>=0</code>{.inlineCode}<code> </code>{.inlineCode}<code>0</code>{.inlineCode}.</p>
+<p>The applied change in the <code>ping</code>{.inlineCode} group range will impact
+the mapped user privileges to run the <code>ping</code>{.inlineCode} command inside
+the container.</p>
+<p>Let's start by building a Fedora-based image with the
+<code>iputils</code>{.inlineCode} package (not included by default) using Buildah:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ container=$(buildah from docker.io/library/fedora) &amp;&amp; \
+  buildah run $container -- dnf install -y iputils &amp;&amp; \
+  buildah commit $container ping_example</code></pre></div>
+<p>We can test it by running the following command inside a container:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run --rm ping_example ping -W10 -c1 redhat.com
+PING redhat.com (209.132.183.105): 56 data bytes
+--- redhat.com ping statistics ---
+1 packets transmitted, 0 packets received, 100% packet loss</code></pre></div>
+<p>The command, executed on a[]{#Chapter_11.xhtml#idx_9d932f14 .index-entry
+index-entry=&ldquo;ping command:issues&rdquo;} system with a restricted range,
+produces a 100% packet loss since the <code>ping</code>{.inlineCode} command is not
+able to send packets over a raw socket.</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>Do not forget to restore the original <code>ping_group_range</code>{.inlineCode}
+before proceeding with the next examples.[]{.sentence-end} On Fedora,
+the default configuration can be restored with the
+<code>sudo</code>{.inlineCode}<code> </code>{.inlineCode}<code>sysctl</code>{.inlineCode}<code> </code>{.inlineCode}<code>-w</code>{.inlineCode}<code> </code>{.inlineCode}<code>&quot;</code>{.inlineCode}<code>net.ipv4.ping_group_range</code>{.inlineCode}<code>=0</code>{.inlineCode}<code> </code>{.inlineCode}<code>2147483647&quot;</code>{.inlineCode}
+command and by removing any persistent configuration applied under
+<code>/</code>{.inlineCode}<code>etc</code>{.inlineCode}<code>/</code>{.inlineCode}<code>sysctl.d</code>{.inlineCode}
+during the exercise.[]{.sentence-end} For a base container image that we
+are building through a Dockerfile, we may need to add a brand-new user
+with a large UID/GID.[]{.sentence-end} This will create a large, sparse
+<code>/</code>{.inlineCode}<code>var</code>{.inlineCode}<code>/log/</code>{.inlineCode}<code>lastlog</code>{.inlineCode}
+file, and this can cause the build to hang forever.[]{.sentence-end}
+This issue is related to the Go language, which does not correctly
+support sparse files, leading to the creation of this huge file in the
+container image.</p>
+<p>The example demonstrates how a restriction in
+<code>ping_group_range</code>{.inlineCode} impacts the execution of
+<code>ping</code>{.inlineCode} inside a rootless container.[]{.sentence-end} By
+setting the range to a value large enough to include the user's private
+group GID (or one of the user's secondary groups), the
+<code>ping</code>{.inlineCode} command will be able to send ICMP
+packets[]{#Chapter_11.xhtml#idx_25c835d4 .index-entry
+index-entry=&ldquo;ping command:issues&rdquo;} correctly.</p>
+<p>note
+<strong>Good</strong> <strong>to</strong> <strong>know</strong></p>
+<p>The
+<code>/</code>{.inlineCode}<code>var</code>{.inlineCode}<code>/log/</code>{.inlineCode}<code>lastlog</code>{.inlineCode}
+file is a binary and sparse file that contains information about the
+last time that users logged in to the system.[]{.sentence-end} The
+apparent size of a sparse file reported by
+<code>ls</code>{.inlineCode}<code> </code>{.inlineCode}<code>-l</code>{.inlineCode} is larger than the
+actual disk usage.[]{.sentence-end} A sparse file attempts to use
+filesystem space in a more efficient way, writing the metadata that
+represents the empty blocks to disk instead of the empty space that
+should be stored in the block.[]{.sentence-end} This will use less disk
+space.</p>
+<p>As mentioned in the early paragraphs of this section, the Podman team
+has created a long but non-comprehensive list of common
+issues.[]{.sentence-end} We strongly suggest taking a look at it if any
+issues are encountered:
+<a href="https://github.com/containers/podman/blob/main/troubleshooting.md" rel="external" target="_blank">[https://github.com/containers/podman/blob/main/troubleshooting.md]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>Troubleshooting could be tricky, but the first step is always the
+identification of an issue.[]{.sentence-end} For this reason, a
+monitoring tool could help in alerting as soon as possible in the case
+of issues.[]{.sentence-end} Let's see how to monitor containers with
+health checks in the next section.</p>
+<h1 id="h1_286" class="heading-1">Monitoring containers with health checks<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Podman supports the option []{#Chapter_11.xhtml#idx_9bec6470
+.index-entry index-entry=&ldquo;containers:monitoring, with health checks&rdquo;}to
+add a health check to containers.[]{.sentence-end} We
+will[]{#Chapter_11.xhtml#idx_0626c334 .index-entry
+index-entry=&ldquo;health checks:containers, monitoring&rdquo;} go into these health
+checks in depth in this section, and how to use them.</p>
+<p>A health check is a Podman feature that can help determine the health or
+readiness of the process running in a container.[]{.sentence-end} It
+could be as simple as checking that the container's process is running,
+but also more sophisticated, such as verifying that both the container
+and its applications are responsive using, for example, network
+connections.</p>
+<p>In the container world, there is a distinct difference between a
+container that is running and a container that is
+healthy.[]{.sentence-end} By default, Podman considers a container <em>up</em>
+as long as its primary process (<code>PID</code>{.inlineCode}<code> 1</code>{.inlineCode})
+hasn't exited.[]{.sentence-end} However, a web server process might
+still be running even if it's deadlocked, out of memory, or unable to
+connect to its database.</p>
+<p>A health check is a proactive monitoring mechanism used to ensure that
+the service inside the container is actually functioning as
+intended.[]{.sentence-end} Instead of just checking if the process
+exists, Podman executes a specific command inside the container at
+regular intervals to verify its internal state.</p>
+<p>While you can manually define a health check when starting a container,
+it is important to note that many enterprise-grade images come with
+health checks built directly into the Image configuration:</p>
+<ul>
+<li><strong>Built-in</strong> <strong>health</strong> <strong>checks:</strong> Many official images (like those
+for databases or specialized web services)
+include[]{#Chapter_11.xhtml#idx_2e7db330 .index-entry
+index-entry=&ldquo;health checks:built-in health checks&rdquo;} a
+<code>HEALTHCHECK</code>{.inlineCode} instruction in their
+Containerfile.[]{.sentence-end} When you run these images, Podman
+automatically starts the health monitoring logic without any extra
+configuration from the administrator.</li>
+<li><strong>Manual</strong> <strong>health</strong> <strong>checks</strong>: You can override an image's
+default or add a new check using the
+<code>--health-</code>{.inlineCode}<code>cmd</code>{.inlineCode} flag.[]{.sentence-end}
+This is useful for custom applications where you might want to
+[]{#Chapter_11.xhtml#idx_ec92b2e4 .index-entry
+index-entry=&ldquo;health checks:manual health checks&rdquo;}check a specific
+API endpoint or the existence of a <em>lock</em> file.</li>
+</ul>
+<p>When a health check is active, the container's status in
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>ps</code>{.inlineCode} will move through
+several phases:</p>
+<ul>
+<li><strong>Starting</strong>: The[]{#Chapter_11.xhtml#idx_e52d2165 .index-entry
+index-entry=&ldquo;health checks:starting&rdquo;} container has just launched,
+and the initial delay, or grace period, is active</li>
+<li><strong>Healthy</strong>: The[]{#Chapter_11.xhtml#idx_3af01252 .index-entry
+index-entry=&ldquo;health checks:healthy&rdquo;} health check command exited
+successfully &ndash; exit code <code>0</code>{.inlineCode}</li>
+<li><strong>Unhealthy</strong>: The []{#Chapter_11.xhtml#idx_21756d99 .index-entry
+index-entry=&ldquo;health checks:unhealthy&rdquo;}command failed a consecutive
+number of times, defined by the <em>retries</em> limit</li>
+</ul>
+<p>A health check is []{#Chapter_11.xhtml#idx_312ba87f .index-entry
+index-entry=&ldquo;containers:monitoring, with health checks&rdquo;}made up of five
+core components.[]{.sentence-end} The first
+is[]{#Chapter_11.xhtml#idx_79baaeb2 .index-entry
+index-entry=&ldquo;health checks:containers, monitoring&rdquo;} the main element
+that will instruct Podman on the particular check to execute; the others
+are used for configuring the schedule of the health
+check.[]{.sentence-end} Let's see these elements in detail:</p>
+<ul>
+<li>
+<p><strong>Command</strong>: This is the command[]{#Chapter_11.xhtml#idx_7c6b19d6
+.index-entry index-entry=&ldquo;health checks:command&rdquo;} that Podman will
+execute inside the target container.[]{.sentence-end} The health of
+the container and its process will be determined by waiting for
+either a success (return code <code>0</code>{.inlineCode}) or a failure (any
+other exit codes).[]{.sentence-end}</p>
+<p>If our container provides a web server, for example, our health
+check command could be something really simple, such as a
+<code>curl</code>{.inlineCode} command that will try to connect to the web
+server port to make sure it is responsive.</p>
+</li>
+<li>
+<p><strong>Retries</strong>: This defines the []{#Chapter_11.xhtml#idx_5a6920be
+.index-entry index-entry=&ldquo;health checks:retries&rdquo;}number of
+consecutive failed commands that Podman has to execute before the
+container will be marked as unhealthy.[]{.sentence-end} If a command
+executes successfully, Podman will reset the retry counter.</p>
+</li>
+<li>
+<p><strong>Interval</strong>: This[]{#Chapter_11.xhtml#idx_4bf6ef66 .index-entry
+index-entry=&ldquo;health checks:interval&rdquo;} option defines the interval
+time between health checks.[]{.sentence-end}</p>
+<p>Finding the right interval time could be really difficult and
+requires some trial and error.[]{.sentence-end} If we set it to a
+small value, then our system may spend a lot of time running the
+health checks.[]{.sentence-end} But if we set it to a large value,
+we may struggle and catch timeouts.[]{.sentence-end} This value can
+be defined with a widely used time format: <code>30s</code>{.inlineCode} or
+<code>1h5m</code>{.inlineCode}.</p>
+</li>
+<li>
+<p><strong>Start</strong> <strong>period</strong>: In this[]{#Chapter_11.xhtml#idx_494b45e3
+.index-entry index-entry=&ldquo;health checks:start period&rdquo;} period,
+Podman will ignore health check failures.[]{.sentence-end}</p>
+<p>We can consider this as a grace period that should be used to allow
+our application to be up and start replying correctly to any
+clients, as well as to our health checks.</p>
+</li>
+<li>
+<p><strong>Timeout</strong>: This defines []{#Chapter_11.xhtml#idx_cc156d6a
+.index-entry index-entry=&ldquo;health checks:timeout&rdquo;}the period of time
+the health check itself must complete before being considered
+unsuccessful.[]{.sentence-end}</p>
+<p>::: note-one
+Please note that <code>t</code>{.inlineCode}<code>imeout</code>{.inlineCode},
+<code>s</code>{.inlineCode}<code>tart period</code>{.inlineCode}<code>,</code>{.inlineCode} and
+<code>r</code>{.inlineCode}<code>etries</code>{.inlineCode} are optional, while command
+and interval must be set for a successful health check.
+:::</p>
+</li>
+</ul>
+<p>Let's take a look at a real example, supposing we want to define a
+health check for a container and run that health check manually:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run -dt --name healthtest1 --health-cmd &#39;curl http://localhost || exit 1&#39; --health-interval=0 quay.io/libpod/alpine_nginx:latest
+89e3df8713d24fb56bfe3cfd545826d605581ead6ec1bec31c3b1363428355a2
+
+$ podman ps
+CONTAINER ID  IMAGE                               COMMAND               CREATED        STATUS                   PORTS       NAMES
+89e3df8713d2  quay.io/libpod/alpine_nginx:latest  nginx -g daemon o...  7 seconds ago  Up 8 seconds (starting)  80/tcp      healthtest1</code></pre></div>
+<p>As we can see[]{#Chapter_11.xhtml#idx_d5fdb451 .index-entry
+index-entry=&ldquo;containers:monitoring, with health checks&rdquo;} from the
+previous command block, we just started
+[]{#Chapter_11.xhtml#idx_844ee3ea .index-entry
+index-entry=&ldquo;health checks:containers, monitoring&rdquo;}a brand-new container
+named <code>health</code>{.inlineCode}<code>test1</code>{.inlineCode}, defining a
+<code>healthcheck</code>{.inlineCode} command that will run the <code>curl</code>{.inlineCode}
+command on the <code>localhost</code>{.inlineCode} address inside the target
+container.[]{.sentence-end} Once the container started, it stayed on
+state <code>starting</code>{.inlineCode} until we manually ran
+<code>healthcheck</code>{.inlineCode}; let's try it with the following command.</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman healthcheck run healthtest1
+
+$ echo $?
+0
+
+$ podman ps
+CONTAINER ID  IMAGE                               COMMAND               CREATED         STATUS                   PORTS       NAMES
+89e3df8713d2  quay.io/libpod/alpine_nginx:latest  nginx -g daemon o...  41 seconds ago  Up 41 seconds (healthy)  80/tcp      healthtest1</code></pre></div>
+<p>We can see from[]{#Chapter_11.xhtml#idx_a3c55909 .index-entry
+index-entry=&ldquo;containers:monitoring, with health checks&rdquo;} the previous
+output that after manually[]{#Chapter_11.xhtml#idx_890bfe93 .index-entry
+index-entry=&ldquo;health checks:containers, monitoring&rdquo;} running
+<code>healthcheck</code>{.inlineCode}, its exit code was <code>0</code>{.inlineCode}, meaning
+that the check completed successfully and our container is marked as
+<code>healthy</code>{.inlineCode}.[]{.sentence-end} In the previous example, we
+also used the
+<code>--</code>{.inlineCode}<code>healthcheck</code>{.inlineCode}<code>-interval=0</code>{.inlineCode}
+option to actually disable the run interval and make the health check
+manual.</p>
+<p>note
+Please note that the previous example is only required when
+<code>--health-interval=0</code>{.inlineCode} is specified, preventing Podman from
+automatically scheduling the health check.[]{.sentence-end} In
+real-world usage, Podman will run the health check automatically, and
+the
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>healthcheck</code>{.inlineCode}<code> run</code>{.inlineCode}
+command will never need to be run by the user.</p>
+<p>Podman uses <strong>systemd</strong> timers[]{#Chapter_11.xhtml#idx_bc8713a6
+.index-entry index-entry=&ldquo;systemd timers&rdquo;} to schedule health
+checks.[]{.sentence-end} For this reason, it is mandatory if we want to
+schedule a health check for our containers.[]{.sentence-end} Of course,
+if some of our systems do not use systemd as the default daemon manager,
+we could use different tools, such as <code>cron</code>{.inlineCode}, to schedule
+the health checks, but these should be set manually.</p>
+<p>Let's inspect how this automatic integration with systemd works by
+creating a health check with an interval:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run -dt --name healthtest2 --health-cmd &#39;curl http://localhost || exit 1&#39; --healthcheck-interval=10s quay.io/libpod/alpine_nginx:latest
+69f3ca0ce7aa96401363db07daefe29184a1ede49f242cc4d3f8ab13a50ac5f6
+$ podman ps
+CONTAINER ID  IMAGE                               COMMAND               CREATED        STATUS                  PORTS       NAMES
+69f3ca0ce7aa  quay.io/libpod/alpine_nginx:latest  nginx -g daemon o...  4 seconds ago  Up 4 seconds (healthy)  80/tcp      healthtest2  </code></pre></div>
+<p>As we can see from the previous code block, we just started a brand-new
+container named <code>healthtest2</code>{.inlineCode}, defining the same
+<code>health-</code>{.inlineCode}<code>cmd</code>{.inlineCode} of the previous example but now
+specifying the <code>--health-interval=</code>{.inlineCode}<code>10s</code>{.inlineCode}
+option to actually schedule the check every 10 seconds.</p>
+<p>After the <code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>run</code>{.inlineCode}
+command, we also ran the
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>ps</code>{.inlineCode} command to
+actually inspect whether the health check is working properly, and as we
+can see in the output, we have the <code>healthy</code>{.inlineCode} status for our
+[]{#Chapter_11.xhtml#idx_5cc04d55 .index-entry
+index-entry=&ldquo;containers:monitoring, with health checks&rdquo;}brand-new
+container.</p>
+<p>But how does this []{#Chapter_11.xhtml#idx_ccb4d201 .index-entry
+index-entry=&ldquo;health checks:containers, monitoring&rdquo;}integration work?
+Let's grab the container ID and search for it in the following
+directory:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ ls /run/user/$UID/systemd/transient/69f3*
+/run/user/1000/systemd/transient/69f3ca0ce7aa96401363db07daefe29184a1ede49f242cc4d3f8ab13a50ac5f6-6433a92c3f3c8479.service
+/run/user/1000/systemd/transient/69f3ca0ce7aa96401363db07daefe29184a1ede49f242cc4d3f8ab13a50ac5f6-6433a92c3f3c8479.timer</code></pre></div>
+<p>The directory shown in the previous example holds all the systemd
+resources in use for our current user.[]{.sentence-end} In particular,
+we looked into the <code>transient</code>{.inlineCode} directory, which holds
+temporary unit files for our current user.</p>
+<p>When we start a container with a health check and a schedule interval,
+Podman will perform a transient setup of a systemd service and timer
+unit file.[]{.sentence-end} This means that these unit files are not
+permanent and can be lost on reboot, but recreated next time the
+container restarts.</p>
+<p>Let's inspect what is defined inside these files:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ cat /run/user/1000/systemd/transient/69f3ca0ce7aa96401363db07daefe29184a1ede49f242cc4d3f8ab13a50ac5f6-6433a92c3f3c8479.service
+# This is a transient unit file, created programmatically via the systemd API. Do not edit.
+[Unit]
+Description=/usr/bin/podman healthcheck run 69f3ca0ce7aa96401363db07daefe29184a1ede49f242cc4d3f8ab13a50ac5f6
+
+[Service]
+LogLevelMax=5
+Environment=&#34;PATH=/home/vagrant/.local/bin:/home/vagrant/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin&#34;
+ExecStart=
+ExecStart=&#34;/usr/bin/podman&#34; &#34;healthcheck&#34; &#34;run&#34; &#34;69f3ca0ce7aa96401363db07daefe29184a1ede49f242cc4d3f8ab13a50ac5f6&#34;                                            
+
+$ cat /run/user/1000/systemd/transient/69f3ca0ce7aa96401363db07daefe29184a1ede49f242cc4d3f8ab13a50ac5f6-6433a92c3f3c8479.timer
+# This is a transient unit file, created programmatically via the systemd API. Do not edit.
+[Unit]
+Description=/usr/bin/podman healthcheck run 69f3ca0ce7aa96401363db07daefe29184a1ede49f242cc4d3f8ab13a50ac5f6
+
+[Timer]
+OnUnitInactiveSec=10s
+AccuracySec=1s</code></pre></div>
+<p>As we can see []{#Chapter_11.xhtml#idx_26741156 .index-entry
+index-entry=&ldquo;containers:monitoring, with health checks&rdquo;}from the
+previous example, the service unit file
+[]{#Chapter_11.xhtml#idx_7d08ffcf .index-entry
+index-entry=&ldquo;health checks:containers, monitoring&rdquo;}contains the Podman
+<code>healthcheck</code>{.inlineCode} command, while the timer unit file defines
+the scheduling interval.</p>
+<p>Finally, just because we may want a quick way to identify healthy or
+unhealthy containers, we can use the following command to quickly output
+them:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman ps -a --filter health=healthy
+CONTAINER ID  IMAGE                               COMMAND               CREATED         STATUS                   PORTS       NAMES
+6a98d7bc448d  quay.io/libpod/alpine_nginx:latest  nginx -g daemon o...  18 seconds ago  Up 18 seconds (healthy)  80/tcp      healthtest1
+05678f1bf846  quay.io/libpod/alpine_nginx:latest  nginx -g daemon o...  5 seconds ago   Up 4 seconds (healthy)   80/tcp      healthtest2</code></pre></div>
+<p>In this example, we used the
+<code>--filter</code>{.inlineCode}<code> </code>{.inlineCode}<code>health=healthy</code>{.inlineCode}
+option to display only the healthy containers with the
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>ps</code>{.inlineCode} command.</p>
+<p>By default, when a container's health check fails repeatedly, Podman
+simply marks the container as unhealthy.[]{.sentence-end} While this is
+useful for external monitoring tools, it doesn't solve the problem of a
+stalled service.[]{.sentence-end} To bridge this gap, Podman provides
+the <code>--health-on-failure</code>{.inlineCode} flag, allowing the container
+engine to take immediate, automated action when a health check fails.</p>
+<p>This flag transforms []{#Chapter_11.xhtml#idx_5b19a711 .index-entry
+index-entry=&ldquo;containers:monitoring, with health checks&rdquo;}a passive health
+check into an active self-healing []{#Chapter_11.xhtml#idx_ae24b0b8
+.index-entry
+index-entry=&ldquo;health checks:containers, monitoring&rdquo;}mechanism.[]{.sentence-end}
+You can choose from several different strategies, depending on how you
+want the recovery to be handled:</p>
+<ul>
+<li><strong>none</strong> (default): Podman only updates the health status to
+unhealthy and takes no further action.</li>
+<li><strong>restart</strong>: Podman will automatically restart the
+container.[]{.sentence-end} This is the most common <em>self-healing</em>
+approach for services that may occasionally deadlock or leak
+resources.</li>
+<li><strong>stop</strong>: The container is simply stopped.[]{.sentence-end} This is
+useful in scenarios where a failing service might corrupt data if
+allowed to keep running.</li>
+<li><strong>kill</strong>: Podman sends a <code>SIGKILL</code>{.inlineCode} to immediately
+terminate the container process.</li>
+</ul>
+<p>To run a web server that automatically restarts itself if it becomes
+unresponsive, you would combine your health check command with the
+restart policy:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run -d \
+  --name self_healing_web \
+  --health-cmd &#34;curl -f http://localhost/ || exit 1&#34; \
+  --health-on-failure=restart \
+  nginx</code></pre></div>
+<p>Using this approach ensures that your service maintains maximum uptime
+without requiring manual intervention from a system
+administrator.[]{.sentence-end} It effectively brings a
+<strong>mini-orchestrator</strong> capability directly to the Podman CLI.</p>
+<p>While defining health checks at runtime via the CLI is flexible, the
+most robust way to ensure a service is monitored correctly is to embed
+the health check within the container image itself.[]{.sentence-end} By
+adding a <code>HEALTHCHECK</code>{.inlineCode} instruction to your Containerfile
+(or Dockerfile), you encode the <em>definition of health</em> directly into
+[]{#Chapter_11.xhtml#idx_094f3bfb .index-entry
+index-entry=&ldquo;containers:monitoring, with health checks&rdquo;}the
+application's []{#Chapter_11.xhtml#idx_0a8c99d7 .index-entry
+index-entry=&ldquo;health checks:containers, monitoring&rdquo;}metadata.</p>
+<p>This approach ensures that anyone pulling your image, whether they are a
+developer on Fedora or an automated system in a production cluster,
+benefits from the same monitoring logic without having to look up the
+correct CLI flags.</p>
+<p>Let's look at a Containerfile that builds a simple web service using
+the Red Hat <strong>Universal Base Image</strong> (<strong>UBI</strong>) and
+[]{#Chapter_11.xhtml#idx_90ad1e16 .index-entry
+index-entry=&ldquo;Universal Base Image (UBI)&quot;}includes a built-in health
+check.</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>FROM registry.access.redhat.com/ubi9/ubi-minimal
+
+# Install a simple web server (microdnf is the package manager for ubi-minimal)
+RUN microdnf install -y python3 &amp;&amp; microdnf clean all
+
+# Define the health check: try to fetch the local index every 10 seconds
+HEALTHCHECK --interval=10s --timeout=3s --start-period=5s \
+  --retries=3 CMD curl -f http://localhost:8080/ || exit 1
+
+EXPOSE 8080
+CMD [&#34;python3&#34;, &#34;-m&#34;, &#34;http.server&#34;, &#34;8080&#34;]</code></pre></div>
+<p>We learned how to troubleshoot and monitor our containers so far, but
+what about the container build process? Let's discover more about
+container build inspection in the next section.</p>
+<h1 id="h1_287" class="heading-1">Inspecting your container build results<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In <em>Chapter</em> <em>6</em>, we discussed in []{#Chapter_11.xhtml#idx_8b3cc756
+.index-entry index-entry=&ldquo;container build results:inspecting&rdquo;}detail the
+container build process and learned how to create custom images using
+Dockerfiles/Containerfiles or Buildah-native commands.[]{.sentence-end}
+We also illustrated how the second approach helps achieve a greater
+degree of control over the build workflow.</p>
+<p>This section helps provide some best practices to inspect the build
+results and understand potentially related issues.</p>
+<h2 id="h2_288" class="heading-2">Troubleshooting builds from Dockerfiles<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>When using Podman or Buildah to run a []{#Chapter_11.xhtml#idx_de246c02
+.index-entry
+index-entry=&ldquo;builds:troubleshooting, from Dockerfiles&rdquo;}build based on a
+Dockerfile/Containerfile, the build process prints all the
+instructions' outputs and related errors to
+[]{#Chapter_11.xhtml#idx_09e83c85 .index-entry
+index-entry=&ldquo;Dockerfiles:builds, triubleshooting from&rdquo;}the terminal
+<code>stdout</code>{.inlineCode}.[]{.sentence-end} For all <code>RUN</code>{.inlineCode}
+instructions, errors generated from the executed commands are propagated
+and printed for debugging purposes.</p>
+<p>Let's now try to test some potential build issues.[]{.sentence-end}
+This is not an exhaustive list of errors; the purpose is to provide a
+method to analyze the root cause.</p>
+<p>The first example shows a minimal build where a <code>RUN</code>{.inlineCode}
+instruction fails due to an error in the executed
+command.[]{.sentence-end} Errors in <code>RUN</code>{.inlineCode} instructions can
+cover a wide range of cases, but the general rule of thumb is the
+following: the executed command returns an exit code, and if this is
+non-zero, the build fails and the error, along with the exit status, is
+printed.</p>
+<p>In the next example, we use the <code>yum</code>{.inlineCode} command to install
+the <code>httpd</code>{.inlineCode} package, but we have intentionally made a typo
+in the package name to generate an error.[]{.sentence-end} Here is the
+Dockerfile transcript:</p>
+<p><code>Chapter11</code>{.inlineCode}<code>/</code>{.inlineCode}<code>RUN_command_error</code>{.inlineCode}<code>/</code>{.inlineCode}<code>Dockerfile</code>{.inlineCode}</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>FROM registry.access.redhat.com/ubi8
+
+# Update image and install httpd
+RUN yum install -y htpd &amp;&amp; yum clean all -y
+
+# Expose the default httpd port 80
+EXPOSE 80
+
+# Run the httpd
+CMD [&#34;/usr/sbin/httpd&#34;, &#34;-DFOREGROUND&#34;]</code></pre></div>
+<p>If we try to execute[]{#Chapter_11.xhtml#idx_b4dd53e4 .index-entry
+index-entry=&ldquo;builds:troubleshooting, from Dockerfiles&rdquo;} the command, we
+will get an error generated by[]{#Chapter_11.xhtml#idx_65b6b945
+.index-entry index-entry=&ldquo;Dockerfiles:builds, triubleshooting from&rdquo;} the
+<code>yum</code>{.inlineCode} command not being able to find the missing
+<code>htpd</code>{.inlineCode} package:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ buildah build -t custom_httpd .
+STEP 1/4: FROM registry.access.redhat.com/ubi8
+STEP 2/4: RUN yum install -y htpd &amp;&amp; yum clean all -y
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+
+Red Hat Universal Base Image 8 (RPMs) - BaseOS  3.9 MB/s | 796kB     00:00  
+Red Hat Universal Base Image 8 (RPMs) - AppStre 6.2 MB/s | 2.6 MB     00:00  
+Red Hat Universal Base Image 8 (RPMs) - CodeRea 171 kB/s |  16 kB     00:00  
+
+No match for argument: htpd
+Error: Unable to find a match: htpd
+error building at STEP &#34;RUN yum install -y htpd &amp;&amp; yum clean all -y&#34;: error while running runtime: exit status 1</code></pre></div>
+<p>The first two lines print the error message generated by the
+<code>yum</code>{.inlineCode} command, as in a standard command-line environment.</p>
+<p>Next, Buildah (and, in the same way, Podman) produces a message to
+inform us about the step that generated the error.[]{.sentence-end} This
+message is managed in the <code>imagebuildah</code>{.inlineCode} package by the
+stage executor, which handles, as the name indicates, the execution of
+the build stages and their statuses.[]{.sentence-end} The source code
+can be inspected in the Buildah repository on GitHub:
+<a href="https://github.com/containers/buildah/blob/main/imagebuildah/stage_executor.go" rel="external" target="_blank">[https://github.com/containers/buildah/blob/main/imagebuildah/stage_executor.go]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>The message includes the Dockerfile instruction and the generated error,
+along with the exit status.</p>
+<p>The last line includes the error and the final exit status,
+<code>1</code>{.inlineCode}, related to the <code>buildah</code>{.inlineCode} command
+execution.</p>
+<p><strong>Solution</strong>: Use the error message to find the <code>RUN</code>{.inlineCode}
+instruction that contains the failing command and fix or troubleshoot
+the command error.</p>
+<p>Another very common failure reason in builds is the missing parent
+image.[]{.sentence-end} It could be related to a misspelled repository
+name, a missing tag, or an unreachable registry.</p>
+<p>The next example shows another variation of the previous Dockerfile,
+where the image repository name is []{#Chapter_11.xhtml#idx_b00f5958
+.index-entry
+index-entry=&ldquo;builds:troubleshooting, from Dockerfiles&rdquo;}mistyped and thus
+does not exist in the remote []{#Chapter_11.xhtml#idx_3e49d9b3
+.index-entry
+index-entry=&ldquo;Dockerfiles:builds, triubleshooting from&rdquo;}registry:</p>
+<p><code>Chapter11</code>{.inlineCode}<code>/</code>{.inlineCode}<code>FROM_repo_not_found</code>{.inlineCode}<code>/</code>{.inlineCode}<code>Dockerfile</code>{.inlineCode}</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>FROM registry.access.redhat.com/ubi_8
+
+# Update image and install httpd
+RUN yum install -y httpd &amp;&amp; yum clean all -y
+
+# Expose the default httpd port 80
+EXPOSE 80
+
+# Run the httpd
+CMD [&#34;/usr/sbin/httpd&#34;, &#34;-DFOREGROUND&#34;]</code></pre></div>
+<p>When running a build from this Dockerfile, we will encounter an error
+caused by the missing image repository, as in the next example:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ buildah build -t custom_httpd .
+STEP 1/4: FROM registry.access.redhat.com/ubi_8
+Trying to pull registry.access.redhat.com/ubi_8:latest...
+error creating build container: initializing source docker://registry.access.redhat.com/ubi_8:latest: reading manifest latest in registry.access.redhat.com/ubi_8: name unknown: Repo not found</code></pre></div>
+<p>The last line []{#Chapter_11.xhtml#idx_44663f83 .index-entry
+index-entry=&ldquo;builds:troubleshooting, from Dockerfiles&rdquo;}produces a
+different error.[]{.sentence-end} It is a very easy error
+[]{#Chapter_11.xhtml#idx_81a5e943 .index-entry
+index-entry=&ldquo;Dockerfiles:builds, triubleshooting from&rdquo;}to troubleshoot
+and only requires passing a valid repository to the <code>FROM</code>{.inlineCode}
+instruction.</p>
+<p><strong>Solution</strong>: Fix the repository name and relaunch the build
+process.[]{.sentence-end} Alternatively, verify that the target registry
+holds the wanted repository.</p>
+<p>What happens if we misspell the image tag? The next Dockerfile snippet
+shows an invalid tag for the official Fedora image:</p>
+<p><code>Chapter11</code>{.inlineCode}<code>/</code>{.inlineCode}<code>FROM_tag_not_found</code>{.inlineCode}<code>/</code>{.inlineCode}<code>Dockerfile</code>{.inlineCode}</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>FROM docker.io/library/fedora:sometag
+
+# Update image and install httpd
+RUN dnf install -y httpd &amp;&amp; dnf clean all -y
+
+# Expose the default httpd port 80
+EXPOSE 80
+
+# Run the httpd
+CMD [&#34;/usr/sbin/httpd&#34;, &#34;-DFOREGROUND&#34;]</code></pre></div>
+<p>This time, when we build the image, we will get a 404 error produced by
+the registry, which is unable to find an associated manifest for the
+<code>sometag</code>{.inlineCode} tag:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ buildah build -t custom_httpd .
+STEP 1/4: FROM docker.io/library/fedora:sometag
+Trying to pull docker.io/library/fedora:sometag...
+error creating build container: initializing source docker://fedora:sometag: reading manifest sometag in docker.io/library/fedora: manifest unknown: manifest unknown</code></pre></div>
+<p>The missing tag will again generate an error that's easy to
+troubleshoot, telling us that the manifest <code>sometag</code>{.inlineCode} cannot
+be found.</p>
+<p><strong>Solution</strong>: Find []{#Chapter_11.xhtml#idx_1a015aea .index-entry
+index-entry=&ldquo;builds:troubleshooting, from Dockerfiles&rdquo;}a valid tag to be
+used for the build process.[]{.sentence-end} Use
+<code>skopeo</code>{.inlineCode}<code> list-tags</code>{.inlineCode} to find all the available
+tags in a given repository, as shown in the
+[]{#Chapter_11.xhtml#idx_4e9d38e2 .index-entry
+index-entry=&ldquo;Dockerfiles:builds, triubleshooting from&rdquo;}following
+example:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ skopeo list-tags docker://docker.io/library/fedora
+{
+    &#34;Repository&#34;: &#34;docker.io/library/fedora&#34;,
+    &#34;Tags&#34;: [
+   ...omitted output...
+        &#34;39&#34;,
+        &#34;40&#34;,
+        &#34;branched&#34;,
+        &#34;heisenbug&#34;,
+        &#34;latest&#34;,
+        &#34;modular&#34;,
+        &#34;rawhide&#34;
+    ]
+}    </code></pre></div>
+<p>Please also consider that, sometimes, the error caught from the
+<code>FROM</code>{.inlineCode} instruction is caused by the attempt to access a
+private registry without authentication.[]{.sentence-end} This is a very
+common mistake and simply requires an authenticating step on the target
+registry before any build action takes place.</p>
+<p>In the next example, we have a Dockerfile that uses an image from a
+generic private registry running using Docker Registry v2 APIs:</p>
+<p><code>Chapter11</code>{.inlineCode}<code>/</code>{.inlineCode}<code>FROM_auth_error</code>{.inlineCode}<code>/</code>{.inlineCode}<code>Dockerfile</code>{.inlineCode}</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>FROM local-registry.example.com/ubi8
+
+# Update image and install httpd
+RUN yum install -y httpd &amp;&amp; yum clean all -y
+
+# Expose the default httpd port 80
+EXPOSE 80
+
+# Run the httpd
+CMD [&#34;/usr/sbin/httpd&#34;, &#34;-DFOREGROUND&#34;]</code></pre></div>
+<p>Let's try to build the image and see what happens:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ buildah build -t test3 .
+STEP 1/4: FROM local-registry.example.com/ubi8
+Trying to pull local-registry.example.com/ubi8:latest...
+error creating build container: initializing source docker://local-registry.example.com/ubi8:latest: reading manifest latest in local-registry.example.com/ubi8: unauthorized: authentication required</code></pre></div>
+<p>In this use case, the []{#Chapter_11.xhtml#idx_3d4acff6 .index-entry
+index-entry=&ldquo;builds:troubleshooting, from Dockerfiles&rdquo;}error is very
+clear.[]{.sentence-end} We are not authorized to pull
+[]{#Chapter_11.xhtml#idx_67265065 .index-entry
+index-entry=&ldquo;Dockerfiles:builds, triubleshooting from&rdquo;}the image from
+the target registry, and thus, we need to authenticate with a valid auth
+token to access it.</p>
+<p><strong>Solution</strong>: Authenticate with
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>login</code>{.inlineCode} or
+<code>buildah</code>{.inlineCode}<code> </code>{.inlineCode}<code>login</code>{.inlineCode} to the
+registry to retrieve the token or provide an authentication file with a
+valid token.</p>
+<p>So far, we have inspected errors generated by builds with
+Dockerfiles.[]{.sentence-end} Let's now see the behavior of Buildah in
+the case of errors when using its command-line instructions.</p>
+<h2 id="h2_289" class="heading-2">Troubleshooting builds with Buildah-native commands<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>When running Buildah []{#Chapter_11.xhtml#idx_eb346c5d .index-entry
+index-entry=&ldquo;builds:troubleshooting, with Buildah-native commands&rdquo;}commands,
+it is a []{#Chapter_11.xhtml#idx_ff9c7f7e .index-entry
+index-entry=&ldquo;Buildah-native commands:builds, troubleshooting&rdquo;}common
+practice to put them inside a shell script or a pipeline.</p>
+<p>In this example, we will use Bash as the interpreter.[]{.sentence-end}
+By default, Bash executes the script up to the end, regardless of
+intermediate errors.[]{.sentence-end} This behavior can generate
+unexpected errors if a Buildah instruction inside the script
+fails.[]{.sentence-end} For this reason, the best practice is to add the
+following command at the beginning of the script:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>set -euo pipefail</code></pre></div>
+<p>The resulting configuration is a sort of safety net that blocks the
+execution of the script as soon as we encounter an error and avoids
+common mistakes, such as unset variables.</p>
+<p>The <code>set</code>{.inlineCode} command is a Bash internal instruction that
+configures the shell for script execution.[]{.sentence-end} The
+<code>-e</code>{.inlineCode} option inside this instruction tells the shell to exit
+immediately if a pipeline or a single command fails, and the
+<code>-</code>{.inlineCode}<code>o</code>{.inlineCode}<code> </code>{.inlineCode}<code>pipefail</code>{.inlineCode}
+option tells the shell to exit with the error code of the rightmost
+command of a failing pipeline that produced a non-zero exit
+code.[]{.sentence-end} The <code>-u</code>{.inlineCode} option tells the shell to
+treat unset variables and parameters as an error during parameter
+expansion.[]{.sentence-end} This keeps us safe from the missing
+expansion of unset variables.</p>
+<p>The next script embeds the logic of a simple build of an
+<code>httpd</code>{.inlineCode} server on top of the Fedora image:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>#!/bin/bash
+
+set -euo pipefail
+# Trying to pull a non-existing tag of Fedora official image
+container=$(buildah from docker.io/library/fedora:non-existing-tag)
+buildah run $container -- dnf install -y httpd; dnf clean all -y
+buildah config --cmd &#34;httpd -DFOREGROUND&#34; $container
+buildah config --port 80 $container
+buildah commit $container custom-httpd
+buildah tag custom-httpd registry.example.com/custom-httpd:v0.0.1</code></pre></div>
+<p>The image tag was []{#Chapter_11.xhtml#idx_23238e0d .index-entry
+index-entry=&ldquo;builds:troubleshooting, with Buildah-native commands&rdquo;}set
+wrong on purpose.[]{.sentence-end} Let's see
+the[]{#Chapter_11.xhtml#idx_d5ec26b8 .index-entry
+index-entry=&ldquo;Buildah-native commands:builds, troubleshooting&rdquo;} results
+of the script execution:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ ./custom-httpd.sh
+Trying to pull docker.io/library/fedora:non-existing-tag...
+initializing source docker://fedora:non-existing-tag: reading manifest non-existing-tag in docker.io/library/fedora: manifest unknown: manifest unknown</code></pre></div>
+<p>The build produces a
+<code>manifest</code>{.inlineCode}<code> </code>{.inlineCode}<code>unknown</code>{.inlineCode} error,
+just like the similar attempt with the Dockerfile.</p>
+<p>From this output, we can also learn that Buildah (and Podman, which uses
+Buildah libraries for its build implementation) produces the same
+messages as a standard build with a Dockerfile/Containerfile, with the
+only exception of not mentioning the build step, which is obvious since
+we are running free commands inside a script.</p>
+<p><strong>Solution</strong>: Find a []{#Chapter_11.xhtml#idx_994222a2 .index-entry
+index-entry=&ldquo;builds:troubleshooting, with Buildah-native commands&rdquo;}valid
+tag to be used for the build[]{#Chapter_11.xhtml#idx_0a5eb47d
+.index-entry
+index-entry=&ldquo;Buildah-native commands:builds, troubleshooting&rdquo;}
+process.[]{.sentence-end} Use
+<code>skopeo</code>{.inlineCode}<code> </code>{.inlineCode}<code>list-tags</code>{.inlineCode} to find
+all the available tags in a given repository.</p>
+<p>In this section, we have learned how to analyze and troubleshoot build
+errors, but what can we do when the errors happen at runtime inside the
+container, and we do not have the proper tools for troubleshooting
+inside the image? For this purpose, we have a native Linux tool that can
+be considered the real Swiss Army knife of namespaces:
+<code>nsenter</code>{.inlineCode}.</p>
+<h1 id="h1_290" class="heading-1">Advanced troubleshooting with nsenter<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Let's start with a dramatic []{#Chapter_11.xhtml#idx_936209c3
+.index-entry
+index-entry=&ldquo;nsenter:for advanced troubleshooting&rdquo;}sentence:
+troubleshooting issues at runtime can sometimes be complex.</p>
+<p>Also, understanding and troubleshooting runtime issues inside a
+container implies an understanding of how containers work in
+GNU/Linux.[]{.sentence-end} We explained these concepts in <em>Chapter</em>
+<em>1</em>, <em>Introduction</em> <em>to</em> <em>Container</em> <em>Technology</em>.</p>
+<p>Sometimes, troubleshooting can be very easy, and, as stated in the
+previous sections, the usage of basic commands, such as
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>logs</code>{.inlineCode},
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>inspect</code>{.inlineCode}, and
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>exec</code>{.inlineCode}, along with the
+usage of tailored health checks, can help us to gain access to the
+necessary information to complete our analysis successfully.</p>
+<p>Images nowadays tend to be as small as possible.[]{.sentence-end} What
+happens when we need more specialized troubleshooting tools, and they
+are not available inside the image? You could think to execute a shell
+process inside the container and install the missing tool, but sometimes
+(and this is a growing security pattern), package managers are not
+available inside container images, sometimes not even the
+<code>curl</code>{.inlineCode} or <code>wget</code>{.inlineCode} commands!</p>
+<p>We may feel a bit lost, but we must remember that containers are
+processes executed within dedicated namespaces and
+cgroups.[]{.sentence-end} What if we had a tool that could let us
+execute inside one or more namespaces while keeping our access to the
+host tools? That tool exists and is called <code>nsenter</code>{.inlineCode}
+(access the manual page with
+<code>man</code>{.inlineCode}<code> </code>{.inlineCode}<code>nsenter</code>{.inlineCode}).[]{.sentence-end}
+It is not affiliated with any container engine or runtime and provides a
+simple way to execute commands inside one or multiple namespaces
+unshared for a process (the main container process).</p>
+<p>Before diving into real[]{#Chapter_11.xhtml#idx_cc4e5574 .index-entry
+index-entry=&ldquo;nsenter:for advanced troubleshooting&rdquo;} examples, let's
+discuss the main <code>nsenter</code>{.inlineCode} options and arguments by running
+it with the <code>--help</code>{.inlineCode} option:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ nsenter --help
+
+Usage:
+ nsenter [options] [&lt;program&gt; [&lt;argument&gt;...]]
+
+Run a program with namespaces of other processes.
+
+Options:
+-a, --all              enter all namespaces
+-t, --target &lt;pid&gt;     target process to get namespaces from
+-m, --mount[=&lt;file&gt;]   enter mount namespace
+-u, --uts[=&lt;file&gt;]     enter UTS namespace (hostname etc)
+-i, --ipc[=&lt;file&gt;]     enter System V IPC namespace
+-n, --net[=&lt;file&gt;]     enter network namespace
+-p, --pid[=&lt;file&gt;]     enter pid namespace
+-C, --cgroup[=&lt;file&gt;]  enter cgroup namespace
+-U, --user[=&lt;file&gt;]    enter user namespace
+-T, --time[=&lt;file&gt;]    enter time namespace
+-S, --setuid &lt;uid&gt;     set uid in entered namespace
+-G, --setgid &lt;gid&gt;     set gid in entered namespace
+     --preserve-credentials do not touch uids or gids
+-r, --root[=&lt;dir&gt;]     set the root directory
+-w, --wd[=&lt;dir&gt;]       set the working directory
+-F, --no-fork          do not fork before exec&#39;ing &lt;program&gt;
+-Z, --follow-context   set SELinux context according to --target PID
+
+-h, --help             display this help
+-V, --version          display version
+
+For more details see nsenter(1).</code></pre></div>
+<p>From the output of this command, it is easy to spot that there are as
+many options as the number of available namespaces.</p>
+<p>Thanks to <code>nsenter</code>{.inlineCode}, we can capture the PID of the main
+process of a container and then execute commands (including a shell)
+inside the related namespaces.</p>
+<p>To extract the container's main PID, we can use the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman inspect &lt;Container_Name&gt; --format &#39;{{ .State.Pid }}&#39;</code></pre></div>
+<p>The output can[]{#Chapter_11.xhtml#idx_5c3afbf3 .index-entry
+index-entry=&ldquo;nsenter:for advanced troubleshooting&rdquo;} be inserted inside a
+variable for easier access:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ CNT_PID=$(podman inspect &lt;Container_Name&gt; \
+  --format &#39;{{ .State.Pid }}&#39;)</code></pre></div>
+<p>note
+<strong>Hint</strong></p>
+<p>All namespaces associated with a process are represented inside the
+<code>/</code>{.inlineCode}<code>proc</code>{.inlineCode}<code>/[</code>{.inlineCode}<code>pid</code>{.inlineCode}<code>]/ns</code>{.inlineCode}
+directory.[]{.sentence-end} This directory contains a series of symbolic
+links mapping to a namespace type and its corresponding inode
+number.[]{.sentence-end} At its core, an inode is a data structure that
+stores crucial information about a file or directory, while the inode
+number is a unique integer that identifies that specific inode within a
+given filesystem.</p>
+<p>The following command shows the namespaces associated with the process
+executed by the container:
+<code>ls</code>{.inlineCode}<code> </code>{.inlineCode}<code>-</code>{.inlineCode}<code>al</code>{.inlineCode}<code> </code>{.inlineCode}<code>/</code>{.inlineCode}<code>proc</code>{.inlineCode}<code>/$</code>{.inlineCode}<code>CNT_PID</code>{.inlineCode}<code>/ns</code>{.inlineCode}.</p>
+<p>We are going to learn how to use <code>nsenter</code>{.inlineCode} with a practical
+example.[]{.sentence-end} In the next subsection, we will try to network
+troubleshoot a database client application that returns an HTTP internal
+server error without mentioning any useful information in the
+application logs.</p>
+<h2 id="h2_291" class="heading-2">Troubleshooting a database client with nsenter<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>It is not uncommon to work []{#Chapter_11.xhtml#idx_6cb4e853
+.index-entry
+index-entry=&ldquo;database client:troubleshooting, with nsenter&rdquo;}on alpha
+applications that still do not have[]{#Chapter_11.xhtml#idx_2cefa652
+.index-entry index-entry=&ldquo;nsenter:database client, troubleshooting&rdquo;}
+logging correctly implemented or that have poor handling of log
+messages.</p>
+<p>The following example is a web application that extracts fields from a
+Postgres database and prints out a JSON object with all the
+occurrences.[]{.sentence-end} The verbosity of the application logs has
+been intentionally left to a minimum, and no connection or query errors
+are produced.</p>
+<p>Consider that, with this last example, we are simulating a real workflow
+for an application developer trying to leverage a database connection
+with the application just developed.</p>
+<p>For the sake of space, we will not print the application source code in
+the book; however, it is available at the following URL for inspection:
+<a href="https://github.com/PacktPublishing/Podman-for-DevOps-Second-Edition/tree/main/Chapter11/students" rel="external" target="_blank">[https://github.com/PacktPublishing/Podman-for-DevOps-Second-Edition/tree/main/Chapter11/students]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>The folder also contains a SQL script to populate a sample
+database.[]{.sentence-end} The application is built using the following
+Dockerfile:</p>
+<p><code>Chapter11</code>{.inlineCode}<code>/students/</code>{.inlineCode}<code>Dockerfile</code>{.inlineCode}</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>FROM docker.io/library/golang AS builder
+
+# Copy files for build
+RUN mkdir -p /go/src/students/models
+COPY go.mod main.go /go/src/students
+COPY models/main.go /go/src/students/models
+
+# Set the working directory
+WORKDIR /go/src/students
+
+# Download dependencies
+RUN go get -d -v ./...
+
+# Install the package
+RUN go build -v
+
+# Runtime image
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest as bin
+COPY --from=builder /go/src/students /usr/local/bin
+COPY entrypoint.sh /
+
+EXPOSE 8080
+
+ENTRYPOINT [&#34;/entrypoint.sh&#34;]</code></pre></div>
+<p>As usual, we are going to build the container with Buildah:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># buildah build -t students-image .</code></pre></div>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>While we are building and running this container in rootful mode to
+explore traditional network namespace segregation, it is important to
+distinguish this from how Podman handles rootless networking.</p>
+<p>Even in rootless mode, containers remain fully segregated within their
+own network namespaces.[]{.sentence-end} The key difference lies in the
+driver.[]{.sentence-end} The current default, <strong>pasta</strong>, provides a
+high-performance translation layer between the container's layer 2
+interface and the []{#Chapter_11.xhtml#idx_056e8f71 .index-entry
+index-entry=&ldquo;pasta&rdquo;}host's native layer 4 sockets.[]{.sentence-end}
+This allows for seamless network isolation and security without
+requiring elevated privileges or complex IP configurations on the
+host.[]{.sentence-end} We will explore the mechanics of pasta and other
+advanced networking features in <em><a href="/containers/tshootandmoinorcontainers/#Chapter_12.xhtml#h1_295">Chapter
+12</a>{.chapref}</em>.</p>
+<p>The container []{#Chapter_11.xhtml#idx_50cbb5f6 .index-entry
+index-entry=&ldquo;database client:troubleshooting, with nsenter&rdquo;}accepts a
+set of custom flags to define the[]{#Chapter_11.xhtml#idx_fb44db8c
+.index-entry index-entry=&ldquo;nsenter:database client, troubleshooting&rdquo;}
+database, host, port, and credentials.[]{.sentence-end} To see the help,
+simply run the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run students-image students -help
+%!(EXTRA string=students)
+-database string
+      Default application database (default &#34;students&#34;)
+-host string     Default host running the database (default &#34;localhost&#34;)
+-password string      Default database password (default &#34;password&#34;
+-port string    Default database port (default &#34;5432&#34;)
+-username string       Default database username (default &#34;admin&#34;)</code></pre></div>
+<p>We have been informed that the database is running on host
+<code>pghost.example.com</code>{.inlineCode} on port <code>5432</code>{.inlineCode}, with
+username <code>students</code>{.inlineCode} and password
+<code>Podman_R0cks</code>{.inlineCode}<code>#</code>{.inlineCode}.</p>
+<p>The next command runs the <code>students</code>{.inlineCode} web application with
+the custom arguments:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run --rm -d -p 8080:8080 \
+   --name students_app students-image \
+   students -host pghost.example.com \
+   -port 5432 \
+   -username students \
+   -password Podman_R0cks#</code></pre></div>
+<p>The container []{#Chapter_11.xhtml#idx_0cb5882a .index-entry
+index-entry=&ldquo;nsenter:database client, troubleshooting&rdquo;}starts
+successfully, and the only log message
+printed[]{#Chapter_11.xhtml#idx_31dd2889 .index-entry
+index-entry=&ldquo;database client:troubleshooting, with nsenter&rdquo;} is the
+following:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman logs students_app
+2021/12/27 21:51:31 Connecting to host pghost.example.com:5432, database students</code></pre></div>
+<p>We can finally test the application and see what happens when we run a
+query:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ curl localhost:8080/students
+Internal Server Error</code></pre></div>
+<p>The application can take some time to answer, but after a while, it will
+print an internal server error (<code>500</code>{.inlineCode}) HTTP
+message.[]{.sentence-end} We will find the reason in the following
+paragraphs.[]{.sentence-end} Logs are not useful since nothing other
+than the first boot message is printed.[]{.sentence-end} Besides, the
+container was built with the UBI minimal image, which has a small
+footprint of pre-installed binaries and no utilities for
+troubleshooting.[]{.sentence-end} We can use <code>nsenter</code>{.inlineCode} to
+inspect the container behavior, especially from a networking point of
+view, by attaching our current shell program to the container network
+namespace while keeping access to our host binaries.</p>
+<p>On a new shell, we can find out the main process PID and populate a
+variable with its value (notice the <code>sudo</code>{.inlineCode} command to run
+the inspection with elevated privileges for the running rootful
+container):</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ CNT_PID=$(sudo podman inspect students_app --format &#39;{{ .State.Pid }}&#39;)</code></pre></div>
+<p>The following example[]{#Chapter_11.xhtml#idx_17a3c908 .index-entry
+index-entry=&ldquo;nsenter:database client, troubleshooting&rdquo;} runs Bash in the
+container network []{#Chapter_11.xhtml#idx_e04ca5b7 .index-entry
+index-entry=&ldquo;database client:troubleshooting, with nsenter&rdquo;}namespace,
+while retaining all the other host namespaces (again, notice the
+<code>sudo</code>{.inlineCode} command to run <code>nsenter</code>{.inlineCode} with elevated
+privileges):</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo nsenter -t $CNT_PID -n /bin/bash</code></pre></div>
+<p>note
+Important note</p>
+<p>It is possible to run any host binary directly from
+<code>nsenter</code>{.inlineCode}.[]{.sentence-end} A command such as the following
+is perfectly legitimate:</p>
+<div class="programlisting snippet-con-info highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo nsenter -t $CNT_PID -n ip addr show</code></pre></div>
+<p>To demonstrate that we are really executing a shell attached to the
+container network namespace, we can launch the
+<code>ip</code>{.inlineCode}<code> </code>{.inlineCode}<code>addr</code>{.inlineCode}<code> </code>{.inlineCode}<code>show</code>{.inlineCode}
+command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># ip addr show
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: tap0: &lt;BROADCAST,UP,LOWER_UP&gt; mtu 65520 qdisc fq_codel state UNKNOWN group default qlen 1000
+    link/ether fa:0b:50:ed:9d:37 brd ff:ff:ff:ff:ff:ff
+    inet 10.0.2.100/24 brd 10.0.2.255 scope global tap0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::f80b:50ff:feed:9d37/64 scope link
+       valid_lft forever preferred_lft forever
+# ip route
+default via 10.0.2.2 dev tap0
+10.0.2.0/24 dev tap0 proto kernel scope link src 10.0.2.100</code></pre></div>
+<p>The first command,
+<code>ip</code>{.inlineCode}<code> </code>{.inlineCode}<code>addr</code>{.inlineCode}<code> </code>{.inlineCode}<code>show</code>{.inlineCode},
+prints the IP configuration, with a basic <code>tap0</code>{.inlineCode} interface
+connected to the host and the loopback interface.</p>
+<p>The second command,
+<code>ip</code>{.inlineCode}<code> </code>{.inlineCode}<code>route</code>{.inlineCode}, shows the default
+routing table inside the container network namespace.</p>
+<p>We can take a first[]{#Chapter_11.xhtml#idx_d330c36c .index-entry
+index-entry=&ldquo;nsenter:database client, troubleshooting&rdquo;} look at the
+active connections using []{#Chapter_11.xhtml#idx_10ac3b1e .index-entry
+index-entry=&ldquo;database client:troubleshooting, with nsenter&rdquo;}the
+<code>ss</code>{.inlineCode} tool, already available on our Fedora host:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># ss -atunp
+Netid State     Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess
+tcp   TIME-WAIT 0      0         10.0.2.100:50728   10.0.2.100:8080
+tcp   LISTEN    0      128                *:8080             *:*    users:(&#34;(&#34;students&#34;,pid=402788,fd=3))</code></pre></div>
+<p>We immediately spot that there are no established connections between
+the application and the database host, which tells us that the issue is
+probably related to routing, firewall rules, or name resolution issues
+that prevent us from reaching the host correctly.</p>
+<p>The next step is to try to manually connect to the database with the
+<code>psql</code>{.inlineCode} client tool, available from the rpm
+<code>postgresql</code>{.inlineCode} package:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># psql -h pghost.example.com
+psql: error: could not translate host name &#34;pghost.example.com&#34; to address: Name or service not known</code></pre></div>
+<p>This message is quite clear: the host is not resolved by the DNS service
+and causes the application to fail.[]{.sentence-end} To finally confirm
+it, we can run the <code>dig</code>{.inlineCode} command, which returns an
+<code>NXDOMAIN</code>{.inlineCode} error, a typical message from a DNS server to
+say that the domain cannot be resolved and does not exist:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># dig pghost.example.com
+
+; &lt;&lt;&gt;&gt; DiG 9.16.23-RH &lt;&lt;&gt;&gt; pghost.example.com
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NXDOMAIN, id: 40669
+;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;pghost.example.com.        IN    A
+
+;; Query time: 0 msec
+;; SERVER: 192.168.200.1#53(192.168.200.1)
+;; WHEN: Mon Dec 27 23:26:47 CET 2021
+;; MSG SIZE  rcvd: 47</code></pre></div>
+<p>After checking with the development team, we discovered that the
+database name had a missing dash, so it was misspelled, and the correct
+name was <code>pg-host.example.com</code>{.inlineCode}.[]{.sentence-end} We can now
+fix the issue by running the container with the correct name.</p>
+<p>We now expect to see []{#Chapter_11.xhtml#idx_0aa40190 .index-entry
+index-entry=&ldquo;nsenter:database client, troubleshooting&rdquo;}the correct
+results when launching the query[]{#Chapter_11.xhtml#idx_ebd1db6d
+.index-entry
+index-entry=&ldquo;database client:troubleshooting, with nsenter&rdquo;} again:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ curl localhost:8080/students
+{&#34;Id&#34;:10149,&#34;FirstName&#34;:&#34;Frank&#34;,&#34;MiddleName&#34;:&#34;Vincent&#34;,&#34;LastName&#34;:&#34;Zappa&#34;,&#34;Class&#34;:&#34;3A&#34;,&#34;Course&#34;:&#34;Composition&#34;}</code></pre></div>
+<p>In this example, we have focused on network namespace troubleshooting,
+but it is possible to attach our current shell program to multiple
+namespaces by simply adding the related flags.</p>
+<p>We can also simulate
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>exec</code>{.inlineCode} by running the
+command with the <code>-</code>{.inlineCode}<code>a</code>{.inlineCode} option:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo nsenter -t $CNT_PID -a /bin/bash</code></pre></div>
+<p>This command[]{#Chapter_11.xhtml#idx_5d3a4085 .index-entry
+index-entry=&ldquo;nsenter:database client, troubleshooting&rdquo;} attaches the
+process to all the unshared namespaces,
+including[]{#Chapter_11.xhtml#idx_c16bcf29 .index-entry
+index-entry=&ldquo;database client:troubleshooting, with nsenter&rdquo;} the mount
+namespace, thus giving the same filesystem tree view that is seen by
+processes inside the container.</p>
+<p>While <code>podman</code>{.inlineCode}<code> exec</code>{.inlineCode} is the standard way to
+run a process inside an existing container, it has one major limitation:
+it can only run binaries that already exist within the container's
+image.</p>
+<p>In a production environment, you are likely using <em>minimal</em> images, such
+as Red Hat's <code>ubi</code>{.inlineCode}<code>-micro</code>{.inlineCode} or
+<code>ubi</code>{.inlineCode}<code>-minimal</code>{.inlineCode}, to reduce the attack surface
+and image size.[]{.sentence-end} These images often lack basic
+troubleshooting tools such as <code>ip</code>{.inlineCode}, <code>ps</code>{.inlineCode},
+<code>tcpdump</code>{.inlineCode}, or even a shell like
+<code>bash</code>{.inlineCode}.[]{.sentence-end} If you try to use
+<code>podman</code>{.inlineCode}<code> exec</code>{.inlineCode} to troubleshoot such a
+container, you will be met with an error because the tool you need
+simply isn't there.</p>
+<h1 id="h1_292" class="heading-1">Summary<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In this chapter, we focused on container troubleshooting, trying to
+provide a set of best practices and tools to find and fix issues inside
+a container at build time or runtime.</p>
+<p>We started by showing off some common use cases during container
+execution and build stages, and their related solutions.</p>
+<p>Afterward, we introduced the concept of health checks and illustrated
+how to implement solid probes on containers to monitor their statuses,
+while showing the architectural concepts behind them.</p>
+<p>In the third section, we learned about a series of common error
+scenarios related to builds and showed how to solve them quickly.</p>
+<p>In the final section, we introduced the <code>nsenter</code>{.inlineCode} command
+and simulated a web frontend application that needed network
+troubleshooting to find out the cause of an internal server
+error.[]{.sentence-end} Thanks to this example, we learned how to
+conduct advanced troubleshooting inside the container namespaces.</p>
+<p>Now that we've done a deep dive into troubleshooting techniques for
+containers, we are ready to move on to the next chapter, where we will
+take an advanced look at networking for containers.</p>
+<h1 id="h1_293" class="heading-1">Further reading<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<ul>
+<li>Podman troubleshooting guidelines:
+<a href="https://github.com/containers/podman/blob/main/troubleshooting.md" rel="external" target="_blank">[https://github.com/containers/podman/blob/main/troubleshooting.md]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+</ul>
+<h1 id="h1_294" class="heading-1">Get This Book&rsquo;s PDF Version and Exclusive Extras<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Scan the QR code (or go to
+<a href="https://packtpub.com/unlock" rel="external" target="_blank">[packtpub.com/unlock]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}).[]{.sentence-end}
+Search for this book by name, confirm the edition, and then follow the
+steps on the page.</p>
+<p><a href="#R-image-7506ec702ea38541cd50420cfa5bc42d" class="lightbox-link"><img alt="Image" class="lazy lightbox figure-image" loading="lazy" src="images/B31467_11_1.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-7506ec702ea38541cd50420cfa5bc42d"><img alt="Image" class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_11_1.png"></a>{style=&ldquo;width:25%;&rdquo;}</p>
+<p><a href="#R-image-9ed2c7075da2da6fe9b9b1b5b32b624c" class="lightbox-link"><img alt="Image" class="lazy lightbox figure-image" loading="lazy" src="images/B31467_11_2.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-9ed2c7075da2da6fe9b9b1b5b32b624c"><img alt="Image" class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_11_2.png"></a>{style=&ldquo;width:25%;&rdquo;}</p>
+<p><em>Note: Keep your invoice handy.[]{.sentence-end} Purchases made directly
+from</em> <em>Packt</em> <em>don&rsquo;t require one.</em></p>
+<p>[]{#Chapter_12.xhtml}</p>
+<p>{.section .chapter-first}</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready for RHCE<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/install-ansible-using-uv/"><a class="padding" href="/ansible/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/playbooks/"><a class="padding" href="/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/hostname-patterns/"><a class="padding" href="/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/include-and-import-files/"><a class="padding" href="/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2/"><a class="padding" href="/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/user-and-groups/"><a class="padding" href="/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/storage-partitions-and-lvm/"><a class="padding" href="/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/services/"><a class="padding" href="/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimize-ansible-processing/"><a class="padding" href="/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux/"><a class="padding" href="/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/tags/"><a class="padding" href="/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/loops-and-items/"><a class="padding" href="/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/modules-for-troubleshooting/"><a class="padding" href="/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Using Variables In Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/when/"><a class="padding" href="/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/secure-shell-service-ssh/"><a class="padding" href="/cyber-security/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ansiblepuppetchef/"><a class="padding" href="/networking/ccna/ccna-notes-1/ansiblepuppetchef/">Ansible, Puppet, and Chef<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscoacls/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscoacls/">Cisco ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscocli/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscocli/">Cisco CLI<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/classfulipv4/"><a class="padding" href="/networking/ccna/ccna-notes-1/classfulipv4/">Classful IPv4<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/cloudarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/cloudarchitecture/">Cloud Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/controllerbasednetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/controllerbasednetworking/">Controller-Based Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/device-management-protocols/"><a class="padding" href="/networking/ccna/ccna-notes-1/device-management-protocols/">Device Management Protocols<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-config/">DHCP Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/">DHCP Snooping and ARP Inspection<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-syncronization/"><a class="padding" href="/networking/dns-and-time-syncronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ethernetlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/ethernetlans/">Ethernet LANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/extended-acls/"><a class="padding" href="/networking/ccna/ccna-notes-1/extended-acls/">Extended ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-services/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-services/">IP Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-transport-and-applications/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-transport-and-applications/">IP Transport and Applications<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6/">IPv6<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/">IPv6 Addressing and Subnetting<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6configuration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6configuration/">IPv6 Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6routing/">IPv6 Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lan-architecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/lan-architecture/">LAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/l2-etherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/l2-etherchannel/">Layer 2 Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/network-devices-and-connections/"><a class="padding" href="/networking/network-devices-and-connections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospf-concepts/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospf-concepts/">OSPF Concepts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfconfiguration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfconfiguration/">OSPF Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/">OSPF Network Types and Neighbors<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/restandjson/"><a class="padding" href="/networking/ccna/ccna-notes-1/restandjson/">REST and JSON<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/router_operation/"><a class="padding" href="/networking/ccna/ccna-notes-1/router_operation/">Router Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/routeroperation/"><a class="padding" href="/networking/ccna/ccna-notes-1/routeroperation/">ROuter Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lanrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/lanrouting/">Routing in the LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/rstpandetherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/rstpandetherchannel/">RSTP and Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/securing-network-devices/"><a class="padding" href="/networking/ccna/ccna-notes-1/securing-network-devices/">Securing Network Devices<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/security-architectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/security-architectures/">Security Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/softwaredefinedaccess/"><a class="padding" href="/networking/ccna/ccna-notes-1/softwaredefinedaccess/">Software-Defined Access (SDA)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/spanningtreeprotocol/"><a class="padding" href="/networking/ccna/ccna-notes-1/spanningtreeprotocol/">Spanning Tree Protocol<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/static-routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/static-routing/">Static Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchinterfaces/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchinterfaces/">Switch Interfaces<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switching/"><a class="padding" href="/networking/ccna/ccna-notes-1/switching/">Switching<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchport-security-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchport-security-config/">Switchport Security Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/tcpipbasic/"><a class="padding" href="/networking/ccna/ccna-notes-1/tcpipbasic/">TCP/IP Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/troubleshootingrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/troubleshootingrouting/">Troubleshooting Routing Issues<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/vlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/vlans/">VLANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wanarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/wanarchitecture/">WAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wansandiprouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/wansandiprouting/">WANs and IP Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessarchitectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessarchitectures/">Wireless Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_lan/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_lan/">Wireless LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessnetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessnetworking/">Wireless Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_security/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_security/">Wireless Security<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
+            <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/local-filesystems-and-swap/"><a class="padding" href="/storage/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/network-filesystem-nfs/"><a class="padding" href="/storage/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/partitioning-mbr-gpt/"><a class="padding" href="/storage/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/rm-filesystem-from-partition/"><a class="padding" href="/storage/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/remove-formatting-from-highlights/"><a class="padding" href="/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-docker-nginx/"><a class="padding" href="/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/you-need-to-learn-man-pages/"><a class="padding" href="/tools/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/proxmox-ha-proxy-setup/"><a class="padding" href="/tools/proxmox-ha-proxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/learning-touch-typing/"><a class="padding" href="/tools/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5" checked><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/">Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="active hidden " data-nav-id="/containers/tshootandmoinorcontainers/"><a class="padding" href="/containers/tshootandmoinorcontainers/"><i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/ansible-and-podman/"><a class="padding" href="/containers/ansible-and-podman/">Ansible and Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/intro-to-containers-1/"><a class="padding" href="/containers/intro-to-containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/convert-docker-compose-to-quadlets/"><a class="padding" href="/containers/convert-docker-compose-to-quadlets/">Convert Docker Compose to Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-links/"><a class="padding" href="/containers/podman-links/">Podman Links<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-quadlets/"><a class="padding" href="/containers/podman-quadlets/">Podman Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/">Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
+            <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users-and-Groups</span></label><a class="padding default-animation" href="/users-and-groups/">Users-and-Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
+            <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/virtualization/"><input type="checkbox" id="R-section-da8ee4406de37987b502b79e5b0a9d1c" aria-controls="R-subsections-da8ee4406de37987b502b79e5b0a9d1c"><label for="R-section-da8ee4406de37987b502b79e5b0a9d1c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualizations</span></label><a class="padding default-animation" href="/virtualization/">Virtualizations<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-da8ee4406de37987b502b79e5b0a9d1c" class="collapsible-menu">
+            <li class="" data-nav-id="/virtualization/using-vagrant-on-linux/"><a class="padding" href="/virtualization/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/booknotes/"><a class="padding" href="/booknotes/"><i class='fas fa-fw fa-book'></i> Book Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/now/"><a class="padding" href="/now/"><i class='fas fa-fw fa-clock'></i> Now<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780154752" defer></script>
+    <script src="/js/theme.js?1780154752" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

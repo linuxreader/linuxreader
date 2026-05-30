@@ -14,7 +14,7 @@ subscription-manager list --available
 ```
 
 Scroll down and copy the pool id:
-![](../images/Pasted%20image%2020260218041922.png)
+![](../../../images/Pasted%20image%2020260218041922.png)
 
 Attach to the subscription:
 ```bash
@@ -53,7 +53,7 @@ Run:
 ansible-navigator
 ```
 
-![](../images/Pasted%20image%2020260218043647.png)
+![](../../../images/Pasted%20image%2020260218043647.png)
 
 Grab additional ees:
 ```bash

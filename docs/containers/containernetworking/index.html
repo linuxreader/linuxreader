@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    <meta name="description" content="12 Implementing Container Networking Concepts Container network isolation leverages network namespaces to provide separate network stacks for each container.[]{.sentence-end} Without a container runtime, managing network interfaces across multiple namespaces would be complex.[]{.sentence-end} Podman provides flexible network management that allows users to customize how containers communicate with external and other containers inside the same host.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="12 Implementing Container Networking Concepts Container network isolation leverages network namespaces to provide separate network stacks for each container.[]{.sentence-end} Without a container runtime, managing network interfaces across multiple namespaces would be complex.[]{.sentence-end} Podman provides flexible network management that allows users to customize how containers communicate with external and other containers inside the same host.">
+    <meta property="og:url" content="http://localhost:1313/containers/containernetworking/">
+    <meta property="og:description" content="12 Implementing Container Networking Concepts Container network isolation leverages network namespaces to provide separate network stacks for each container.[]{.sentence-end} Without a container runtime, managing network interfaces across multiple namespaces would be complex.[]{.sentence-end} Podman provides flexible network management that allows users to customize how containers communicate with external and other containers inside the same host.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Containers">
+    <meta itemprop="description" content="12 Implementing Container Networking Concepts Container network isolation leverages network namespaces to provide separate network stacks for each container.[]{.sentence-end} Without a container runtime, managing network interfaces across multiple namespaces would be complex.[]{.sentence-end} Podman provides flexible network management that allows users to customize how containers communicate with external and other containers inside the same host.">
+    <meta itemprop="wordCount" content="8564">
+    <title></title>
+    <link href="/containers/containernetworking/index.md" rel="alternate" type="text/markdown" title="">
+    <link href="/images/favicon.svg?1780154752" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1780154752" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1780154752" defer></script>
+    <script src="/js/search-lunr.js?1780154752" defer></script>
+    <script src="/js/search.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1780154752";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780154752" rel="stylesheet">
+    <link href="/css/theme.css?1780154752" rel="stylesheet">
+    <link href="/css/format-html.css?1780154752" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/containers\/containernetworking\/';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:1313';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script><script defer src="https://cloud.umami.is/script.js" data-website-id="d179743c-138a-4212-8906-28f70628ef95"></script>
+<style>
+:root {
+    --MENU-S-width: 15rem;
+    --MENU-M-width: 15rem;
+    --MENU-L-width: 18rem;
+    --MAIN-MAX-width: 100rem;
+}
+html {
+  zoom: 1.2;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif,
+               "Apple Color Emoji", "Segoe UI Emoji" !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500 !important;
+  letter-spacing: 0.7px;
+}
+
+code, kbd, pre, samp {
+  font-family: "Fira Code", "Hack", "Source Code Pro", Consolas, Menlo, monospace !important;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+  <body class="mobile-support html" data-origin="/containers/containernetworking/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#h2_299">Configuring Netavark</a></li>
+    <li><a href="#h2_300">Creating a container with Podman and Netavark</a></li>
+    <li><a href="#h2_301">Managing networks with Podman</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#h2_303">Containers DNS resolution</a>
+      <ul>
+        <li><a href="#h3_304">DNS resolution on a Netavark network backend</a></li>
+      </ul>
+    </li>
+    <li><a href="#h2_305">Running containers inside a Pod</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#h2_307">Port publishing</a></li>
+    <li><a href="#h2_308">Attaching the host network</a></li>
+    <li><a href="#h2_309">Host firewall configuration</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/containers/"><span itemprop="name">Containers</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/containernetworking/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/" title="Containers (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/ansible-and-podman/" title="Ansible and Podman (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable containers" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id=""></h1>
+
+<h1 id="h1_295" class="chapterNumber">12<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<h1 id="h1_296" class="chapterTitle">Implementing Container Networking Concepts<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Container network isolation leverages network namespaces to provide
+separate network stacks for each container.[]{.sentence-end} Without a
+container runtime, managing network interfaces across multiple
+namespaces would be complex.[]{.sentence-end} Podman provides flexible
+network management that allows users to customize how containers
+communicate with external and other containers inside the same host.</p>
+<p>In this chapter, we will learn about the common configuration practices
+for managing container networking, along with the differences between
+rootless and rootful containers.</p>
+<p>In this chapter, we're going to cover the following main topics:</p>
+<ul>
+<li>Container networking and Podman setup</li>
+<li>Interconnecting two or more containers</li>
+<li>Exposing containers outside our underlying host</li>
+<li>Rootless container network behavior</li>
+</ul>
+<h1 id="h1_297" class="heading-1">Technical requirements<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>To complete this chapter, you will need a machine with a working Podman
+installation.[]{.sentence-end} As we mentioned in <em><a href="/containers/containernetworking/#Chapter_3.xhtml#h1_83">Chapter
+3</a>{.chapref}</em>, <em>Running</em> <em>the First Container</em>,
+all the examples in this book can be executed on a Fedora 40 system or
+later, but can be reproduced on your operating system of
+choice.[]{.sentence-end} The examples in this chapter will be related to
+Podman v5.x.y and its default network backend.</p>
+<p>A good understanding of the topics that were covered in <em><a href="/containers/containernetworking/#Chapter_4.xhtml#h1_114">Chapter
+4</a>{.chapref}</em>, <em>Managing Running Containers</em>,
+<em><a href="/containers/containernetworking/#Chapter_5.xhtml#h1_133">Chapter 5</a>{.chapref}</em>, <em>Implementing</em>
+<em>Storage for the Container's Data</em>, and <em><a href="/containers/containernetworking/#Chapter_9.xhtml#h1_219">Chapter
+9</a>{.chapref}</em>, <em>Pushing Images to a Container</em>
+<em>Registry</em>, will help you grasp the container networking topics we'll
+be covering.</p>
+<p>You must also have a good understanding of basic networking concepts to
+understand topics such as routing, the IP protocol, DNS, and
+firewalling.</p>
+<h1 id="h1_298" class="heading-1">Configuring container networking and setting up Podman<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In this section, we'll cover[]{#Chapter_12.xhtml#idx_9caf0586
+.index-entry index-entry=&ldquo;container networking:configuring&rdquo;} Podman's
+networking implementation and how to configure
+networks.[]{.sentence-end} Podman 4 introduced an important change to
+the network stack, which is why, considering that Podman 5 has already
+been available for a while, we are going to showcase only examples based
+on version 5's implementation.</p>
+<p>Just for your reference, Podman 3 and 4
+leveraged[]{#Chapter_12.xhtml#idx_84c95028 .index-entry
+index-entry=&ldquo;Container Network Interface (CNI)&rdquo;} the <strong>Container Network
+Interface</strong> (<strong>CNI</strong>) to manage local networks that are created on the
+host.[]{.sentence-end} The CNI provides a standard set of specifications
+and libraries to create and configure plugin-based network interfaces in
+a container environment.</p>
+<p>CNI specifications were created for Kubernetes to provide a network
+configuration format that's used by the
+container[]{#Chapter_12.xhtml#idx_3e156b02 .index-entry
+index-entry=&ldquo;Podman:setting up&rdquo;} runtime to set up the defined plugins,
+as well as an execution protocol between plugin binaries and
+runtimes.[]{.sentence-end} The advantage of this plugin-based approach
+is that vendors and communities can develop third-party plugins that
+satisfy the CNI's specifications.[]{.sentence-end} The Podman 4 network
+stack is instead based on a new project called Netavark, a
+container-native networking implementation completely written in Rust
+and designed to work with Podman.[]{.sentence-end}
+Rust[]{#Chapter_12.xhtml#idx_acd6e221 .index-entry index-entry=&ldquo;Rust&rdquo;}
+is a great programming language for developing system and network
+components, thanks to its efficient memory management and high
+performance, similar to the C programming language.[]{.sentence-end}
+Netavark provides better support for dual-stack networking (IPv4/IPv6)
+and inter-container DNS resolution, along with a tighter bond with the
+Podman project development roadmap.</p>
+<p>Starting from Podman 5, CNI support has been deprecated, and it will be
+removed from Podman 6, which is why we are not going to deep dive into
+any use case or configuration leveraging the deprecated
+and[]{#Chapter_12.xhtml#idx_7882907f .index-entry
+index-entry=&ldquo;Podman:setting up&rdquo;} removed CNI network backend.</p>
+<p>In the next subsection, we'll focus on the Netavark backend, which is
+used by Podman 5 to orchestrate container networking.</p>
+<h2 id="h2_299" class="heading-2">Configuring Netavark<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Podman 4's release introduced []{#Chapter_12.xhtml#idx_e7e240b7
+.index-entry index-entry=&ldquo;Netavark:configuring&rdquo;}Netavark as the default
+network backend.[]{.sentence-end} The advantages of Netavark are as
+follows:</p>
+<ul>
+<li>Support for dual IPv4/IPv6 stacks</li>
+<li>Support for DNS native resolution using the
+<code>aardvark-dns</code>{.inlineCode} companion project</li>
+<li>Support for rootless containers</li>
+<li>Support for different firewall implementations, even though the
+suggested one is <code>nftables</code>{.inlineCode}</li>
+</ul>
+<p>Netavark uses JSON format to configure networks; files are stored under
+the <code>/etc/containers/networks</code>{.inlineCode} path for rootful containers
+and the <code>~/.local/share/containers/storage/networks</code>{.inlineCode} path
+for rootless containers.</p>
+<p>The following configuration file shows an example network that's been
+created and managed under Netavark:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>[
+     {
+          &#34;name&#34;: &#34;netavark-example&#34;,
+          &#34;id&#34;: &#34;d98700453f78ea2fdfe4a1f77eae9e121f3cbf4b6160dab89edf9ce23cb924d7&#34;,
+          &#34;driver&#34;: &#34;bridge&#34;,
+          &#34;network_interface&#34;: &#34;podman1&#34;,
+          &#34;created&#34;: &#34;2025-02-17T21:37:59.873639361Z&#34;,
+          &#34;subnets&#34;: [
+               {
+                    &#34;subnet&#34;: &#34;10.89.4.0/24&#34;,
+                    &#34;gateway&#34;: &#34;10.89.4.1&#34;
+               }
+          ],
+          &#34;ipv6_enabled&#34;: false,
+          &#34;internal&#34;: false,
+          &#34;dns_enabled&#34;: true,
+          &#34;ipam_options&#34;: {
+               &#34;driver&#34;: &#34;host-local&#34;
+          }
+     }
+]</code></pre></div>
+<p>The first noticeable element is []{#Chapter_12.xhtml#idx_5d2c0d9e
+.index-entry index-entry=&ldquo;Netavark:configuring&rdquo;}the compact size of the
+configuration file.[]{.sentence-end} The following fields are defined:</p>
+<ul>
+<li><code>name</code>{.inlineCode}: This is the name of the network.</li>
+<li><code>id</code>{.inlineCode}: This is the unique network ID.</li>
+<li><code>driver</code>{.inlineCode}: This specifies the kind of network driver
+that's being used.[]{.sentence-end} The default is
+<code>bridge</code>{.inlineCode}.[]{.sentence-end} Netavark also supports
+MACVLAN drivers.</li>
+<li><code>network_interface</code>{.inlineCode}: This is the name of the network
+interface associated with the network.[]{.sentence-end} If
+<code>bridge</code>{.inlineCode} is the configured driver, this will be the
+name of the Linux bridge.[]{.sentence-end} In the preceding example,
+a bridge is created called <code>podman1</code>{.inlineCode}.</li>
+<li><code>created</code>{.inlineCode}: This is the network creation timestamp.</li>
+<li><code>subnets</code>{.inlineCode}: This provides a list of subnet and gateway
+objects.[]{.sentence-end} Subnets are assigned
+automatically.[]{.sentence-end} However, when you're creating a new
+network with Podman, users can provide a custom
+CIDR.[]{.sentence-end} Netavark allows you to manage multiple
+subnets and gateways on a network.</li>
+<li><code>ipv6_enabled</code>{.inlineCode}: Native support for IPv6 in Netavark can
+be enabled or disabled with this Boolean.</li>
+<li><code>internal</code>{.inlineCode}: This Boolean is used to configure a network
+for internal use only and to block external routing.</li>
+<li><code>dns_enabled</code>{.inlineCode}: This Boolean enables DNS resolution for
+the network and is served by the <code>aardvark-dns</code>{.inlineCode} daemon.</li>
+<li><code>ipam_options</code>{.inlineCode}: This object defines a series of
+<code>ipam</code>{.inlineCode} parameters.[]{.sentence-end} In the preceding
+example, the only option is the kind of IPAM driver,
+<code>host-local</code>{.inlineCode}, which behaves in a way similar to the CNI
+<code>host-local</code>{.inlineCode} plugin.</li>
+</ul>
+<p>The default Podman 4[]{#Chapter_12.xhtml#idx_b4a46d28 .index-entry
+index-entry=&ldquo;Netavark:configuring&rdquo;} network, named
+<code>podman</code>{.inlineCode}, implemented a <code>bridge</code>{.inlineCode} driver (the
+bridge's name is <code>podman0</code>{.inlineCode}).[]{.sentence-end} Netavark is
+also an executable binary that's installed by default in the
+<code>/usr/libexec/podman/netavark</code>{.inlineCode} path.[]{.sentence-end} It
+has a simple <strong>command-line interface</strong> (<strong>CLI</strong>)
+that[]{#Chapter_12.xhtml#idx_311d8aa4 .index-entry
+index-entry=&ldquo;command-line interface (CLI)&rdquo;} implements the
+<code>setup</code>{.inlineCode} and <code>teardown</code>{.inlineCode} commands, applying the
+network configuration to a given network namespace (see
+<code>man netavark</code>{.inlineCode}).[]{.sentence-end} Consider that users are
+never expected to run Netavark themselves.[]{.sentence-end} Podman does
+not provide documentation on how to do so, and deliberately installs
+into a path not in the user's default <code>$PATH</code>{.inlineCode}.</p>
+<p>Now, let's look at the effects of creating a new container with
+Netavark.</p>
+<h2 id="h2_300" class="heading-2">Creating a container with Podman and Netavark<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Netavark manages the creation of network configurations in the container
+network namespace and the host network namespace, including the creation
+of <code>veth</code>{.inlineCode} pairs and the Linux bridge that's defined in the
+config file.</p>
+<p>Before the first container is created
+in[]{#Chapter_12.xhtml#idx_28a4a2df .index-entry
+index-entry=&ldquo;containers:creating, with Podman&rdquo;} the default Podman
+network, no bridges are[]{#Chapter_12.xhtml#idx_7c9e318a .index-entry
+index-entry=&ldquo;containers:creating, with Netavark&rdquo;} created, and the host
+interfaces are the []{#Chapter_12.xhtml#idx_abc1ed9e .index-entry
+index-entry=&ldquo;Podman:container, creating&rdquo;}only ones available, along with
+the loopback[]{#Chapter_12.xhtml#idx_9ced9c8b .index-entry
+index-entry=&ldquo;Netavark:container, creating&rdquo;} interface:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># ip addr show
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host noprefixroute
+       valid_lft forever preferred_lft forever
+2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 52:54:00:95:d0:d4 brd ff:ff:ff:ff:ff:ff
+    altname enp0s5
+    altname ens5
+    inet 192.168.124.116/24 brd 192.168.124.255 scope global dynamic noprefixroute eth0
+       valid_lft 2290sec preferred_lft 2290sec
+    inet6 fe80::bde:e502:5c8d:caf/64 scope link noprefixroute
+       valid_lft forever preferred_lft forever</code></pre></div>
+<p>Let's run a new <code>n</code>{.inlineCode}<code>ginx</code>{.inlineCode} container and see
+what happens:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run -d -p 8080:80 \
+  --name nginx-netavark
+  docker.io/library/nginx</code></pre></div>
+<p>When the []{#Chapter_12.xhtml#idx_57c9ba6d .index-entry
+index-entry=&ldquo;containers:creating, with Podman&rdquo;}container
+is[]{#Chapter_12.xhtml#idx_30f72776 .index-entry
+index-entry=&ldquo;containers:creating, with Netavark&rdquo;} started, the
+<code>podman0</code>{.inlineCode} bridge and[]{#Chapter_12.xhtml#idx_e18f2943
+.index-entry index-entry=&ldquo;Podman:container, creating&rdquo;} a
+<code>veth</code>{.inlineCode} interface []{#Chapter_12.xhtml#idx_8abc7766
+.index-entry index-entry=&ldquo;Netavark:container, creating&rdquo;}appear:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># ip addr show
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host noprefixroute
+       valid_lft forever preferred_lft forever
+2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 52:54:00:95:d0:d4 brd ff:ff:ff:ff:ff:ff
+    altname enp0s5
+    altname ens5
+    inet 192.168.124.116/24 brd 192.168.124.255 scope global dynamic noprefixroute eth0
+       valid_lft 2225sec preferred_lft 2225sec
+    inet6 fe80::bde:e502:5c8d:caf/64 scope link noprefixroute
+       valid_lft forever preferred_lft forever
+3: podman0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether b2:4f:dc:12:f3:d1 brd ff:ff:ff:ff:ff:ff
+    inet 10.88.0.1/16 brd 10.88.255.255 scope global podman0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::b04f:dcff:fe12:f3d1/64 scope link proto kernel_ll
+       valid_lft forever preferred_lft forever
+4: veth0@if2: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master podman0 state UP group default qlen 1000
+    link/ether de:0f:80:78:e7:b6 brd ff:ff:ff:ff:ff:ff link-netns netns-d490e486-f67a-08f4-c066-d87915abadbf
+    inet6 fe80::ac62:f2ff:fe0b:94a3/64 scope link proto kernel_ll
+       valid_lft forever preferred_lft forever</code></pre></div>
+<p>The interesting part of <code>veth</code>{.inlineCode} pairs is that they can be
+spawned across multiple network namespaces and that a packet that's
+sent to one side of the pair is immediately received on the other side.</p>
+<p>The <code>veth0@if2</code>{.inlineCode} interface[]{#Chapter_12.xhtml#idx_7ca78a3c
+.index-entry index-entry=&ldquo;containers:creating, with Netavark&rdquo;} is linked
+to a device that resides in a []{#Chapter_12.xhtml#idx_b366a260
+.index-entry index-entry=&ldquo;Podman:container, creating&rdquo;}network
+namespace[]{#Chapter_12.xhtml#idx_00492a4c .index-entry
+index-entry=&ldquo;containers:creating, with Podman&rdquo;} named
+<code>netns-d490e486-f67a-08f4-c066-d87915abadbf</code>{.inlineCode}.[]{.sentence-end}
+Since Linux offers us the option to []{#Chapter_12.xhtml#idx_b26f4a80
+.index-entry index-entry=&ldquo;Netavark:container, creating&rdquo;}inspect network
+namespaces using the <code>ip netns</code>{.inlineCode} command, we can check
+whether the namespace exists and inspect its network stack:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># ip netns
+netns-d490e486-f67a-08f4-c066-d87915abadbf (id: 0)</code></pre></div>
+<p>note
+<strong>Hint</strong></p>
+<p>When a new network namespace is created, a file with the same name under
+<code>/var/run/netns/</code>{.inlineCode} is created.[]{.sentence-end} This file
+also has the same inode number that's pointed to by the symlink under
+<code>/proc/</code>{.inlineCode}<code>&lt;</code>{.inlineCode}<code>PID</code>{.inlineCode}<code>&gt;</code>{.inlineCode}<code>/ns/net</code>{.inlineCode}.[]{.sentence-end}
+When the file is opened, the returned file descriptor gives access to
+the namespace.</p>
+<p>The preceding command[]{#Chapter_12.xhtml#idx_381940a4 .index-entry
+index-entry=&ldquo;containers:creating, with Netavark&rdquo;} confirms that the
+network namespace exists.[]{.sentence-end} Now, we
+[]{#Chapter_12.xhtml#idx_ad91b4c8 .index-entry
+index-entry=&ldquo;Netavark:container, creating&rdquo;}want to inspect the network
+interfaces that have been defined inside it:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># ip netns exec netns-d490e486-f67a-08f4-c066-d87915abadbf ip addr show
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host proto kernel_lo
+       valid_lft forever preferred_lft forever
+2: eth0@if4: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 0a:86:78:41:11:8d brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 10.88.0.2/16 brd 10.88.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::886:78ff:fe41:118d/64 scope link proto kernel_ll
+       valid_lft forever preferred_lft forever</code></pre></div>
+<p>Previously, we[]{#Chapter_12.xhtml#idx_9dde31f5 .index-entry
+index-entry=&ldquo;containers:creating, with Podman&rdquo;} executed an
+<code>ip addr show</code>{.inlineCode} command
+that's[]{#Chapter_12.xhtml#idx_635f0fd6 .index-entry
+index-entry=&ldquo;Podman:container, creating&rdquo;} nested inside the
+<code>ip netns exec</code>{.inlineCode} command.[]{.sentence-end} The output shows
+us an interface that is on the other side of our <code>veth</code>{.inlineCode}
+pair.[]{.sentence-end} This also tells us something valuable: the
+container's IPv4 address, set to <code>10.88.0.2</code>{.inlineCode}.</p>
+<p>note
+<strong>Hint</strong></p>
+<p>When using Podman's default network with the <code>host-local</code>{.inlineCode}
+IPAM plugin, the container IP configuration is persisted to the
+<code>/run/containers/networks/ipam.db</code>{.inlineCode} file.</p>
+<p>We can also inspect the container's routing tables:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># ip netns exec netns-d490e486-f67a-08f4-c066-d87915abadbf ip route show
+default via 10.88.0.1 dev eth0 proto static metric 100
+10.88.0.0/16 dev eth0 proto kernel scope link src 10.88.0.2</code></pre></div>
+<p>All the outbound []{#Chapter_12.xhtml#idx_0bbc4f5f .index-entry
+index-entry=&ldquo;containers:creating, with Netavark&rdquo;}traffic that's
+directed to the external networks will go through the
+<code>10.88.0.1</code>{.inlineCode} address, which has been assigned to the
+<code>podman0</code>{.inlineCode} bridge.</p>
+<p>If the container is []{#Chapter_12.xhtml#idx_8fe85d12 .index-entry
+index-entry=&ldquo;containers:creating, with Podman&rdquo;}executed in rootless
+mode, the <code>bridge</code>{.inlineCode} and <code>veth</code>{.inlineCode} pairs
+will[]{#Chapter_12.xhtml#idx_d285fdd9 .index-entry
+index-entry=&ldquo;Podman:container, creating&rdquo;} be created in a rootless
+network []{#Chapter_12.xhtml#idx_7ff41866 .index-entry
+index-entry=&ldquo;Netavark:container, creating&rdquo;}namespace.</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>The rootless network namespace can be inspected in Podman 4 with the
+<code>podman unshare --rootless-netns</code>{.inlineCode} command.</p>
+<p>Finally, let's have a look at the firewall rules that Podman creates
+for forwarding.[]{.sentence-end} In a default installation using
+<code>nftables</code>{.inlineCode}, it is possible to show all firewall rules
+created by Podman:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># nft list table inet netavark</code></pre></div>
+<p>Thanks to the previous command, you should be able to see all the
+firewall rules created by Podman.</p>
+<p>In the next subsection, we will learn how to manage and customize
+container networks with the CLI tools that are offered by Podman.</p>
+<h2 id="h2_301" class="heading-2">Managing networks with Podman<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>The <code>podman network</code>{.inlineCode} command provides
+[]{#Chapter_12.xhtml#idx_8ef7cb63 .index-entry
+index-entry=&ldquo;Podman:networks, managing&rdquo;}the necessary tools for managing
+container[]{#Chapter_12.xhtml#idx_33e563b0 .index-entry
+index-entry=&ldquo;networks:managing, with Podman&rdquo;} networks.[]{.sentence-end}
+The following subcommands are available:</p>
+<ul>
+<li><code>create</code>{.inlineCode}: Creates a new network</li>
+<li><code>connect</code>{.inlineCode}: Connects to a given network</li>
+<li><code>disconnect</code>{.inlineCode}: Disconnects from a network</li>
+<li><code>exists</code>{.inlineCode}: Checks whether a network exists</li>
+<li><code>inspect</code>{.inlineCode}: Dumps the configuration of a network</li>
+<li><code>prune</code>{.inlineCode}: Removes unused networks</li>
+<li><code>reload</code>{.inlineCode}: Reloads container firewall rules</li>
+<li><code>rm</code>{.inlineCode}: Removes a given network</li>
+</ul>
+<p>In this section, you []{#Chapter_12.xhtml#idx_dacc39fe .index-entry
+index-entry=&ldquo;Podman:networks, managing&rdquo;}will learn how to create a new
+network and connect a []{#Chapter_12.xhtml#idx_5ae8f4b6 .index-entry
+index-entry=&ldquo;networks:managing, with Podman&rdquo;}container to
+it.[]{.sentence-end} For Podman 4, all the generated Netavark config
+files for rootful networks are written to
+<code>/etc/containers/networks</code>{.inlineCode}, while the config files for
+rootless networks are written to
+<code>~/.local/share/containers/storage/networks</code>{.inlineCode}.</p>
+<p>The following command creates a new network called
+<code>example1</code>{.inlineCode}:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman network create \
+  --driver bridge \
+  --gateway &#34;10.89.0.1&#34; \
+  --subnet &#34;10.89.0.0/16&#34; example1</code></pre></div>
+<p>Here, we provided <code>subnet</code>{.inlineCode} and <code>gateway</code>{.inlineCode}
+information, along with the <code>driver</code>{.inlineCode} type.[]{.sentence-end}
+The resulting network configuration is written in the aforementioned
+paths according to the kind of network backend and can be inspected with
+the <code>podman network inspect</code>{.inlineCode} command.</p>
+<p>The following output shows the configuration for the Netavark network
+backend:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman network inspect example1
+[
+     {
+          &#34;name&#34;: &#34;example1&#34;,
+          &#34;id&#34;: &#34;fec1abe68af4f46969dfb144e5ab0fe49b319a82f3774f232f86f2e2a25d25a8&#34;,
+          &#34;driver&#34;: &#34;bridge&#34;,
+          &#34;network_interface&#34;: &#34;podman1&#34;,
+          &#34;created&#34;: &#34;2025-07-11T18:49:19.994867142Z&#34;,
+          &#34;subnets&#34;: [
+               {
+                    &#34;subnet&#34;: &#34;10.89.0.0/16&#34;,
+                    &#34;gateway&#34;: &#34;10.89.0.1&#34;
+               }
+          ],
+          &#34;ipv6_enabled&#34;: false,
+          &#34;internal&#34;: false,
+          &#34;dns_enabled&#34;: true,
+          &#34;ipam_options&#34;: {
+               &#34;driver&#34;: &#34;host-local&#34;
+          },
+          &#34;containers&#34;: {}
+     }
+]</code></pre></div>
+<p>The new[]{#Chapter_12.xhtml#idx_2d6ec5a5 .index-entry
+index-entry=&ldquo;Podman:networks, managing&rdquo;} network configuration shows
+that a bridge called <code>podman1</code>{.inlineCode} will
+be[]{#Chapter_12.xhtml#idx_c3f29381 .index-entry
+index-entry=&ldquo;networks:managing, with Podman&rdquo;} created for this network
+and that containers will allocate IPs from the
+<code>10.89.0.0/16</code>{.inlineCode} subnet.</p>
+<p>The bridge naming convention with Netavark uses the
+<code>podmanN</code>{.inlineCode} pattern, with <em>N</em> <em>&gt;=</em> <em>0</em>.</p>
+<p>To list all the existing networks, we can use the
+<code>podman network ls</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman network ls
+NETWORK ID    NAME        DRIVER
+a8ca04a41ef3  example1    bridge
+2f259bab93aa  podman      bridge</code></pre></div>
+<p>Now, it's time to spin up a container that's attached to the new
+network.[]{.sentence-end} The following code creates a PostgreSQL
+database that's attached to the <code>example1</code>{.inlineCode} network:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run -d -p 5432:5432 \
+  --network example1 \
+  -e POSTGRES_PASSWORD=password \
+  --name postgres \
+  docker.io/library/postgres
+533792e9522fc65371fa6d694526400a3a01f29e6de9b2024e84895f354ed2bb</code></pre></div>
+<p>The new container receives an address from the
+<code>10.89.0.0/16</code>{.inlineCode} subnet, as shown by the
+<code>podman inspect</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman inspect postgres --format &#39;{{.NetworkSettings.Networks.example1.IPAddress}}&#39;
+10.89.0.2</code></pre></div>
+<p>With the Netavark[]{#Chapter_12.xhtml#idx_30b8d82e .index-entry
+index-entry=&ldquo;Podman:networks, managing&rdquo;} network backend, we can
+double-check this information[]{#Chapter_12.xhtml#idx_5c152065
+.index-entry index-entry=&ldquo;networks:managing, with Podman&rdquo;} by looking at
+the contents of the <code>/run/containers/networks/</code>{.inlineCode} folder:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># ls -la /run/containers/networks/
+total 28
+drwxr-xr-x. 4 root root   120 Jul 11 18:54 .
+drwx------. 4 root root    80 Jul 11 18:49 ..
+drwxr-xr-x. 2 root root    80 Jul 11 18:54 aardvark-dns
+-rw-r--r--. 1 root root     0 Jul 11 18:54 aardvark.lock
+drwxr-xr-x. 4 root root   120 Jul 11 18:54 firewall
+-rw-------. 1 root root 32768 Jul 11 18:54 ipam.db</code></pre></div>
+<p>Looking at the content of the <code>ipam.db</code>{.inlineCode} file, we find the
+following:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># cat /run/containers/networks/ipam.db | grep 10.89.0.2
+grep: (standard input): binary file matches</code></pre></div>
+<p>Podman uses BoltDB, a key-value store, to persist IPAM data that is
+saved in that binary file.</p>
+<p>We can also see that a new Linux bridge has been created:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># ip addr show podman1
+3: podman1: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether c2:74:9e:cb:4b:d4 brd ff:ff:ff:ff:ff:ff
+    inet 10.89.0.1/16 brd 10.89.255.255 scope global podman1
+       valid_lft forever preferred_lft forever
+    inet6 fe80::c074:9eff:fecb:4bd4/64 scope link proto kernel_ll
+       valid_lft forever preferred_lft forever</code></pre></div>
+<p>The new device is connected to one peer of the PostgreSQL container's
+<code>veth</code>{.inlineCode} pair:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># bridge link show
+4: veth0@eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 master podman1 state forwarding priority 32 cost 2</code></pre></div>
+<p>Here, we can see that <code>veth0@eth0</code>{.inlineCode} is attached to the
+<code>podman1</code>{.inlineCode} bridge.[]{.sentence-end} The interface has the
+following configuration:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># ip addr show veth0
+4: veth0@if2: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master podman1 state UP group default qlen 1000
+    link/ether de:0f:80:78:e7:b6 brd ff:ff:ff:ff:ff:ff link-netns netns-0a6b7e3b-1784-fb72-1598-caba854b137d
+    inet6 fe80::dc0f:80ff:fe78:e7b6/64 scope link proto kernel_ll
+       valid_lft forever preferred_lft forever</code></pre></div>
+<p>The preceding []{#Chapter_12.xhtml#idx_73aa6c8f .index-entry
+index-entry=&ldquo;Podman:networks, managing&rdquo;}output also shows that the other
+side of the <code>veth</code>{.inlineCode} pair is[]{#Chapter_12.xhtml#idx_0e2454bf
+.index-entry index-entry=&ldquo;networks:managing, with Podman&rdquo;} located in
+the container's network namespace&mdash;that is,
+<code>netns-0a6b7e3b-1784-fb72-1598-caba854b137d</code>{.inlineCode}.[]{.sentence-end}
+We can inspect the container's network configuration and confirm the IP
+address that's been allocated from the new subnet:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># ip netns exec netns-0a6b7e3b-1784-fb72-1598-caba854b137d ip addr show
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host proto kernel_lo
+       valid_lft forever preferred_lft forever
+2: eth0@if4: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 86:6f:1d:25:fd:68 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 10.89.0.2/16 brd 10.89.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::846f:1dff:fe25:fd68/64 scope link proto kernel_ll
+       valid_lft forever preferred_lft forever</code></pre></div>
+<p>It is possible to []{#Chapter_12.xhtml#idx_1287fef5 .index-entry
+index-entry=&ldquo;Podman:networks, managing&rdquo;}connect a running container to
+another network without[]{#Chapter_12.xhtml#idx_689d9df2 .index-entry
+index-entry=&ldquo;networks:managing, with Podman&rdquo;} stopping and restarting
+it.[]{.sentence-end} In this way, the container will keep its interface
+attached to the original network, and a second interface attached to the
+new network is created.[]{.sentence-end} This feature, which is useful
+for use cases such as reverse proxies, can be achieved with the
+<code>podman network connect</code>{.inlineCode} command.[]{.sentence-end} Let's
+try to run a new <code>net_example</code>{.inlineCode} container:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run -d -p 8080:80 --name net_example docker.io/library/nginx
+# podman network connect example1 net_example</code></pre></div>
+<p>To verify that the container has been attached to the new network, we
+can run the <code>podman inspect</code>{.inlineCode} command and look at the
+networks:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman inspect net_example
+[...omitted output...]
+              &#34;Networks&#34;: {
+                    &#34;example1&#34;: {
+                         &#34;EndpointID&#34;: &#34;&#34;,
+                         &#34;Gateway&#34;: &#34;10.89.0.1&#34;,
+                         &#34;IPAddress&#34;: &#34;10.89.0.3&#34;,
+                         &#34;IPPrefixLen&#34;: 16,
+                         &#34;IPv6Gateway&#34;: &#34;&#34;,
+                         &#34;GlobalIPv6Address&#34;: &#34;&#34;,
+                         &#34;GlobalIPv6PrefixLen&#34;: 0,
+                         &#34;MacAddress&#34;: &#34;5a:3b:d9:88:d6:08&#34;,
+                         &#34;NetworkID&#34;: &#34;example1&#34;,
+                         &#34;DriverOpts&#34;: null,
+                         &#34;IPAMConfig&#34;: null,
+                         &#34;Links&#34;: null,
+                         &#34;Aliases&#34;: [
+                              &#34;988abb4d2248&#34;
+                         ]
+                    },
+                    &#34;podman&#34;: {
+                         &#34;EndpointID&#34;: &#34;&#34;,
+                         &#34;Gateway&#34;: &#34;10.88.0.1&#34;,
+                         &#34;IPAddress&#34;: &#34;10.88.0.2&#34;,
+                         &#34;IPPrefixLen&#34;: 16,
+                         &#34;IPv6Gateway&#34;: &#34;&#34;,
+                         &#34;GlobalIPv6Address&#34;: &#34;&#34;,
+                         &#34;GlobalIPv6PrefixLen&#34;: 0,
+                         &#34;MacAddress&#34;: &#34;16:36:74:8c:87:37&#34;,
+                         &#34;NetworkID&#34;: &#34;podman&#34;,
+                         &#34;DriverOpts&#34;: null,
+                         &#34;IPAMConfig&#34;: null,
+                         &#34;Links&#34;: null,
+                         &#34;Aliases&#34;: [
+                              &#34;988abb4d2248&#34;
+                         ]
+                    }
+               }
+
+[…omitted output...]</code></pre></div>
+<p>Here, we can see that []{#Chapter_12.xhtml#idx_0703c79e .index-entry
+index-entry=&ldquo;Podman:networks, managing&rdquo;}the container now has two
+interfaces attached to []{#Chapter_12.xhtml#idx_2f6f8283 .index-entry
+index-entry=&ldquo;networks:managing, with Podman&rdquo;}the <code>podman</code>{.inlineCode}
+and <code>example1</code>{.inlineCode} networks, with IP addresses allocated from
+each network's subnet.</p>
+<p>To disconnect a container from a network, we can use the
+<code>podman network disconnect</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman network disconnect example1 net_example</code></pre></div>
+<p>When a network is no longer necessary and is disconnected from running
+containers, we can delete it with the <code>podman network rm</code>{.inlineCode}
+command, except for the default network named <code>podman</code>{.inlineCode}:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman network rm example1
+example1</code></pre></div>
+<p>The command's output shows the list of removed networks.</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>If the network has associated containers that are either running or have
+been stopped, the previous message will fail with <strong>Error: &quot;example1&quot;
+has associated containers with it</strong>.[]{.sentence-end} To work around
+this issue, remove or disconnect the associated containers before using
+the command.</p>
+<p>The <code>podman network rm</code>{.inlineCode} command is
+[]{#Chapter_12.xhtml#idx_e6bc7768 .index-entry
+index-entry=&ldquo;Podman:networks, managing&rdquo;}useful when we need to remove a
+specific network.[]{.sentence-end} To[]{#Chapter_12.xhtml#idx_b0ef4061
+.index-entry index-entry=&ldquo;networks:managing, with Podman&rdquo;} remove all
+unused networks, the <code>podman network prune</code>{.inlineCode} command is a
+better choice:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman network prune
+WARNING! This will remove all networks not used by at least one container.
+Are you sure you want to continue? [y/N] y
+example2
+db_network</code></pre></div>
+<p>In this section, we learned about the new Netavark network configuration
+manager and how Podman leverages its interface to simplify container
+networking.[]{.sentence-end} In a multi-tier or microservices scenario,
+we need to let containers communicate with each other.[]{.sentence-end}
+In the next section, we will learn how to manage container-to-container
+communication.</p>
+<h1 id="h1_302" class="heading-1">Interconnecting two or more containers<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Using our knowledge from the []{#Chapter_12.xhtml#idx_c2810f8a
+.index-entry index-entry=&ldquo;containers:interconnecting&rdquo;}previous section,
+we should be aware that two or more containers that have been created
+inside the same network can reach each other on the same subnet without
+the need for external routing.</p>
+<p>At the same time, two or more containers that belong to different
+networks will be able to reach each other on different subnets by
+routing packets through their networks.</p>
+<p>To demonstrate this, let's create a couple of <code>busybox</code>{.inlineCode}
+containers in the same default network:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run -d --name endpoint1 \
+  --cap-add=net_admin,net_raw busybox /bin/sleep 10000
+# podman run -d --name endpoint2 \
+  --cap-add=net_admin,net_raw busybox /bin/sleep 10000</code></pre></div>
+<p>In our lab, the two containers have <code>10.88.0.3</code>{.inlineCode}
+(<code>endpoint1</code>{.inlineCode}) and <code>10.88.0.4</code>{.inlineCode}
+(<code>endpoint2</code>{.inlineCode}) as their addresses.[]{.sentence-end} These
+two addresses are subject to change and can be collected using the
+methods illustrated previously with the
+<code>podman </code>{.inlineCode}<code>inspect</code>{.inlineCode} or the
+<code>nsenter</code>{.inlineCode} commands.</p>
+<p>Regarding capabilities customization, we added the
+<code>CAP_NET_ADMIN</code>{.inlineCode} and <code>CAP_NET_RAW</code>{.inlineCode} capabilities
+to let the containers run commands such as <code>ping</code>{.inlineCode} or
+<code>traceroute</code>{.inlineCode} seamlessly.</p>
+<p>Let's try to run a <code>traceroute</code>{.inlineCode} command from
+<code>endpoint1</code>{.inlineCode} to <code>endpoint2</code>{.inlineCode} to see the path of
+a packet:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman exec -it endpoint1 traceroute 10.88.0.4
+traceroute to 10.88.0.4 (10.88.0.4), 30 hops max, 46 byte packets
+ 1  10.88.0.4 (10.88.0.4)  0.009 ms  0.007 ms  0.005 ms</code></pre></div>
+<p>As we can see, the packet stays on the internal network and reaches the
+node without additional hops.</p>
+<p>Now, let's create a new network, <code>net1</code>{.inlineCode}, and connect a
+container called <code>endpoint3</code>{.inlineCode} to it:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman network create --driver bridge --gateway &#34;10.90.0.1&#34; --subnet &#34;10.90.0.0/16&#34; --opt isolate=false net1
+# podman run -d --name endpoint3 --network=net1 --cap-add=net_admin,net_raw busybox /bin/sleep 10000</code></pre></div>
+<p>We are explicitly[]{#Chapter_12.xhtml#idx_789937e5 .index-entry
+index-entry=&ldquo;containers:interconnecting&rdquo;} setting
+<code>--opt isolate=false</code>{.inlineCode} to disable
+isolation.[]{.sentence-end} In Podman 6 and up, by default, containers
+in one network will be unable to contact containers in another network,
+as isolation will be enforced.</p>
+<p>The container in our lab gets an IP address of
+<code>10.90.0.2</code>{.inlineCode}.[]{.sentence-end} Let's see the network path
+from <code>endpoint1</code>{.inlineCode} to <code>endpoint3</code>{.inlineCode}:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman exec -it endpoint1 traceroute 10.90.0.2
+traceroute to 10.90.0.2 (10.90.0.2), 30 hops max, 46 byte packets
+1  host.containers.internal (10.88.0.1)  0.003 ms  0.001 ms  0.006 ms
+2  10.90.0.2 (10.90.0.2)  0.001 ms  0.002 ms  0.002 ms</code></pre></div>
+<p>This time, the packet has traversed the <code>endpoint1</code>{.inlineCode}
+container's default gateway (<code>10.88.0.1</code>{.inlineCode}) and reached the
+<code>endpoint3</code>{.inlineCode} container, which is routed from the host to the
+associated <code>net1</code>{.inlineCode} Linux bridge.</p>
+<p>Connectivity across containers in the same host is very easy to manage
+and understand.[]{.sentence-end} However, we are still missing an
+important aspect for container-to-container communication: DNS
+resolution.</p>
+<p>Let's learn how to leverage this feature with Podman networks.</p>
+<h2 id="h2_303" class="heading-2">Containers DNS resolution<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Despite its many configuration[]{#Chapter_12.xhtml#idx_44805019
+.index-entry index-entry=&ldquo;containers DNS resolution&rdquo;} caveats, DNS
+resolution is a very simple concept: a service is queried to provide the
+IP address associated with a given hostname.[]{.sentence-end} The amount
+of information that can be provided by a DNS server is far richer than
+this, but we want to focus on simple IP resolution in this example.</p>
+<p>For example, let's imagine a scenario where a web application running
+on a container named <code>webapp</code>{.inlineCode} needs read/write access to a
+database running on a second container named
+<code>db</code>{.inlineCode}.[]{.sentence-end} DNS resolution enables
+<code>webapp</code>{.inlineCode} to query for the <code>db</code>{.inlineCode} container's IP
+address before contacting it.</p>
+<p>Podman's default network does not provide DNS resolution, while new
+user-created networks have DNS resolution enabled by
+default.[]{.sentence-end} On a Netavark network backend, the DNS
+resolution is delivered by <code>aarvark-dns</code>{.inlineCode}.</p>
+<p>To test this feature, we[]{#Chapter_12.xhtml#idx_b13737e1 .index-entry
+index-entry=&ldquo;containers DNS resolution&rdquo;} are going to reuse the
+<strong>students</strong> web application that we illustrated in <em><a href="/containers/containernetworking/#Chapter_11.xhtml#h1_273">Chapter
+11</a>{.chapref}</em>, <em>Troubleshooting and
+Monitoring Containers</em>, since it provides an adequate client-server
+example with a minimal REST service and a database backend based on
+PostgreSQL.</p>
+<p>note
+<strong>Note</strong></p>
+<p>The source code is available in this book's GitHub repository at
+<a href="https://github.com/PacktPublishing/Podman-for-DevOps/tree/main/Chapter11/students" rel="external" target="_blank">[https://github.com/PacktPublishing/Podman-for-DevOps/tree/main/Chapter11/students]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>In this example, the web application simply prints some output in JSON
+as the result of an HTTP <code>GET</code>{.inlineCode} that triggers a query to a
+PostgreSQL database.[]{.sentence-end} For our demonstration, we will run
+both the database and the web application on the same network.</p>
+<p>First, we must create the PostgreSQL database Pod while providing a
+generic username and password:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run -d \
+   --network net1 --name db \
+   -e POSTGRES_USER=admin \
+   -e POSTGRES_PASSWORD=password \
+   -e POSTGRES_DB=students \
+   postgres</code></pre></div>
+<p>Next, we must restore the data from the SQL dump in the
+<code>students</code>{.inlineCode} folder to the database:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># cd Chapter11/students
+# cat db.sql | podman exec -i db psql -U admin students</code></pre></div>
+<p>If you haven't already built it in the previous chapters, then you need
+to build the <code>students</code>{.inlineCode} container image and run it on the
+host:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># buildah build -t students .
+# podman run -d \
+   --network net1 \
+   -p 8080:8080 \
+   --name webapp \
+   students \
+   students -host db -port 5432 \
+   -username admin -password password</code></pre></div>
+<p>Notice the highlighted part of the command: the <code>students</code>{.inlineCode}
+application accepts the <code>-host</code>{.inlineCode}, <code>-port</code>{.inlineCode},
+<code>-username</code>{.inlineCode}, and <code>-password</code>{.inlineCode} options to
+customize the database's endpoints and credentials.</p>
+<p>We did not provide any[]{#Chapter_12.xhtml#idx_9d3e7eb0 .index-entry
+index-entry=&ldquo;containers DNS resolution&rdquo;} IP address in the
+<code>host</code>{.inlineCode} field.[]{.sentence-end} Instead, the Postgres
+container name, <code>db</code>{.inlineCode}, along with the default
+<code>5432</code>{.inlineCode} port, was used to identify the database.</p>
+<p>Also, notice that the <code>db</code>{.inlineCode} container was created without
+any kind of port mapping: we expect to directly reach the database over
+the <code>net1</code>{.inlineCode} container network, where both containers were
+created.</p>
+<p>Let's try to call the <code>students</code>{.inlineCode} application API and see
+what happens:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># curl localhost:8080/students
+{&#34;Id&#34;:10149,&#34;FirstName&#34;:&#34;Frank&#34;,&#34;MiddleName&#34;:&#34;Vincent&#34;,&#34;LastName&#34;:&#34;Zappa&#34;,&#34;Class&#34;:&#34;3A&#34;,&#34;Course&#34;:&#34;Composition&#34;}</code></pre></div>
+<p>The query worked fine, meaning that the application successfully queried
+the database.[]{.sentence-end} But how did this happen? How did it
+resolve the container IP address by only knowing its name? In the next
+section, we'll look at the behavior of the Netavark network backend.</p>
+<h3 id="h3_304" class="heading-3">DNS resolution on a Netavark network backend<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>In the[]{#Chapter_12.xhtml#idx_be211d32 .index-entry
+index-entry=&ldquo;Netavark network backend:DNS resolution&rdquo;} preceding example
+with a []{#Chapter_12.xhtml#idx_2febf738 .index-entry
+index-entry=&ldquo;DNS resolution:on Netavark network backend&rdquo;}Netavark
+network backend, the <code>aardvark-dns</code>{.inlineCode} daemon would be
+responsible for container resolution.</p>
+<p>The <code>aardvark-dns</code>{.inlineCode} project is a companion project of
+Netavark written in Rust.[]{.sentence-end} It is a lightweight
+authoritative DNS service that can work on both IPv4 A records and IPv6
+AAAA records.[]{.sentence-end} It resolves both external and internal
+requests.[]{.sentence-end} It allows containers to query other
+containers by either name or alias, which can be added during container
+creation.[]{.sentence-end} This only works for containers in the same
+network as you, though; if you are in <code>net1</code>{.inlineCode} and the
+<code>db</code>{.inlineCode} container is in <code>net2</code>{.inlineCode},
+<code>ping db</code>{.inlineCode} will not work.[]{.sentence-end} Aardvark knows
+which networks a container belongs to and only responds with containers
+in those networks.</p>
+<p>When a new network with DNS resolution enabled is created, a new
+<code>aardvark-dns</code>{.inlineCode} process is created, as shown in the
+following code:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># ps aux | grep aardvark-dns
+root        9115  0.0  0.0 344732  2584 pts/0    Sl   20:15   0:00 /usr/libexec/podman/aardvark-dns --config /run/containers/networks/aardvark-dns -p 53 run
+root       10831  0.0  0.0   6400  2044 pts/0    S+   23:36   0:00 grep --color=auto aardvark-dns</code></pre></div>
+<p>The process listens on port <code>53/udp</code>{.inlineCode} of the host network
+namespace for rootful containers and on port <code>53/udp</code>{.inlineCode} of
+the rootless network namespace for rootless containers.[]{.sentence-end}
+This setting can be changed in <code>containers.conf</code>{.inlineCode} with the
+<code>dns_bind_port</code>{.inlineCode} option, so Aardvark can still be run on
+systems that already run a DNS server.</p>
+<p>The output of the <code>ps</code>{.inlineCode} command also shows the default
+configuration path&mdash;the
+<code>/run/containers/networks/aardvark-dns</code>{.inlineCode} directory&mdash;where
+the <code>aardvark-dns</code>{.inlineCode} process stores the resolution
+configurations under different files, named after the associated
+network.[]{.sentence-end} For example, for the <code>net1</code>{.inlineCode}
+network, we will find content similar to the following:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># cat /run/containers/networks/aardvark-dns/net1
+10.90.0.1
+d397b12635f166dd92d56310cf7cc56cac148f3d46c49947d35915f570125767 10.90.0.2  endpoint3,d397b12635f1
+1d140d617b04d3697b049195b05b5e37805d9ffbadee66cfabc8df05fc0e07f5 10.90.0.3  db,1d140d617b04
+70c0dbfba6f2fd3a451d799d12df16514f6b4e05768f410fec8633093ca4d0bb 10.90.0.6  webapp,70c0dbfba6f2</code></pre></div>
+<p>The file stores IPv4[]{#Chapter_12.xhtml#idx_ea255476 .index-entry
+index-entry=&ldquo;Netavark network backend:DNS resolution&rdquo;} addresses (and
+IPv6 addresses, if present) for []{#Chapter_12.xhtml#idx_e7b4828e
+.index-entry
+index-entry=&ldquo;DNS resolution:on Netavark network backend&rdquo;}every
+container.[]{.sentence-end} Here, we can see the containers' names and
+short IDs resolved to the IPv4 addresses.</p>
+<p>The first line tells us the address where <code>aardvark-dns</code>{.inlineCode} is
+listening for incoming requests.[]{.sentence-end} Once again, it
+corresponds to the default gateway address for the network.</p>
+<p>Let's make a test by reaching another container by name:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman network create web-stack
+web-stack
+
+$ podman run -d \
+  --name web-service \
+  --net web-stack \
+  nginx:latest
+66b395cc2e4a0e0827c2ef17300b445801c27c9679b3496f6767693f2b310f6a
+
+$ podman run --rm --net web-stack fedora   sh -c &#34;curl -I http://web-service&#34;
+...
+Server: nginx/1.29.5
+Date: Fri, 13 Feb 2026 15:00:40 GMT
+Content-Type: text/html
+Content-Length: 615
+Last-Modified: Wed, 04 Feb 2026 15:12:20 GMT
+Connection: keep-alive
+ETag: &#34;698361d4-267&#34;
+Accept-Ranges: bytes
+...</code></pre></div>
+<p>Connecting []{#Chapter_12.xhtml#idx_7b2c931a .index-entry
+index-entry=&ldquo;Netavark network backend:DNS resolution&rdquo;}containers across
+the same network allows for fast []{#Chapter_12.xhtml#idx_39278ab9
+.index-entry
+index-entry=&ldquo;DNS resolution:on Netavark network backend&rdquo;}and simple
+communication across different services running in separate network
+namespaces.[]{.sentence-end} However, there are use cases where
+containers must share the same network namespace.[]{.sentence-end}
+Podman offers a solution to achieve this goal easily: Pods.</p>
+<h2 id="h2_305" class="heading-2">Running containers inside a Pod<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>The concept of a Pod comes from the Kubernetes
+architecture.[]{.sentence-end} According to the official upstream
+documentation, &quot;<em>A</em> <em>Pod</em> <em>is a group of one or more containers, with
+shared storage and network resources, and a specification for how to run
+the containers</em>.&quot;</p>
+<p>A Pod is also []{#Chapter_12.xhtml#idx_990b4f5c .index-entry
+index-entry=&ldquo;Pods&rdquo;}the smallest deployable unit in Kubernetes
+scheduling.[]{.sentence-end} All the containers inside a Pod share the
+same network, UTC, IPC, and (optionally) PID namespace.[]{.sentence-end}
+This means that all the services running on the different containers can
+refer to each other as <em>localhost</em>, while external containers will
+continue to contact the pod's IP address.[]{.sentence-end} A Pod
+receives one IP address that is shared across all the containers.</p>
+<p>There are many adoption use cases.[]{.sentence-end} A very common one is
+sidecar containers: in this case, a reverse proxy or an OAuth proxy runs
+alongside the main container to provide authentication or service mesh
+functionalities.</p>
+<p>Podman provides the basic tooling for manipulating Pods with the
+<code>podman pod</code>{.inlineCode} command.[]{.sentence-end} The following
+example shows how to create a basic Pod with two containers and
+demonstrates network namespace sharing across the two containers in the
+Pod.</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>To understand the following example, stop and remove all the running
+containers and Pods, and start with a clean environment.</p>
+<p><code>podman</code>{.inlineCode}<code> pod create</code>{.inlineCode} initializes a new, empty
+Pod from scratch:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman pod create --name example_pod</code></pre></div>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>When a new, empty Pod is created, Podman also creates an
+<code>infra</code>{.inlineCode} container, which is used to initialize the
+namespaces when the Pod is started.[]{.sentence-end} This container is
+based on the <code>k8s.gcr.io/pause</code>{.inlineCode} image for Podman 3 and a
+locally-built <code>podman-pause</code>{.inlineCode} image for Podman 4.</p>
+<p>Now, we can create two basic <code>busybox</code>{.inlineCode} containers inside
+the Pod:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman create --name c1 --pod example_pod busybox sh -c &#39;sleep 10000&#39;
+# podman create --name c2 --pod example_pod busybox sh -c &#39;sleep 10000&#39;</code></pre></div>
+<p>Finally, we can start the Pod (and its associated containers) with the
+<code>podman pod start</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman pod start example_pod</code></pre></div>
+<p>Here, we have a running []{#Chapter_12.xhtml#idx_a5706625 .index-entry
+index-entry=&ldquo;containers:running, inside Pod&rdquo;}Pod with two containers
+(plus an <code>infra</code>{.inlineCode} one) running.[]{.sentence-end}
+To[]{#Chapter_12.xhtml#idx_792d1f93 .index-entry
+index-entry=&ldquo;Pods:containers, running inside&rdquo;} verify its status, we can
+use the <code>podman pod ps</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman pod ps
+POD ID        NAME         STATUS      CREATED        INFRA ID      # OF CONTAINERS
+8f89f37b8f3b  example_pod  Degraded    8 minutes ago  95589171284a  4</code></pre></div>
+<p>With the <code>podman pod top</code>{.inlineCode} command, we can see the resources
+that are being consumed by each container in the Pod:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman pod top example_pod
+USER        PID         PPID        %CPU        ELAPSED          TTY         TIME        COMMAND
+root        1           0           0.000       10.576973703s  ?           0s          sleep 1000
+0           1           0           0.000       10.577293395s  ?           0s          /catatonit -P
+root        1           0           0.000       9.577587032s   ?           0s          sleep 1000</code></pre></div>
+<p>After creating the Pod, we can inspect the network's
+behavior.[]{.sentence-end} First, we will see that only one network
+namespace has been created in the system:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># ip netns
+netns-17b9bb67-5ce6-d533-ecf0-9d7f339e6ebd (id: 0)</code></pre></div>
+<p>Let's check the IP []{#Chapter_12.xhtml#idx_97fe2611 .index-entry
+index-entry=&ldquo;containers:running, inside Pod&rdquo;}configuration for this
+namespace and its related network []{#Chapter_12.xhtml#idx_a5c6e04e
+.index-entry index-entry=&ldquo;Pods:containers, running inside&rdquo;}stack:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># ip netns exec netns-17b9bb67-5ce6-d533-ecf0-9d7f339e6ebd ip addr show
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: eth0@if15: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default
+    link/ether a6:1b:bc:8e:65:1e brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 10.88.0.3/16 brd 10.88.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::a41b:bcff:fe8e:651e/64 scope link
+       valid_lft forever preferred_lft forever</code></pre></div>
+<p>To verify that the <code>c1</code>{.inlineCode} and <code>c2</code>{.inlineCode} containers
+share the same network namespace and are running with an IP address of
+<code>10.88.0.3</code>{.inlineCode}, we can run the same
+<code>ip addr show</code>{.inlineCode} command inside the containers using the
+<code>podman exec</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman exec -it c1 ip addr show
+# podman exec -it c2 ip addr show</code></pre></div>
+<p>These two containers are expected to return the same output as the
+<code>netns-17b9bb67-5ce6-d533-ecf0-9d7f339e6ebd</code>{.inlineCode} network
+namespace.</p>
+<p>The example[]{#Chapter_12.xhtml#idx_4e3268c2 .index-entry
+index-entry=&ldquo;containers:running, inside Pod&rdquo;} Pod
+[]{#Chapter_12.xhtml#idx_78e29f4b .index-entry
+index-entry=&ldquo;Pods:containers, running inside&rdquo;}can be stopped and removed
+with the <code>podman pod stop</code>{.inlineCode} and <code>podman pod rm</code>{.inlineCode}
+commands, respectively:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman pod stop example_pod
+# podman pod rm example_pod</code></pre></div>
+<p>We will cover Pods in more detail in <em><a href="/containers/containernetworking/#Chapter_14.xhtml#h1_330">Chapter
+14</a>{.chapref}</em>, <em>Interacting</em> <em>with systemd
+and Kubernetes</em>, where we will also discuss name resolution and
+multi-Pod orchestration.</p>
+<p>In this section, we focused on communication across two or more
+containers inside the same host or Pod, regardless of the number and
+type of networks involved.[]{.sentence-end} However, containers are a
+platform where you can run services that are generally accessed by the
+external world.[]{.sentence-end} For this reason, in the next section,
+we will investigate the best practices that can be applied to expose
+containers outside their hosts and make their services accessible to
+other clients/consumers.</p>
+<h1 id="h1_306" class="heading-1">Exposing containers outside our underlying host<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Container adoption in an enterprise company or a community project could
+be a hard thing to do, and could require time.[]{.sentence-end} For this
+reason, we may not have all the required services running as containers
+during our adoption journey.[]{.sentence-end} This is why exposing
+containers outside our underlying host could be a nice solution for
+interconnecting services that live in containers to services that run in
+the legacy world.</p>
+<p>As we briefly saw earlier in this chapter, Podman uses two different
+networking stacks, depending on the container: rootless or rootful.</p>
+<p>Even though the underlying mechanism is slightly different, depending on
+whether you are using a rootless or a rootful container, Podman's
+command-line options for exposing network ports are the same for both
+container types.</p>
+<p>note
+<strong>Good to</strong> <strong>know</strong></p>
+<p>Note that the example we are going to see in this section will be
+executed as a root user.[]{.sentence-end} This choice was necessary
+because the main objective of this section is to show you some of the
+firewall configurations that could be mandatory for exposing a container
+service to the outside world.</p>
+<p>Exposing a container starts with port publishing
+activities.[]{.sentence-end} We'll learn what this is in the next
+section.</p>
+<h2 id="h2_307" class="heading-2">Port publishing<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Port publishing[]{#Chapter_12.xhtml#idx_abd36c46 .index-entry
+index-entry=&ldquo;port publishing&rdquo;} consists of instructing Podman to create
+a temporary mapping between the container's ports and some random or
+custom host's ports.</p>
+<p>The option to instruct Podman to publish a port is really simple&mdash;it
+consists of adding the <code>-p</code>{.inlineCode} or <code>--publish</code>{.inlineCode}
+option to the <code>run</code>{.inlineCode} command.[]{.sentence-end} Let's see
+how it works:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>-p=ip:hostPort:containerPort</code></pre></div>
+<p>The previous option publishes a container's port, or range of ports, to
+the host.</p>
+<p>You can also specify the protocol:
+<code>-p 127.0.0.1:8080:80/tcp</code>{.inlineCode}.[]{.sentence-end} Podman
+supports forwarding TCP, UDP, and SCTP.[]{.sentence-end} You can do more
+than one, but it requires a separate <code>-p</code>{.inlineCode} for each.</p>
+<p>When we are specifying ranges for <code>hostPort</code>{.inlineCode} or
+<code>containerPort</code>{.inlineCode}, the numbers must be equal for both ranges.</p>
+<p>We can even omit <code>ip</code>{.inlineCode}.[]{.sentence-end} In that case, the
+port will be bound to all the IPs of the underlying
+host.[]{.sentence-end} If we do not set the host port, the container's
+port will be randomly assigned a port on the host.</p>
+<p>Let's look at an example of the port publishing option:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run -dt -p 8080:80/tcp docker.io/library/httpd
+Trying to pull docker.io/library/httpd:latest...
+Getting image source signatures
+Copying blob 41c22baa66ec done
+Copying blob dcc4698797c8 done
+Copying blob d982c879c57e done
+Copying blob a2abf6c4d29d done
+Copying blob 67283bbdd4a0 done
+Copying config dabbfbe0c5 done
+Writing manifest to image destination
+Storing signatures
+ea23dbbeac2ea4cb6d215796e225c0e7c7cf2a979862838ef4299d410c90ad44</code></pre></div>
+<p>As you can see, we have []{#Chapter_12.xhtml#idx_c85a77aa .index-entry
+index-entry=&ldquo;port publishing&rdquo;}told Podman to run a container starting
+from the <code>httpd</code>{.inlineCode} base image.[]{.sentence-end} Then, we
+allocated a pseudo-tty (<code>-t</code>{.inlineCode}) in detached mode
+(<code>-d</code>{.inlineCode}) before setting the port mapping to bind the
+underlying host port, <code>8</code>{.inlineCode}<code>08</code>{.inlineCode}<code>0</code>{.inlineCode},
+to port <code>80</code>{.inlineCode} of the container.</p>
+<p>Now, we can use the <code>podman port</code>{.inlineCode} command to see the actual
+mapping:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman ps
+CONTAINER ID  IMAGE                           COMMAND           CREATED        STATUS            PORTS               NAMES
+ea23dbbeac2e  docker.io/library/httpd:latest  httpd-foreground  3 minutes ago  Up 3 minutes ago  0.0.0.0:8080-&gt;80/tcp  ecstatic_chaplygin
+# podman port ea23dbbeac2e
+80/tcp -&gt; 0.0.0.0:8080</code></pre></div>
+<p>First, we requested the list of running containers and then passed the
+correct container ID to the <code>podman port</code>{.inlineCode}
+command.[]{.sentence-end} We can check whether the mapping is working
+properly like so:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># curl localhost:8080
+&lt;html&gt;&lt;body&gt;&lt;h1&gt;It works!&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;</code></pre></div>
+<p>Here, we executed a <code>curl</code>{.inlineCode} command from the host system,
+and it worked&mdash;the <code>httpd</code>{.inlineCode} process running in the
+container just replied to us.</p>
+<p>If we have multiple ports and we do not care about their assignment on
+the underlying host system, we can easily leverage the
+<code>-</code>{.inlineCode}<code>P</code>{.inlineCode} or <code>--publish-all</code>{.inlineCode} option
+to publish all the ports that are exposed by the
+[]{#Chapter_12.xhtml#idx_640b6121 .index-entry
+index-entry=&ldquo;port publishing&rdquo;}container image to random ports on the
+host interfaces.[]{.sentence-end} Podman will run through the container
+image's metadata, looking for the exposed ports.[]{.sentence-end} These
+ports are usually defined in a Dockerfile or Containerfile with the
+<code>EXPOSE</code>{.inlineCode} instruction, as shown here:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>EXPOSE 80/tcp
+EXPOSE 80/udp</code></pre></div>
+<p>With the previous keyword, we can instruct the container engine that
+will run the final container which network ports will be exposed and
+used by it.</p>
+<p>However, we can leverage an easy but insecure alternative, as shown in
+the next section.</p>
+<h2 id="h2_308" class="heading-2">Attaching the host network<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>To expose a container service to the []{#Chapter_12.xhtml#idx_a7ccce43
+.index-entry index-entry=&ldquo;host network:attaching&rdquo;}outside world, we can
+attach the whole host network to the running container.[]{.sentence-end}
+As you can imagine, this method could lead to the unauthorized use of
+host resources; for this reason, it is not recommended and should be
+used carefully.[]{.sentence-end} Please consider that this gives access
+to all ports on the host, including the host's localhost, on which many
+secure services will open ports.</p>
+<p>As we anticipated, attaching the host network to a running container is
+quite simple.[]{.sentence-end} Using the right Podman option, we can
+easily get rid of any network isolation:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman run --network=host -dt docker.io/library/httpd
+deea584a393ea901cf61bf0e3a5490ad0dd5c347c9574bb6de489d7a7a7e0907</code></pre></div>
+<p>Here, we used the <code>--network</code>{.inlineCode} option while specifying the
+<code>host</code>{.inlineCode} value.[]{.sentence-end} This informs Podman that we
+want to let the container attach to the host network namespace.</p>
+<p>After running the previous command, we can check that the running
+container is bound to the host system's network interfaces since it can
+access all of them:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># netstat -nap|grep ::80
+tcp6     0    0 :::80     :::*   LISTEN  37304/httpd
+# curl localhost:80
+&lt;html&gt;&lt;body&gt;&lt;h1&gt;It works!&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;</code></pre></div>
+<p>Here, executing a <code>curl</code>{.inlineCode} command from the host confirmed
+that the <code>httpd</code>{.inlineCode} process inside the container replied
+[]{#Chapter_12.xhtml#idx_3fb5d6ff .index-entry
+index-entry=&ldquo;host network:attaching&rdquo;}successfully.</p>
+<p>Let's also test the opposite case; let's connect to the container and
+check the network details:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman exec -ti deea584a393e /bin/bash
+
+root@localhost:/usr/local/apache2# apt-get update
+...
+
+root@localhost:/usr/local/apache2# apt-get install net-tools
+...
+
+root@localhost:/usr/local/apache2# ifconfig -a
+eth0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
+        inet 192.168.122.175  netmask 255.255.255.0  broadcast 192.168.122.255
+        inet6 fe80::72ec:6b16:6d2a:64c1  prefixlen 64  scopeid 0x20&lt;link&gt;
+        ether 52:54:00:66:af:72  txqueuelen 1000  (Ethernet)
+        RX packets 67861  bytes 461094320 (439.7 MiB)
+        RX errors 0  dropped 188  overruns 0  frame 0
+        TX packets 40818  bytes 3603455 (3.4 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+...
+
+root@localhost:/usr/local/apache2# netstat -nap | head -10
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name   
+tcp        0      0 127.0.0.54:53           0.0.0.0:*               LISTEN      -                  
+tcp        0      0 0.0.0.0:5355            0.0.0.0:*               LISTEN      -                  
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      -                  
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      -                  
+tcp        0      0 192.168.122.175:57518   151.101.194.132:80      TIME_WAIT   -                  
+tcp        0      0 192.168.122.175:57520   151.101.194.132:80      TIME_WAIT   -                  
+tcp        0     36 192.168.122.175:22      192.168.122.1:50736     ESTABLISHED -                  
+tcp6       0      0 :::5355                 :::*                    LISTEN      -   </code></pre></div>
+<p>As you can see, even[]{#Chapter_12.xhtml#idx_94dff9f5 .index-entry
+index-entry=&ldquo;host network:attaching&rdquo;} from the inside, we can see the
+host network and any running services and network ports.</p>
+<p>The process of exposing containers outside the underlying host does not
+stop here.[]{.sentence-end} In the next section, we'll learn how to
+complete this job.</p>
+<h2 id="h2_309" class="heading-2">Host firewall configuration<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Whether we choose to leverage []{#Chapter_12.xhtml#idx_e71fb5bb
+.index-entry index-entry=&ldquo;host firewall configuration&rdquo;}port publishing
+or attach the host network to the container, the process of exposing
+containers outside the underlying host does not stop here&mdash;we have
+reached the base operating system of our host machine.[]{.sentence-end}
+In most cases, we will also need to allow the incoming connections to
+flow in the host's underlying machine, which will be interacting with
+the system firewall.</p>
+<p>The following example shows a non-comprehensive way to interact with the
+base operating system firewall.[]{.sentence-end} If we're using a
+Fedora operating system or any other Linux distribution that's
+leveraging <code>f</code>{.inlineCode}<code>irewalld</code>{.inlineCode} as its firewall
+daemon manager, Podman will automatically allow traffic through the
+firewall.[]{.sentence-end} No configuration of <code>firewalld</code>{.inlineCode}
+is required for port forwarding.</p>
+<p>note
+<strong>Good to</strong> <strong>know</strong></p>
+<p><code>firewalld</code>{.inlineCode} is a[]{#Chapter_12.xhtml#idx_2f626037
+.index-entry index-entry=&ldquo;firewalld&rdquo;} firewall service daemon that
+provides us with an easy and fast way to customize the system
+firewall.[]{.sentence-end} <code>firewalld</code>{.inlineCode} is dynamic, which
+means that it can create, change, and delete the firewall rules without
+restarting the firewall daemon each time a change is applied.</p>
+<p>As we have seen, the process of exposing the container's services is
+quite simple but should be performed with a bit of consciousness and
+attention: opening a network port to the outside world should always be
+done carefully.</p>
+<h1 id="h1_310" class="heading-1">Rootless container network behavior<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>As we saw in the previous sections, Podman
+[]{#Chapter_12.xhtml#idx_fae9bede .index-entry
+index-entry=&ldquo;rootless container network:behavior&rdquo;}relies on Netavark for
+containers running as root and has the privileges to alter network
+configurations in the host network namespace.[]{.sentence-end} Until
+version 4.3.z, Podman relied solely on the <code>slirp4netns</code>{.inlineCode}
+project for rootless containers networking.[]{.sentence-end} This
+approach allows users to create container network configurations without
+the need for root privileges.[]{.sentence-end} With
+<code>slirp4netns</code>{.inlineCode}, the network interfaces are created inside a
+rootless network namespace where the standard user has sufficient
+privileges.[]{.sentence-end} This approach allows you to transparently
+and flexibly manage rootless container networking.</p>
+<p>Podman version 4.4.0
+(<a href="https://github.com/containers/podman/blob/main/RELEASE_NOTES.md#440" rel="external" target="_blank">[https://github.com/containers/podman/blob/main/RELEASE_NOTES.md#440]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;})
+introduced support for a new networking mode based on the
+<code>pasta</code>{.inlineCode} utility (with lowercase <em>p</em>).[]{.sentence-end} This
+new networking mode also became the default mode since Podman 5.0.0, and
+we will cover it extensively in this chapter.</p>
+<p>Let's start with some technical background: the
+[]{#Chapter_12.xhtml#idx_9c91af90 .index-entry index-entry=&ldquo;pasta&rdquo;}name
+<em>pasta</em> is an acronym of <strong>Pack A Subtle Tap Abstraction</strong> and is a
+variant []{#Chapter_12.xhtml#idx_02a7e905 .index-entry
+index-entry=&ldquo;passt utility:reference link&rdquo;}of the <strong>passt</strong> utility (an
+acronym for <strong>Plug A Simple Socket Transport</strong>).[]{.sentence-end} The
+project's home page
+(<a href="https://passt.top/passt/about/" rel="external" target="_blank">[https://passt.top/passt/about/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;})
+provides good insights into their behavior and their motivation.</p>
+<p>The <code>passt</code>{.inlineCode} utility was created to provide full network
+connectivity for virtual machines in user mode without elevated
+privileges by providing a translation layer between Layer-2 network
+interfaces and Layer-4 sockets on the host.[]{.sentence-end} It supports
+QEMU virtualization, and it is a smart and performant way to give the
+illusion, from a networking perspective, that application processes
+running on the guest virtual machine are running on the local host (that
+is, the hypervisor).</p>
+<p>The same behavior happens with <code>pasta</code>{.inlineCode}, which is a variant
+to provide unprivileged connectivity from within a network namespace
+and, therefore, a perfect replacement for the <code>slirp4netns</code>{.inlineCode}
+utility used in previous versions of Podman.[]{.sentence-end} The
+general behavior is the same as in <code>passt</code>{.inlineCode}, with
+<code>pasta</code>{.inlineCode} managing the translation from Layer-2 within the
+container network namespace to Layer-4 sockets in the host.</p>
+<p>Both <code>pasta</code>{.inlineCode} and <code>passt</code>{.inlineCode} do not need root
+privileges and do not need the <code>CAP_NET_RAW</code>{.inlineCode} or
+<code>CAP_NET_ADMIN</code>{.inlineCode} capabilities.</p>
+<p>When running rootful containers, we create a <code>veth</code>{.inlineCode} pair
+between the container network namespace and the host.[]{.sentence-end}
+This operation requires <code>CAP_NET_ADMIN</code>{.inlineCode} capabilities that
+are usually not allowed to unprivileged users for security
+reasons.[]{.sentence-end} <code>pasta</code>{.inlineCode} creates a tap interface
+in the container network namespace and maps process traffic leaving the
+container to Layer-4 sockets.[]{.sentence-end} This approach is similar
+to the one previously implemented by <code>slirp4netns</code>{.inlineCode}, but
+doesn't require implementing a full TCP/IP stack between the container
+and the host for traffic translation, which can also impact
+performance.[]{.sentence-end} Please consider also that both
+<code>slirp4netns</code>{.inlineCode} and <code>pasta</code>{.inlineCode} are slower than root
+networking with <code>veth</code>{.inlineCode} pairs, but <code>pasta</code>{.inlineCode} is
+much faster than <code>slirp4netns</code>{.inlineCode} and almost as fast as root
+in some cases.</p>
+<p>For every new rootless container, a new <code>pasta</code>{.inlineCode} process is
+executed on the host.[]{.sentence-end} The process creates a network
+namespace for the container under
+<code>/run/user/</code>{.inlineCode}<code>&lt;</code>{.inlineCode}<code>user</code>{.inlineCode}<code>_ID</code>{.inlineCode}<code>&gt;</code>{.inlineCode}<code>/netns</code>{.inlineCode},
+and all IPv4 and IPv6 addresses and routes are copied from the
+host.[]{.sentence-end} The <code>tap</code>{.inlineCode} interface created inside
+the container inherits the same []{#Chapter_12.xhtml#idx_a0c4393b
+.index-entry index-entry=&ldquo;rootless container network:behavior&rdquo;}name as
+the host primary interface, and also port forwarding preserves the
+original source IP address.</p>
+<p>Such a configuration in <code>pasta</code>{.inlineCode} is different from the
+previous behavior of <code>slirp4netns</code>{.inlineCode}, where a
+<code>tap0</code>{.inlineCode} device was created with the
+<code>10.0.2.100/24</code>{.inlineCode} address (from the default
+<code>slirp4netns 10.0.2.0/24</code>{.inlineCode} subnet).[]{.sentence-end} It also
+avoids any[]{#Chapter_12.xhtml#idx_5459d4b4 .index-entry
+index-entry=&ldquo;network address translation (NAT)&rdquo;} kind of <strong>network</strong>
+<strong>address</strong> <strong>translation</strong> (<strong>NAT</strong>), which improves performance.</p>
+<p>The following example demonstrates the network behavior of a rootless
+<code>busybox</code>{.inlineCode} container:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run -i busybox sh -c &#39;ip addr show&#39;
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 65520 qdisc fq_codel qlen 1000
+    link/ether 9a:36:ed:16:4d:11 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.122.94/24 brd 192.168.122.255 scope global noprefixroute eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::9836:edff:fe16:4d11/64 scope link tentative
+       valid_lft forever preferred_lft forever</code></pre></div>
+<p>To demonstrate that the []{#Chapter_12.xhtml#idx_3294fc48 .index-entry
+index-entry=&ldquo;rootless container network:behavior&rdquo;}container inherits the
+same IP address and interface name of the host, let's inspect the
+host's network configuration:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ ip addr show
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host noprefixroute
+       valid_lft forever preferred_lft forever
+2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 52:54:00:69:94:4d brd ff:ff:ff:ff:ff:ff
+    altname enp1s0
+    inet 192.168.122.94/24 brd 192.168.122.255 scope global dynamic noprefixroute eth0
+       valid_lft 2786sec preferred_lft 2786sec
+    inet6 fe80::e93b:f1db:1357:84fa/64 scope link noprefixroute
+       valid_lft forever preferred_lft forever</code></pre></div>
+<p>A common misconception is that rootless containers lack independent IP
+addresses.[]{.sentence-end} In reality, rootless containers do have
+unique IPs, but they exist within a private network namespace managed by
+the rootless user.[]{.sentence-end} This creates a secure <em>bubble</em> where
+containers can talk to one another, but the host machine cannot directly
+ping or access those internal IPs.</p>
+<p>To enable communication between your rootless services, you generally
+have three primary strategies:</p>
+<ul>
+<li>The simplest way to connect containers is to group them into a
+Pod.[]{.sentence-end} Containers within the same Pod share the same
+network namespace, meaning they share a single IP address and can
+communicate with each other over the localhost interface.</li>
+<li>When you attach containers to a custom bridge network, Podman
+manages their interfaces within the rootless network
+namespace.[]{.sentence-end} In this environment, each container
+receives its own IP address and can resolve other containers by
+their name.</li>
+<li>If you need the host or external users to access a containerized
+service, you must use port mapping (the <code>-p</code>{.inlineCode}
+flag).[]{.sentence-end} This creates a bridge between a port on the
+host (for example, <code>8080</code>{.inlineCode}) and a port inside the
+container's private namespace (for example, <code>80</code>{.inlineCode}).</li>
+</ul>
+<p>Using a Podman 4 []{#Chapter_12.xhtml#idx_53685500 .index-entry
+index-entry=&ldquo;rootless container network:behavior&rdquo;}network backend,
+let's quickly focus on the second scenario, where two Pods are attached
+to a rootless network.[]{.sentence-end} First, we need to create the
+network and attach a couple of test containers:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman network create rootless-net
+$ podman run -d --net rootless-net --name endpoint1 --cap-add=net_admin,net_raw busybox /bin/sleep 10000
+$ podman run -d --net rootless-net --name endpoint2 --cap-add=net_admin,net_raw busybox /bin/sleep 10000</code></pre></div>
+<p>Let's try to ping the <code>endpoint2</code>{.inlineCode} container from
+<code>endpoint1</code>{.inlineCode}:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman exec -it endpoint1 ping -c1 endpoint2
+PING endpoint1 (10.89.2.5): 56 data bytes
+64 bytes from 10.89.2.5: seq=0 ttl=64 time=0.023 ms
+--- endpoint1 ping statistics ---
+1 packets transmitted, 1 packets received, 0% packet loss
+round-trip min/avg/max = 0.023/0.023/0.023 ms</code></pre></div>
+<p>These two containers can communicate on the common network and have
+different IPv4 addresses.[]{.sentence-end} To prove this, we can inspect
+the contents of the <code>aardvark-dns</code>{.inlineCode} configuration for the
+rootless containers:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ cat /run/user/1000/containers/networks/aardvark-dns/rootless-net
+10.89.2.1
+fe27f8d653384fc191d5c580d18d874d480a7e8ef74c2626ae21b118eedbf1e6 10.89.2.4  endpoint1,fe27f8d65338
+19a4307516ce1ece32ce58753e70da5e5abf9cf70feea7b981917ae399ef934d 10.89.2.5  endpoint2,19a4307516ce</code></pre></div>
+<p>To prove that rootless networking still follows standard Linux
+networking principles, we can peek inside the private network namespace
+that Podman manages for your user.[]{.sentence-end} This namespace
+contains the virtual <code>bridge</code>{.inlineCode} and <code>veth</code>{.inlineCode} pairs
+that allow your containers to talk to one another.</p>
+<p>It is important to []{#Chapter_12.xhtml#idx_57e6f581 .index-entry
+index-entry=&ldquo;rootless container network:behavior&rdquo;}understand that these
+interfaces are entirely private to your user session.[]{.sentence-end}
+Unlike rootful Podman, you will not see these <code>veth</code>{.inlineCode}
+interfaces if you run <code>ip link</code>{.inlineCode} on your host
+machine.[]{.sentence-end} Because a non-privileged user cannot modify
+the host's networking stack, these pairs exist only within the isolated
+rootless namespace, safely tucked away from the rest of the system.</p>
+<p>To see these <em>invisible</em> interfaces, we must use the
+<code>podman unshare</code>{.inlineCode} command to enter the rootless network
+namespace:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman unshare --rootless-netns ip link | grep &#39;podman&#39;
+3: podman3: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+4: veth0@if2: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master podman3 state UP mode DEFAULT group default qlen 1000
+5: veth1@if2: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master podman3 state UP mode DEFAULT group default qlen 1000</code></pre></div>
+<p>Another limitation of rootless containers is the <code>ping</code>{.inlineCode}
+command.[]{.sentence-end} Usually, on Linux distributions, standard
+non-root users lack the <code>CAP_NET_RAW</code>{.inlineCode} security
+capability.[]{.sentence-end} This inhibits the execution of the
+<code>ping</code>{.inlineCode} command, which leverages the send/receive operations
+of ICMP packets.[]{.sentence-end} If we want to use the
+<code>ping</code>{.inlineCode} command in a rootless container, we can enable the
+missing security capability through the <code>sysctl</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># sysctl -w &#34;net.ipv4.ping_group_range=0 2000000&#34;</code></pre></div>
+<p>Note that this could allow any process that will be executed by a user
+on these groups to send <code>ping</code>{.inlineCode} packets.</p>
+<p>Users running rootless []{#Chapter_12.xhtml#idx_d5cf0772 .index-entry
+index-entry=&ldquo;rootless container network:behavior&rdquo;}containers executed
+with <code>pasta</code>{.inlineCode} could find it necessary to work in legacy mode
+with the same network configuration of
+<code>slirp4netns</code>{.inlineCode}.[]{.sentence-end} For those use cases, it is
+possible to run a container with the following backward-compatible
+configuration:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run \     --network=pasta:--ipv4-only,-a,10.0.2.0,-n,24,-g,10.0.2.2,--dns-forward,10.0.2.3,-m,1500,--no-ndp,--no-dhcpv6,--no-dhcp --rm -d busybox sleep 1000</code></pre></div>
+<p>By using <code>pasta</code>{.inlineCode}, users can customize the behavior of the
+container by tweaking various parameters.[]{.sentence-end} For example,
+it is possible to retain the default configuration while passing a
+custom MTU on the container interface, as in the following example:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run --network=pasta:-m,1500 \
+--rm -d busybox sleep 1000</code></pre></div>
+<p>Also, port mapping works in a similar way to rootful
+containers.[]{.sentence-end} The biggest change is that we do not have
+permission to update the firewall, so it may be necessary to add
+firewall rules to allow traffic through.[]{.sentence-end} The following
+example runs a minimal Python HTTP server and binds port
+<code>8000</code>{.inlineCode} in the container to port <code>8000</code>{.inlineCode} on the
+host:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman run -d --rm -p 8000:8000 \                    registry.access.redhat.com/ubi9/python-312 \
+python -m http.server</code></pre></div>
+<p>This is how the <code>pasta</code>{.inlineCode} process created with the container
+maps the port:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ ps aux | grep pasta
+packt  189281  0.0  0.0 206444 17132 ?        Ss   00:18   0:00 /usr/bin/pasta --config-net -t 8000-8000:8000-8000 --dns-forward 169.254.1.1 -u none -T none -U none --no-map-gw --quiet --netns /run/user/1000/netns/netns-fa625228-da6d-e87d-d62f-bee84d158d8a --map-guest-addr 169.254.1.2
+packt  189580  0.0  0.0 231248  2380 pts/3    S+   00:19   0:00 grep --color=auto pasta</code></pre></div>
+<p>The <code>-t</code>{.inlineCode} option[]{#Chapter_12.xhtml#idx_3b73830f
+.index-entry index-entry=&ldquo;rootless container network:behavior&rdquo;}
+configures the TCP port forwarding to the guest (in our case, the
+container).</p>
+<p>Finally, while using rootless containers, we also need to consider that
+the port publishing technique can only be used for ports above
+<code>1024</code>{.inlineCode}.[]{.sentence-end} This is because, on Linux
+operating systems, all the ports below <code>1024</code>{.inlineCode} are
+privileged and cannot be used by standard non-root users.</p>
+<h1 id="h1_311" class="heading-1">Summary<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In this chapter, we learned how container network isolation can be
+leveraged to allow network segregation for each container that's
+running through network namespaces.[]{.sentence-end} These activities
+seem complex, but thankfully, with the help of a container runtime, the
+steps are almost automated.[]{.sentence-end} We learned how to manage
+container networking with Podman and how to interconnect two or more
+containers.[]{.sentence-end} Finally, we learned how to expose a
+container's network ports outside of the underlying host and what kind
+of limitations we can expect while networking for rootless containers.</p>
+<p>In the next chapter, we will discover the main differences between
+Docker and Podman.[]{.sentence-end} This will be useful for advanced
+users, but also for novice ones, to understand what we can expect by
+comparing these two container engines.</p>
+<h1 id="h1_312" class="heading-1">Further reading<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>To learn more about the topics that were covered in this chapter, take a
+look at the following resources:</p>
+<ul>
+<li>The Netavark project on GitHub:
+<a href="https://github.com/containers/netavark" rel="external" target="_blank">[https://github.com/containers/netavark]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>The <code>a</code>{.inlineCode}<code>ardvark-dns</code>{.inlineCode} project on GitHub:
+<a href="https://github.com/containers/aardvark-dns" rel="external" target="_blank">[https://github.com/containers/aardvark-dns]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>Kubernetes Pod definition:
+<a href="https://kubernetes.io/docs/concepts/workloads/pods/" rel="external" target="_blank">[https://kubernetes.io/docs/concepts/workloads/pods/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>The <code>passt</code>{.inlineCode}/<code>pasta</code>{.inlineCode} project repository:
+<a href="https://passt.top/passt/about/" rel="external" target="_blank">[https://passt.top/passt/about/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+</ul>
+<h1 id="h1_313" class="heading-1">Join us on Discord<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>For discussions around the book and to connect with your peers, join us
+on Discord at
+<a href="https://packt.link/discordcloud" rel="external" target="_blank">[packt.link/discordcloud]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}
+or scan the QR code below:</p>
+<p><a href="#R-image-57a3d5cb0058f160bbc1ceb93a7d3034" class="lightbox-link"><img alt="Image" class="lazy lightbox figure-image" loading="lazy" src="images/B31467_12_1.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-57a3d5cb0058f160bbc1ceb93a7d3034"><img alt="Image" class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_12_1.png"></a>{style=&ldquo;width:25%;&rdquo;}</p>
+<p>[]{#Chapter_13.xhtml}</p>
+<p>{.section .chapter-first}</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready for RHCE<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/install-ansible-using-uv/"><a class="padding" href="/ansible/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/playbooks/"><a class="padding" href="/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/hostname-patterns/"><a class="padding" href="/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/include-and-import-files/"><a class="padding" href="/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2/"><a class="padding" href="/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/user-and-groups/"><a class="padding" href="/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/storage-partitions-and-lvm/"><a class="padding" href="/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/services/"><a class="padding" href="/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimize-ansible-processing/"><a class="padding" href="/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux/"><a class="padding" href="/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/tags/"><a class="padding" href="/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/loops-and-items/"><a class="padding" href="/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/modules-for-troubleshooting/"><a class="padding" href="/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Using Variables In Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/when/"><a class="padding" href="/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/secure-shell-service-ssh/"><a class="padding" href="/cyber-security/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ansiblepuppetchef/"><a class="padding" href="/networking/ccna/ccna-notes-1/ansiblepuppetchef/">Ansible, Puppet, and Chef<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscoacls/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscoacls/">Cisco ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscocli/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscocli/">Cisco CLI<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/classfulipv4/"><a class="padding" href="/networking/ccna/ccna-notes-1/classfulipv4/">Classful IPv4<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/cloudarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/cloudarchitecture/">Cloud Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/controllerbasednetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/controllerbasednetworking/">Controller-Based Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/device-management-protocols/"><a class="padding" href="/networking/ccna/ccna-notes-1/device-management-protocols/">Device Management Protocols<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-config/">DHCP Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/">DHCP Snooping and ARP Inspection<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-syncronization/"><a class="padding" href="/networking/dns-and-time-syncronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ethernetlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/ethernetlans/">Ethernet LANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/extended-acls/"><a class="padding" href="/networking/ccna/ccna-notes-1/extended-acls/">Extended ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-services/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-services/">IP Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-transport-and-applications/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-transport-and-applications/">IP Transport and Applications<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6/">IPv6<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/">IPv6 Addressing and Subnetting<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6configuration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6configuration/">IPv6 Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6routing/">IPv6 Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lan-architecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/lan-architecture/">LAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/l2-etherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/l2-etherchannel/">Layer 2 Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/network-devices-and-connections/"><a class="padding" href="/networking/network-devices-and-connections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospf-concepts/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospf-concepts/">OSPF Concepts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfconfiguration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfconfiguration/">OSPF Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/">OSPF Network Types and Neighbors<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/restandjson/"><a class="padding" href="/networking/ccna/ccna-notes-1/restandjson/">REST and JSON<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/router_operation/"><a class="padding" href="/networking/ccna/ccna-notes-1/router_operation/">Router Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/routeroperation/"><a class="padding" href="/networking/ccna/ccna-notes-1/routeroperation/">ROuter Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lanrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/lanrouting/">Routing in the LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/rstpandetherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/rstpandetherchannel/">RSTP and Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/securing-network-devices/"><a class="padding" href="/networking/ccna/ccna-notes-1/securing-network-devices/">Securing Network Devices<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/security-architectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/security-architectures/">Security Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/softwaredefinedaccess/"><a class="padding" href="/networking/ccna/ccna-notes-1/softwaredefinedaccess/">Software-Defined Access (SDA)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/spanningtreeprotocol/"><a class="padding" href="/networking/ccna/ccna-notes-1/spanningtreeprotocol/">Spanning Tree Protocol<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/static-routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/static-routing/">Static Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchinterfaces/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchinterfaces/">Switch Interfaces<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switching/"><a class="padding" href="/networking/ccna/ccna-notes-1/switching/">Switching<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchport-security-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchport-security-config/">Switchport Security Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/tcpipbasic/"><a class="padding" href="/networking/ccna/ccna-notes-1/tcpipbasic/">TCP/IP Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/troubleshootingrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/troubleshootingrouting/">Troubleshooting Routing Issues<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/vlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/vlans/">VLANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wanarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/wanarchitecture/">WAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wansandiprouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/wansandiprouting/">WANs and IP Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessarchitectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessarchitectures/">Wireless Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_lan/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_lan/">Wireless LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessnetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessnetworking/">Wireless Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_security/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_security/">Wireless Security<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
+            <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/local-filesystems-and-swap/"><a class="padding" href="/storage/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/network-filesystem-nfs/"><a class="padding" href="/storage/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/partitioning-mbr-gpt/"><a class="padding" href="/storage/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/rm-filesystem-from-partition/"><a class="padding" href="/storage/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/remove-formatting-from-highlights/"><a class="padding" href="/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-docker-nginx/"><a class="padding" href="/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/you-need-to-learn-man-pages/"><a class="padding" href="/tools/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/proxmox-ha-proxy-setup/"><a class="padding" href="/tools/proxmox-ha-proxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/learning-touch-typing/"><a class="padding" href="/tools/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5" checked><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/">Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="active hidden " data-nav-id="/containers/containernetworking/"><a class="padding" href="/containers/containernetworking/"><i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/ansible-and-podman/"><a class="padding" href="/containers/ansible-and-podman/">Ansible and Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/intro-to-containers-1/"><a class="padding" href="/containers/intro-to-containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/convert-docker-compose-to-quadlets/"><a class="padding" href="/containers/convert-docker-compose-to-quadlets/">Convert Docker Compose to Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-links/"><a class="padding" href="/containers/podman-links/">Podman Links<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-quadlets/"><a class="padding" href="/containers/podman-quadlets/">Podman Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/">Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
+            <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users-and-Groups</span></label><a class="padding default-animation" href="/users-and-groups/">Users-and-Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
+            <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/virtualization/"><input type="checkbox" id="R-section-da8ee4406de37987b502b79e5b0a9d1c" aria-controls="R-subsections-da8ee4406de37987b502b79e5b0a9d1c"><label for="R-section-da8ee4406de37987b502b79e5b0a9d1c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualizations</span></label><a class="padding default-animation" href="/virtualization/">Virtualizations<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-da8ee4406de37987b502b79e5b0a9d1c" class="collapsible-menu">
+            <li class="" data-nav-id="/virtualization/using-vagrant-on-linux/"><a class="padding" href="/virtualization/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/booknotes/"><a class="padding" href="/booknotes/"><i class='fas fa-fw fa-book'></i> Book Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/now/"><a class="padding" href="/now/"><i class='fas fa-fw fa-clock'></i> Now<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780154752" defer></script>
+    <script src="/js/theme.js?1780154752" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

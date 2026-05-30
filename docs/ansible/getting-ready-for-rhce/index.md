@@ -4,7 +4,7 @@ Let's make sure we have everything we need set up for getting RHCE certified.
 ## Scheduling the exam
 First step I needed to take was [scheduling the exam](https://rhtapps.redhat.com/individualexamscheduler/#/Dashboard). I picked a date a couple weeks before my voucher expires. Just in case I fail, I want to be able to study hard for two weeks. Then do a retake. 
 
-![](../images/Pasted%20image%2020260201052356.png)
+![](../../../images/Pasted%20image%2020260201052356.png)
 
 ## Course materials
 My only study material is this [book](https://www.amazon.com/RHCE-EX294-Cert-Guide-Certification/dp/0136872433/ref=sr_1_2?crid=1ZMN9NQWZA8HS&dib=eyJ2IjoiMSJ9.i-ddoTpDl9FtL3_grGGJeWUfBjh3voBjqLWIjzLKC0LQpybI3wGJH985YNmRx-v3Lr49AztXZAlNeFJ8HybfEpnbzviDpgZiz3iyNZC_u7d7Y9CTE6JreVpV-kZS6DeLB-ZpPe_M2ijMnczPiVNCPjo0hWJxe7whmw6GdgI-NK-s9s1s33HecRHixxsIxrDahiX5TLH5EgEADTbxVQ5vfD62nAlrJmLsNMrWPLrJgSA.KOdBHcqwRu1KsIRc3SOlI3bGR6eULH7QxJMns4BiTUQ&dib_tag=se&keywords=rhce+exam+guide&qid=1769951529&sprefix=rhce+exam+guid%2Caps%2C196&sr=8-2) and documentation that will be available during the exam. 
@@ -19,7 +19,7 @@ This concept is hard to explain. But it'll look something like this:
 
 |     | Topic                                                                                                              | Review 1 | Review 2 | Review 3 |
 | --- | ------------------------------------------------------------------------------------------------------------------ | -------- | -------- | -------- |
-| 1   | [Ad Hoc Commands](../../adhoccommands.md)                                                        | X        | X        | X        |
+| 1   | [Ad Hoc Commands](adhoccommands.md)                                                        | X        | X        | X        |
 | 2   | [ansible.cfg](ansibleconfig.md)                                                    | X        | X        | X        |
 | 3   | [Ansible Vault](ansible-vault.md)                                                   | X        | X        | X        |
 | 4   | [Boot Process](boot-process.md)                                                     | X        | X        |          |
@@ -48,7 +48,7 @@ This will be a new thing for me. But I am going to schedule my ideal daily study
 
 Though I am not limited to only these times. And may study more based on energy levels and motivation.
 
-![](../images/Pasted%20image%2020260201060753.png)
+![](../../../images/Pasted%20image%2020260201060753.png)
 
 ## Understand the exam environment
 You probably already know this since you are an RHCSA, but RedHat will email you instructions a day or two before the exam.  Check the PDF on this [page](https://learn.redhat.com/t5/Certification-Resources/Getting-Ready-for-your-Red-Hat-Certification-Remote-Exam/ba-p/33528) to get the latest exam requirements documentation. 

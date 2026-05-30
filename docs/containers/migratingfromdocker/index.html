@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    <meta name="description" content="13 Docker Migration Tips and Tricks Every technology has a pioneer company, project, and product that, once created and announced, has been a real game-changer that allowed its base concepts to be spread.[]{.sentence-end} For containers, this was Docker.
+As we learned in Chapter 1{.chapref}, Introduction to Container Technology, Docker provided a new approach and great ideas for leveraging existing technologies and creating brand new ones.[]{.sentence-end} After a few years, it became the most used technology for containers.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="13 Docker Migration Tips and Tricks Every technology has a pioneer company, project, and product that, once created and announced, has been a real game-changer that allowed its base concepts to be spread.[]{.sentence-end} For containers, this was Docker.
+As we learned in Chapter 1{.chapref}, Introduction to Container Technology, Docker provided a new approach and great ideas for leveraging existing technologies and creating brand new ones.[]{.sentence-end} After a few years, it became the most used technology for containers.">
+    <meta property="og:url" content="http://localhost:1313/containers/migratingfromdocker/">
+    <meta property="og:description" content="13 Docker Migration Tips and Tricks Every technology has a pioneer company, project, and product that, once created and announced, has been a real game-changer that allowed its base concepts to be spread.[]{.sentence-end} For containers, this was Docker.
+As we learned in Chapter 1{.chapref}, Introduction to Container Technology, Docker provided a new approach and great ideas for leveraging existing technologies and creating brand new ones.[]{.sentence-end} After a few years, it became the most used technology for containers.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Containers">
+    <meta itemprop="description" content="13 Docker Migration Tips and Tricks Every technology has a pioneer company, project, and product that, once created and announced, has been a real game-changer that allowed its base concepts to be spread.[]{.sentence-end} For containers, this was Docker.
+As we learned in Chapter 1{.chapref}, Introduction to Container Technology, Docker provided a new approach and great ideas for leveraging existing technologies and creating brand new ones.[]{.sentence-end} After a few years, it became the most used technology for containers.">
+    <meta itemprop="wordCount" content="5421">
+    <title></title>
+    <link href="/containers/migratingfromdocker/index.md" rel="alternate" type="text/markdown" title="">
+    <link href="/images/favicon.svg?1780154752" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1780154752" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1780154752" defer></script>
+    <script src="/js/search-lunr.js?1780154752" defer></script>
+    <script src="/js/search.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1780154752";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780154752" rel="stylesheet">
+    <link href="/css/theme.css?1780154752" rel="stylesheet">
+    <link href="/css/format-html.css?1780154752" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/containers\/migratingfromdocker\/';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:1313';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script><script defer src="https://cloud.umami.is/script.js" data-website-id="d179743c-138a-4212-8906-28f70628ef95"></script>
+<style>
+:root {
+    --MENU-S-width: 15rem;
+    --MENU-M-width: 15rem;
+    --MENU-L-width: 18rem;
+    --MAIN-MAX-width: 100rem;
+}
+html {
+  zoom: 1.2;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif,
+               "Apple Color Emoji", "Segoe UI Emoji" !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500 !important;
+  letter-spacing: 0.7px;
+}
+
+code, kbd, pre, samp {
+  font-family: "Fira Code", "Hack", "Source Code Pro", Consolas, Menlo, monospace !important;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+  <body class="mobile-support html" data-origin="/containers/migratingfromdocker/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#h2_319">Behavioral differences between Podman and Docker</a></li>
+    <li><a href="#h2_320">Missing commands in Podman</a></li>
+    <li><a href="#h2_321">Missing commands in Docker</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#h2_323">Docker Compose quick start</a></li>
+    <li><a href="#h2_324">Configuring Podman to interact with docker-compose</a></li>
+    <li><a href="#h2_325">Running Compose workloads with Podman and docker-compose</a></li>
+    <li><a href="#h2_326">Using podman-compose</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/containers/"><span itemprop="name">Containers</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/migratingfromdocker/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/" title="Containers (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/ansible-and-podman/" title="Ansible and Podman (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable containers" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id=""></h1>
+
+<h1 id="h1_314" class="chapterNumber">13<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<h1 id="h1_315" class="chapterTitle">Docker Migration Tips and Tricks<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Every technology has a pioneer company, project, and product that, once
+created and announced, has been a real game-changer that allowed its
+base concepts to be spread.[]{.sentence-end} For containers, this was
+Docker.</p>
+<p>As we learned in <em><a href="/containers/migratingfromdocker/#Chapter_1.xhtml#h1_14">Chapter 1</a>{.chapref}</em>,
+<em>Introduction to Container Technology</em>, Docker provided a new approach
+and great ideas for leveraging existing technologies and creating brand
+new ones.[]{.sentence-end} After a few years, it became the most used
+technology for containers.</p>
+<p>But as it usually happens for open source projects, the community and
+the enterprise started looking for improvements, new architectures, and
+different implementations.[]{.sentence-end} That's where Podman found a
+place to grow and leverage the[]{#Chapter_13.xhtml#idx_08210be1
+.index-entry index-entry=&ldquo;Open Container Initiative (OCI)&rdquo;}
+standardization that's offered by the <strong>Open Container Initiative</strong>
+(<strong>OCI</strong>).</p>
+<p>Docker was (and still is) the most used container
+technology.[]{.sentence-end} For this reason, in this chapter, we are
+going to provide some tips and tricks regarding handling the migration
+process.[]{.sentence-end} We will be covering the following topics:</p>
+<ul>
+<li>Migrating existing images and playing with a command's alias</li>
+<li>Podman commands versus Docker commands</li>
+<li>Using Docker Compose with Podman</li>
+</ul>
+<h1 id="h1_316" class="heading-1">Technical requirements<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Before you proceed with this chapter's lecture and examples, you will
+need a machine with a working Podman installation.[]{.sentence-end} As
+we mentioned in <em><a href="/containers/migratingfromdocker/#Chapter_3.xhtml#h1_83">Chapter 3</a>{.chapref}</em>,
+<em>Running</em> <em>the</em> <em>First Container</em>, all the examples in this book have
+been executed on a Fedora 40 system or later, but can be reproduced on
+your choice of <strong>operating system</strong> (<strong>OS</strong>).</p>
+<p>Having a good understanding of the topics that were covered in <em><a href="/containers/migratingfromdocker/#Chapter_4.xhtml#h1_114">Chapter
+4</a>{.chapref}</em>, <em>Managing Running Containers</em>,
+<em><a href="/containers/migratingfromdocker/#Chapter_5.xhtml#h1_133">Chapter 5</a>{.chapref}</em>, <em>Implementing Storage
+for the Container's Data</em>, and <em><a href="/containers/migratingfromdocker/#Chapter_9.xhtml#h1_219">Chapter
+9</a>{.chapref}</em>, <em>Pushing Images to a Container
+Registry</em>, will help you grasp the concepts that will be covered in this
+chapter regarding containers.</p>
+<h1 id="h1_317" class="heading-1">Migrating existing images and playing with a command's alias<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Podman[]{#Chapter_13.xhtml#idx_0cce4abb .index-entry
+index-entry=&ldquo;CLI compatibility:with Docker&rdquo;} has one great feature that
+lets any previous Docker user easily adapt and switch to it&mdash;complete
+<strong>command-line interface</strong> (<strong>CLI</strong>)
+compatibility[]{#Chapter_13.xhtml#idx_0f935203 .index-entry
+index-entry=&ldquo;images:migrating&rdquo;} with Docker.</p>
+<p>Let's demonstrate this CLI compatibility with Docker by creating a
+shell command alias for the <code>docker</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># alias docker=podman
+# docker
+Error: missing command &#39;podman COMMAND&#39;
+Try &#39;podman --help&#39; for more information.</code></pre></div>
+<p>As you can see, we have created a command alias that binds the
+<code>podman</code>{.inlineCode} command to the <code>docker</code>{.inlineCode}
+one.[]{.sentence-end} If we try to execute the <code>docker</code>{.inlineCode}
+command after setting the alias, the output is returned from the
+<code>podman</code>{.inlineCode} command instead.</p>
+<p>As an alternative to the classic command alias, we can install the
+<code>podman-docker</code>{.inlineCode} package, available in many distributions,
+which installs a script named <code>docker</code>{.inlineCode} that emulates the
+Docker CLI while executing Podman commands.[]{.sentence-end} The script
+also creates links to the Podman <code>man</code>{.inlineCode} pages, so that users
+writing <code>man </code>{.inlineCode}<code>docker</code>{.inlineCode} will get the output of
+<code>man </code>{.inlineCode}<code>docker</code>{.inlineCode} instead.[]{.sentence-end} To
+install the <code>podman-docker</code>{.inlineCode} package on Fedora, simply run
+the following:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo dnf install podman-docker</code></pre></div>
+<p>The script installed by the package is really simple, as you can see in
+the following code snippet:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ cat /usr/bin/docker
+#!/usr/bin/sh
+[ -e /etc/containers/nodocker ] || [ -e &#34;${XDG_CONFIG_HOME-$HOME/.config}/containers/nodocker&#34; ] || \
+echo &#34;Emulate Docker CLI using podman. Create /etc/containers/nodocker to quiet msg.&#34; &gt;&amp;2
+exec /usr/bin/podman &#34;$@&#34;</code></pre></div>
+<p>Let's try this []{#Chapter_13.xhtml#idx_56efb9a7 .index-entry
+index-entry=&ldquo;CLI compatibility:with Docker&rdquo;}out on the newly created
+alias (or script when using the <code>podman-docker</code>{.inlineCode} package) by
+running a container:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># docker version
+Emulate Docker CLI using podman. Create /etc/containers/nodocker to quiet msg.
+Client:        Podman Engine
+Version:       5.4.2
+API Version:   5.4.2
+Go Version:    go1.22.12
+Git Commit:    be85287fcf4590961614ee37be65eeb315e5d9ff
+Built:         Wed Apr  2 00:00:00 2025
+Build Origin:  Fedora Project
+OS/Arch:       linux/amd64
+# docker run --rm -it docker.io/wernight/funbox nyancat</code></pre></div>
+<p>We should see something very funny&mdash;a running cat, similar to the one
+shown in the following screenshot:</p>
+<figure class="mediaobject">
+<img src="images/B31467_13_1.png"
+style="width:528.0px; height:295.68px;" alt="Image 1" />
+</figure>
+<p>Figure 13.1 &ndash; Funny output from running a test container</p>
+<p>Let's test []{#Chapter_13.xhtml#idx_ad5ed419 .index-entry
+index-entry=&ldquo;CLI compatibility:with Docker&rdquo;}something more
+interesting.[]{.sentence-end} Docker, for example, offers a tutorial
+based on a container image exposing a web server:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># docker run -dp 80:80 docker.io/docker/getting-started
+Trying to pull docker.io/docker/getting-started:latest...
+Getting image source signatures
+Copying blob 97518928ae5f done
+Copying blob e0bae2ade5ec done
+Copying blob a2402c2da473 done
+Copying blob e362c27513c3 done
+Copying blob a4e156412037 done
+Copying blob 3f3577460f48 done
+Copying blob 69465e074227 done
+Copying blob eb65930377cd done
+Copying config 26d80cd96d done
+Writing manifest to image destination
+Storing signatures
+d44a2df41d76b3322e56971d45e92e75f4679e8b620198228fbd9cc00fe9578f</code></pre></div>
+<p>Here, we continued to use the <code>docker</code>{.inlineCode} alias command with
+the option for running it by using a daemon,
+<code>-</code>{.inlineCode}<code>d</code>{.inlineCode}, and the
+[]{#Chapter_13.xhtml#idx_c78426cf .index-entry
+index-entry=&ldquo;CLI compatibility:with Docker&rdquo;}option for binding the HTTP
+port, <code>-</code>{.inlineCode}<code>p</code>{.inlineCode}.</p>
+<p>If everything worked correctly, then we can point our favorite web
+browser to <code>http://</code>{.inlineCode}<code>localhost</code>{.inlineCode}:</p>
+<figure class="mediaobject">
+<img src="images/B31467_13_2.png"
+style="width:528.0px; height:248.9142857142857px;" alt="Image 2" />
+</figure>
+<p>Figure 13.2 &ndash; Docker tutorial home page</p>
+<p>The first page of Docker Labs, <strong>Getting Started</strong>, specifies the
+command that was just run.[]{.sentence-end} From the left column of the
+page, we can continue with the tutorial.</p>
+<p>Let's continue with the tutorial and double-check that the alias will
+work properly at every stage.</p>
+<p>The tutorial steps are very simple, and they can help you summarize the
+knowledge that was shared in the previous chapters, from building a
+container to using multiple container applications to create a dedicated
+network.[]{.sentence-end} Please stop before the <strong>Using</strong> <strong>Docker</strong>
+<strong>Compose</strong> section, as we will look at this in more detail shortly.</p>
+<p>Don't forget that we are using an alias and that, under the hood,
+Podman is working actively to let our containers work as expected,
+ensuring Docker CLI compatibility.</p>
+<p>But what about[]{#Chapter_13.xhtml#idx_afdc718e .index-entry
+index-entry=&ldquo;CLI compatibility:with Docker&rdquo;} container migration in the
+case of swapping Docker in favor of Podman?</p>
+<p>Well, a direct way to move existing containers from Docker to Podman
+does not exist.[]{.sentence-end} It is recommended that you recreate the
+containers with the respective container images and reattach any volumes
+using Podman.</p>
+<p>The container images can be exported using the
+<code>docker</code>{.inlineCode}<code> export</code>{.inlineCode} command, which will create a
+TAR archive file that can be imported into Podman via the
+<code>podman</code>{.inlineCode}<code> import</code>{.inlineCode} command.[]{.sentence-end} If
+you're using a container image registry, you can skip this.</p>
+<p>To understand any limitations we may encounter when we're using
+commands, examples, and resources written for Docker with our Podman
+installation, let's compare various Podman and Docker commands.</p>
+<h1 id="h1_318" class="heading-1">Podman commands versus Docker commands<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>As we saw[]{#Chapter_13.xhtml#idx_f345ae1e .index-entry
+index-entry=&ldquo;Podman commands:versus Docker commands&rdquo;} in the previous
+section, as well as in <em><a href="/containers/migratingfromdocker/#Chapter_2.xhtml#h1_52">Chapter 2</a>{.chapref}</em>,
+<em>Comparing</em> <em>Podman</em> <em>and</em> <em>Docker</em>, the Podman CLI is based on the
+Docker CLI.[]{.sentence-end} However, because Podman does not require a
+runtime daemon to work, some of the Docker commands may not be directly
+available, or they could require some workarounds.</p>
+<p>The command list is exceptionally long, so the following table only
+specifies a few:</p>
+<p><strong>Docker</strong> <strong>command</strong>                                    <strong>Podman</strong> <strong>command</strong></p>
+<hr>
+<p><code>docker</code>{.inlineCode}                                     <code>podman</code>{.inlineCode}
+<code>docker</code>{.inlineCode}<code> </code>{.inlineCode}<code>ps</code>{.inlineCode}    <code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>ps</code>{.inlineCode}
+<code>docker</code>{.inlineCode}<code> pull</code>{.inlineCode}                 <code>podman</code>{.inlineCode}<code> pull</code>{.inlineCode}
+<code>docker</code>{.inlineCode}<code> push</code>{.inlineCode}                 <code>podman</code>{.inlineCode}<code> push</code>{.inlineCode}
+<code>docker</code>{.inlineCode}<code> rename</code>{.inlineCode}               <code>podman</code>{.inlineCode}<code> rename</code>{.inlineCode}
+<code>docker</code>{.inlineCode}<code> restart</code>{.inlineCode}              <code>podman</code>{.inlineCode}<code> restart</code>{.inlineCode}
+<code>docker</code>{.inlineCode}<code> </code>{.inlineCode}<code>rm</code>{.inlineCode}    <code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>rm</code>{.inlineCode}
+<code>docker</code>{.inlineCode}<code> </code>{.inlineCode}<code>rmi</code>{.inlineCode}   <code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>rmi</code>{.inlineCode}
+<code>docker</code>{.inlineCode}<code> run</code>{.inlineCode}                  <code>podman</code>{.inlineCode}<code> run</code>{.inlineCode}</p>
+<p>As you can see, the command's name is the same when comparing the
+<code>docker</code>{.inlineCode} command with the <code>podman</code>{.inlineCode}
+command.[]{.sentence-end} However, even though the name is the same, due
+to architectural differences between Podman and Docker, some features or
+behaviors could be different.</p>
+<h2 id="h2_319" class="heading-2">Behavioral differences between Podman and Docker<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>The following []{#Chapter_13.xhtml#idx_1ac89157 .index-entry
+index-entry=&ldquo;Podman commands:versus Docker commands&rdquo;}commands were
+intentionally implemented in another way by the Podman development team:</p>
+<ul>
+<li><code>podman</code>{.inlineCode}<code> volume create</code>{.inlineCode}: This command
+will fail if the volume already exists.[]{.sentence-end} In Docker,
+this command is idempotent, which means that if a volume already
+exists with the same name, then Docker will just skip this
+instruction.[]{.sentence-end} The actual behavior of Docker does not
+match the implementations for the other commands.</li>
+<li><code>podman</code>{.inlineCode}<code> run -v /</code>{.inlineCode}<code>tmp</code>{.inlineCode}<code>/</code>{.inlineCode}<code>noexist</code>{.inlineCode}<code>:/</code>{.inlineCode}<code>tmp</code>{.inlineCode}:
+This command will fail if the source volume path does not
+exist.[]{.sentence-end} Instead, Docker will create the folder if it
+does not exist.[]{.sentence-end} Again, the Podman development team
+considered this a bug and changed it.</li>
+<li><code>podman</code>{.inlineCode}<code> run --restart</code>{.inlineCode}: In older
+releases, the <code>restart</code>{.inlineCode} option in Podman did not
+persist after a system reboot.[]{.sentence-end} Modern Fedora and
+RHEL systems include a helper service that <em>bridges</em> this
+gap.[]{.sentence-end} By running
+<code>sudo</code>{.inlineCode}<code> </code>{.inlineCode}<code>systemctl</code>{.inlineCode}<code>enable --now</code>{.inlineCode}<code>podman-restart.service</code>{.inlineCode},
+Podman will scan for containers with <code>always</code>{.inlineCode} or
+<code>unless-stopped</code>{.inlineCode} policies during the boot process and
+start them automatically.</li>
+</ul>
+<p>In the next section, we'll see which commands are missing from Podman
+that exist in Docker.</p>
+<h2 id="h2_320" class="heading-2">Missing commands in Podman<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>The following[]{#Chapter_13.xhtml#idx_97d21e88 .index-entry
+index-entry=&ldquo;Podman:missing commands&rdquo;} table shows a non-comprehensive
+list of Docker commands that, at the time of writing, don't have
+equivalents in Podman:</p>
+<p><strong>Missing</strong> <strong>command</strong>                       <strong>Description</strong></p>
+<hr>
+<p><code>docker</code>{.inlineCode}<code> plugin</code>{.inlineCode}   Podman does not support plugins at the time of writing.[]{.sentence-end} Its development team recommends using alternative OCI runtimes or OCI runtime hooks to alter its behavior.
+<code>docker</code>{.inlineCode}<code> swarm</code>{.inlineCode}    It is important to clarify that Podman does not support Docker Swarm.[]{.sentence-end} For users coming from the Docker ecosystem who require multi-node clustering and orchestration, the Podman project recommends moving toward Kubernetes.[]{.sentence-end} In a production Kubernetes environment, you typically won't find the Podman CLI running the cluster.[]{.sentence-end} Instead, Kubernetes uses a specialized, <em>bare-bones</em> runtime such as CRI-O.
+<code>docker</code>{.inlineCode}<code> trust</code>{.inlineCode}    This Docker command has been implemented in the <code>podman</code>{.inlineCode}<code> image trust</code>{.inlineCode} command.</p>
+<p>Now, let's see which []{#Chapter_13.xhtml#idx_1b5c0a24 .index-entry
+index-entry=&ldquo;Podman:missing commands&rdquo;}commands are missing from Docker.</p>
+<h2 id="h2_321" class="heading-2">Missing commands in Docker<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Similar to []{#Chapter_13.xhtml#idx_94db22db .index-entry
+index-entry=&ldquo;Docker:missing commands&rdquo;}how Podman is missing some Docker
+commands, Docker is missing some Podman commands.</p>
+<p>The following families of commands in Podman don't have respective ones
+in Docker:</p>
+<ul>
+<li><code>podman</code>{.inlineCode}<code> generate</code>{.inlineCode}: This command can be
+used to create a structured output (such as a YAML file) for a
+container, pod, or volume.</li>
+<li><code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>healthcheck</code>{.inlineCode}:
+This command provides you with a set of subcommands that you can use
+to manage container health checks.</li>
+<li><code>podman</code>{.inlineCode}<code> machine</code>{.inlineCode}: This command lists a
+set of subcommands for managing Podman's virtual machine on macOS
+and Windows (it also works on Linux, though you can already run
+containers natively, so it's not very useful there).</li>
+<li><code>podman</code>{.inlineCode}<code> mount</code>{.inlineCode}: This command mounts the
+container's root filesystem in a location that can be accessed by
+the host.</li>
+<li><code>podman</code>{.inlineCode}<code> play</code>{.inlineCode}: This command creates
+containers, pods, or volumes based on the input from a structured
+file (such as YAML) .</li>
+<li><code>podman</code>{.inlineCode}<code> pod</code>{.inlineCode}: This provides a set of
+subcommands for managing pods or groups of containers.</li>
+<li><code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>unmount</code>{.inlineCode}: This
+command unmounts a working container's root filesystem.</li>
+<li><code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>unshare</code>{.inlineCode}: This
+command launches a process in a new user namespace (rootless
+containers).</li>
+<li><code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>untag</code>{.inlineCode}: This
+command removes one or more stored images.</li>
+<li><code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>kube</code>{.inlineCode}: A critical
+addition for modern workflows, this command allows you to interact
+with []{#Chapter_13.xhtml#idx_0f6bbd8b .index-entry
+index-entry=&ldquo;Docker:missing commands&rdquo;}Kubernetes
+YAML.[]{.sentence-end} You can use
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>kube</code>{.inlineCode}<code> play</code>{.inlineCode}
+to launch a local pod based on a K8s manifest, or
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>kube</code>{.inlineCode}<code> generate</code>{.inlineCode}
+to export your local container configuration for deployment into a
+cluster.</li>
+<li><code>podman</code>{.inlineCode}<code> volume export</code>{.inlineCode} and
+<code>podman</code>{.inlineCode}<code> volume import</code>{.inlineCode}: Unlike Docker,
+which typically requires manual file copying or custom scripts to
+move volume data, Podman provides native subcommands to compress a
+volume's contents into a tarball and move it between different
+systems or backups.</li>
+</ul>
+<p>Of course, if a command is missing, this does not mean that the feature
+is missing in Docker.</p>
+<p>Another useful feature that's available in Docker is
+Compose.[]{.sentence-end} We'll learn how to use it in Podman in the
+next section.</p>
+<h1 id="h1_322" class="heading-1">Using Docker Compose with Podman<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>When it was []{#Chapter_13.xhtml#idx_72f37f81 .index-entry
+index-entry=&ldquo;Docker Compose:using, with Podman&rdquo;}first released, Docker
+quickly gained consensus thanks to its intuitive approach to container
+management.[]{.sentence-end} Along with the main container engine
+solution, another great feature was introduced to help users orchestrate
+multiple containers on a single host: <strong>Docker</strong> <strong>Compose</strong>.</p>
+<p>The idea behind Compose is quite simple&mdash;it's a tool that can be used
+to orchestrate multi-container applications that are supposed to
+interact together on a single host and configured with a declarative
+file in YAML format.[]{.sentence-end} All the applications that are
+executed in a Compose stack are defined as services that can communicate
+with the other containers in the stack with transparent name resolution.</p>
+<p>The configuration file is named <code>docker-compose.yaml</code>{.inlineCode} and
+has a simple syntax where one or more <strong>services</strong> and related
+<strong>volumes</strong> are created and started.</p>
+<p>Development teams can benefit from the stack's automation to quickly
+test applications on a single host.[]{.sentence-end} However, if we need
+to run our application on a production-like, multi-node environment, the
+best approach is to adopt a clustered orchestration solution such as
+Kubernetes.</p>
+<p>When Podman []{#Chapter_13.xhtml#idx_12fa872f .index-entry
+index-entry=&ldquo;Docker Compose:using, with Podman&rdquo;}was first released, its
+primary mission was to achieve OCI compatibility and feature parity with
+the Docker CLI.[]{.sentence-end} However, one significant gap remained:
+support for Docker Compose.[]{.sentence-end} In the early versions of
+Podman, there was no background daemon or REST API for the original
+<code>docker</code>{.inlineCode}<code>-compose</code>{.inlineCode} utility to communicate
+with, making it impossible to run multi-container YAML definitions
+directly.</p>
+<p>To solve this, the community launched the
+<code>podman</code>{.inlineCode}<code>-compose</code>{.inlineCode} project.[]{.sentence-end}
+It is important to note that
+<code>podman</code>{.inlineCode}<code>-compose</code>{.inlineCode} is an independent,
+community-maintained tool&mdash;it was not created nor is it officially
+maintained by the core Podman development team.[]{.sentence-end} It was
+specifically designed to bridge the gap before Podman 3.0 by acting as a
+Python-based wrapper that translated Compose YAML files directly into
+<code>podman</code>{.inlineCode} commands.</p>
+<p>The landscape changed significantly with the release of Podman 3.0,
+which introduced a native, Docker-compatible Unix socket and a robust
+REST API.[]{.sentence-end} This update allowed the original, official
+<code>docker</code>{.inlineCode}<code>-compose</code>{.inlineCode} command (written in Go) to
+<em>talk</em> directly to Podman as if it were the Docker daemon.</p>
+<p>In this section, we will learn how to configure Podman to orchestrate
+multiple containers with <code>docker</code>{.inlineCode}<code>-compose</code>{.inlineCode} to
+provide full compatibility to users migrating from Docker to
+Podman.[]{.sentence-end} In the next subsection, we'll look at an
+example of using <code>podman</code>{.inlineCode}<code>-compose</code>{.inlineCode} to
+leverage rootless container orchestration.</p>
+<p>Before we dig into setting up Podman, let's look at a few basic
+examples of Compose files to understand how they work.</p>
+<h2 id="h2_323" class="heading-2">Docker Compose quick start<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Compose[]{#Chapter_13.xhtml#idx_404d13fb .index-entry
+index-entry=&ldquo;Docker Compose:quick start&rdquo;} files can be used to declare
+one or multiple containers being executed inside a common stack and also
+to define build instructions for custom applications.[]{.sentence-end}
+The advantage of this approach is that you can fully automate the entire
+application stack, including frontends, backends, and persistence
+services such as databases or in-memory caches.</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>The purpose of this section is to provide a quick overview of Compose
+files to help you understand how Podman can handle them.</p>
+<p>For a detailed list of the latest Compose specification, please refer to
+the following URL:
+<a href="https://docs.docker.com/reference/compose-file/" rel="external" target="_blank">[https://docs.docker.com/reference/compose-file/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>A more extensive list of Compose examples can be found in the Docker
+Awesome Compose project at
+<a href="https://github.com/docker/awesome-compose" rel="external" target="_blank">[https://github.com/docker/awesome-compose]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>The following is a minimal configuration file that defines a single
+container running the Docker registry
+(<code>Chapter13</code>{.inlineCode}<code>/registry/</code>{.inlineCode}<code>docker-compose.yaml</code>{.inlineCode}):</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>services:
+  registry:
+    ports:
+      - &#34;5000:5000&#34;
+    volumes:
+      - registry_volume:/var/lib/registry
+    image: docker.io/library/registry
+volumes:
+  registry_volume: {}</code></pre></div>
+<p>The preceding example can be seen as a more structured and declarative
+way to define the execution parameters for a container.[]{.sentence-end}
+However, the real value of Docker Compose is its orchestration stacks,
+which are made up of multiple containers in a single instance.</p>
+<p>The following example is even more interesting and shows a configuration
+file for a WordPress application that uses
+a[]{#Chapter_13.xhtml#idx_7f0c0ae2 .index-entry
+index-entry=&ldquo;Docker Compose:quick start&rdquo;} MySQL database as its backend
+(<code>Chapter13</code>{.inlineCode}<code>/</code>{.inlineCode}<code>wordpress</code>{.inlineCode}<code>/</code>{.inlineCode}<code>docker-compose.yaml</code>{.inlineCode}):</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>services:
+  db:
+    image: docker.io/library/mysql:latest
+    command: &#39;--default-authentication-plugin=mysql_native_password&#39;
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=wordpressroot
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_USER=wordpress
+      - MYSQL_PASSWORD=wordpress
+    expose:
+      - 3306
+      - 33060
+  wordpress:
+    image: docker.io/library/wordpress:latest
+    ports:
+      - 8080:80
+    restart: always
+    environment:
+      - WORDPRESS_DB_HOST=db
+      - WORDPRESS_DB_USER=wordpress
+      - WORDPRESS_DB_PASSWORD=wordpress
+      - WORDPRESS_DB_NAME=wordpress
+volumes:
+  db_data:</code></pre></div>
+<p>Here, we can see the two main YAML objects&mdash;<code>services</code>{.inlineCode} and
+<code>volumes</code>{.inlineCode}.[]{.sentence-end} Under the
+<code>services</code>{.inlineCode} part of the code, we have two
+applications&mdash;<code>db</code>{.inlineCode} and
+<code>wordpress</code>{.inlineCode}.[]{.sentence-end} These have been highlighted
+for clarity.</p>
+<p>In the <code>services</code>{.inlineCode} list, there's a set
+[]{#Chapter_13.xhtml#idx_25be74bc .index-entry
+index-entry=&ldquo;Docker Compose:quick start&rdquo;}of configuration values that
+define the container's behavior.[]{.sentence-end} These are as follows:</p>
+<ul>
+<li><code>image</code>{.inlineCode}: The image that's used by the container.</li>
+<li><code>command</code>{.inlineCode}: Additional commands to be passed to the
+container's entry point.</li>
+<li><code>v</code>{.inlineCode}<code>olumes</code>{.inlineCode}: The list of volumes to be
+mounted in the container, along with their associated mount
+points.[]{.sentence-end} Along with new dedicated volumes, existing
+directories in the host can be bind-mounted on container mount
+points.</li>
+<li><code>restart</code>{.inlineCode}: Container restart options in case an error
+occurs.</li>
+<li><code>expose</code>{.inlineCode}: The list of ports to be exposed by the
+container.</li>
+<li><code>ports</code>{.inlineCode}: The list of port mappings between the
+container and the host.[]{.sentence-end}</li>
+<li><code>environment</code>{.inlineCode}: The list of environment variables to be
+created in the container.[]{.sentence-end} In this example,
+<code>WORDPRESS_DB_HOST</code>{.inlineCode}, <code>WORDPRESS_DB_USER</code>{.inlineCode},
+<code>WORDPRESS_DB_PASSWORD</code>{.inlineCode}, and
+<code>WORDPRESS_DB_NAME</code>{.inlineCode} are injected into the WordPress
+container to provide connection parameters to the database.</li>
+</ul>
+<p>Together with the <code>services</code>{.inlineCode} declaration, we have a list of
+volumes that are managed by Compose.[]{.sentence-end} The engine can
+create these volumes in the Compose process or use existing volumes that
+have been labeled as <code>external</code>{.inlineCode}.</p>
+<p>The third and final example is a Compose file that builds a minimal REST
+API application that's been written in Go, which writes and retrieves
+data to a Redis in-memory store
+(<code>Chapter13</code>{.inlineCode}<code>/</code>{.inlineCode}<code>golang-redis</code>{.inlineCode}<code>/</code>{.inlineCode}<code>docker-compose.yaml</code>{.inlineCode}):</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>services:
+  web:
+    build:
+      context: ./app
+      labels:
+        - &#34;com.example.description=Golang Redis App&#34;
+    ports:
+      - &#34;8080:8080&#34;
+    environment:
+      - REDIS_HOST=redis
+    depends_on:
+      - redis
+  redis:
+    image: docker.io/library/redis
+    deploy:
+      replicas: 1</code></pre></div>
+<p>In this example, we []{#Chapter_13.xhtml#idx_add127cc .index-entry
+index-entry=&ldquo;Docker Compose:quick start&rdquo;}have new elements that deserve
+attention:</p>
+<ul>
+<li><code>build</code>{.inlineCode}: Defines the image to be built and also applies
+custom labels to the build.</li>
+<li><code>context</code>{.inlineCode}: Holds the path for the
+build.[]{.sentence-end} In this example, the
+<code>./</code>{.inlineCode}<code>app</code>{.inlineCode} folder contains all the source
+code files and the Dockerfile for building the image.</li>
+<li><code>labels</code>{.inlineCode}: Holds a set of labels that are passed as
+strings in the build process.</li>
+<li><code>depends_on</code>{.inlineCode}: Specifies, for the web service, the other
+services that are considered dependencies&mdash;in this case, the
+<code>redis</code>{.inlineCode} service.</li>
+<li><code>environment</code>{.inlineCode}: Defines the name of the
+<code>redis</code>{.inlineCode} service that's used by the web app.</li>
+<li><code>deploy</code>{.inlineCode}: An object in the <code>redis</code>{.inlineCode} service
+that lets us define custom configuration parameters, such as the
+number of container replicas.</li>
+</ul>
+<p>To bring up Compose applications with Docker, we can run the following
+command from the Compose file's folder:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ docker-compose up</code></pre></div>
+<p>This command creates all the stack and related volumes while printing
+the output to <code>stdout</code>{.inlineCode}.</p>
+<p>To run in detached mode, simply add the <code>-d</code>{.inlineCode} option to the
+command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ docker-compose up -d</code></pre></div>
+<p>The following command builds the necessary images and starts the stack:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ docker-compose up --build</code></pre></div>
+<p>Alternatively, the <code>docker</code>{.inlineCode}<code>-compose build</code>{.inlineCode}
+command can be used to build the applications without starting them.</p>
+<p>To shut[]{#Chapter_13.xhtml#idx_0249f64c .index-entry
+index-entry=&ldquo;Docker Compose:quick start&rdquo;} down a stack running in the
+foreground, simply hit the <em>Ctrl</em> + <em>C</em> keyboard
+combination.[]{.sentence-end} Instead, to shut down a detached
+application, run the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ docker-compose down</code></pre></div>
+<p>To kill an unresponsive container, we can use the
+<code>docker</code>{.inlineCode}<code>-compose kill</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ docker-compose kill [SERVICE]</code></pre></div>
+<p>This command also supports multiple signals with the
+<code>-s SIGNAL</code>{.inlineCode} option.</p>
+<p>Now that we've covered the basic concepts surrounding Docker Compose,
+let's learn how to configure Podman to run Compose files.</p>
+<h2 id="h2_324" class="heading-2">Configuring Podman to interact with docker-compose<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>To[]{#Chapter_13.xhtml#idx_291e9072 .index-entry
+index-entry=&ldquo;Docker Compose:Podman, configuring for interaction&rdquo;}
+support Compose, Podman needs to expose its REST API service through a
+local Unix socket.[]{.sentence-end} This service supports both
+Docker-compatible APIs and the native Libpod APIs.</p>
+<p>On a Fedora distribution, the
+<code>docker</code>{.inlineCode}<code>-compose</code>{.inlineCode} package (which provides
+Docker Compose binaries) and the <code>podman-docker</code>{.inlineCode} package
+(which provides aliasing to the <code>docker</code>{.inlineCode} command) must be
+installed using the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo dnf install docker-compose podman-docker</code></pre></div>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>The <code>docker</code>{.inlineCode}<code>-compose</code>{.inlineCode} package, when installed
+on a Fedora 42 system, installs version 2.37.3 at the time of
+writing.[]{.sentence-end} The latest version, 2, was completely
+rewritten in Go, while version 1.x was written in
+Python.[]{.sentence-end} The new implementation provides a significant
+performance improvement and can be downloaded from the GitHub release
+page at
+<a href="https://github.com/docker/compose/releases" rel="external" target="_blank">[https://github.com/docker/compose/releases]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>After installing the packages, we can enable and start the
+<code>systemd</code>{.inlineCode} unit that manages the Unix socket service:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo systemctl enable --now podman.socket</code></pre></div>
+<p>This[]{#Chapter_13.xhtml#idx_523bfb68 .index-entry
+index-entry=&ldquo;Docker Compose:Podman, configuring for interaction&rdquo;}
+command starts a socket that's listening on
+<code>/run/</code>{.inlineCode}<code>podman</code>{.inlineCode}<code>/</code>{.inlineCode}<code>podman.sock</code>{.inlineCode}.</p>
+<p>Note that the native <code>docker</code>{.inlineCode}<code>-compose</code>{.inlineCode}
+command looks for a socket file in the
+<code>/run/</code>{.inlineCode}<code>docker.sock</code>{.inlineCode} path by
+default.[]{.sentence-end} For this reason, the
+<code>podman-docker</code>{.inlineCode} package creates a symbolic link on the same
+path that points to
+<code>/run/</code>{.inlineCode}<code>podman</code>{.inlineCode}<code>/</code>{.inlineCode}<code>podman.sock</code>{.inlineCode},
+as shown in the following example:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># ls -al /run/docker.sock
+lrwxrwxrwx. 1 root root 23 Feb  3 21:54 /var/run/docker.sock -&gt; /run/podman/podman.sock</code></pre></div>
+<p>The Unix socket that's exposed by Podman can be accessed by a process
+with root privileges only.[]{.sentence-end} It is possible to stretch
+the security restrictions by opening access to the file to all the users
+in the system or by allowing custom ACLs for a custom
+group.[]{.sentence-end} Later in this chapter, we will see that rootless
+container stacks can be executed with
+<code>podman</code>{.inlineCode}<code>-compose</code>{.inlineCode}.</p>
+<p>For the sake of simplicity, in the next subsection, you'll learn how to
+run <code>docker</code>{.inlineCode}<code>-compose</code>{.inlineCode} commands with Podman in
+rootful mode.</p>
+<h2 id="h2_325" class="heading-2">Running Compose workloads with Podman and docker-compose<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>To []{#Chapter_13.xhtml#idx_1663314e .index-entry
+index-entry=&ldquo;Docker Compose:workloads, running with Podman and docker-compose&rdquo;}help
+you learn how to operate <code>docker</code>{.inlineCode}<code>-compose</code>{.inlineCode}
+and create orchestrated multi-container deployments on our host, we will
+reuse the previous example of the Go REST API with a Redis in-memory
+store.</p>
+<p>We have already inspected the <code>docker-compose.yaml</code>{.inlineCode} file,
+which builds the web application and deploys one instance of the Redis
+container.</p>
+<p>Let's inspect[]{#Chapter_13.xhtml#idx_9266d05c .index-entry
+index-entry=&ldquo;Docker Compose:workloads, running with Podman and docker-compose&rdquo;}
+the Dockerfile that's used to build the application
+(<code>Chapter13</code>{.inlineCode}<code>/</code>{.inlineCode}<code>golang-redis</code>{.inlineCode}<code>/</code>{.inlineCode}<code>Dockerfile</code>{.inlineCode}):</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>FROM docker.io/library/golang AS builder
+
+# Copy files for build
+RUN mkdir -p /go/src/golang-redis
+COPY go.mod main.go /go/src/golang-redis
+
+# Set the working directory
+WORKDIR /go/src/golang-redis
+
+# Download dependencies
+RUN go get -d -v ./...
+
+# Install the package
+RUN go build -v
+
+# Runtime image
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest as bin
+COPY --from=builder /go/src/golang-redis/golang-redis /usr/local/bin
+COPY entrypoint.sh /
+
+EXPOSE 8080
+
+ENTRYPOINT [&#34;/entrypoint.sh&#34;]</code></pre></div>
+<p>Here, we can see that the Go application is compiled in a multi-stage
+build and that the Go binary is copied inside a UBI-Minimal image.</p>
+<p>The web frontend is minimal&mdash;it listens to port
+<code>8080</code>{.inlineCode}/<code>tcp</code>{.inlineCode} and only implements two
+endpoints&mdash;an HTTP <code>POST</code>{.inlineCode} method and an HTTP
+<code>GET</code>{.inlineCode} method to allow clients to upload and retrieve a JSON
+object that contains the name, email, and ID of a user.[]{.sentence-end}
+The JSON object is stored inside the Redis database.</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>If you're curious, the source code for the Go server is available in
+the
+<code>Chapter13</code>{.inlineCode}<code>/</code>{.inlineCode}<code>golang-redis</code>{.inlineCode}<code>/app/</code>{.inlineCode}<code>main.go</code>{.inlineCode}
+file.[]{.sentence-end} It isn't presented in this book for the sake of
+space and readability.</p>
+<p>To build and []{#Chapter_13.xhtml#idx_78f75913 .index-entry
+index-entry=&ldquo;Docker Compose:workloads, running with Podman and docker-compose&rdquo;}run
+the application, we must change to the project directory and run the
+<code>docker</code>{.inlineCode}<code>-compose up</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># cd Chapter13/golang-redis
+# docker-compose up --build -d
+[...omitted output...]
+Successfully tagged localhost/golang-redis_web:latest
+6b330224010ed611baba11fc2d66b9e4cfc991312f5166b47b5fcd07357c6325
+Successfully built 6b330224010ed611baba11fc2d66b9e4cfc991312f5166b47b5fcd07357c6325
+Creating golang-redis_redis_1 ... done
+Creating golang-redis_web_1   ... done</code></pre></div>
+<p>Here, we can see that <code>docker</code>{.inlineCode}<code>-compose</code>{.inlineCode}
+created two containers, whose names always follow the
+<code>&lt;</code>{.inlineCode}<code>project</code>{.inlineCode}<code>_name</code>{.inlineCode}<code>&gt;</code>{.inlineCode}<code>_</code>{.inlineCode}<code>&lt;</code>{.inlineCode}<code>service_name</code>{.inlineCode}<code>&gt;</code>{.inlineCode}<code>_</code>{.inlineCode}<code>&lt;</code>{.inlineCode}<code>instance_count</code>{.inlineCode}<code>&gt;</code>{.inlineCode}
+pattern.</p>
+<p>The instance count varies when there is more than one replica in the
+service deployment.[]{.sentence-end} For example, if we set the
+<code>redis</code>{.inlineCode} service value of replicas to <code>3</code>{.inlineCode}, we
+will get 3 container instances of the service.</p>
+<p>We can inspect the running containers with the usual
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>ps</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># podman ps
+CONTAINER ID  IMAGE                              COMMAND       CREATED         STATUS             PORTS                   NAMES
+4a5421c9e7cd  docker.io/library/redis:latest     redis-server  20 seconds ago  Up 20 seconds ago                          golang-redis_redis_1
+8a465d4724ab  localhost/golang-redis_web:latest                20 seconds ago  Up 20 seconds ago  0.0.0.0:8080-&gt;8080/tcp  golang-redis_web_1</code></pre></div>
+<p>One of the []{#Chapter_13.xhtml#idx_c1665f10 .index-entry
+index-entry=&ldquo;Docker Compose:workloads, running with Podman and docker-compose&rdquo;}more
+interesting aspects is that the service names are automatically
+resolved.</p>
+<p>When a Compose stack is created, Podman creates a new network, named
+with the
+<code>&lt;</code>{.inlineCode}<code>project</code>{.inlineCode}<code>_</code>{.inlineCode}<code>name</code>{.inlineCode}<code>&gt;</code>{.inlineCode}<code>_default</code>{.inlineCode}
+pattern.</p>
+<p>The new network instantiates an
+<code>aardvark-</code>{.inlineCode}<code>dns</code>{.inlineCode} process and resolves the
+containers' IPs to names that have been created after the service
+names.</p>
+<p>The <code>aardvark-</code>{.inlineCode}<code>dns</code>{.inlineCode} service can be found
+using the <code>ps</code>{.inlineCode} command and filtered with
+<code>grep</code>{.inlineCode}:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ps aux | grep aardvark-dns
+gbsalin+  318577  0.0  0.0 1493272 2944 ?        Ssl  14:01   0:00 /usr/libexec/podman/aardvark-dns --config /run/user/1000/containers/networks/aardvark-dns -p 53 run
+gbsalin+  321031  0.0  0.0 231256  2448 pts/2    S+   14:24   0:00 grep --color=auto aardvark-dns</code></pre></div>
+<p>The
+<code>/run/user/</code>{.inlineCode}<code>&lt;</code>{.inlineCode}<code>USER</code>{.inlineCode}<code>_ID</code>{.inlineCode}<code>&gt;</code>{.inlineCode}<code>/containers/networks/aardvark-</code>{.inlineCode}<code>dns</code>{.inlineCode}<code>/</code>{.inlineCode}
+directory holds the instance's configuration.[]{.sentence-end} Inside
+the <code>golang-redis_default</code>{.inlineCode} file, we can find the mappings
+between the service names and the allocated container IPs:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>cat golang-redis_default
+10.89.5.1
+843bfd9cf8f766843340e228033ee89d61bb9916b398c2537bc3c600fe6a74e8 10.89.5.2  golang-redis-redis-1,golang-redis-redis-1,redis,843bfd9cf8f7
+776daece0e231f18b349fcc68deccee41e307355c3b4e4db279243fe6a081dcc 10.89.5.3  golang-redis-redis-2,golang-redis-redis-2,redis,776daece0e23
+adc4344449224c1c62c75f39121dea87ad6be5e308e794e97acffecdafd624cb 10.89.5.4  golang-redis-redis-3,golang-redis-redis-3,redis,adc434444922</code></pre></div>
+<p>This means that a process inside a container can resolve a service name
+with a standard DNS query.</p>
+<p>When we have multiple container replicas in a service, the resulting
+resolution that's delivered by
+<code>aardvark-</code>{.inlineCode}<code>dns</code>{.inlineCode} is similar to a <strong>round-robin
+DNS</strong>, a[]{#Chapter_13.xhtml#idx_4c73708a .index-entry
+index-entry=&ldquo;round-robin DNS&rdquo;} simple and minimalistic kind of load
+balancing that iterates multiple DNS records that are resolved by the
+same name.[]{.sentence-end} When a process
+calls[]{#Chapter_13.xhtml#idx_3d4aa6d3 .index-entry
+index-entry=&ldquo;Docker Compose:workloads, running with Podman and docker-compose&rdquo;}
+a service (the <code>db</code>{.inlineCode} service, for example), it will be
+resolved to as many different IPs as there are service replicas.</p>
+<p>Let's go back to the <code>docker-compose.yaml</code>{.inlineCode}
+file.[]{.sentence-end} In the <code>environment</code>{.inlineCode} section of the
+<code>web</code>{.inlineCode} service configuration, we have the following
+variable:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>   environment:
+      - REDIS_HOST=redis</code></pre></div>
+<p>This variable is injected into the running container and represents the
+name of the <code>redis</code>{.inlineCode} service.[]{.sentence-end} It is used by
+the Go application to create the connection string to Redis and
+initialize the connection.[]{.sentence-end} When we're using a
+DNS-resolved service name, the container name and IP address of the
+<code>redis</code>{.inlineCode} service are completely irrelevant to our Go
+application.</p>
+<p>We can use the <code>docker</code>{.inlineCode}<code>-compose exec</code>{.inlineCode} command
+to verify that the variable was correctly injected inside the containers
+running as the <code>web</code>{.inlineCode} service in the stack:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># docker-compose exec web env
+Emulate Docker CLI using podman. Create /etc/containers/nodocker to quiet msg.
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+TERM=xterm
+container=oci
+REDIS_HOST=redis
+HOME=/root</code></pre></div>
+<p>The <code>env</code>{.inlineCode} command outputs the full list of environment
+variables in the container.[]{.sentence-end} This allows us to verify
+that the <code>REDIS_HOST</code>{.inlineCode} variable was created correctly.</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>Storing configurations such as connection strings in a database as
+constants in the application code is an anti-pattern in general,
+especially for modern cloud-native applications.[]{.sentence-end} The
+correct approach is to guarantee a strict separation between the
+application logic and the configuration parameters.</p>
+<p>Configurations can be stored as environment variables or inside
+config/secret files that are injected at runtime in the container that
+runs the application.</p>
+<p>These practices are well-defined in the <strong>Twelve-Factor App</strong> pattern
+specification, whose URL can be found in the <em>Further reading</em> section.</p>
+<p>It is finally time to[]{#Chapter_13.xhtml#idx_4556053a .index-entry
+index-entry=&ldquo;Docker Compose:workloads, running with Podman and docker-compose&rdquo;}
+test the application by posting a couple of JSON objects and retrieving
+one of them with the <code>curl</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ curl -X POST -d \
+&#39;{&#34;name&#34;:&#34;jim&#34;, &#34;email&#34;:&#34;jim@example.com&#34;, &#34;id&#34;:&#34;0001&#34;}&#39; \
+localhost:8080
+$ curl -X POST -d \
+&#39;{&#34;name&#34;:&#34;anna&#34;, &#34;email&#34;:&#34;anna@example.com&#34;, &#34;id&#34;:&#34;0002&#34;}&#39; \
+localhost:8080</code></pre></div>
+<p>The <code>web</code>{.inlineCode} container was successfully written to the Redis
+backend, which we can see by running the
+<code>docker</code>{.inlineCode}<code>-compose logs</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># docker-compose logs web
+[...omitted output...]
+2022/02/06 00:58:06 Storing data:  {&#34;name&#34;:&#34;jim&#34;,&#34;email&#34;:&#34;jim@example.com&#34;,&#34;id&#34;:&#34;0001&#34;}
+2022/02/06 00:58:10 Storing data:  {&#34;name&#34;:&#34;anna&#34;,&#34;email&#34;:&#34;anna@example.com&#34;,&#34;id&#34;:&#34;0002&#34;}</code></pre></div>
+<p>The preceding command captures the logs of all the containers behind the
+<code>web</code>{.inlineCode} service.</p>
+<p>Finally, we can retrieve the result.[]{.sentence-end} The web
+application reads back the object from the Redis database by looking at
+its <code>id</code>{.inlineCode} value:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ curl -X GET -d &#39;{&#34;id&#34;: &#34;0001&#34;}&#39; localhost:8080
+{&#34;name&#34;:&#34;jim&#34;,&#34;email&#34;:&#34;jim@example.com&#34;,&#34;id&#34;:&#34;0001&#34;}</code></pre></div>
+<p>To shut down our application, we can simply use the
+<code>docker</code>{.inlineCode}<code>-compose down</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># docker-compose down</code></pre></div>
+<p>This[]{#Chapter_13.xhtml#idx_11166c34 .index-entry
+index-entry=&ldquo;Docker Compose:workloads, running with Podman and docker-compose&rdquo;}
+command destroys the containers and their associated resources,
+including the custom network, but not volumes.[]{.sentence-end} To
+remove volumes, you must add the <code>-v</code>{.inlineCode} option to the end of
+the command.</p>
+<p>The <code>docker</code>{.inlineCode}<code>-compose</code>{.inlineCode} utility is a great
+companion for building and deploying on a single host with
+Podman.[]{.sentence-end} However, in the next chapter, we will learn
+about some other useful solutions that will let us generate and execute
+Kubernetes Pod and Service resources, as well as containers that are
+executed by <code>s</code>{.inlineCode}<code>ystemd</code>{.inlineCode}
+units.[]{.sentence-end} Before moving on, let's inspect the alternative
+<code>podman</code>{.inlineCode}<code>-compose</code>{.inlineCode} tool, which provides
+support for rootless containers.</p>
+<h2 id="h2_326" class="heading-2">Using podman-compose<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>The <code>podman</code>{.inlineCode}<code>-compose</code>{.inlineCode} project
+[]{#Chapter_13.xhtml#idx_7f1a7ebb .index-entry
+index-entry=&ldquo;Docker Compose:podman-compose, using&rdquo;}started way before
+[]{#Chapter_13.xhtml#idx_7edb86db .index-entry
+index-entry=&ldquo;podman-compose project&rdquo;}version 3.0 of Podman to provide a
+compatibility layer for users who needed to orchestrate containers with
+Compose files.[]{.sentence-end} In this subsection, we will look at an
+example of using <code>podman</code>{.inlineCode}<code>-compose</code>{.inlineCode} on Fedora.</p>
+<p>The <code>podman</code>{.inlineCode}<code>-compose</code>{.inlineCode} tool's CLI is written
+in Python.[]{.sentence-end} The package can be installed with
+<code>dnf</code>{.inlineCode} or by getting the latest release from the respective
+GitHub repository (you can find the direct link in the <em>Further reading</em>
+section):</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ sudo dnf install -y podman-compose</code></pre></div>
+<p>Alternatively, it can be installed with Python's package manager,
+<code>pip3</code>{.inlineCode}, which supports a broader set of operating systems
+and distributions:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ pip3 install podman-compose</code></pre></div>
+<p>Now, we can run the same Compose stacks from the previous examples with
+the advantage of the rootless approach that's provided by
+<code>podman</code>{.inlineCode}<code>-compose</code>{.inlineCode}.</p>
+<p>The following are all the available commands that are compatible with
+<code>docker</code>{.inlineCode}<code>-compose</code>{.inlineCode}, along
+[]{#Chapter_13.xhtml#idx_5a0c7bbd .index-entry
+index-entry=&ldquo;podman-compose project&rdquo;}with their
+[]{#Chapter_13.xhtml#idx_47ffdea7 .index-entry
+index-entry=&ldquo;Docker Compose:podman-compose, using&rdquo;}descriptions and some
+minor changes that are made by the output of the
+<code>podman</code>{.inlineCode}<code>-compose help</code>{.inlineCode} command:</p>
+<ul>
+<li><code>help</code>{.inlineCode}: Shows the tool's help</li>
+<li><code>version</code>{.inlineCode}: Shows the command's version</li>
+<li><code>systemd</code>{.inlineCode}: Creates <code>systemd</code>{.inlineCode} unit files
+and registers its Compose tasks</li>
+<li><code>pull</code>{.inlineCode}: Pulls the stack images</li>
+<li><code>push</code>{.inlineCode}: Pushes the stack images</li>
+<li><code>build</code>{.inlineCode}: Builds the stack images</li>
+<li><code>up</code>{.inlineCode}: Creates and starts the entire stack or some of
+its services</li>
+<li><code>down</code>{.inlineCode}: Tears down the entire stack</li>
+<li><code>ps</code>{.inlineCode}: Show the status of running containers</li>
+<li><code>run</code>{.inlineCode}: Creates a container similar to a service to run
+a one-off command</li>
+<li><code>exec</code>{.inlineCode}: Executes a certain command in a running
+container</li>
+<li><code>start</code>{.inlineCode}: Starts specific services</li>
+<li><code>stop</code>{.inlineCode}: Stops specific services</li>
+<li><code>restart</code>{.inlineCode}: Restarts specific services</li>
+<li><code>logs</code>{.inlineCode}: Shows logs from services</li>
+<li><code>config</code>{.inlineCode}: Displays the Compose file</li>
+<li><code>port</code>{.inlineCode}: Shows the public port for a port binding</li>
+<li><code>pause</code>{.inlineCode}: Pauses all running containers</li>
+<li><code>unpause</code>{.inlineCode}: Unpauses the previously paused containers</li>
+<li><code>kill</code>{.inlineCode}: Kills one or more containers with a specific
+signal</li>
+<li><code>stats</code>{.inlineCode}: Shows usage stats (CPU, memory, network I/O,
+block I/O, and PIDs)</li>
+<li><code>images</code>{.inlineCode}: Lists the images used by the running
+containers</li>
+</ul>
+<p>The following command creates a stack from a directory containing the
+necessary configurations and the <code>docker-compose.yaml</code>{.inlineCode}
+file:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman-compose up</code></pre></div>
+<p>The[]{#Chapter_13.xhtml#idx_ca522fa7 .index-entry
+index-entry=&ldquo;Docker Compose:podman-compose, using&rdquo;} command's output is
+also very similar to the output provided by
+<code>docker</code>{.inlineCode}<code>-compose</code>{.inlineCode}.</p>
+<p>To build and []{#Chapter_13.xhtml#idx_14b0d0c0 .index-entry
+index-entry=&ldquo;podman-compose project&rdquo;}contextually run the services stack
+as we did in the previous <code>golang-redis</code>{.inlineCode} example, use this:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman-compose up --build -d</code></pre></div>
+<p>To shut down the stack, simply run the following command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ podman-compose down</code></pre></div>
+<p>The <code>podman</code>{.inlineCode}<code>-compose </code>{.inlineCode}<code>systemd</code>{.inlineCode}
+command provides an interesting way to interact with
+<code>systemd</code>{.inlineCode} and register our Compose stacks as
+<code>systemd</code>{.inlineCode} units.[]{.sentence-end} The following example
+creates a <code>systemd</code>{.inlineCode} unit and registers it:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>sudo podman-compose systemd -a create-unit
+Sudo podman-compose systemd -a register</code></pre></div>
+<p>The first command creates a unit such as the following under the
+<code>/</code>{.inlineCode}<code>etc</code>{.inlineCode}<code>/</code>{.inlineCode}<code>systemd</code>{.inlineCode}<code>/user/</code>{.inlineCode}<code>podman</code>{.inlineCode}<code>-</code>{.inlineCode}<code>compose@.service</code>{.inlineCode}
+path:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># /etc/systemd/user/podman-compose@.service
+
+[Unit]
+Description=%i rootless pod (podman-compose)
+
+[Service]
+Type=simple
+EnvironmentFile=%h/.config/containers/compose/projects/%i.env
+ExecStartPre=-/usr/bin/podman-compose up --no-start
+ExecStartPre=/usr/bin/podman pod start pod_%i
+ExecStart=/usr/bin/podman-compose wait
+ExecStop=/usr/bin/podman pod stop pod_%i
+
+[Install]
+WantedBy=default.target</code></pre></div>
+<p>From []{#Chapter_13.xhtml#idx_2430f0f3 .index-entry
+index-entry=&ldquo;Docker Compose:podman-compose, using&rdquo;}now on, it is
+possible to start, stop, or inspect our service by recalling the
+<code>systemd</code>{.inlineCode} commands:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ systemctl --user start &#39;podman-compose@golang-redis
+$ systemctl --user stop &#39;podman-compose@golang-redis
+$ systemctl --user status &#39;podman-compose@golang-redis</code></pre></div>
+<p>The[]{#Chapter_13.xhtml#idx_28f31242 .index-entry
+index-entry=&ldquo;podman-compose project&rdquo;} landscape of multi-container
+orchestration on a single host has matured
+significantly.[]{.sentence-end} While the
+<code>podman</code>{.inlineCode}<code>-compose</code>{.inlineCode} project has made great
+steps forward in compatibility and offers unique features, such as the
+ability to automatically group services into Pods, this <em>pod-first</em>
+approach can sometimes introduce unexpected friction with complex
+Compose files designed for Docker's individual-container model.</p>
+<p>For most developers, the <code>docker</code>{.inlineCode}<code>-compose</code>{.inlineCode}
+command remains the gold standard for high-fidelity
+compatibility.[]{.sentence-end} It allows you to run existing stacks
+without the <em>debugging tax</em> often associated with translation layers.</p>
+<p>While <code>podman</code>{.inlineCode}<code>-compose</code>{.inlineCode} continues to evolve
+as a community-driven, Python-based alternative, Podman itself is moving
+toward Quadlets, which we will explore in the next chapter, as the
+preferred <em>native</em> method for managing service lifecycles via
+<code>systemd</code>{.inlineCode} in a single system and through
+<code>podman</code>{.inlineCode}<code> </code>{.inlineCode}<code>kube</code>{.inlineCode} moving to
+production multi-node environments such as OpenShift or Kubernetes.</p>
+<h1 id="h1_327" class="heading-1">Summary<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In this chapter, we learned how to manage a full migration from Docker
+to Podman.</p>
+<p>We covered how to migrate images and create command aliases, and we
+inspected the command compatibility matrix.[]{.sentence-end} Here, we
+provided a detailed overview of the different behaviors of specific
+commands and the different commands that are implemented in the two
+container engines&mdash;that is, Docker and Podman.</p>
+<p>Then, we learned how to migrate Docker Compose by illustrating native
+Podman support for the <code>docker</code>{.inlineCode}<code>-compose</code>{.inlineCode}
+command and the <code>podman</code>{.inlineCode}<code>-compose</code>{.inlineCode} alternative
+utility.</p>
+<p>In the next chapter of this book, we will learn how to interact with
+<code>s</code>{.inlineCode}<code>ystemd</code>{.inlineCode} by generating custom service units
+and turning containers into services that are started automatically
+inside the host.[]{.sentence-end} Then, we'll look at
+Kubernetes-oriented orchestration, where we will learn how to generate
+Kubernetes resources from running containers and pods and run them in
+Podman or Kubernetes natively.</p>
+<h1 id="h1_328" class="heading-1">Further reading<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>To learn more about the topics that were covered in this chapter, take a
+look at the following resources:</p>
+<ul>
+<li>Docker Awesome Compose:
+<a href="https://github.com/docker/awesome-compose" rel="external" target="_blank">[https://github.com/docker/awesome-compose]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>Podman Compose project on GitHub:
+<a href="https://github.com/containers/podman-compose" rel="external" target="_blank">[https://github.com/containers/podman-compose]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>Red Hat blog introduction to Docker Compose support in Podman:
+<a href="https://www.redhat.com/sysadmin/podman-docker-compose" rel="external" target="_blank">[https://www.redhat.com/sysadmin/podman-docker-compose]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>Twelve-Factor App:
+<a href="https://12factor.net/" rel="external" target="_blank">[https://12factor.net/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>Podman <code>man</code>{.inlineCode} page:</li>
+</ul>
+<h1 id="h1_329" class="heading-1">Get This Book&rsquo;s PDF Version and Exclusive Extras<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Scan the QR code (or go to
+<a href="https://packtpub.com/unlock" rel="external" target="_blank">[packtpub.com/unlock]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}).[]{.sentence-end}
+Search for this book by name, confirm the edition, and then follow the
+steps on the page.</p>
+<p><a href="#R-image-eeb3d5d8fbe6dd4417ee985dabab1cfc" class="lightbox-link"><img alt="Image" class="lazy lightbox figure-image" loading="lazy" src="images/B31467_13_3.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-eeb3d5d8fbe6dd4417ee985dabab1cfc"><img alt="Image" class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_13_3.png"></a>{style=&ldquo;width:25%;&rdquo;}</p>
+<p><a href="#R-image-e2cb95a604dd22c8b3307fb505c7cad0" class="lightbox-link"><img alt="Image" class="lazy lightbox figure-image" loading="lazy" src="images/B31467_13_4.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-e2cb95a604dd22c8b3307fb505c7cad0"><img alt="Image" class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_13_4.png"></a>{style=&ldquo;width:25%;&rdquo;}</p>
+<p><em>Note: Keep your invoice handy.[]{.sentence-end} Purchases made directly
+from</em> <em>Packt</em> <em>don&rsquo;t require one.</em></p>
+<p>[]{#Chapter_14.xhtml}</p>
+<p>{.section .chapter-first}</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready for RHCE<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/install-ansible-using-uv/"><a class="padding" href="/ansible/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/playbooks/"><a class="padding" href="/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/hostname-patterns/"><a class="padding" href="/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/include-and-import-files/"><a class="padding" href="/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2/"><a class="padding" href="/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/user-and-groups/"><a class="padding" href="/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/storage-partitions-and-lvm/"><a class="padding" href="/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/services/"><a class="padding" href="/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimize-ansible-processing/"><a class="padding" href="/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux/"><a class="padding" href="/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/tags/"><a class="padding" href="/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/loops-and-items/"><a class="padding" href="/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/modules-for-troubleshooting/"><a class="padding" href="/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Using Variables In Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/when/"><a class="padding" href="/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/secure-shell-service-ssh/"><a class="padding" href="/cyber-security/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ansiblepuppetchef/"><a class="padding" href="/networking/ccna/ccna-notes-1/ansiblepuppetchef/">Ansible, Puppet, and Chef<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscoacls/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscoacls/">Cisco ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscocli/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscocli/">Cisco CLI<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/classfulipv4/"><a class="padding" href="/networking/ccna/ccna-notes-1/classfulipv4/">Classful IPv4<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/cloudarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/cloudarchitecture/">Cloud Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/controllerbasednetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/controllerbasednetworking/">Controller-Based Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/device-management-protocols/"><a class="padding" href="/networking/ccna/ccna-notes-1/device-management-protocols/">Device Management Protocols<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-config/">DHCP Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/">DHCP Snooping and ARP Inspection<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-syncronization/"><a class="padding" href="/networking/dns-and-time-syncronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ethernetlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/ethernetlans/">Ethernet LANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/extended-acls/"><a class="padding" href="/networking/ccna/ccna-notes-1/extended-acls/">Extended ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-services/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-services/">IP Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-transport-and-applications/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-transport-and-applications/">IP Transport and Applications<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6/">IPv6<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/">IPv6 Addressing and Subnetting<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6configuration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6configuration/">IPv6 Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6routing/">IPv6 Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lan-architecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/lan-architecture/">LAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/l2-etherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/l2-etherchannel/">Layer 2 Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/network-devices-and-connections/"><a class="padding" href="/networking/network-devices-and-connections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospf-concepts/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospf-concepts/">OSPF Concepts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfconfiguration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfconfiguration/">OSPF Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/">OSPF Network Types and Neighbors<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/restandjson/"><a class="padding" href="/networking/ccna/ccna-notes-1/restandjson/">REST and JSON<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/router_operation/"><a class="padding" href="/networking/ccna/ccna-notes-1/router_operation/">Router Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/routeroperation/"><a class="padding" href="/networking/ccna/ccna-notes-1/routeroperation/">ROuter Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lanrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/lanrouting/">Routing in the LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/rstpandetherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/rstpandetherchannel/">RSTP and Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/securing-network-devices/"><a class="padding" href="/networking/ccna/ccna-notes-1/securing-network-devices/">Securing Network Devices<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/security-architectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/security-architectures/">Security Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/softwaredefinedaccess/"><a class="padding" href="/networking/ccna/ccna-notes-1/softwaredefinedaccess/">Software-Defined Access (SDA)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/spanningtreeprotocol/"><a class="padding" href="/networking/ccna/ccna-notes-1/spanningtreeprotocol/">Spanning Tree Protocol<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/static-routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/static-routing/">Static Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchinterfaces/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchinterfaces/">Switch Interfaces<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switching/"><a class="padding" href="/networking/ccna/ccna-notes-1/switching/">Switching<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchport-security-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchport-security-config/">Switchport Security Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/tcpipbasic/"><a class="padding" href="/networking/ccna/ccna-notes-1/tcpipbasic/">TCP/IP Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/troubleshootingrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/troubleshootingrouting/">Troubleshooting Routing Issues<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/vlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/vlans/">VLANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wanarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/wanarchitecture/">WAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wansandiprouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/wansandiprouting/">WANs and IP Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessarchitectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessarchitectures/">Wireless Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_lan/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_lan/">Wireless LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessnetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessnetworking/">Wireless Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_security/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_security/">Wireless Security<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
+            <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/local-filesystems-and-swap/"><a class="padding" href="/storage/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/network-filesystem-nfs/"><a class="padding" href="/storage/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/partitioning-mbr-gpt/"><a class="padding" href="/storage/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/rm-filesystem-from-partition/"><a class="padding" href="/storage/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/remove-formatting-from-highlights/"><a class="padding" href="/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-docker-nginx/"><a class="padding" href="/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/you-need-to-learn-man-pages/"><a class="padding" href="/tools/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/proxmox-ha-proxy-setup/"><a class="padding" href="/tools/proxmox-ha-proxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/learning-touch-typing/"><a class="padding" href="/tools/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5" checked><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/">Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="active hidden " data-nav-id="/containers/migratingfromdocker/"><a class="padding" href="/containers/migratingfromdocker/"><i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/ansible-and-podman/"><a class="padding" href="/containers/ansible-and-podman/">Ansible and Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/intro-to-containers-1/"><a class="padding" href="/containers/intro-to-containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/convert-docker-compose-to-quadlets/"><a class="padding" href="/containers/convert-docker-compose-to-quadlets/">Convert Docker Compose to Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-links/"><a class="padding" href="/containers/podman-links/">Podman Links<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-quadlets/"><a class="padding" href="/containers/podman-quadlets/">Podman Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/">Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
+            <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users-and-Groups</span></label><a class="padding default-animation" href="/users-and-groups/">Users-and-Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
+            <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/virtualization/"><input type="checkbox" id="R-section-da8ee4406de37987b502b79e5b0a9d1c" aria-controls="R-subsections-da8ee4406de37987b502b79e5b0a9d1c"><label for="R-section-da8ee4406de37987b502b79e5b0a9d1c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualizations</span></label><a class="padding default-animation" href="/virtualization/">Virtualizations<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-da8ee4406de37987b502b79e5b0a9d1c" class="collapsible-menu">
+            <li class="" data-nav-id="/virtualization/using-vagrant-on-linux/"><a class="padding" href="/virtualization/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/booknotes/"><a class="padding" href="/booknotes/"><i class='fas fa-fw fa-book'></i> Book Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/now/"><a class="padding" href="/now/"><i class='fas fa-fw fa-clock'></i> Now<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780154752" defer></script>
+    <script src="/js/theme.js?1780154752" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

@@ -1,1650 +1,600 @@
-# Containers
+# 
 
-## Introduction to Containers 
+Before asking ourselves what a container is, we should answer another question: what is a **process**?
 
-- Take advantage of the native virtualization features available in the Linux kernel. 
-- Each container typically encapsulates one self-contained application that includes all dependencies such as library files, configuration files, software binaries, and services.
+- A *process* is an instance of an executing program. 
+- A **program** is a file holding information necessary to execute the process. 
+- A program can be dynamically linked to external libraries, or it can be statically linked in the program itself (the Go programming language uses this approach by default).
+- A process is executed in the machine CPU and allocates a portion of memory containing program code and variables used by the code itself. 
+- The process is instantiated in the machine\'s user space, and its execution is orchestrated by the **operating system kernel**. 
+- When a process is executed, it needs to access different machine resources such as I/O (disk, network, terminals, and so on) or memory. 
+- When the process needs to access those resources, it performs a system call into the kernel space (for example, to read a disk block or send packets via the network interface).
+- The process indirectly interacts with the host disks using a filesystem, a multi-layer storage abstraction, that facilitates the write and read access to files and directories.
+- They are orchestrated by the OS kernel with complex scheduling logic that makes the processes behave like they are running on a dedicated CPU core, while it is shared among many of them.
+- The same program can instantiate many processes of its kind (for example, multiple web server instances running on the same machine). 
+- Conflicts, such as many processes trying to access the same network port, must be managed accordingly.
+- Nothing prevents us from running a different version of the same program on the host, assuming that system administrators will have the burden of managing potential conflicts of binaries, libraries, and their dependencies. This could become a complex task, which is not always easy to solve with common practices.
 
-Traditional server/ application deployment:
-- Applications may have conflicting requirements in terms of shared library files, package dependencies, and software versioning. 
-- Patching or updating the operating system may result in breaking an application functionality. 
-- Developers perform an analysis on their current deployments before they decide whether to collocate a new application with an existing one or to go with a new server without taking the risk of breaking the current operation.
 
-Container Model:
-- Developers can now package their application alongside dependencies, shared library files, environment variables, and other specifics in a single image file and use that file to run the application in a unique, isolated "environment" called container. 
-- A container is essentially a set of processes that runs in complete seclusion on a Linux system. 
-- A single Linux system running on bare metal hardware or in a virtual machine may have tens or hundreds of containers running at a time. 
-- The underlying hardware may be located either on the ground or in the cloud.
-
-- Each container is treated as a complete whole, which can be tagged, started, stopped, restarted, or even transported to another server without impacting other running containers. 
-- Any conflicts that may exist among applications, within application components, or with the operating system can be evaded. 
-- Applications encapsulated to run inside containers are called containerized applications.
-- Containerization is a growing trend for architecting and deploying applications, application components, and databases in real world environments.
-
-### Containers and the Linux Features 
-
-- Container technology employs some of the core features available in the Linux kernel. 
-- These features include:
-	- **control groups**
-	- **namespaces**
-	- **seccomp** (secure computing mode)
-	- **SELinux**
-
-**Control Groups** (cgroups)
-- Split processes into groups to set limits on their consumption of compute resources---CPU, memory, disk, and network I/O. 
-- These restrictions result in controlling individual processes from over utilizing available resources.
-
-**Namespaces** 
-- Restrict the ability of process groups from seeing or accessing system resources---PIDs, network interfaces, mount points, hostname, etc.
-- Creates a layer of isolation between process groups and the rest of the system. 
-- Guarantees a secure, performant, and stable environment for containerized applications as well as the host operating system.
 
-**Secure Computing Mode (seccomp) and SELinux** 
-- Impose security constraints thereby protecting processes from one another and the host operating system from running processes.
-- Container technology employs these characteristics to run processes isolated in a highly secure environment with full control over what they can or cannot do.
+## Containers
+- Simple and smart answer to the need to run isolated process instances. 
+- Form of application isolation that works on many levels:
+	- **File system isolation**: Containerized processes have a separate filesystem view, and their programs are executed from the isolated filesystem itself.
+	- **Process ID isolation**: This is a containerized process run under an independent set of **process IDs** **(PIDs)**.
+	- **User isolation**: **User IDs** **(UIDs)** and **group IDs** **(GIDs)** are isolated to the container. A process user and group ID can be different inside a container and run with a privileged UID or GID inside the container only.
+	- **Network isolation**: This kind of isolation relates to the host network resources, such as network devices, IPv4 and IPv6 stacks, routing tables, and firewall rules.
+	- **IPC** **isolation**: Containers provide isolation for host IPC resources, such as POSIX message queues or System V IPC objects.
+	- **Resource usage isolation**: Containers rely on Linux **control groups** **(cgroups)** to limit or monitor the usage of certain resources, such as CPU, memory, or disk. We will discuss more about cgroups later in this chapter.
 
-## Benefits of Using Containers 
 
-### Isolation 
-- Containers are not affected due to changes in the host operating system or in other hosted or containerized applications, as they run fully isolated from the rest of the environment.
-
-### Loose Coupling 
-- Containerized applications are loosely coupled with the underlying operating system due to their self-containment and minimal level of dependency.
-
-### Maintenance Independence 
-- Maintenance is performed independently on individual containers.
-
-### Less Overhead 
-- Containers require fewer system resources than do bare metal and virtual servers.
-
-### Transition Time 
-- Containers require a few seconds to start and stop.
-
-### Transition Independence 
-- Transitioning from one state to another (start or stop) is independent of other containers, and it does not affect or require a restart of any underlying host operating system service.
-
-### Portability 
-- Containers can be migrated to other servers without modifications to the contained applications. 
-- Target servers may be bare metal or virtual and located on-premises or in the cloud.
-
-### Reusability 
-- The same container image can be used to run identical containers in development, test, preproduction, and production environments. 
-- There is no need to rebuild the image.
-
-### Rapidity 
-- The container technology allows for accelerated application development, testing, deployment, patching, and scaling. 
-- There is no need for an exhaustive testing.
-
-### Version Control 
-- Container images can be version-controlled, which gives users the flexibility in choosing the right version to run a container.
-
-### Container Home: Bare Metal or Virtual Machine 
-
-Containers
-- run directly on the underlying operating system whether it be running on a bare metal server or in a virtual machine.
-- Share hardware and operating system resources securely among themselves. 
-- Containerized applications stay lightweight and isolated, and run in parallel. 
-- Share the same Linux kernel and require far fewer hardware resources than do virtual machines, which contributes to their speedy start and stop. 
-- Given the presence of an extra layer of hypervisor services, it may be more beneficial and economical to run containers directly on non-virtualized physical servers.
-
-![](../../../images/image-3RXCU9W7%201%201.jpg)
-
-### Container Images and Container Registries 
-
-- Launching a container requires a pre-packaged image to be available. 
-
-**container image** 
-- Essentially a static file that is built with all necessary components (application binaries, library files, configuration settings, environment variables, static data files, etc.)
-- Required by an application to run smoothly, securely, and independently. 
-- RHEL follows the **open container initiative** (**OCI**) to allow users to build images based on industry standard specifications that define the image format, host operating system metadata, and supported hardware architectures. 
-- An OCI-compliant image can be executed and managed with OCI-compliant tools such as podman (pod manager) and Docker. 
-- Images can be version-controlled giving users the suppleness to use the latest or any of the previous versions to launch their containers. 
-- A single image can be used to run several containers at once.
-
-- Container images adhere to a standard naming convention for identification. 
-- This is referred to as **fully qualified image name** (**FQIN**). 
-	- Comprised of four components: 
-		- (1) the storage location (registry_name)
-		- (2) the owner or organization name (user_name)
-		- (3) a unique repository name (repo_name)
-		- (4) an optional version (tag). 
-	- The syntax of an FQIN is:
-		*registry_hostname/user_name/repo_name:tag*.
-
-- Images are stored and maintained in public or private registries;
-- They need to be downloaded and made locally available for consumption. 
-- There are several registries available on the Internet.
-	- *registry.redhat.io* (/images/images based on official Red Hat products; requires authentication),
-	- *registry.access.redhat.com* (requires no authentication)
-	- *registry.connect.redhat.com* (/images/images based on third-party products)
-	- *hub.docker.com* (Docker Hub). 
-- The three Red Hat registries may be searched using the Red Hat Container Catalog at catalog.redhat.com/software/containers/search. 
-- Additional registries may be added as required. 
-- Private registries may also require authentication for access.
-
-### Rootful vs. Rootless Containers 
-
-- Containers can be launched with the root user privileges (sudo or directly as the root user). 
-- This gives containers full access to perform administrative functions including the ability to map privileged network ports (1024 and below). 
-- Launching containers with superuser rights opens a gate to potential unauthorized access to the container host if a container is compromised due to a vulnerability or misconfiguration.
-
-- To secure containers and the underlying operating system, containers should be launched and interacted with as normal Linux users. 
-- Such containers are referred to as **rootless containers**. 
-- Rootless containers allow regular, unprivileged users to run containers without the ability to perform tasks that require privileged access.
-
-## Working with Images and Containers 
-
-### Lab: Install Necessary Container Support 
-
-- Install the necessary software to set the foundation for completing the exercises in the remainder of the chapter.
-- The standard RHEL 9.1 image includes a package called `container-tools` that consists of all the required components and commands. 
-- Use the standard `dnf` command to install the package.
-
-1\. Install the container-tools package:
-```bash
- root@server10 ~]# dnf install -y container-tools
-
- Upgraded:
-  aardvark-dns-2:1.10.0-3.el9_4.x86_64 
-  buildah-2:1.33.7-3.el9_4.x86_64         
-  netavark-2:1.10.3-1.el9.x86_64            
-  podman-4:4.9.4-6.el9_4.x86_64                                   
- Installed:
-  container-tools-1-14.el9.noarch        
-  podman-docker-4:4.9.4-6.el9_4.noarch 
-  podman-remote-4:4.9.4-6.el9_4.x86_64    
-  python3-podman-3:4.9.0-1.el9.noarch 
-  python3-pyxdg-0.27-3.el9.noarch    
-  python3-tomli-2.0.1-5.el9.noarch   
-  skopeo-2:1.14.3-3.el9_4.x86_64             
-  toolbox-0.0.99.5-2.el9.x86_64      
-  udica-0.2.8-1.el9.noarch    
-```
-
-2\. Verify the package installation:
-```bash
- [root@server10 ~]# dnf list container-tools
- Updating Subscription Management repositories.
- Last metadata expiration check: 14:53:32 ago on Wed 31 Jul 2024 05:45:56 PM MST.
- Installed Packages
- container-tools.noarch   1-14.el9    @rhel-9-for-x86_64-appstream-rpms
-```
-### `podman` Command 
-
-- Finding, inspect, retrieve, and delete images 
-- Run, stop, list, and delete containers. 
-- Used for most of these operations. 
-
-### Subcommands 
-
-#### Image Management                    
-
-**build**                               
-- Builds an image using instructions delineated in a Container file
-
-**images**                              
-- Lists downloaded images from local storage
-
-**inspect**                             
-- Examines an image and displays its details
-
-**login/logout**                       
-- Logs in/out to/from a container registry. A login may be required to access private and protected registries.
-
-**pull**                                
-- Downloads an image to local storage from a registry
-
-**rmi**                                 
-- Removes an image from local storage
-
-**search**                              
-- Searches for an image. The following options can be included with this subcommand:
-
-1. A *partial image name* in the search will produce a list of all images containing the partial name.
-2. The `--no-trunc` option makes the command exhibit output without truncating it. 
-3. The `--limit <number>` option limits the displayed results to the specified number.
-
-**tag**                                 
-- Adds a name to an image. The default is 'latest' to classify the image as the latest version. Older images may have specific version identifiers.
-
-#### Container Management                
-
-**attach**                              
-- Attaches to a running container
-
-**exec**                                
-- Runs a process in a running container
-
-**generate**                            
-- Generates a systemd unit configuration file that can be used to control the operational state of a container. The `--new` option is important and is employed in later exercises.
-
-**info**                                
-- Reveals system information, including the defined registries
-
-**inspect**                             
-- Exhibits the configuration of a container
-
-**ps**                                  
-- Lists running containers (includes stopped containers with the -a option)
-
-**rm**                                  
-- Removes a container
-
-**run**                                
-- Launches a new container from an image. Some options such as -d (detached), -i (interactive), and -t (terminal) are important and are employed in exercises where needed.
-
-**start/stop/restart**                  
-- Starts, stops, or restarts a container
-
-### `skopeo` Command 
-- Utilized for interacting with local and remote images and registries. 
-- Has numerous subcommands available; however, you will be using only the `inspect` subcommand to examine the details of an image stored in a remote registry. 
-
-*/etc/containers/registries.conf*
-- System-wide configuration file for image registries.
-- Normal Linux users may store a customized copy of this file, if required, under the *~/.config/containers* directory. 
-- Settings stored in the per-user file will take precedence over those stored in the system-wide file. 
-	- Useful for running rootless containers.
-- Defines searchable and blocked registries. 
-
-```bash
- [root@server10 ~]# grep -Ev '^#|^$' /etc/containers/registries.conf
- unqualified-search-registries = ["registry.access.redhat.com", "registry.redhat.io", "docker.io"]
- short-name-mode = "enforcing"
-```
-
-- The output shows three registries. 
-- The `podman` command searches these registries for container images in the given order.
-- Can add additional registries to the list. 
-
- Add a private registry called *registry.private.myorg.io* to be added with the highest priority:
-```bash
- [root@server10 ~]# vim /etc/containers/registries.conf
-```
-
-```bash
- unqualified-search-registries = \["registry.private.myorg.io",
- "registry.access.redhat.com", "registry.redhat.io", "docker.io"\]
-```
-
-If this private registry is the only one to be used, you can take the rest of the registry entries out of the list:
-
-```bash
- unqualified-search-registries = \["registry.private.myorg.io"\]
-```
-
-EXAM TIP: As there is no Internet access provided during Red Hat exams, you may have to access a network-based registry to download images.
-
-### Viewing Podman Configuration and Version 
-
-- The podman command references various system runtime and configuration files and runs certain Linux commands in the background to gather and display information. 
-- For instance, it looks for registries and storage data in the system-wide and per-user configuration files, pulls memory information from the */proc/meminfo* file, executes `uname -r`to obtain the kernel version, and so on. 
-- podman's `info` subcommand shows all this information. 
-
-Here is a sample when this command is executed as a normal
-user (user1):
-```bash
- [[user1@server10 root]$ podman info
- ERRO[0000] XDG_RUNTIME_DIR directory "/run/user/0" is not owned by the current user](<[user1@server10 ~]$ podman info
- host:
-  arch: amd64
-  buildahVersion: 1.33.8
-  cgroupControllers:
-  - memory
-  - pids
-  cgroupManager: systemd
-  cgroupVersion: v2
-  conmon:
- ...
-```
-
-
-- Re-run the command as root (preceded by sudo if running as user1) and compare the values for the settings "rootless" under host and "ConfigFile" and "ImageStore" under store. 
-
-- The differences lie between where the root and rootless (normal) users store and obtain configuration data, the number of container images they have locally available, and so on.
-
-```bash
- [root@server10 ~]# podman info
- host:
-  arch: amd64
-  buildahVersion: 1.33.8
-  cgroupControllers:
-  - cpuset
-  - cpu
-  - io
-  - memory
-  - hugetlb
-  - pids
-  - rdma
-  - misc
-...
-```
-
-Similarly, you can run the podman command as follows to check its
-version:
-```bash
- [root@server10 ~]# podman version
- Client:       Podman Engine
- Version:      4.9.4-rhel
- API Version:  4.9.4-rhel
- Go Version:   go1.21.11 (Red Hat 1.21.11-1.el9_4)
- Built:        Mon Jul  1 03:27:14 2024
- OS/Arch:      linux/amd64
-```
-### Image Management 
-
-Container images 
-- Are available from numerous private and public registries. 
-- They are pre-built for a variety of use cases. 
-- You can search through registries to find the one that suits your needs. 
-- You can examine their metadata before downloading them for consumption.
-- Downloaded images can be removed when no longer needed to conserve local storage. 
-- The same pair of commands---`podman` and `skopeo`---is employed for these operations.
-
-### Lab: Search, Examine, Download, and Remove an Image 
-
-- Log in to the registry.access.redhat.com registry
-- Look for an image called *mysql-80* in the registry, examine its details, pull it to your system, confirm the retrieval, and finally erase it from the local storage. 
-
-1\. Log in to the specified Red Hat registry:
-```bash
- [user1@server10 ~]$ podman login registry.redhat.io
-```
-
-2\. Confirm a successful login:
-```bash
- [user1@server10 ~]$ podman login registry.redhat.io --get-login
-```
-
-3\. Find the mysql-80 image in the specified registry. Add the
-`--no-trunc` option to view full output.
-```bash
- [user1@server10 ~]$ podman search registry.redhat.io/mysql-80 --no-trunc
- NAME                                     DESCRIPTION
- registry.redhat.io/rhel8/mysql-80        This container image provides a containerized packaging of the MySQL mysqld daemon and client application. The  mysqld server daemon accepts connections from clients and provides access to content from MySQL databases on behalf of the clients.
-...
-```
-
-4\. Select the second image rhel9/mysql-80 for this exercise. Inspect the image without downloading it using skopeo inspect. A long output
-will be generated. The command uses the docker:// mechanism to access
-the image.
-```bash
- [user1@server10 ~]$ skopeo inspect docker://registry.redhat.io/rhel9/mysql-80
- {
-    "Name": "registry.redhat.io/rhel9/mysql-80",
-    "Digest": "sha256:247903d2103a3c1db9401f6340ecdcd97c6244480b7a3419e6303dda650491dc",
-    "RepoTags": [
-        "1",
-        "1-190",
-        "1-190.1655192188",
-        "1-190.1655192188-source",
-        "1-190-source",
-        "1-197",
-        "1-197-source",
-        "1-206",
-...
-```
-
-Output:
-- Shows older versions under RepoTags
-- Creation time for the latest version
-- Build date of the image
-- description
-- other information. 
-
-- It is a good practice to analyze the metadata of an image prior to downloading and consuming it.
-
-5\. Download the image by specifying the fully qualified image name using podman pull:
-```bash
- [user1@server10 ~]$ podman pull docker://registry.redhat.io/rhel9/mysql-80
- Trying to pull registry.redhat.io/rhel9/mysql-80:latest...
- Getting image source signatures
- Checking if image destination supports signatures
- Copying blob 846c0bdf4e30 done   | 
- Copying blob cc296d75b612 done   | 
- Copying blob db22e630b1c7 done   | 
- Copying config b5782120a3 done   | 
- Writing manifest to image destination
- Storing signatures
- b5782120a320e5915d86555e661c357cfa56dd8320ba4c54a58caa1e1c91925f
-```
-
-6\. List the image to confirm the retrieval using podman images:
-```bash
- [user1@server10 ~]$ podman images
- REPOSITORY                         TAG         IMAGE ID      CREATED      SIZE
- registry.redhat.io/rhel9/mysql-80  latest      b5782120a320  2 weeks ago  555 MB
-```
-
-7\. Display the image's details using `podman inspect`:
-```bash
- [user1@server10 ~]$ podman inspect mysql-80
- [
-     {
-          "Id": "b5782120a320e5915d86555e661c357cfa56dd8320ba4c54a58caa1e1c91925f",
-          "Digest": "sha256:247903d2103a3c1db9401f6340ecdcd97c6244480b7a3419e6303dda650491dc",
-          "RepoTags": [
-               "registry.redhat.io/rhel9/mysql-80:latest"
-          ],
-```
-
-8\. Remove the mysql-80 image from local storage:
-```bash
- [user1@server10 ~]$ podman rmi mysql-80
- Untagged: registry.redhat.io/rhel9/mysql-80:latest
- Deleted: b5782120a320e5915d86555e661c357cfa56dd8320ba4c54a58caa1e1c91925f
-```
-
-- Shows the ID of the image after deletion.
-
-9\. Confirm the removal:
-```bash
- [user1@server10 ~]$ podman images
- REPOSITORY  TAG         IMAGE ID    CREATED     SIZE
-```
-
-### Containerfile 
-- Can build a custom image by outlining the steps you need to be run in a file called Containerfile. 
-- The podman command can then be used to read those instructions and executes them to produce a new image.
-- File name *containerfile* is widespread; but you can use any name of your liking.
-
-Instructions that may be utilized inside a Containerfile to perform specific functions during the build process:
-
-**CMD**                                 
-- Runs a command
-
-**COPY**                                
-- Copies files to the specified location
-
-**ENV**                                 
-- Defines environment variables to be used during the build process
-
-**EXPOSE**                              
-- A port number that will be opened when a container is launched using this image
-
-**FROM**                                
-- Identifies the base container image to use
-
-**RUN**                                 
-- Executes the specified commands
-
-**USER**                                
-- Defines a non-root user to run the commands as
-
-**WORKDIR**                             
-- Sets the working directory. This directory is automatically created if it does not already exist.
-
-A sample container file is presented below:
-```bash
- [user1@server10 ~]$ vim containerfile
-```
-
-```bash
- # Use RHEL9 base image
- FROM registry.redhat.io/ubi9/ubi
-
- # Install Apache web server software
- RUN dnf -y install httpd
-
- # Copy the website
- COPY ./index.html /var/www/html/
-
- # Expose Port 80/tcp
- EXPOSE 80
-
- # Start Apache web server
- CMD ["httpd"]
-```
-
-- The index.html file may contain a basic statement such as "This is a custom-built Apache web server container image based on RHEL 9".
-
-### Lab: Use Containerfile to Build Image 
-
-- Use a containerfile to build a custom image based on the latest version of the RHEL 9 universal base image (ubi) available from a Red Hat container registry. 
-- Confirm the image creation. 
-- Use the podman command for these activities.
-
-1\. Log in to the specified Red Hat registry:
-```bash
- [user1@server10 ~]$ podman login registry.redhat.io
- Authenticating with existing credentials for registry.redhat.io
- Existing credentials are valid. Already logged in to registry.redhat.io
-```
-
-2\. Confirm a successful login:
-```bash
- [user1@server10 ~]$ podman login registry.redhat.io --get-login
-```
-
-3\. Create a file called containerfile with the following code:
-```bash
- [user1@server10 ~]$ vim containerfile2
-```
-
-```bash
- # Use RHEL9 base image
- FROM registry.redhat.io/ubi9/ubi
-
- # Count the number of characters
- CMD echo "RHCSA exam is hands-on." | wc
-
- # Copy a local file to /tmp
- COPY ./testfile /tmp
-
-```
-
-4\. Create a file called testfile with some random text in it and place it in the same directory as the containerfile.
-```bash
- [user1@server10 ~]$ echo "boo bee doo bee doo" >> testfile
- [user1@server10 ~]$ cat testfile 
- boo bee doo bee doo
-```
-
-5\. Build an image by specifying the containerfile name and an image tag such as `ubi9-simple-image`. The period character at the end represents the current directory and this is where both containerfile and testfile are located.
-```bash
- [user1@server10 ~]$ podman image build -f containerfile2 -t ubi9-simple-image .
- STEP 1/3: FROM registry.redhat.io/ubi9/ubi
- Trying to pull registry.redhat.io/ubi9/ubi:latest...
- Getting image source signatures
- Checking if image destination supports signatures
- Copying blob cc296d75b612 done   | 
- Copying config 159a1e6731 done   | 
- Writing manifest to image destination
- Storing signatures
- STEP 2/3: CMD echo "RHCSA exam is hands-on." | wc
- --> 4c005bfd0b34
- STEP 3/3: COPY ./testfile /tmp
- COMMIT ubi9-simple-image
- --> a2797b06a129
- Successfully tagged localhost/ubi9-simple-image:latest
- a2797b06a1294ed06edab2ba1c21d2bddde3eb3af1d8ed286781837f62992622
-```
-
-6\. Confirm image creation:
-```bash
- [user1@server10 ~]$ podman image ls
- REPOSITORY                   TAG         IMAGE ID      CREATED        SIZE
- localhost/ubi9-simple-image  latest      a2797b06a129  2 minutes ago  220 MB
- registry.redhat.io/ubi9/ubi  latest      159a1e67312e  2 weeks ago    220 MB
-```
-
-Output: 
-- downloaded image
-- new custom image along with their image IDs, creation time, and size. 
-
-- Do not remove the custom image yet as you will be using it to launch a container in the next section.
-
-### Basic Container Management 
-
-- Starting, stopping, listing, viewing information about, and deleting them. 
-- Depending on the use case, containers can be launched in different ways. 
-- They can:
-	- Have a name assigned or be nameless
-	- Have a terminal session opened for interaction
-	- Execute an entry point command (the command specified at the launch time) and be auto-terminated right after.
-	- etc. 
-- Running containers can be stopped and restarted, or discarded if no longer needed. 
-- The podman command is utilized to start containers and manage their lifecycle. 
-- This command is also employed to list stopped and running containers, and view their details.
-
-### Lab: Run, Interact with, and Remove a Named Container 
-
-- Run a container based on the latest version of the RHEL 8 ubi available in the Red Hat container registry.
-- Assign this container a name and run a few native Linux commands in a terminal window interactively. 
-- Exit out of the container to mark the completion of the exercise.
-
-1\. Launch a container using ubi8 (RHEL 8). Name this container rhel8-base-os and open a terminal session for interaction:
-```bash
- [user1@server10 ~]$ podman run -ti --name rhel8-base-os ubi8
- Resolved "ubi8" as an alias (/etc/containers/registries.conf.d/001-rhel-shortnames.conf)
- Trying to pull registry.access.redhat.com/ubi8:latest...
- Getting image source signatures
- Checking if image destination supports signatures
- Copying blob 8694db102e5b done   | 
- Copying config 269749ad51 done   | 
- Writing manifest to image destination
- Storing signatures
- [root@30c7cccd8490 /]# 
-```
-
-- Downloaded the latest version of the specified image automatically even though no FQIN was provided. 
-	- This is because it searched through the registries listed in the */etc/containers/registries.conf* file and retrieved the image from wherever it found it first (registry.access.redhat.com). 
-- Opened a terminal session inside the container as the root user to interact with the containerized RHEL 8 OS. 
-- The container ID is reflected as the hostname in the container's command prompt (last line in the output). This is an auto-generated ID.
-
-- If you encounter any permission issues, delete the /etc/docker directory (if it exists) and try again.
-
-2\. Run a few basic commands such as pwd, ls, cat, and date inside the
-container for verification:
-```bash
- [root@30c7cccd8490 /]# pwd
- /
- [root@30c7cccd8490 /]# ls
- bin   dev  home  lib64	     media  opt   root	sbin  sys  usr
- boot  etc  lib	 lost+found  mnt    proc  run	srv   tmp  var
- [root@30c7cccd8490 /]# cat /etc/redhat-release
- Red Hat Enterprise Linux release 8.10 (Ootpa)
- [root@30c7cccd8490 /]# date
- Thu Aug  1 21:09:13 UTC 2024
-```
-
-3\. Close the terminal session when done:
-```bash
- [root@30c7cccd8490 /]# exit
- exit
- [user1@server10 ~]$ 
-```
-
-4\. Delete the container using podman rm:
-```bash
- [user1@server10 ~]$ podman rm rhel8-base-os
- rhel8-base-os
-```
-
-Confirm the removal with podman ps.
-```bash
- [user1@server10 ~]$ podman ps
- CONTAINER ID  IMAGE       COMMAND     CREATED     STATUS      PORTS       NAMES
-```
-
-### Lab: Run a Nameless Container and Auto-Remove it After Entry Point Command Execution 
-
-- Launch a container based on the latest version of RHEL 7 ubi available in a Red Hat container registry.
-	- This image provides the base operating system layer to deploy containerized applications. 
-- Enter a Linux command at the command line for execution inside the container as an entry point command and the container should be automatically deleted right after that.
-
-1\. Start a container using ubi7 (RHEL 7) and run ls as an entry point command. Remove the container as soon as the entry point command has finished running.
-```bash
- [user1@server10 ~]$ podman run --rm ubi7 ls
- Resolved "ubi7" as an alias (/etc/containers/registries.conf.d/001-rhel-shortnames.conf)
- Trying to pull registry.access.redhat.com/ubi7:latest...
- Getting image source signatures
- Checking if image destination supports signatures
- Copying blob 7f2c2c4492b6 done   | 
- Copying config a084eb42a5 done   | 
- Writing manifest to image destination
- Storing signatures
- bin
- boot
- dev
- etc
- home
-...
-```
-
-2\. Confirm the container removal with podman ps:
-```bash
-podman ps
- CONTAINER ID  IMAGE       COMMAND     CREATED     STATUS      PORTS       NAMES
-```
-
-## Advanced Container Management 
-
-- Preset environment variables may be passed when launching containers or new variables may be set for containerized applications to consume for proper operation. 
-- Information stored during an application execution is lost when a container is restarted or erased. 
-- This behavior can be overridden by making a directory on the host available inside the container for saving data persistently. 
-- Containers may be configured to start and stop with the transitioning of the host system via the systemd service. These advanced tasks are also performed with the `podman` command. 
-
-## Containers and Port Mapping 
-
-- Applications running in different containers often need to exchange data for proper operation. 
-- For instance, a containerized Apache web server may need to talk to a MySQL database instance running in a different container. 
-- It may also need to talk to the outside world over a port such as 80 or 8080. 
-- To support this traffic flow, appropriate port mappings are established between the host system and each container.
-
-EXAM TIP: As a normal user, you cannot map a host port below 1024 to a container port.
+![](images/B31467_1_1.png)
 
-### Lab: Configure Port Mapping 
+- Applications running natively on a system that does not provide containerization features share the same binaries and libraries, as well as the same kernel, filesystem, network, and users. 
+- This could lead to many issues when an updated version of an application is deployed, especially conflicting library issues or unsatisfied dependencies.
 
-- Launch a container called rhel7-port-map in detached mode (as a daemon) with host port 10000 mapped to port 8000 inside the container. 
-- Use a version of the RHEL 7 image with Apache web server software pre-installed. 
-- This image is available from a Red Hat container registry.
-- List the running container and confirm the port mapping.
+- Containers offer a consistent layer of isolation for applications and their related dependencies that ensures seamless coexistence on the same host. A new deployment only consists of the execution of the new containerized version, as it will not interact with or conflict with the other containers or native applications.
 
-1\. Search for an Apache web server image for RHEL 7 using podman
-search:
-```bash
- [user1@server30 ~]$ podman search registry.redhat.io/rhel7/httpd
- NAME                                      DESCRIPTION
- registry.redhat.io/rhscl/httpd-24-rhel7   Apache HTTP 2.4 Server
-```
-
-2\. Log in to registry.redhat.io using the Red Hat credentials to access
-the image:
-```bash
- [user1@server30 ~]$ podman login registry.redhat.io
- Username: tdavetech@gmail.com
- Password: 
- Login Succeeded!
-```
-
-3\. Download the latest version of the Apache image using podman pull:
-```bash
- [user1@server30 ~]$ podman pull registry.redhat.io/rhscl/httpd-24- rhel7
- Trying to pull registry.redhat.io/rhscl/httpd-24-rhel7:latest...
- Getting image source signatures
- Checking if image destination supports signatures
- Copying blob fd77da0b900b done   | 
- Copying blob 7f2c2c4492b6 done   | 
- Copying blob ea092d7970b2 done   | 
- Copying config 847db19d6c done   | 
- Writing manifest to image destination
- Storing signatures
- 847db19d6cbc726106c901a7713d30dccc9033031ec812037c4c458319a1b328
-```
-
-4\. Verify the download using podman images:
-```bash
- [user1@server30 ~]$ podman images
- REPOSITORY                               TAG         IMAGE ID       CREATED       SIZE
- registry.redhat.io/rhscl/httpd-24-rhel7  latest      847db19d6cbc  2  months ago  332 MB
-```
-
-5\. Launch a container named *rhel7-port-map* in detached mode to run the containerized Apache web server with host port 10000
-mapped to container port 8000. 
-```bash
- [user1@server30 ~]$ podman run -dp 10000:8000 --name rhel7-port-map  httpd-24-rhel7
- cd063dff352dfbcd57dd417587513b12ca4033ed657f3baaa28d54df19d4df1c
-```
-
-6\. Verify that the container was launched successfully using podman ps:
-```bash
- [user1@server30 ~]$ podman ps
- CONTAINER ID  IMAGE                                           COMMAND               CREATED         STATUS         PORTS                    NAMES
- cd063dff352d  registry.redhat.io/rhscl/httpd-24-rhel7:latest   /usr/bin/run-http...  36 seconds ago  Up 36 seconds  0.0.0.0:10000- >8000/tcp  rhel7-port-map
-```
-
-7\. You can also use `podman port` to view the mapping:
-```bash
- [user1@server30 ~]$ podman port rhel7-port-map
- 8000/tcp -> 0.0.0.0:10000
-```
-
-- Now any inbound web traffic on host port 10000 will be redirected to the container.
-
-### Exercise 22-7: Stop, Restart, and Remove a Container 
-
-- Stop the container, restart it, stop it again, and then erase it. 
-- Use appropriate `podman` subcommands and verify each transition.
-
-1\. Verify the current operational state of the container rhel7-port-map:
-```bash
- [user1@server30 ~]$ podman ps
- CONTAINER ID  IMAGE                                           COMMAND               CREATED        STATUS        PORTS                    NAMES
- cd063dff352d  registry.redhat.io/rhscl/httpd-24-rhel7:latest   /usr/bin/run-http...  3 minutes ago  Up 3 minutes  0.0.0.0:10000- >8000/tcp  rhel7-port-map
-```
-
-2\. Stop the container and confirm.
-(the `-a` option with `ps` also includes the stopped containers in the output):
-```bash
- [user1@server30 ~]$ podman stop rhel7-port-map
- rhel7-port-map
-
- [user1@server30 ~]$ podman ps -a
- CONTAINER ID  IMAGE                                           COMMAND               CREATED        STATUS                    PORTS                    NAMES
- cd063dff352d  registry.redhat.io/rhscl/httpd-24-rhel7:latest   /usr/bin/run-http...  6 minutes ago  Exited (0) 5 seconds ago   0.0.0.0:10000->8000/tcp  rhel7-port-map
-```
-
-3\. Start the container and confirm:
-```bash
- [user1@server30 ~]$ podman start rhel7-port-map
- rhel7-port-map
- [user1@server30 ~]$ podman ps -a
- CONTAINER ID  IMAGE                                           COMMAND               CREATED        STATUS         PORTS                    NAMES
- cd063dff352d  registry.redhat.io/rhscl/httpd-24-rhel7:latest   /usr/bin/run-http...  8 minutes ago  Up 11 seconds  0.0.0.0:10000- >8000/tcp  rhel7-port-map
-```
-
-4\. Stop the container and remove it:
-```bash
- [user1@server30 ~]$ podman rm rhel7-port-map
- rhel7-port-map
-```
-
-5\. Confirm the removal:
-```bash
- [user1@server30 ~]$ podman ps -a
- CONTAINER ID  IMAGE       COMMAND     CREATED     STATUS      PORTS       NAMES
-```
-
-## Containers and Environment Variables 
-
-- Many times it is necessary to pass a host's pre-defined environment variable, such as PATH, to a containerized application for consumption.
-- Moreover, it may also be necessary at times to set new variables to inject debugging flags or sensitive information such as passwords, access keys, or other secrets for use inside containers. 
-- Passing host environment variables or setting new environment variables is done at the time of launching a container. 
-- The `podman` command allows multiple variables to be passed or set with the `-e` option.
-
-EXAM TIP: Use the `-e` option with each variable that you want to pass or set.
-
-### Lab: Pass and Set Environment Variables 
-
-- Launch a container using the latest version of a ubi for RHEL 9 available in a Red Hat container registry. 
-- Inject the HISTSIZE environment variable, and a variable called SECRET with a value "secret123". 
-- Name this container rhel9-env-vars and have a shell terminal opened to check the variable settings.
-- Remove this container.
-
-1\. Launch a container with an interactive terminal session and inject variables **HISTSIZE** and **SECRET** as directed. Use the specified container image.
-```bash
- [user1@server30 ~]$ podman run -it -e HISTSIZE -e SECRET="secret123" --name rhel9-env-vars ubi9
- Resolved "ubi9" as an alias (/etc/containers/registries.conf.d/001- rhel-shortnames.conf)
- Trying to pull registry.access.redhat.com/ubi9:latest...
- Getting image source signatures
- Checking if image destination supports signatures
- Copying blob cc296d75b612 done   | 
- Copying config 159a1e6731 done   | 
- Writing manifest to image destination
- Storing signatures
- [root@b587355b8fc1 /]# 
-```
-
-2\. Verify both variables using the echo command:
-```bash
- [root@b587355b8fc1 /]# echo $HISTSIZE $SECRET
- 1000 secret123
- [root@b587355b8fc1 /]# 
-```
-
-3\. Disconnect from the container, and stop and remove it:
-```bash
- [user1@server30 ~]$ podman stop rhel9-env-vars
- rhel9-env-vars
- [user1@server30 ~]$ podman rm rhel9-env-vars
- rhel9-env-vars
-```
-
-Confirm the deletion:
-```bash
- [user1@server30 ~]$ podman ps -a
- CONTAINER ID  IMAGE       COMMAND     CREATED     STATUS      PORTS       NAMES
-```
-
-## Containers and Persistent Storage 
-
-- Containers are normally launched for a period of time to run an application and then stopped or deleted when their job is finished. 
-- Any data that is produced during runtime is lost on their restart, failure, or termination.
-- This data may be saved for persistence on a host directory by attaching the host directory to a container. 
-- The containerized application will see the attached directory just like any other local directory and will use it to store data if it is configured to do so. 
-- Any data that is saved on the directory will be available even after the container is rebooted or removed. 
-- Later, this directory can be re-attached to other containers to give them access to the stored data or to save their own data. 
-- The source directory on the host may itself exist on any local or remote file system.
-
-EXAM TIP: Proper ownership, permissions, and SELinux file type must be set to ensure persistent storage is accessed and allows data writes without issues.
-
-- There are a few simple steps that should be performed to configure a host directory before it can be attached to a container. 
-- These steps include the correct ownership, permissions, and SELinux type (*container_file_t*). 
-- The special SELinux file type is applied to prevent containerized applications (especially those running in root containers) from gaining undesired privileged access to host files and processes, or other running containers on the host if compromised.
-
-### Lab: Attach Persistent Storage and Access Data Across Containers 
-
-- Set up a directory on server20 and attach it to a new container. 
-- Write some data to the directory while in the container. 
-- Delete the container and launch another container with the same directory attached. 
-- Observe the persistence of saved data in the new container and that it is accessible. 
-- Remove the container to mark the completion of this exercise.
-
-1\. Create a directory called /host_data, set full permissions on it, and confirm:
-```bash
- [user1@server30 ~]$ sudo mkdir /host_data
- [sudo] password for user1: 
- [user1@server30 ~]$ sudo chmod 777 /host_data/
- [user1@server30 ~]$ ll -d /host_data/
- drwxrwxrwx. 2 root root 6 Aug  1 22:59 /host_data/
-```
-
-2\. Launch a root container called *rhel9-persistent-data*  in interactive mode using the latest ubi9 image. Specify the attachment point (*/container_data*) to be used inside the container for the host directory (*/host_data*) Ensure the SELinux type container_file_t is automatically set on the directory and files within.
-```bash
- [user1@server30 ~]$ sudo podman run --name rhel9-persistent-data -v  /host_data:/container_data:Z -it ubi9
- Resolved "ubi9" as an alias (/etc/containers/registries.conf.d/001- rhel-shortnames.conf)
- Trying to pull registry.access.redhat.com/ubi9:latest...
- Getting image source signatures
- Checking if image destination supports signatures
- Copying blob cc296d75b612 done   | 
- Copying config 159a1e6731 done   | 
- Writing manifest to image destination
- Storing signatures
-```
-
-3\. Confirm the presence of the directory inside the container with `ls` on /container_data:
-```bash
- [root@e8711892370f /]# ls -ldZ /container_data
- drwxrwxrwx. 2 root root  system_u:object_r:container_file_t:s0:c376,c965 6 Aug  2 05:59  /container_data
-```
-
-4\. Create a file called testfile with the echo command under /container_data:
-```bash
- [root@e8711892370f /]# echo "This is persistent storage." >  /container_data/testfile
-```
-
-5\. Verify the file creation and the SELinux type on it:
-```bash
- [root@e8711892370f /]# ls -lZ /container_data/
- total 4
- -rw-r--r--. 1 root root  system_u:object_r:container_file_t:s0:c376,c965 28 Aug  2 06:03  testfile
-```
-
-6\. Exit out of the container and check the presence of the file in the host directory:
-```bash
- [root@e8711892370f /]# exit
- exit
- [user1@server30 ~]$ ls -lZ /host_data/
- total 4
- -rw-r--r--. 1 root root  system_u:object_r:container_file_t:s0:c376,c965 28 Aug  1 23:03  testfile
-```
-
-7\. Stop and remove the container:
-```bash
- [user1@server30 ~]$ sudo podman stop rhel9-persistent-data
- rhel9-persistent-data
- [user1@server30 ~]$ sudo podman rm rhel9-persistent-data
- rhel9-persistent-data
-```
-
-8\. Launch a new root container called *rhel8-persistent-data* in interactive mode using the latest ubi8 image from any of the defined registries. Specify the attachment point (*/container_data2*) to be used inside the container for the host directory (*/host_data*). Ensure the SELinux type *container_file_t* is automatically set on the directory and files within.
-```bash
- [user1@server30 ~]$ sudo podman run -it --name rhel8-persistent-data -v /host_data:/container_data2:Z ubi8
- Resolved "ubi8" as an alias (/etc/containers/registries.conf.d/001- rhel-shortnames.conf)
- Trying to pull registry.access.redhat.com/ubi8:latest...
- Getting image source signatures
- Checking if image destination supports signatures
- Copying blob 8694db102e5b done   | 
- Copying config 269749ad51 done   | 
- Writing manifest to image destination
- Storing signatures 
-```
-
-9\. Confirm the presence of the directory inside the container with ls on /container_data2:
-```bash
- [root@af6773299c7e /]# ls -ldZ /container_data2/
- drwxrwxrwx. 2 root root  system_u:object_r:container_file_t:s0:c198,c914 22 Aug  2 06:03  /container_data2/
- [root@af6773299c7e /]# ls -lZ /container_data2/
- total 4
- -rw-r--r--. 1 root root  system_u:object_r:container_file_t:s0:c198,c914 28 Aug  2 06:03  testfile
- [root@af6773299c7e /]# cat /container_data2/testfile
- This is persistent storage.
-```
-
-10\. Create a file called testfile2 with the echo command under /container_data2:
-```bash
- [root@af6773299c7e /]# echo "This is persistent storage2." >  /container_data2/testfile2
-
- [root@af6773299c7e /]# ls -lZ /container_data2/
- total 8
- -rw-r--r--. 1 root root  system_u:object_r:container_file_t:s0:c198,c914 28 Aug  2 06:03  testfile
- -rw-r--r--. 1 root root  system_u:object_r:container_file_t:s0:c198,c914 29 Aug  2 06:10  testfile2
-```
-
-11\. Exit out of the container and confirm the existence of both files in the host directory:
-```bash
- [root@af6773299c7e /]# exit
- exit
-
- [user1@server30 ~]$ ls -lZ /host_data/
- total 8
- -rw-r--r--. 1 root root  system_u:object_r:container_file_t:s0:c198,c914 28 Aug  1 23:03  testfile
- -rw-r--r--. 1 root root  system_u:object_r:container_file_t:s0:c198,c914 29 Aug  1 23:10  testfile2
-```
-
-12\. Stop and remove the container using the stop and rm subcommands:
-```bash
- [user1@server30 ~]$ sudo podman stop rhel8-persistent-data
- rhel8-persistent-data
- [user1@server30 ~]$ sudo podman rm rhel8-persistent-data
- rhel8-persistent-data
-```
-
-13\. Re-check the presence of the files in the host directory:
-```bash
- [user1@server30 ~]$ ll /host_data
- total 8
- -rw-r--r--. 1 root root 28 Aug  1 23:03 testfile
- -rw-r--r--. 1 root root 29 Aug  1 23:10 testfile2
-```
-
-## Container State Management with systemd 
-
-- Multiple containers run on a single host and it becomes a challenging task to change their operational state or delete them manually. 
-- In RHEL 9, these administrative functions can be automated via the systemd service 
+- Linux containers are enabled by different native kernel features, with the most important being **Linux namespaces**. 
+- Namespaces abstract specific system resources (notably, the ones described before, such as network, filesystem mount, users, and so on) and make them appear as unique to the isolated process. 
+- In this way, the process has the illusion of interacting with the host resource -- for example, the host filesystem -- while an alternative and isolated version is being exposed.
 
-- There are several steps that need to be completed to configure container state management via systemd. 
-- These steps vary for rootful and rootless container setups and include the creation of service unit files and their storage in appropriate directory locations (*~/.config/systemd/user* for rootless containers and */etc/systemd/system* for rootful containers). 
-- Once setup and enabled, the containers will start and stop automatically as a systemd service with the host state transition or manually with the `systemctl` command.
+Currently, we have a total of eight kinds of namespaces:
+- **Mount namespaces**: These provide isolation of the **mount point** list that is seen by the processes in the namespace.
+- **PID** **namespaces**: These isolate the process ID number in a separate space, allowing processes in different PID namespaces to retain the same PID.
+- **User namespaces**: These isolate UIDs and GIDs, the root directory, keyrings, and capabilities. This allows a process to have a privileged UID and GID inside the container while simultaneously having unprivileged ones outside the namespace.
+- **UTS** **namespaces**: These allow the isolation of the hostname and NIS domain name.
+- **Network namespaces**: These allow the isolation of networking system resources, such as network devices, IPv4 and IPv6 protocol stacks, routing tables, firewall rules, port numbers, and so on. Users can create virtual network devices called **veth** **pairs** to build tunnels between network namespaces.
+- **IPC** **namespaces**: These isolate IPC resources such as System V IPC objects and POSIX message queues. Objects created in an IPC namespace can be accessed only by the processes that are members of the namespace. Processes use IPC to exchange data, events, and messages in a client-server mechanism.
+- **cgroup** **namespaces**: These isolate cgroup directories, providing a virtualized view of the process\'s cgroups.
+- **Time namespaces**: These provide an isolated view of system time, letting processes in the namespace run with a time offset against the host time.
 
-- The `podman` command to start and stop containers is no longer needed if the systemd setup is in place. 
-- You may experience issues if you continue to use `podman` for container state transitioning alongside.
+## Resource usage with cgroups 
 
-- The start and stop behavior for rootless containers differs slightly from that of rootful containers. 
-- For the rootless setup, the containers are started when the relevant user logs in to the host and stopped when that user logs off from all their open terminal sessions;
-- However, this default behavior can be altered by enabling **lingering** for that user with the `loginctl` command.
+- cgroups are a native feature of the Linux kernel whose purpose is to organize processes in a hierarchical tree and limit or monitor their resource usage.
 
-- User lingering is a feature that, if enabled for a particular user, spawns a user manager for that user at system startup and keeps it running in the background to support long-running services configured for that user. 
-- The user need not log in.
+- The kernel cgroups interface, similar to what happens with `proc`, is exposed with a `cgroupfs` pseudo-filesystem. 
+- This filesystem is usually mounted under `/sysfscgroup` in the host.
 
-EXAM TIP: Make sure that you use a normal user to launch rootless containers and the root user (or sudo) for rootful containers.
+- cgroups offer a series of **controllers** (also called subsystems) that can be used for different purposes, such as limiting the CPU time share of a process, memory usage, freezing and resuming processes, and so on.
 
-- Rootless setup does not require elevated privileges of the root user.
+- The organizational hierarchy of controllers has changed through time, and there are currently two versions, v1 and v2. In cgroups v1, different controllers can be mounted against different hierarchies. 
+- Instead, cgroups v2 provides a unified hierarchy of controllers, with processes residing in the leaf nodes of the tree. 
+- Currently, cgroups v1 is going to be deprecated in favor of v2, but some distributions still support it for backwards compatibility.
 
-### Lab: Configure a Rootful Container as a systemd Service 
+- cgroups are used by containers to limit CPU or memory usage. 
+- For example, users can limit the CPU quota, which means limiting the number of microseconds the container can use the CPU over a given period, or limit CPU shares, the weighted proportion of CPU cycles for each container.
 
-- Create a systemd unit configuration file for managing the state of your rootful containers. 
-- Launch a new container and use it as a template to generate a service unit file. 
-- Stop and remove the launched container to avoid conflicts with new containers that will start. 
-- Use the `systemctl` command to verify the automatic container start, stop, and deletion.
 
-1\. Launch a new container called *rootful-container* in detached mode using the latest ubi9:
-```bash
- [user1@server30 ~]$ sudo podman run -dt --name rootful-container ubi9
- [sudo] password for user1: 
- 0ed04dcedec418068acd14c864e95e78f56a38dd57d2349cf2c46b0de1a1bf1b
-```
-
-2\. Confirm the new container using podman ps. Note the container ID.
-```bash
- [user1@server30 ~]$ sudo podman ps
- CONTAINER ID  IMAGE                                   COMMAND      CREATED         STATUS         PORTS       NAMES
- 0ed04dcedec4  registry.access.redhat.com/ubi9:latest  /bin/bash   20  seconds ago  Up 20 seconds              rootful-container
-```
+## Running isolated processes 
 
-3\. Create (generate) a service unit file called *rootful-container.service* under */etc/systemd/system* while ensuring that the next new container that will be launched based on this configuration file will not require the source container  to work. The `tee` command will show the generated file content on the screen as well as store it in the specified file.
-```bash
- [user1@server30 ~]$ sudo podman generate systemd --new --name  rootful-container | sudo tee /etc/systemd/system/rootful-qcontainer.service
-
- [Unit]
- Description=Podman container-rootful-container.service
- Documentation=man:podman-generate-systemd(1)
- Wants=network-online.target
- After=network-online.target
- RequiresMountsFor=%t/containers
-
- [Service]
- Environment=PODMAN_SYSTEMD_UNIT=%n
- Restart=on-failure
- TimeoutStopSec=70
- ExecStart=/usr/bin/podman run \
-	--cidfile=%t/%n.ctr-id \
-	--cgroups=no-conmon \
-	--rm \
-	--sdnotify=conmon \
-	--replace \
-	-dt \
-	--name rootful-container ubi9
- ExecStop=/usr/bin/podman stop \
-	--ignore -t 10 \
-	--cidfile=%t/%n.ctr-id
- ExecStopPost=/usr/bin/podman rm \
-	-f \
-	--ignore -t 10 \
-	--cidfile=%t/%n.ctr-id
- Type=notify
- NotifyAccess=all
-
- [Install]
- WantedBy=default.target
-```
+- GNU/Linux operating systems offer all the features necessary to run a container manually. 
+- This result can be achieved by working with a specific system call (notably `unshare()` and `clone()`) and utilities such as the `unshare` command.
 
-- The unit file has the same syntax as any other systemd service configuration file.
-- There are three sections---Unit, Service, and Install. 
-	- (1) The **unit** section provides a short description of the service, the manual page location, and the dependencies (wants and after). 
-	- (2) The **service** section highlights the full commands for starting (**ExecStart**) and stopping (**ExecStop**) containers. 
-		- It also highlights the commands that will be executed before the container start (**ExecStartPre**) and after the container stop (**ExecStopPost**). 
-		- There are a number of options and arguments with the commands to ensure a proper transition. 
-		- The **restart** on-failure stipulates that systemd will try to restart the container in the event of a failure. 
-	- (3) The **install** section identifies the operational target the host needs to be running in before this container service can start.  
-
-4\. Stop and delete the source container (rootful-container):
-```bash
- [user1@server30 ~]$ sudo podman stop rootful-container
- [sudo] password for user1: 
- WARN[0010] StopSignal SIGTERM failed to stop container rootful- container in 10 seconds, resorting to SIGKILL 
- rootful-container
-
- [user1@server30 ~]$ sudo podman rm rootful-container
- rootful-container
+To run a process, let's say `/binsh`, in an isolated PID namespace, users can rely on the `unshare` command:
 ```
-
-Verify the removal by running sudo podman ps -a:
-```bash
- [user1@server30 ~]$ sudo podman ps -a
- CONTAINER ID  IMAGE       COMMAND     CREATED     STATUS      PORTS       NAMES
+# unshare --fork --pid --mount-proc /bin/sh
 ```
 
-5\. Update systemd to bring the new service under its control (reboot the system if required):
-```bash
- [user1@server30 ~]$ sudo systemctl daemon-reload
+The result is the execution of a new shell process in an isolated PID namespace. Users can try to monitor the process view and will get an output such as the following:
 
+``` sh-5.0# ps aux 
+USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND 
+root 1 0.0 0.0 226164 4012 pts/4 S 22:56 0:00 /bin/sh 
+root 4 0.0 0.0 227968 3484 pts/4 R+ 22:56 0:00 ps aux 
 ```
 
-6\. Enable and start the container service:
-```bash
- [user1@server30 ~]$ sudo systemctl enable --now rootful-container
- Created symlink /etc/systemd/system/default.target.wants/rootful- container.service → /etc/systemd/system/rootful-container.service.
-```
+- The shell process of the preceding example is running with `PID 1`, which is correct, since it is the very first process running in the new isolated namespace.
 
-7\. Check the running status of the new service:
-```bash
- [user1@server30 ~]$ sudo systemctl status rootful-container
- rootful-container.service - Podman container-rootful-container.s>
-     Loaded: loaded (/etc/systemd/system/rootful-container.service>
-     Active: active (running)
-```
+- The PID namespace will be the only one to be abstracted, while all the other system resources still remain the original host ones. 
+- If we want to add more isolation, for example, on a network stack, we can add the `--net` flag to the previous command:
 
-8\. Verify the launch of a new container (compare the container ID with that of the source root container):
-```bash
- [user1@server30 ~]$ sudo podman ps
- CONTAINER ID  IMAGE                                   COMMAND      CREATED             STATUS             PORTS       NAMES
- 440a57c26186  registry.access.redhat.com/ubi9:latest  /bin/bash    About a minute ago  Up About a minute              rootful-container
-```
+``` # unshare --fork --net --pid --mount-proc /bin/sh ```
 
-9\. Restart the container service using the systemctl command:
-```bash
- [user1@server30 ~]$ sudo systemctl restart rootful-container
- sudo systemctl status rootful-
-
- [user1@server30 ~]$ sudo systemctl status rootful-container
- rootful-container.service - Podman container-rootful-container.s>
-     Loaded: loaded (/etc/systemd/system/rootful-container.service>
-     Active: active (running)
-```
+- Inspect the network IP configuration and realize that the host native devices are no longer directly seen by the unshared process:
 
-10\. Check the status of the container again. Observe the removal of the previous container and the launch of a new container (compare container IDs).
-```bash
- [user1@server30 ~]$ sudo podman ps
- CONTAINER ID  IMAGE                                   COMMAND      CREATED         STATUS             PORTS       NAMES
- 0a980537b83a  registry.access.redhat.com/ubi9:latest  /bin/bash   59  seconds ago  Up About a minute              rootful-container
+``` 
+sh-5.0# ip addr show 
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN group default qlen 1000 link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 
 ```
-
-- Each time the rootful-container service is restarted or server20 is rebooted, a new container will be launched. 
 
-### Lab: Configure Rootless Container as a systemd Service 
+- Containers are strongly related to Linux native features. 
+- The OS provided a solid and complete interface that helped container runtime development, and the capability to isolate namespaces and resources was the key that unlocked container adoption. 
+- The role of the container runtime is to abstract the complexity of the underlying isolation mechanisms, with mount point isolation being probably the most crucial of them. 
 
-- Create a systemd unit configuration file for managing the state of your rootless containers. 
-- Launch a new container as conuser1 (create this user) and use it as a template to generate a service unit file. 
-- Stop and remove the launched container to avoid conflicts with new containers that will start. 
-- Use the `systemctl` command as conuser1 to verify the automatic container start, stop, and deletion.
+## Isolating mounts 
 
-1\. Create a user account called conuser1 and assign a simple password:
-```bash
- [user1@server30 ~]$ sudo useradd conuser1
-
- [user1@server30 ~]$ echo conuser1 | sudo passwd -- stdin conuser1
- Changing password for user conuser1.
- passwd: all authentication tokens updated  successfully.
-```
+- To gain the filesystem isolation that prevents binary and library conflicts, users need to create another layer of abstraction for the exposed mount points.
 
-2\. Open a new terminal window on server20 and log in as conuser1. Create directory *~/.config/systemd/user* to store a service unit file:
-```bash
- [conuser1@server30 ~]$ mkdir ~/.config/systemd/user -p
-```
+**mount namespaces** and **bind mounts**. 
+- First introduced in 2002 with the **Linux kernel 2.4.19**
+- Mount namespaces isolate the list of mount points seen by the process. 
+- Each mount namespace exposes a discrete list of mount points, thus making processes in different namespaces aware of different directory hierarchies.
 
-3\. Launch a new container called rootless-container in detached mode using the latest ubi8:
-```bash
- [conuser1@server30 ~]$ podman run -dt --name  rootless-container ubi8
- Resolved "ubi8" as an alias  (/etc/containers/registries.conf.d/001-rhel- shortnames.conf)
- Trying to pull  registry.access.redhat.com/ubi8:latest...
- Getting image source signatures
- Checking if image destination supports signatures
- Copying blob 8694db102e5b done   | 
- Copying config 269749ad51 done   | 
- Writing manifest to image destination
- Storing signatures
- 381d46ae9a3e11723c3bde35090782129e6937c461f8c2621bc9725f6b9efc27
-```
+- It is possible to expose to the executing process an alternative directory tree that contains all the necessary binaries and libraries of choice.
 
-4\. Confirm the new container using podman ps. Note the container ID.
-```bash
- [conuser1@server30 ~]$ podman ps
- CONTAINER ID  IMAGE                                   COMMAND     CREATED         STATUS         PORTS       NAMES
- 381d46ae9a3e  registry.access.redhat.com/ubi8:latest  /bin/bash   27 seconds ago  Up 27 seconds              rootless-container
-```
+- Users should handle different archive versions of directory trees from different distributions, extract them, and bind mount them on separate namespaces. 
+- The first approaches with containers in Linux followed this approach.
 
-5\. Create (generate) a service unit file called *rootless-container.service* under *~/.config/systemd/user* while ensuring that the next new container that will be launched based on this configuration will not require the source container to work:
-```bash
- [conuser1@server30 ~]$ podman generate systemd --new --name rootless-container >  ~/.config/systemd/user/rootless-container.service
+- Container images
+	- An innovative, multi-layered, copy-on-write approach of managing the directory trees that introduced a simple and fast method of copying, deploying, and using the tree necessary to run the container.
 
- DEPRECATED command:
- It is recommended to use Quadlets for running  containers and pods under systemd.
+## Container images to the rescue 
 
- Please refer to podman-systemd.unit(5) for details.
-```
+- **Docker** introduced this smart method of storing data for containers. 
+- Later, images would become an **Open Container Initiative** **(OCI)** standard specification (https://github.com/opencontainers/image-spec).
 
-6\. Display the content of the unit file:
-```bash
- [conuser1@server30 ~]$ cat  ~/.config/systemd/user/rootless-container.service 
- # container-rootless-container.service
- # autogenerated by Podman 4.9.4-rhel
- # Thu Aug  1 23:42:11 MST 2024
-
- [Unit]
- Description=Podman container-rootless- container.service
- Documentation=man:podman-generate-systemd(1)
- Wants=network-online.target
- After=network-online.target
- RequiresMountsFor=%t/containers
-
- [Service]
- Environment=PODMAN_SYSTEMD_UNIT=%n
- Restart=on-failure
- TimeoutStopSec=70
- ExecStart=/usr/bin/podman run \
-	--cidfile=%t/%n.ctr-id \
-	--cgroups=no-conmon \
-	--rm \
-	--sdnotify=conmon \
-	--replace \
-	-dt \
-	--name rootless-container ubi8
- ExecStop=/usr/bin/podman stop \
-	--ignore -t 10 \
-	--cidfile=%t/%n.ctr-id
- ExecStopPost=/usr/bin/podman rm \
-	-f \
-	--ignore -t 10 \
-	--cidfile=%t/%n.ctr-id
- Type=notify
- NotifyAccess=all
-
- [Install]
- WantedBy=default.target
-```
+Images
+- Can be seen as a filesystem bundle that is downloaded (pulled) and unpacked in the host before running the container for the first time.
+- Are downloaded from repositories called **image registries**. 
+- Those repositories can be seen as specialized object storage that holds image data and related metadata. 
+- There are both public and free-to-use registries (such as `quay.io` or `docker.io`) and private registries that can be executed in the customer\'s private infrastructure, on-premises, or in the cloud.
 
-7\. Stop and delete the source container rootless-container using the stop and rm subcommands:
-```bash
- [conuser1@server30 ~]$ podman stop rootless-container
- rootless-container
+- Images can be built by DevOps teams to fulfill special needs or embed artifacts that must be deployed and executed on a host.
+
+- During the image build process, developers can inject pre-built artifacts or source code that can be compiled in the build container itself. 
+- To optimize image size, it is possible to create multi-stage builds with a first stage that compiles the source code using a base image with the necessary compilers and runtimes, and a second stage where the built artifacts are injected into a minimal, lightweight image, optimized for fast startup and minimal storage footprint.
+
+- The *recipe* of the build process is defined in a special text file called a **Dockerfile**, which defines all the necessary steps to assemble the final image.
+
+- After building them, users can push their own images to public or private registries for later use or complex, orchestrated deployments.
+
+Build workflow:
+![](images/B31467_1_2.png)
+
+- Can be considered as a packaging technology. 
+- When users build their own image with all the binaries and dependencies installed in the OS directory tree, they are effectively creating a self-consistent object that can be deployed everywhere with no further software dependencies. 
+- From this point of view, container images are an answer to the long-standing phrase, *It* *works on my machine*.
+
+- Can be certain of the execution environment of your applications
+- They simplify the deployment process by removing the tedious task of maintaining and updating a server's library dependencies.
+
+copy-on-write multi-layered approach
+- Instead of having a single bulk binary archive, an image is made up of many `tar` archives called **blobs** or **layers**. 
+- Layers are composed together using image metadata and squashed into a single filesystem view. 
+- This result can be achieved in many ways, but the most common approach today is by using **union** **filesystems**.
 
- [conuser1@server30 ~]$ podman rm rootless-container
- rootless-container
-```
+**OverlayFS** (https://www.kernel.org/doc/html/latest/filesystems/overlayfs.html)
+- The most used union filesystem nowadays.
+- Maintained in the kernel tree, despite not being completely POSIX-compliant.
+- An overlay filesystem combines two filesystems -- an 'upper' filesystem and a 'lower' filesystem."
+- This means that it can combine more directory trees and provide a unique, squashed view. 
+- The directories are the layers and are referred to as `lowerdir` and `upperdir` to respectively define the low-level directory and the one stacked on top of it. 
+- The unified view is called *merged*. 
+- Supports up to 128 layers.
+- Not aware of the concept of container images; it is merely used as a foundation technology to implement the multi-layered solution used by OCI images.
 
-Verify the removal by running podman ps -a:
-```bash
- [conuser1@server30 ~]$ podman ps -a
- CONTAINER ID  IMAGE       COMMAND     CREATED      STATUS      PORTS       NAMES
-```
+**immutability**. 
+- Implemented by OCI Images
+- The layers of an image are all read-only and cannot be modified. The only way to change something in the lower layers is to rebuild the image with appropriate changes.
+- An important pillar of the cloud computing approach. 
+- An infrastructure (such as an instance, container, or even complex clusters) can only be replaced by a different version and not modified to achieve the target deployment. 
+- We usually do not change anything inside a running container (for example, installing packages or updating config files manually), even though it could be possible in some contexts. 
+- Rather, we replace its base image with a new updated version. This also ensures that every copy of the running containers stays in sync with the others.
 
-8\. Update systemd to bring the new service to its control 
-```bash
- [conuser1@server30 ~]$ systemctl --user daemon-reload
-```
+- When a container is executed, a new read/write thin layer is created on top of the image. 
+- This layer is ephemeral, so any changes on top of it will be lost after the container is destroyed:
+![](images/B31467_1_3.png)
 
-9\. Enable and start the container service:
-```bash
- [conuser1@server30 ~]$ systemctl --user enable --now rootless-container.service 
- Created symlink  /home/conuser1/.config/systemd/user/default.target.wa nts/rootless-container.service →  /home/conuser1/.config/systemd/user/rootless- container.service.
-```
+- We do not store anything inside containers. 
+- Their only purpose is to offer a working and consistent runtime environment for our applications. 
+- Data must be accessed externally, by using bind mounts inside the container itself or network storage (such as **Network File System** **(NFS)**, **Simple Storage Service** **(S3)**, **Internet Small Computer System Interface** **(iSCSI)**, and so on).
 
-10\. Check the running status of the new service:
-```bash
- conuser1@server30 ~]$ systemctl --user status  rootless-container
- rootless-container.service - Podman container- rootless-container>
-     Loaded: loaded (/home/conuser1/.config/systemd/user/rootless->
-     Active: active (running)
-```
+- Containers\' mount isolation and layered images design provide a consistent immutable infrastructure, but more security restrictions are necessary to prevent processes with malicious behaviors from escaping the container sandbox to steal sensitive host information or use the host to attack other machines. 
 
-11\. Verify the launch of a new container (compare the container ID with that of the source rootless container):
-```bash
- [conuser1@server30 ~]$ podman ps
- CONTAINER ID  IMAGE                                   COMMAND     CREATED             STATUS              PORTS       NAMES
- 57f946085605  registry.access.redhat.com/ubi8:latest  /bin/bash   About a minute ago  Up About a minute              rootless-container
-```
+## Security considerations 
 
-12\. Enable the container service to start and stop with host transition using the `loginctl` command (systemd login manager) and confirm:
-```bash
- [conuser1@server30 ~]$ loginctl enable-linger
- [conuser1@server30 ~]$ loginctl show-user conuser1 | grep -i linger
- Linger=yes
-```
+- If a process is running inside a container, it simply does not mean it is more secure than others.
+- A malicious attacker could still make its way through the host filesystem and memory resources. 
+- To achieve better security isolation, additional features are available:
+	- **Mandatory access control**: 
+		- **Security Enhanced Linux** **(SELinux)** or *AppArmor* can be used to enforce container isolation against the parent host. 
+		- These subsystems, and their related command-line utilities, use a policy-based approach to better isolate the running processes in terms of filesystem and network access.
+	- **Capabilities**: 
+		- When an unprivileged process is executed in the system (which means a process with an effective UID different from `0`), it is subject to permission checking based on the process\'s credentials (its effective UID). 
+		- Those permissions, or privileges, are called capabilities and can be enabled independently, assigning to an unprivileged process a restricted set of privileged permissions to access specific resources. 
+		- When running a container, we can add or drop capabilities.
+	- **Secure** **computing** **mode (Seccomp)**: 
+		- This is a native kernel feature that can be used to restrict the syscall that a process is able to make from user space to kernel space. 
+		- By identifying the strictly necessary privileges needed by a process to run, administrators can apply seccomp profiles to limit the attack surface.
 
-13\. Restart the container service using the `systemctl` command:
-```bash
- [conuser1@server30 ~]$ systemctl --user restart  rootless-container
- [conuser1@server30 ~]$ systemctl --user status  rootless-container
- rootless-container.service - Podman container- rootless-container>
-     Loaded: loaded  (/home/conuser1/.config/systemd/user/rootless->
-     Active: active (running)
-```
+- Applying the preceding security features manually is not always easy and immediate, as some of them require a shallow learning curve. 
+- Instruments that automate and simplify (possibly in a declarative way) these security constraints provide high value.
 
-14\. Check the status of the container again. Observe the removal of the previous container and the launch of a new container (compare container IDs).
-```bash
- [conuser1@server30 ~]$ podman ps
- CONTAINER ID  IMAGE                                   COMMAND     CREATED         STATUS         PORTS       NAMES
- 4dec33db41b5  registry.access.redhat.com/ubi8:latest  /bin/bash   41 seconds ago  Up 41 seconds              rootless-container
-```
 
-- Each time the rootless-container service is restarted or server20 is rebooted, a new container will be launched. You can verify this by comparing their container IDs.
+## Container engines and runtimes 
 
-## Containers DIY Labs 
+- Running and securing containers manually is an unreliable and complex approach. 
+- It is too hard to reproduce and automate in production environments, and can easily lead to configuration drift among different hosts.
 
-### Lab: Launch Named Root Container with Port Mapping 
+- This is the reason **container engines** and runtimes were born -- to help automate the creation of a container and all the related tasks necessary that culminate in a running container.
 
-- Create a new user account called conadm on server30 and give them full sudo rights. 
-```bash
- [root@se
 
- -bash: 3: command not found
- rver30 ~]# adduser conadm
- [root@server30 ~]# visudo
-```
+**container engine**
+- A software tool that accepts and processes requests from users to create a container with all the necessary arguments and parameters. 
+- Can be seen as a sort of orchestrator, since it takes care of putting in place all the necessary actions to have the container up and running; yet it is not the effective executor of the container (the container runtime\'s role).
+- Usually solve the following problems:
+	- Providing a command line and/or REST interface for user interaction
+	- Pulling and extracting container images
+	- Managing the container mount point and bind-mounting the extracted image
+	- Handling container metadata
+	- Interacting with the container runtime
+- A thin R/W layer is created on top of the image; this task is achieved by the container engine, which takes care of presenting a working stack of the merged directories to the container runtime.
 
-```bash
- conadm ALL=(ALL)        ALL
-```
+Wide choice of container engines:
+- **Docker** (most well-known (despite not being the first) engine implementation)
+- **Podman** 
+- **CRI-O**
+- **containerd**
+- **LXD**.
 
-- As conadm with sudo (where required) on server30, inspect the latest version of ubi9 and then download it to your computer. 
-```bash
- [root@server30 ~]# dnf install container-tools
- [root@server30 ~]# podman login registry.redhat.io
- [conuser1@server30 ~]$ podman pull ubi9
- Resolved "ubi9" as an alias  (/etc/containers/registries.conf.d/001-rhel- shortnames.conf)
- Trying to pull  registry.access.redhat.com/ubi9:latest...
- Getting image source signatures
- Checking if image destination supports signatures
- Copying blob cc296d75b612 done   | 
- Copying config 159a1e6731 done   | 
- Writing manifest to image destination
- Storing signatures  159a1e67312ef50059357047ebe2a365afea904504fca9561abb3 85ecd942d62
- [conuser1@server30 ~]$ podman inspect ubi9
+**container runtime**
+- A lower-level piece of software used by container engines to run containers on the host. 
+- Provides the following functionalities:
+	- Starting the containerized process at the target mount point (usually provided by the container engine) with a set of custom metadata
+	- Managing the cgroups\' resource allocation
+	- Managing mandatory access control policies (SELinux and AppArmor) and capabilities
 
-```
+- Most of them implement the **OCI** **runtime spec** reference (https://github.com/opencontainers/runtime-spec). 
+- An industry standard that defines how a runtime should behave and the interface it should implement.
+ - The most common OCI runtime is **runc**, used by most notable engines, along with other implementations such as **crun**, **kata-containers**, **youki**, and **gVisor**.
 
-- Launch a container called *rootful-cont-port* in attached terminal mode with host port 80 mapped to container port 8080. 
-```bash
- sudo podman run -it --name rootful-cont-port -p  80:8080 ubi9
-```
+ - This modular approach lets container engines swap the container runtime as needed. 
+ - When Fedora 33 came out, it introduced a new default cgroups hierarchy called cgroups v2. 
+ - runc did not initially support cgroups v2, and Podman simply swapped runc with another OCI-compatible container runtime (crun) that was already compliant with the new hierarchy. 
+ - 3Now that runc finally supports cgroups v2, Podman will be able to safely use it again with no impact for the end user.
 
-- Run a few basic Linux commands such as `ls`, `pwd`, `df`, `cat` */etc/redhat-release*, and *os-release* while in the container. 
-```bash
- [root@349163a6e431 /]# ls
- afs  boot  etc	 lib	lost+found  mnt  proc  run    srv  tmp  var
- bin  dev   home  lib64	media	    opt  root  sbin   sys  usr
-
- [root@349163a6e431 /]# pwd
- /
-
- [root@349163a6e431 /]# df -hT
- Filesystem     Type      Size  Used Avail Use%  Mounted on
- overlay        overlay    17G  4.3G   13G  26% /
- tmpfs          tmpfs      64M     0   64M   0% /dev
- shm            tmpfs      63M     0   63M   0%  /dev/shm
- tmpfs          tmpfs     356M  6.0M  350M   2%  /etc/hosts
- devtmpfs       devtmpfs  4.0M     0  4.0M   0%  /proc/keys
-
- [root@349163a6e431 /]# cat /etc/redhat-release
- Red Hat Enterprise Linux release 9.4 (Plow)
+## Containers versus virtual machines 
 
-```
-- Check to confirm the port mapping from server30.
-```bash
- [conadm@server30 ~]$ sudo podman port rootful-cont- port
- 8080/tcp -> 0.0.0.0:80
-```
+- Containers are not virtual machines.
+- A **Container**, despite being isolated, holds a **process** that directly interacts with the host kernel using **System** **Calls**. 
+- The **process** may not be aware of the host namespaces, but it still needs to context-switch into **Kernel** **Space** to perform operations such as I/O access.
 
-- Do not remove the container yet.
+![](../../images/B31467_1_4.png)
 
-### Lab: Launch Nameless Rootless Container with Two Variables 
+- A virtual machine is always executed on top of a **hypervisor**, running a guest operating system with its own filesystem, networking, storage (usually as image files), and kernel. 
+- The hypervisor is software that provides a layer of hardware abstraction and **virtualization** to the **guest OS**, enabling a single bare-metal machine running on capable hardware to instantiate many virtual machines. 
+- The hardware seen by the guest OS kernel is mostly virtualized hardware, with some exceptions:
 
-- As conadm on server30, launch a container using the latest version of ubi8 in interactive mode (-it) with two environment variables VAR1=lab1 and VAR2=lab2 defined. 
-```bash
- [conadm@server30 ~]$ podman run -d -e VAR1="lab1" -e VAR2="lab2" --name variables8 ubi8 
-```
+![](images/B31467_1_5.png)
 
-- Check the variables from within the container. 
-```bash
- [root@803642faea28 /]# echo $VAR1
- lab1
- [root@803642faea28 /]# echo $VAR2
- lab2
-```
+- When a process performs a system call inside a virtual machine, it is always directed to the guest OS kernel.
 
-- Delete the container and the image when done. 
+- Containers share the same kernel with the host, while virtual machines have their own guest OS kernel.
 
-### Lab: Launch Named Rootless Container with Persistent Storage 
+- From a **security** point of view, virtual machines provide better isolation from potential attacks. 
+- Some of the latest CPU-based attacks (Spectre or Meltdown, most notably) could exploit CPU vulnerabilities to access VMs\' address spaces.
 
-- As conadm with sudo (where required) on server30, create a directory called */host_perm1* with full permissions, and a file called *str1* in it.
-```bash
- [conadm@server30 ~]$ sudo mkdir /host_perm1
- [sudo] password for conadm: 
- [conadm@server30 ~]$ sudo chmod 777 /host_perm1
- [conadm@server30 ~]$ sudo touch /host_perm1/str1
-```
+- Containers have refined isolation features and can be configured with strict security policies (such as CIS Docker, NIST, HIPAA, and so on) that make them quite hard to exploit.
 
-- Launch a container called *rootless-cont-str* in attached terminal mode with the created directory mapped to */cont_perm1* inside the container.
-```bash
- [conadm@server30 ~]$ sudo podman run --name  rootless-cont-str -v /host_perm1:/cont_perm1:Z -it  ubi8
- [root@a1326200eae1 /]# 
-```
+- Containers are faster to spin up than VMs. 
+- Milliseconds if the image is already available in the host. 
+- Achieved by the kernel-less nature of the container. 
+- Virtual machines must boot a kernel and `initramfs`, pivot into the root filesystem, run some kind of init (such as `systemd`), and start a variable number of services.
 
-- While in the container, check access to the directory and the presence of the file. 
-```bash
- [root@a1326200eae1 /]# ls /cont_perm1
- str1
-```
+- A VM will usually consume more resources than a container. 
+- To spin up a guest OS, we usually need to allocate more RAM, CPU, and storage than the resources needed to start a container.
 
-- Create a sub-directory and a file under */cont_perm1* and exit out of the container shell. 
-```bash
- [root@a1326200eae1 cont_perm1]# mkdir permdir2
- [root@a1326200eae1 cont_perm1]# ls
- permdir2  str1
- [root@a1326200eae1 cont_perm1]# exit
- exit
- [conadm@server30 ~]$ 
-```
+- The best practice for containers is to spin up a container for every specific workload. 
+- A VM can run different workloads together.
 
-- List */host_perm1* on server30 to verify the sub-directory and the file. 
-```bash
- [conadm@server30 ~]$ sudo ls /host_perm1
- permdir2  str1
-```
+## Virtual machines in containers 
 
-- Stop and delete the container. 
-```bash
- [conadm@server30 ~]$ podman stop rootless-cont-str
- rootless-cont-str
- [conadm@server30 ~]$ podman rm rootless-cont-str
- rootless-cont-str
-```
+**KubeVirt**
+- Put virtual machines inside containers. 
+- Companies with older software that runs best on VMs can now seamlessly integrate it with newer container-based applications, all on the same platform. 
+- Containers provide an extra layer of security, isolating VMs from each other and from the rest of the servers.
+- **Kubernetes** can now also manage VMs.
 
-- Remove */host_perm1*.
-```bash
- [conadm@server30 ~]$ sudo rm -r /host_perm1
-```
+**QEMU** (**Quick** **EMUlator**) and **KVM** (**Kernel-based Virtual Machine**)
+- QEMU is a versatile tool that emulates various server hardware, tricking a VM into thinking it\'s running on its own dedicated machine, even though it\'s really in a container. 
+- KVM, a kernel module, enhances QEMU\'s performance by allowing VMs to access the server\'s hardware directly.
 
-### Lab: Launch Named Rootless Container with Port Mapping, Environment Variables, and Persistent Storage
+- Putting virtual machines in containers empowers companies to combine the best of both worlds, improving security, efficiency, and the overall management of their software infrastructure.
 
-- As conadm with sudo (where required) on server30, launch a named rootless container called *rootless-cont-adv* in attached mode with two variables (**HISTSIZE**=100 and **MYNAME**=RedHat), host port 9000 mapped to container port 8080, and */host_perm2* mounted at */cont_perm2*
-```bash
- [conadm@server30 ~]$ podman run --name rootless-cont-adv -v ~/host_perm2:/cont_perm2:Z -e HISTSIZE="100" -e MYNAME="RedHat" -p 9000:8080 -it --replace ubi8
- [root@79e965cd1436 /]# 
-```
+## Bootable containers 
 
-- Check and confirm the settings while inside the container. 
-```bash
- [root@79e965cd1436 /]# echo $HISTSIZE
- 100
+- Powered by the **open source** project **bootc**
+- Significant evolution beyond traditional containers. 
+- Instead of just encapsulating applications, bootable containers are designed to encapsulate an entire operating system, effectively blurring the lines between containers, virtual machines, and physical systems. 
 
- [root@79e965cd1436 /]# echo $MYNAME
- RedHat
+- Specialized container image that can be directly booted on a system, in the same way you would boot a traditional operating system. 
+- Achieved by packaging a complete operating system environment, including the kernel, essential libraries, and system tools, within the container image itself. 
+- Compliant with the latest standard of the **Open Container Initiative** **(OCI)**.
 
- [root@79e965cd1436 /]# ls -ld /cont_perm2 
- drwxrwxrwx. 2 root root 6 Aug  4 02:16 /cont_perm2
+- Offer far greater isolation and control. 
+- Secure and self-contained environment for running applications, minimizing the risk of conflicts and interference.
 
- [conadm@server30 ~]$ podman port rootless-cont-adv
- 8080/tcp -> 0.0.0.0:9000
+- Compelling alternative to traditional virtual machines. 
+- By eliminating the need for a hypervisor and guest OS, they significantly reduce the resource overhead, resulting in faster boot times, lower memory consumption, and improved overall performance. 
+- Ideal for scenarios where a lightweight, portable, and efficient operating system environment is desired, such as embedded systems, edge computing, or specialized servers for machine learning and artificial intelligence applications.
 
-```
-- Exit out of the container. 
-```bash
- [root@5d510a1b2293 /]# exit
- exit
- [conadm@server30 ~]$ 
-```
-- Do not remove the container yet. 
+- Podman Desktop has a bootable containers extension that streamlines the building and management of these unique containers, providing an intuitive interface for experimentation and deployment.
 
-### Lab 22-5: Control Rootless Container States via systemd 
+# Why do I need a container? 
 
-- As conadm on server30, use the *rootless-cont-adv* container launched in the last lab as a template and generate a systemd service configuration file and store the file in the appropriate directory. 
-```bash
- [conadm@server30 ~]$ podman run --name rootless-cont-adv -v ~/host_perm2:/cont_perm2:Z -e HISTSIZE="100" -e MYNAME="RedHat" -p 9000:8080 -dt --replace ubi8
- da8faf434813242985b8e332dc06b0e6da78e7125bc36579ffc8d82b0bcafb8e
- [conadm@server30 ~]$ podman generate systemd --new --name rootless-cont-adv >  ~/.config/systemd/user/rootless-container.service
+## Open source 
 
- DEPRECATED command:
- It is recommended to use Quadlets for running  containers and pods under systemd.
+- The technologies that power container technology are open source and have become open standards widely adopted by many vendors or communities. 
+- Often associated with high-value and innovative solutions.
+- Community-driven projects usually have a great evolutionary boost that helps mature the code and bring new features continuously. 
+- Available to the public and can be inspected and analyzed. This is a great transparency feature that also has an impact on software reliability, both in terms of robustness and security.
+- Promotes an evolutionary paradigm where only the best software is adopted, contributed, and supported.
 
- Please refer to podman-systemd.unit(5) for details.
-```
+## Portability 
 
-- Stop and remove the source container rootless-cont-adv. 
-```bash
- [conadm@server30 ~]$ podman stop rootless-cont-adv
- rootless-cont-adv
- [conadm@server30 ~]$ podman rm rootless-cont-adv
- rootless-cont-adv
-```
+- Container image can be pulled and executed on any host that has a container engine running, regardless of the OS distribution underneath. 
+- A CentOS or nginx image can be pulled indifferently from a Fedora or Debian Linux distribution running a container engine and executed with the same configuration.
+- If we have a fleet of many identical hosts, we can choose to schedule the application instance on one of them (for example, using load metrics to choose the best fit) with the awareness of having the same result when running the container.
+- Reduces vendor lock-ins and provides better interoperability between platforms.
 
-- Add the support for the new service to systemd and enable the new service to auto-start at system reboots.
-```bash
- [conadm@server30 ~]$ systemctl --user daemon-reload
+## DevOps facilitators 
 
- [conadm@server30 user]$ systemctl --user enable -- now rootless-container.service
- Created symlink  /home/conadm/.config/systemd/user/default.target.want s/rootless-container.service →  /home/conadm/.config/systemd/user/rootless- container.service.
-```
+- Help solve the old *\"It works on my machine\"* pattern between development and operations teams when it comes to deploying applications for production.
+- Meet the developers\' need to create self-consistent bundles with all the necessary binaries and configurations to run their workloads seamlessly. 
+- Appreciated by operations teams, who are no longer forced to maintain complex dependency constraints or segregate every single application inside VMs.
+- Facilitators of DevOps best practices, where developers and operators work closer to deploy and manage applications without rigid separations.
+- Developers who want to build their own container images are expected to be more aware of the OS layer built into the image and work closely with operations teams to define build templates and automations.
 
-- Perform the required setup to ensure the container is launched without the need for the conadm user to log in. 
-```bash
- [conadm@server30 user]$ loginctl enable-linger
+## Cloud readiness 
 
- [conadm@server30 user]$ loginctl show-user conadm |  grep -i linger
- Linger=yes
-```
+- Containers are built for the cloud, designed with an immutable approach in mind. 
+- The immutability pattern clearly states that changes in the infrastructure (be it a single container or a complex cluster) must be applied by redeploying a modified version and not by patching the current one. 
+- Helps to increase a system\'s predictability and reliability.
+- When a new application version must be rolled out, it is built into a new image, and a new container is deployed in place of the previous version. 
+- Build pipelines can be implemented to manage complex workflows, from application build and image creation, image registry push and tagging, until deployment in the target host. 
+- This approach drastically shortens the provisioning time while reducing inconsistencies.
 
-- Reboot server30 and confirm a successful start of the container service and the container. 
-```bash
-[root@rhcsa3 ~]# systemctl --user --machine=conadm@ list-units --type=service
-  UNIT                           LOAD   ACTIVE SUB     DESCRIPTION           >
-  dbus-broker.service            loaded active running D-Bus User Message Bus
-  rootless-cont-adv.service      loaded active running Podman container-rootl>
-  systemd-tmpfiles-setup.service loaded active exited  Create User's Volatile>
-
-LOAD   = Reflects whether the unit definition was properly loaded.
-ACTIVE = The high-level unit activation state, i.e. generalization of SUB.
-SUB    = The low-level unit activation state, values depend on unit type.
-3 loaded units listed. Pass --all to see loaded but inactive units, too.
-To show all installed unit files use 'systemctl list-unit-files'.
-[root@rhcsa3 ~]# sudo -i -u conadm podman ps -a
-CONTAINER ID  IMAGE                                   COMMAND     CREATED         STATUS         PORTS                   NAMES
-a48fd2c25be4  registry.access.redhat.com/ubi9:latest  /bin/bash   10 minutes ago  Up 10 minutes  0.0.0.0:9000->8080/tcp  rootless-cont-adv
+## Infrastructure optimization 
 
-```
+- Containers have a lightweight footprint that drives much greater efficiency in the consumption of compute and memory resources. 
+- By providing a way to simplify workload execution, container adoption brings great cost savings.
+- If an application server that was running on top of a virtual machine can be containerized and executed on a host along with other containers (with dedicated resource limits and requests), computing resources can be saved and reused.
+- Whole infrastructures can be re-modulated with this new paradigm in mind; a bare-metal machine previously configured as a hypervisor can be reallocated as a worker node of a container orchestration system that simply runs more granular containerized applications as containers.
 
-### Lab 22-6: Control Rootful Container States via systemd 
-
-- As conadm with sudo where required on server10, use the rootful-cont-port container launched in Lab 22-1 as a template and generate a systemd service configuration file and store the file in the appropriate directory. 
-```bash
- [root@server30 ~]# podman generate systemd --new -- name rootful-cont-port | tee  /etc/systemd/system/rootful-cont-port.service
- DEPRECATED command:
- It is recommended to use Quadlets for running  containers and pods under systemd.
-
- Please refer to podman-systemd.unit(5) for details.
- # container-rootful-cont-port.service
- # autogenerated by Podman 4.9.4-rhel
- # Sat Aug  3 20:49:32 MST 2024
-
- [Unit]
- Description=Podman container-rootful-cont- port.service
- Documentation=man:podman-generate-systemd(1)
- Wants=network-online.target
- After=network-online.target
- RequiresMountsFor=%t/containers
-
- [Service]
- Environment=PODMAN_SYSTEMD_UNIT=%n
- Restart=on-failure
-  TimeoutStopSec=70
- ExecStart=/usr/bin/podman run \
-	--cidfile=%t/%n.ctr-id \
-	--cgroups=no-conmon \
-	--rm \
-	--sdnotify=conmon \
-	-d \
-	--replace \
-	-it \
-	--name rootful-cont-port \
-	-p 80:8080 ubi9
- ExecStop=/usr/bin/podman stop \
-	--ignore -t 10 \
-	--cidfile=%t/%n.ctr-id
- ExecStopPost=/usr/bin/podman rm \
-	-f \
-	--ignore -t 10 \
-	--cidfile=%t/%n.ctr-id
- Type=notify
- NotifyAccess=all
-
- [Install]
- WantedBy=default.target
-```
+## Microservices 
 
-- Stop and remove the source container rootful-cont-port. 
-```bash
- [root@server30 ~]# podman stop rootful-cont-port
- WARN[0010] StopSignal SIGTERM failed to stop  container rootful-cont-port in 10 seconds, resorting  to SIGKILL 
- rootful-cont-port
- [root@server30 ~]# podman ps
- CONTAINER ID  IMAGE                                   COMMAND     CREATED         STATUS         PORTS       NAMES
- fe0d07718dda  registry.access.redhat.com/ubi9:latest  /bin/bash   16 minutes ago  Up 16 minutes              rootful-container
- [root@server30 ~]# podman rm rootfil-cont-port
- Error: no container with ID or name "rootfil-cont- port" found: no such container
- [root@server30 ~]# podman rm rootful-cont-port
- rootful-cont-port
-```
-- Add the support for the new service to systemd and enable the service to auto-start at system reboots. 
-```bash
- [root@server30 ~]# systemctl daemon-reload
- [root@server30 ~]# systemctl enable --now rootful- cont-port
- Created symlink  /etc/systemd/system/default.target.wants/rootful- cont-port.service → /etc/systemd/system/rootful-cont- port.service.
-```
+- Microservice architectures split applications into multiple services that perform fine-grained functions and are part of the application as a whole.
+- Traditional applications have a monolithic approach where all the functions are part of the same instance. 
+- Break the monolith into smaller parts that interact independently.
+- Monolithic applications fit well into containers, but microservice applications have an ideal match with them.
 
-- Reboot server10 and confirm a successful start of the container service and the container.
-```bash
- [root@server30 ~]# reboot
-
- [root@server30 ~]# podman ps
- CONTAINER ID  IMAGE                                   COMMAND     CREATED             STATUS              PORTS                 NAMES
- 5c030407a7d6   registry.access.redhat.com/ubi9:latest  /bin/bash    About a minute ago  Up About a minute  0.0.0.0:80- >8080/tcp  rootful-cont-port
- 9d1e8a429ac6   registry.access.redhat.com/ubi9:latest  /bin/bash    About a minute ago  Up About a minute                        rootful-container
- [root@server30 ~]# 
-```
+Having one container for every single microservice helps:
+- Independent scalability of microservices.
+- More defined responsibilities for development teams\' cloud access programs.
+- Potential adoption of different technology stacks over the different microservices.
+- More control over security aspects (such as public-facing exposed services, mTLS connections, and so on).
 
-### Lab 22-7: Build Custom Image Using Containerfile 
+- Orchestrating microservices can be a daunting task when dealing with large and articulated architectures. 
+- The adoption of orchestration platforms such as Kubernetes, service mesh solutions such as **Istio** or **Linkerd**, and tracing tools such as **Jaeger** and **Kiali** becomes crucial to achieving control over complexity.
 
-- As conadm on server10, write a containerfile to use the latest version of ubi8 and create a user account called user-in-container in the resultant custom image. 
-```bash
- [conadm@server30 ~]$ vim containerfile
-```
+## AI/ML 
 
-```bash
- FROM registry.access.redhat.com/ubi8/ubi:latest
+- Containers are also a valuable tool to develop, train, and serve machine learning/deep learning models or **large** **language** **models** (**LLMs**). 
+- Data scientists and engineers can use containers to isolate their Jupyter notebooks (a de facto standard tool to implement solutions based on AI/ML models) and run them in separate, custom environments.
 
- RUN useradd -ms /bin/bash -u 1001 user-in-container
+- Training is a very important part of model development. Developing a model from scratch can be a very long and expensive task, especially for LLMs: for this reason, many users choose generic foundation models and apply fine-tuning techniques by feeding the model more specialized datasets. The fine-tuning process can be executed inside containers -- for example, in a training pipeline that releases a new specialized model starting from the foundation one.
 
- USER 1001
-```
+- After the model has been developed and trained, MLOps engineers can run the model by exposing inference APIs that, again, can be executed inside dedicated containers, thus providing a better layer of encapsulation of the workload and an optimal management of resources.
 
-```bash
- [conadm@server30 ~]$ podman image build -f  containerfile --no-cache -t ubi8-user .
- STEP 1/3: FROM  registry.access.redhat.com/ubi8/ubi:latest
- STEP 2/3: RUN useradd -ms /bin/bash -u 1001 user-in- container
- --> b330095e91eb
- STEP 3/3: USER 1001
- COMMIT ubi8-user
- --> e8cde30fc020
- Successfully tagged localhost/ubi8-user:latest
- e8cde30fc020051caa2a4e2f58aaaf90f088709462a1314b936fd608facfdb5e
 
-```
+# Where do containers come from? 
 
-- Test the image by launching a container in interactive mode and verifying the user. 
+## Chroot and Unix v7 
 
-```bash
- [conadm@server30 ~]$ podman run -ti --name test12  ubi8-user
- [user-in-container@30558ffcb227 /]$
-```
+*chroot* **system call**.
+- A system call (or syscall) is a method used by an application to request something from the OS\'s kernel.
+- Allows the application to change the root directory of the running copy of itself and its children, removing any capability of the running software to escape that jail. 
+- Allows you to prohibit the running application\'s access to any kind of files or directories outside the given subtree, which was really a game changer for that time.
+- Not built with security in mind, and over the years, OS documentation and security literature strongly discouraged the use of *chroot* jails as a security mechanism to achieve isolation.
+- Can easily be escaped and has many limitations
+- Has limitations and isolation only at the filesystem level
+- all the other stuff, such as running processes, system resources, the networking subsystem, and system users, is shared by the processes inside the *chroot* and the host system\'s processes.
+## FreeBSD jails 
+
+- Extends the old and good *chroot* system call.
+- Built on top of the *chroot* syscall, with the goal of extending and enlarging its feature set.
+- Virtualization of the networking subsystem, system users, and its processes;
+- Considerably improves the flexibility and the overall security of the solution.
+- **Directory** **subtree**: 
+	- Same with *chroot* jail. 
+	- Once defined as a subtree, the running process is limited to that, and it cannot escape from it.
+- **IP address**: 
+	- Can define an independent IP address for our jail 
+	- Let running process be isolated even from the host system.
+- **Hostname**: 
+	- Used inside the jail
+	- Different from the host system.
+- **Command**: 
+	- Running executable
+	- Has an option to be run inside the system jail. 
+	- Executable has a relative path that is self-contained in the jail.
+
+- Every instance also has its own users and root account that has no kind of privileges or permissions over the other jails or the underlying host system.
+
+Two ways of installing/creating a jail:
+- **From binary**: 
+	- Reflecting the ones we might install with the underlying OS
+- **From the source**: 
+	- Building from scratch what\'s needed by the final application
+
+## Solaris Containers (also known as Solaris Zones) 
+
+- Solaris is a proprietary Unix OS born from SunOS in 1993, originally developed by Sun Microsystems.
+- Solaris Containers was actually only a transitory naming of **Solaris Zones**
+- Virtualization technology built in the Solaris OS, with help also from a special filesystem, ZFS, that allows storage snapshots and cloning.
+- *zone* 
+	- iVirtualized application environment
+	- Built from the underlying operating system
+	- Allows complete isolation between the base host system and any other applications running inside other *zones*.
+- Branded zone
+	- Completely different environment compared to the underlying OS
+	- Can contain different binaries, toolkits, or even a different OS!
+- Can have its own networking, its own users, and even its own time zone.
+
+## Linux Containers (LXC) 
+
+- Linux\'s first complete container management solution.
+- Cannot just be simplified as a manager for one of the first container implementations of Linux Containers, because its authors developed a lot of the kernel features that now are also used for other container runtimes in Linux.
+- Has its own low-level container runtime, and its authors made it with the goal of offering an isolated environment as close as possible to VMs but without the overhead needed for simulating the hardware and running a brand-new kernel instance.
+- Linux containers achieve such a goal and isolation thanks to the following kernel functionalities:
+	- Namespaces
+	- Mandatory access control
+	- Control groups (also known as cgroups)
+- Requires Daemon
+
+### Linux namespaces 
+- Isolates processes that abstract a global system resource. 
+- If a process makes changes to a system resource in a namespace, these changes are visible only to other processes within the same namespace. 
+- The common use of the namespaces feature is to implement containers.
+
+### Mandatory access control 
+
+- Several MAC implementations available
+- Most well-known project is SELinux
+	- Developed by the USA\'s **National Security Agency** **(NSA)**.
+
+SELinux 
+- Mandatory access control architecture implementation used in Linux operating systems. 
+- Provides role-based access control and multi-level security through a labeling mechanism. 
+- Every file, device, and directory has an associated label (often described as a security context) that extends the common filesystem's attributes.
+
+### Control groups (cgroups) 
+
+- Built-in Linux kernel feature that can help to organize, in hierarchical groups, various types of resources, including processes.
+- These resources can then be limited and monitored. 
+- The common interface used for interacting with cgroups is a pseudo-filesystem called **cgroupfs**. 
+- Useful for tracking and limiting processes\' resources, such as memory, CPU, and so on.
+
+**unprivileged containers**
+- Thanks to namespaces, MAC, and cgroups, in fact, LXC can isolate a certain number of UIDs and GIDs, mapping them with the underlying operating system. 
+- Ensures that UID=0 in the container is (in reality) mapped to a higher UID at the base system host.
+
+- Vast set of pre-built namespace types, such as the following:
+	- **Network:** 
+		- Offering access to network devices, stacks, ports, and so on
+	- **Mount:** 
+		- Offering access to mount points
+	- **PID:** 
+		- Offering access to process IDs
+
+## Docker 
+
+- One of the first Docker container engines was LXC.
+- **libcontainer**
+	- Replaced the LXC container engine.
+	- Docker's own implementation. 
+	- Requires a daemon running on the base host system to keep the containers running and working properly.
+	**OverlayFS**
+	- Helps combine multiple filesystems in just one single filesystem.
+	- Linux union filesystem. 
+	- Can combine multiple mount points into one, creating a single directory structure that contains all the underlying files and subdirectories from sources.
+
+- Docker team introduced the concept of container images and container registries
+	- Enabled the creation of a whole ecosystem in which every developer, sysadmin, or tech enthusiast could collaborate and contribute with their own custom container images. 
+	- Created a special file format for creating brand-new container images (Dockerfile) to easily automate the steps needed for building the container images from scratch.
+
+## rkt 
+
+- Launched by the CoreOS company (acquired then by Red Hat) 
+- Implementation of a container engine that was **daemon-less**.
+- Instead of having a central daemon administering a bunch of containers, every container was on its own, like any other standard process we may start on our base host system.
+
+**Cloud Native Computing Foundation** **(CNCF)**
+- Aims to help and coordinate container and cloud-related projects
+- Decided to adopt the rkt project under their umbrella, together with another project donated by Docker itself -- *containerd*.
+	- Docker team extracted the project\'s core runtime from its daemon and donated it to the CNCF, which was a 
+	- Great step that motivated and enabled a great community around the topic of containers
+	- Helped to develop and improve rising container orchestration tools, such as Kubernetes.
+
+Kubernetes 
+- (from the Greek term *κυβερνήτης*, meaning \"helmsman\")
+- Also abbreviated as K8s, is an open source container-orchestration system for simplifying application deployment and management in a multi-host environment.
+- Released as an open source project by Google
+- Now maintained by the CNCF.
+- Rising need for orchestrating complex projects made of many containers on multi-machine environments
+- Kubernetes rose as the ecosystem leader.
+
+- After Red Hat\'s acquisition of CoreOS, the rkt project was discontinued
+- Influenced the development of the Podman project. 
+
+## OCI and CRI-O 
+
+OCI
+- The *extraction* of containerd from Docker and the consequent donation to the CNCF 
+	- Motivated the open source community to start working seriously on container engines that could be injected under an orchestration layer, such as Kubernetes.
+- Governance committee started by Docker, with the help of many other companies (Red Hat, AWS, Google, Microsoft, IBM, and so on) 
+- Under the umbrella of the Linux Foundation
+- Deveolped the runtime specification (**runtime spec**) and the image specification (**image spec**) for describing how the API and the architecture for new container engines should be created in the future.
+- runc
+	- First implementation of a container runtime adhering to the OCI specifications
+
+- Defined a specification for running standalone containers 
+- Provided the base for linking the Kubernetes layer with the underlying container engine more easily. 
+- The Kubernetes community released the **Container Runtime Interface** **(CRI)**, a plugin interface to enable the adoption of a wide variety of container runtimes.
+
+CRI-O
+- Released as an open source project by Red Hat
+- One of the first implementations of the Kubernetes CRI, 
+	- Enables the use of OCI-compatible runtimes. 
+- Represents a lightweight alternative to using Docker, rkt, or any other engines as Kubernetes' runtime.
+
+## Podman 
+
+- POD* *MANager*
+- A pod is the smallest deployable computing unit that can be handled by Kubernetes
+	- Can be made of one or more containers. 
+	- In the case of multiple containers in the same pod, they are scheduled and run side by side in a shared context.
+- Manages 
+	- Containers
+	- Containers' images
+	- Storage volumes
+	- Pods made of one or multiple containers,
+- Built from scratch to adhere to the OCI standards.
+- No central daemon managing containers
+- Starts containers as standard system processes. 
+- Defines a Docker-compatible CLI interface to ease the transition from Docker.
+- **rootless containers**
+	- Easily run as a normal user, without requiring root. 
+	- Using Podman with a non-privileged user will start restricted containers without any privileges, such as the user running it.
+- Support for **Docker** **Compose**
+- New network stack based on the open source projects Netavark and Aardvark 
+	- Improve performance and functionality. 
+- **Podman** **Machine**
+	- Essential for running Podman on MacOS or the Windows operating system
+- New network stack for rootless containers based on pasta. 
+- Red Hat announced the intent to donate Podman, Podman Desktop, and other related container tools (Buildah, Skopeo, bootc, composefs) to the CNCF in late 2024, with the projects officially joining the CNCF Sandbox in January 2025, solidifying their commitment to an open, vendor-neutral, community-driven future.
+
+# Where are containers used today? 
+
+- Companies are shifting from the old VM deployment model to a container one for new applications. 
+- Cloud-native computing is a software development practice to build and deploy scalable applications in public, private, or hybrid clouds.
+- In Kubernetes, we find a lot of additional services and resources, such as service meshes and serverless computing, which are useful in a **Microservice** **Architecture** **(MSA)**.
+	- Microservice architecture is a practice to create applications based on loosely coupled, fine-grained services, using lightweight protocols.
+A simple web store application built with microservices:
+
+![](images/B31467_1_6.png)
+
+- Depending on the type of client we\'re using (**Mobile** **app** or web **Browser**), we\'ll then be able to interact with the three underlying services, all decoupled, communicating with a **REST API**. 
+- One of the great new features is also decoupling at the data level; every microservice has its own database and data structure, which makes them independent in every phase of development and deployment.
+
+- If we match a container for every microservice shown in the architecture and we also add an orchestrator, such as Kubernetes, we\'ll find that the solution is almost complete! 
+- Thanks to container technology, every service could have its own container base image with just the needed runtimes on board, which ensures a lightweight pre-built package with all the resources needed by the service once started.
+
+- Looking at the various automated processes around application development and maintenance, an architecture based on containers could also be easily fitted on the tools of **CI/CD** to automate all the needed steps to develop, test, and run an application.
+
+CI/CD stands for **continuous integration and continuous delivery/deployment**
+- Fill the gap between development and operation activities
+- Increases the automation in the process of building, testing, and deploying applications.
+
+- DevOps is a set of practices that link software development (Dev) and IT operations (Ops). 
+- The goal of DevOps is to shorten an application\'s development life cycle and increase the frequency of application releases.
+
+- By shedding the constraints of legacy virtualization platforms and embracing containers, companies can unlock a path towards greater agility, cost efficiency, and innovation, positioning themselves for success in the future.
+
+- Container technology can be considered an evolved application packaging format that can be optimized for containing all necessary libraries and tools, even complex monolithic applications. 
+- Over the years, base container images have evolved to optimize the size and content for creating smaller runtimes, capable of improving the overall management, even for complex monolithic applications.
+- The size of a Red Hat Enterprise Linux container base image in its minimal flavor is around 30 MB during download and only 84 MB once extracted through Podman in the target base system.
+
+- Orchestrators have adopted internal features and resources for handling monolithic applications, that are far from cloud-native concepts. 
+- Kubernetes introduced in the platform's core some features for ensuring the statefulness of containers, as well as the concepts of persistent storage for saving locally cached data or important stuff for the application.

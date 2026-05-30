@@ -1,7 +1,6 @@
 # Time Synchronization
 
-### Network Time Protocol (NTP)
-
+## Network Time Protocol (NTP)  
 - Networking protocol for synchronizing the system clock with remote time servers for accuracy and reliability.
 - Having steady and exact time on networked systems allows time-sensitive applications, such as authentication and email applications, backup and scheduling tools, financial and billing systems, logging and monitoring software, and file and storage sharing protocols, to function with precision.
 - Sends a stream of messages to configured time servers and binds itself to the one with least amount of delay in its responses, the most accurate, and may or may not be the closest distance-wise. 
@@ -79,7 +78,7 @@ Under these sub-pools, the owners maintain multiple time servers with enumerated
 - Similarly, a stratum 3 server can be configured to synchronize its time with a stratum 2 server and deliver time to the next lower-level servers, and so on. 
 - Servers sharing the same stratum can be configured as peers to exchange time updates with one another.
 
-![](/images/image-OOGYXDFA%201.jpg)
+![](../../../images/image-OOGYXDFA%201%201.jpg)
 
 There are numerous public NTP servers available for free that synchronize time. 
 They normally operate at higher stratum levels such as 2 and 3.

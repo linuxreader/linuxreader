@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    <meta name="description" content="8 Choosing the Container Base Image The fastest and easiest way to learn about and get some experience with containers is to start working with pre-built container images, as we saw in the previous chapters.[]{.sentence-end} After a deep dive into container management, we discovered that sometimes, the available service, its configuration, or even the application version is not the one that our project requires.[]{.sentence-end} Then, we introduced Buildah and its feature for building custom container images.[]{.sentence-end} In this chapter, we are going to address another important topic that is often questioned in community and enterprise projects: the choice of[]{#Chapter_8.xhtml#idx_fb0e07ef .index-entry index-entry=“container base image”} a container base image.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="8 Choosing the Container Base Image The fastest and easiest way to learn about and get some experience with containers is to start working with pre-built container images, as we saw in the previous chapters.[]{.sentence-end} After a deep dive into container management, we discovered that sometimes, the available service, its configuration, or even the application version is not the one that our project requires.[]{.sentence-end} Then, we introduced Buildah and its feature for building custom container images.[]{.sentence-end} In this chapter, we are going to address another important topic that is often questioned in community and enterprise projects: the choice of[]{#Chapter_8.xhtml#idx_fb0e07ef .index-entry index-entry=“container base image”} a container base image.">
+    <meta property="og:url" content="http://localhost:1313/containers/containerimages/">
+    <meta property="og:description" content="8 Choosing the Container Base Image The fastest and easiest way to learn about and get some experience with containers is to start working with pre-built container images, as we saw in the previous chapters.[]{.sentence-end} After a deep dive into container management, we discovered that sometimes, the available service, its configuration, or even the application version is not the one that our project requires.[]{.sentence-end} Then, we introduced Buildah and its feature for building custom container images.[]{.sentence-end} In this chapter, we are going to address another important topic that is often questioned in community and enterprise projects: the choice of[]{#Chapter_8.xhtml#idx_fb0e07ef .index-entry index-entry=“container base image”} a container base image.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Containers">
+    <meta itemprop="description" content="8 Choosing the Container Base Image The fastest and easiest way to learn about and get some experience with containers is to start working with pre-built container images, as we saw in the previous chapters.[]{.sentence-end} After a deep dive into container management, we discovered that sometimes, the available service, its configuration, or even the application version is not the one that our project requires.[]{.sentence-end} Then, we introduced Buildah and its feature for building custom container images.[]{.sentence-end} In this chapter, we are going to address another important topic that is often questioned in community and enterprise projects: the choice of[]{#Chapter_8.xhtml#idx_fb0e07ef .index-entry index-entry=“container base image”} a container base image.">
+    <meta itemprop="wordCount" content="6877">
+    <title></title>
+    <link href="/containers/containerimages/index.md" rel="alternate" type="text/markdown" title="">
+    <link href="/images/favicon.svg?1780154752" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1780154752" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1780154752" defer></script>
+    <script src="/js/search-lunr.js?1780154752" defer></script>
+    <script src="/js/search.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1780154752";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1780154752" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1780154752" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780154752" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780154752" rel="stylesheet">
+    <link href="/css/theme.css?1780154752" rel="stylesheet">
+    <link href="/css/format-html.css?1780154752" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/containers\/containerimages\/';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:1313';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script><script defer src="https://cloud.umami.is/script.js" data-website-id="d179743c-138a-4212-8906-28f70628ef95"></script>
+<style>
+:root {
+    --MENU-S-width: 15rem;
+    --MENU-M-width: 15rem;
+    --MENU-L-width: 18rem;
+    --MAIN-MAX-width: 100rem;
+}
+html {
+  zoom: 1.2;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif,
+               "Apple Color Emoji", "Segoe UI Emoji" !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500 !important;
+  letter-spacing: 0.7px;
+}
+
+code, kbd, pre, samp {
+  font-family: "Fira Code", "Hack", "Source Code Pro", Consolas, Menlo, monospace !important;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+  <body class="mobile-support html" data-origin="/containers/containerimages/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#h2_203">OCI Image Manifest</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#h2_205">Docker Hub container registry service</a></li>
+    <li><a href="#h2_206">Quay.io container registry service</a></li>
+    <li><a href="#h2_207">Red Hat Container Registry</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#h2_209">Managing trusted registries</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#h2_211">The UBI Standard image</a></li>
+    <li><a href="#h2_212">The UBI Minimal image</a></li>
+    <li><a href="#h2_213">The UBI Micro image</a></li>
+    <li><a href="#h2_214">The UBI Init image</a></li>
+    <li><a href="#h2_215">Other UBI-based images</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/containers/"><span itemprop="name">Containers</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/containerimages/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/" title="Containers (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/ansible-and-podman/" title="Ansible and Podman (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable containers" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id=""></h1>
+
+<h1 id="h1_199" class="chapterNumber">8<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<h1 id="h1_200" class="chapterTitle">Choosing the Container Base Image<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>The fastest and easiest way to learn about and get some experience with
+containers is to start working with pre-built container images, as we
+saw in the previous chapters.[]{.sentence-end} After a deep dive into
+container management, we discovered that sometimes, the available
+service, its configuration, or even the application version is not the
+one that our project requires.[]{.sentence-end} Then, we introduced
+Buildah and its feature for building custom container
+images.[]{.sentence-end} In this chapter, we are going to address
+another important topic that is often questioned in community and
+enterprise projects: the choice of[]{#Chapter_8.xhtml#idx_fb0e07ef
+.index-entry index-entry=&ldquo;container base image&rdquo;} a <strong>container base
+image</strong>.</p>
+<p>Choosing the right container base image is an important task in the
+container journey: a container base image is the underlying operating
+system layer that our system's service, application, or code will rely
+on.[]{.sentence-end} Due to this, we should choose one that fits our
+best practices concerning security and updates.</p>
+<p>In this chapter, we're going to cover the following main topics:</p>
+<ul>
+<li>The Open Container Initiative image format</li>
+<li>Where do container images come from?</li>
+<li>Trusted container image sources</li>
+<li>Introducing Universal Base Image</li>
+</ul>
+<h1 id="h1_201" class="heading-1">Technical requirements<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>To complete this chapter, you will need a machine with a working Podman
+installation.[]{.sentence-end} As stated in <em><a href="/containers/containerimages/#Chapter_3.xhtml#h1_83">Chapter
+3</a>{.chapref}</em>, <em>Running</em> <em>the</em> <em>First
+Container</em>, all the examples in this book have been executed on a Fedora
+40 system or later but can be reproduced on an operating system of your
+choice.</p>
+<p>Having a good understanding of the topics that we covered in <em><a href="/containers/containerimages/#Chapter_4.xhtml#h1_114">Chapter
+4</a>{.chapref}</em>, <em>Managing Running</em> <em>Containers</em>,
+will help you easily grasp concepts regarding container images.</p>
+<h1 id="h1_202" class="heading-1">The Open Container Initiative image format<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>As we described in <em><a href="/containers/containerimages/#Chapter_1.xhtml#h1_14">Chapter 1</a>{.chapref}</em>,
+<em>Introduction to Container Technology</em>, back in 2013, Docker was
+introduced in the container landscape and became very popular rapidly.</p>
+<p>At a high level, the Docker team introduced the concept of container
+images and container registries, which was a
+game-changer.[]{.sentence-end} Another important step was being able to
+<em>extract</em> containerd projects from Docker and donate them to the <strong>Cloud
+Native Computing Foundation</strong> (<strong>CNCF</strong>).[]{.sentence-end} This
+[]{#Chapter_8.xhtml#idx_054dd493 .index-entry
+index-entry=&ldquo;Cloud Native Computing Foundation (CNCF)&quot;}motivated the
+open source community to start working seriously on container engines
+that could be injected into an orchestration layer, such as Kubernetes.</p>
+<p>Similarly, in 2015, Docker, with the help of many other companies (Red
+Hat, AWS, Google, Microsoft, IBM, and others), started
+[]{#Chapter_8.xhtml#idx_1abce2ec .index-entry
+index-entry=&ldquo;Open Container Initiative (OCI)&quot;}the <strong>Open Container
+Initiative</strong> (<strong>OCI</strong>) under the Linux Foundation umbrella.</p>
+<p>These contributors developed the Runtime Specification (runtime-spec)
+and the Image Specification (image-spec) for describing how the API and
+the architecture for new container engines should be created in the
+future.</p>
+<p>After a few months of work, the OCI team released its first
+implementation of a container runtime that adhered to their
+specifications; the project was []{#Chapter_8.xhtml#idx_9e74b4bd
+.index-entry index-entry=&ldquo;runc&rdquo;}named <strong>runc</strong>.</p>
+<p>It's worth looking at the container image specification in detail and
+going over some theory behind the practice that we introduced in
+<em><a href="/containers/containerimages/#Chapter_2.xhtml#h1_52">Chapter 2</a>{.chapref}</em>, <em>Podman</em> <em>and</em>
+<em>Docker</em>.</p>
+<p>The specification defines an OCI container image that consists of the
+following:</p>
+<ul>
+<li><strong>Manifest</strong>: This []{#Chapter_8.xhtml#idx_fee1d176 .index-entry
+index-entry=&ldquo;OCI container image:manifest&rdquo;}contains the metadata of
+the contents and dependencies of the image.[]{.sentence-end} This
+also includes the ability to identify one or more filesystem
+archives that will be unpacked to get the final runnable filesystem.</li>
+<li><strong>Image</strong> <strong>index (optional)</strong>: This represents a list of manifests
+and descriptors that can []{#Chapter_8.xhtml#idx_2b30f8a8
+.index-entry index-entry=&ldquo;OCI container image:image index&rdquo;}provide
+different implementations of the image, depending on the target
+platform.</li>
+<li><strong>Set of</strong> <strong>filesystem</strong> <strong>layers</strong>: The actual set of layers that
+should be merged to build the final[]{#Chapter_8.xhtml#idx_cfe5e8fa
+.index-entry
+index-entry=&ldquo;OCI container image:set of filesystem layers&rdquo;}
+container filesystem.</li>
+<li><strong>Configuration</strong>: This contains[]{#Chapter_8.xhtml#idx_36291cd3
+.index-entry index-entry=&ldquo;OCI container image:configuration&rdquo;} all
+the information that's required by the container runtime engine to
+effectively run the application, such as arguments and environment
+variables.</li>
+</ul>
+<p>We will not deep dive into every element of the OCI Image Specification
+as it is out of scope, but the Image Manifest deserves a closer look.</p>
+<h2 id="h2_203" class="heading-2">OCI Image Manifest<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>The Image Manifest defines a []{#Chapter_8.xhtml#idx_652281e8
+.index-entry index-entry=&ldquo;OCI Image Manifest&rdquo;}set of layers and the
+configuration for a single container image that is built for a specific
+architecture and an operating system.</p>
+<p>Let's explore the details of the OCI Image Manifest by looking at the
+following example:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>{
+  &#34;schemaVersion&#34;: 2,
+  &#34;config&#34;: {
+    &#34;mediaType&#34;: &#34;application/vnd.oci.image.config.v1+json&#34;,
+    &#34;size&#34;: 7023,
+    &#34;digest&#34;: &#34;sha256:b5b2b2c507a0944348e0303114d8d93aaaa081732b86451d9bce1f432a537bc7&#34;
+  },
+  &#34;layers&#34;: [
+    {
+      &#34;mediaType&#34;: &#34;application/vnd.oci.image.layer.v1.tar+gzip&#34;,
+      &#34;size&#34;: 32654,
+      &#34;digest&#34;: &#34;sha256:9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0&#34;
+    }
+  ],
+  &#34;annotations&#34;: {
+    &#34;com.example.key1&#34;: &#34;value1&#34;,
+    &#34;com.example.key2&#34;: &#34;value2&#34;
+  }
+}</code></pre></div>
+<p>Here, we are using the following keywords:</p>
+<ul>
+<li><code>schemaVersion</code>{.inlineCode}: A property that must be set to a value
+of <code>2</code>{.inlineCode}.[]{.sentence-end} This ensures backward
+compatibility with Docker.</li>
+<li><code>config</code>{.inlineCode}: A property that references an image's
+configuration through a digest:
+<ul>
+<li><code>mediaType</code>{.inlineCode}: This property defines the actual
+configuration format (just one currently)</li>
+</ul>
+</li>
+<li><code>layers</code>{.inlineCode}: This property provides an array of descriptor
+objects:
+<ul>
+<li><code>m</code>{.inlineCode}<code>ediaType</code>{.inlineCode}: In this case, this
+descriptor should be one of the media types that are allowed for
+the layer's descriptors</li>
+</ul>
+</li>
+<li><code>annotations</code>{.inlineCode}: This property defines additional
+metadata for the Image Manifest.</li>
+</ul>
+<p>To summarize, the main goal of[]{#Chapter_8.xhtml#idx_61cced1f
+.index-entry index-entry=&ldquo;OCI Image Manifest&rdquo;} the specification is to
+make interoperable tools for building, transporting, and preparing a
+container image to be run.</p>
+<p>The Image Manifest Specification has three main goals:</p>
+<ul>
+<li>To enable hashing for the image's configuration, thereby generating
+a unique ID</li>
+<li>To allow multi-architecture images due to its high-level manifest
+(image index) that references platform-specific versions of the
+Image Manifest</li>
+<li>To be able to easily []{#Chapter_8.xhtml#idx_001f9c54 .index-entry
+index-entry=&ldquo;OCI Image Manifest&rdquo;}translate the container image into
+the OCI Runtime Specification</li>
+</ul>
+<p>Now, let's learn where these container images come from.</p>
+<h1 id="h1_204" class="heading-1">Where do container images come from?<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In the previous chapters, we[]{#Chapter_8.xhtml#idx_f18ba8fa
+.index-entry index-entry=&ldquo;container images&rdquo;} used pre-built images to
+run, build, or manage a container, but where do these container images
+come from?</p>
+<p>How can we dig into their source commands or into the
+Dockerfile/Containerfile that's used to build them?</p>
+<p>Well, as we've mentioned previously, Docker introduced the concept of a
+container image and container registry for storing these images &ndash; even
+publicly.[]{.sentence-end} The most famous container registry is Docker
+Hub, but after Docker's introduction, other cloud container registries
+were released too.</p>
+<p>We can choose between the following cloud container registries:</p>
+<ul>
+<li><strong>Docker</strong> <strong>Hub</strong>: This is the[]{#Chapter_8.xhtml#idx_514556c7
+.index-entry index-entry=&ldquo;Docker Hub&rdquo;} hosted registry solution by
+Docker Inc.[]{.sentence-end} This registry also hosts official
+repositories and security-verified images for some popular open
+source projects.</li>
+<li><strong>Quay.io</strong>: This is the[]{#Chapter_8.xhtml#idx_568b42aa
+.index-entry index-entry=&ldquo;Quay.io&rdquo;} hosted registry solution that
+was born under the CoreOS company, though it is now part of Red
+Hat.[]{.sentence-end} It offers private and public repositories,
+automated scanning for security purposes, image builds, and
+integration with popular Git public repositories.</li>
+<li><strong>Linux</strong> <strong>distribution</strong> <strong>registries</strong>: Popular Linux
+distributions are typically community-baked, such as
+[]{#Chapter_8.xhtml#idx_154c4278 .index-entry
+index-entry=&ldquo;Red Hat Enterprise Linux (RHEL)&quot;}Fedora Linux,
+or[]{#Chapter_8.xhtml#idx_e0487935 .index-entry
+index-entry=&ldquo;Linux distribution registries&rdquo;} enterprise-based, such
+as <strong>Red Hat Enterprise Linux</strong> (<strong>RHEL</strong>).[]{.sentence-end} They
+usually offer public container registries, though these are often
+only available for projects or packages that have already been
+provided as system packages.[]{.sentence-end} These registries are
+not available to end users and they are fed by the Linux
+distributions' maintainers.</li>
+<li><strong>Public</strong> <strong>cloud</strong> <strong>registries</strong>: Amazon, Google, Microsoft, and
+other public cloud providers offer public and
+[]{#Chapter_8.xhtml#idx_e8f30684 .index-entry
+index-entry=&ldquo;public cloud registries&rdquo;}private container registries
+for their customers.</li>
+</ul>
+<p>We will explore these registries in more detail in <em><a href="/containers/containerimages/#Chapter_9.xhtml#h1_219">Chapter
+9</a>{.chapref}</em>, <em>Pushing Images to a Container
+Registry</em>.</p>
+<p>Docker Hub, as well as Quay.io, are []{#Chapter_8.xhtml#idx_7398705a
+.index-entry index-entry=&ldquo;Quay.io&rdquo;}public container registries where we
+can find container images that []{#Chapter_8.xhtml#idx_52eb8976
+.index-entry index-entry=&ldquo;Docker Hub&rdquo;}have been created by
+anyone.[]{.sentence-end} These registries are full of useful custom
+images that we can use as starting points for testing container images
+quickly and easily.</p>
+<p>Just downloading and running a container image is not always the best
+thing to do &ndash; we could hit very old and outdated software that could be
+vulnerable to some known public vulnerability; or, even worse, we could
+download and execute some malicious code that could compromise our whole
+infrastructure.</p>
+<p>For this reason, Docker Hub and Quay.io usually offer features to
+underline where such images come from.[]{.sentence-end} Let's inspect
+them.</p>
+<h2 id="h2_205" class="heading-2">Docker Hub container registry service<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>As we introduced earlier, Docker Hub[]{#Chapter_8.xhtml#idx_d9d4da4f
+.index-entry index-entry=&ldquo;Docker Hub&rdquo;} is the most famous container
+registry available.[]{.sentence-end} It hosts multiple container images
+for community or enterprise products.</p>
+<p>By looking at the detail page of a container image, we can easily
+discover all the required information about that project and its
+container images.[]{.sentence-end} The following screenshot shows Alpine
+Linux's Docker Hub page:</p>
+<figure class="mediaobject">
+<img src="images/B31467_8_1.png"
+style="width:528.0px; height:275.99009083402143px;" alt="Image 1" />
+</figure>
+<p>Figure 8.1 &ndash; Alpine Linux container image on Docker Hub</p>
+<p>As you can see, at the top of the page, we can find helpful information,
+the latest tags, the supported architectures, and useful links to the
+project's documentation and the issue-reporting system.</p>
+<p>On the []{#Chapter_8.xhtml#idx_0569ac14 .index-entry
+index-entry=&ldquo;Docker Hub&rdquo;}Docker Hub page, we can find the <em>Official
+Image</em> tag, just after the image's name, when that image is part of
+Docker's Official Images program.[]{.sentence-end} The images in this
+program, which are reported as official, are curated directly by the
+Docker team in collaboration with the upstream projects' maintainers.</p>
+<p>packt_tip
+<strong>Important note</strong></p>
+<p>If you want to look at this page in more depth, point your web browser
+to
+<a href="https://hub.docker.com/_/alpine" rel="external" target="_blank">[https://hub.docker.com/_/alpine]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>Another important feature that's offered
+by[]{#Chapter_8.xhtml#idx_01b76baa .index-entry
+index-entry=&ldquo;Docker Hub&rdquo;} Docker Hub (not only for official images) is
+the ability to look into the Dockerfile that was used to create a
+certain image.</p>
+<p>If we click on one of the available tags on the container image page, we
+can easily look at the Dockerfile of that container image tag.</p>
+<p>Clicking on the tag named <strong>edge</strong> on that page will redirect us to the
+GitHub page of the docker-alpine project, which is defined as the
+following Dockerfile:
+<a href="https://github.com/alpinelinux/docker-alpine/blob/edge/x86_64/Dockerfile" rel="external" target="_blank">[https://github.com/alpinelinux/docker-alpine/blob/edge/x86_64/Dockerfile]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>We should always look out for and prefer official
+images.[]{.sentence-end} If an official image is not available or it
+does not fit our needs, then we need to inspect the Dockerfile that the
+content creator published, as well as the container image.</p>
+<p>Docker Hub also includes an additional service called
+Scout.[]{.sentence-end} It is a tool that helps developers find and fix
+security issues in their Docker images.[]{.sentence-end} It scans images
+for vulnerabilities, provides remediation advice, and integrates with
+CI/CD pipelines to ensure that security is addressed throughout the
+development process.</p>
+<p>note
+<strong>Important note</strong></p>
+<p>At the time of writing, Docker Hub has several limitations for
+non-paying authenticated users and for unauthenticated ones as
+well.[]{.sentence-end} A common limitation is the number of images
+pulled per hour per user.[]{.sentence-end} You can learn more at the
+following URL:
+<a href="https://docs.docker.com/docker-hub/download-rate-limit/" rel="external" target="_blank">[https://docs.docker.com/docker-hub/download-rate-limit/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<h2 id="h2_206" class="heading-2">Quay.io container registry service<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Quay[]{#Chapter_8.xhtml#idx_6eaff381 .index-entry index-entry=&ldquo;Quay&rdquo;} is
+a container registry service that was acquired by CoreOS in 2014 and is
+now part of the Red Hat ecosystem.[]{.sentence-end} <strong>Quay.io</strong> is
+the[]{#Chapter_8.xhtml#idx_b36f8728 .index-entry index-entry=&ldquo;Quay.io&rdquo;}
+managed service, offered as SaaS, of the open source project Quay.</p>
+<p>The online registry allows its users to be more cautious once they've
+chosen a container image by providing security scanning software.</p>
+<p>Quay, and Quay.io as well, adopts the Clair project, a leading container
+vulnerability scanner that displays reports on the repository tags web
+page, as shown in the following screenshot:</p>
+<figure class="mediaobject">
+<img src="images/B31467_8_2.png"
+style="width:528.0px; height:200.56151940545004px;" alt="Image 2" />
+</figure>
+<p>Figure 8.2 &ndash; Quay vulnerability security scan page</p>
+<p>On this page, we can []{#Chapter_8.xhtml#idx_2804f592 .index-entry
+index-entry=&ldquo;Quay:vulnerability security scan page&rdquo;}click on
+<strong>SECURITY</strong> <strong>SCAN</strong> to inspect the details of that security
+scan.[]{.sentence-end} If you want to learn more about this feature,
+please go to
+<a href="https://quay.io/repository/openshift-release-dev/ocp-release?tab=tags" rel="external" target="_blank">[https://quay.io/repository/openshift-release-dev/ocp-release?tab=tags]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>As we've seen, using a public registry that offers every user the
+security scan feature could help ensure that we choose the right and
+most secure flavor of the container image we are searching for.</p>
+<p>At the moment of writing, Quay.io has no limits on the number of
+container images pulled; the free tier offers five private repositories
+and unlimited public repositories.</p>
+<h2 id="h2_207" class="heading-2">Red Hat Container Registry<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Red Hat Container Registry[]{#Chapter_8.xhtml#idx_1a297474 .index-entry
+index-entry=&ldquo;Red Hat Container Registry&rdquo;} is the
+[]{#Chapter_8.xhtml#idx_cafafecc .index-entry
+index-entry=&ldquo;OpenShift Container Platform (OCP)&quot;}default container
+registry for RHEL and Red Hat <strong>OpenShift</strong> <strong>Container Platform</strong>
+(<strong>OCP</strong>) users.[]{.sentence-end} The web interface of this registry is
+publicly accessible to any user, whether they are authenticated or not,
+although almost all the images that are provided are reserved for paid
+users (RHEL or OCP users).</p>
+<p>We are talking about this registry because it combines all the features
+we talked about previously.[]{.sentence-end} This registry offers the
+following to its users:</p>
+<ul>
+<li>Official container images by Red Hat</li>
+<li>Containerfile/Dockerfile sources to inspect the content of the image</li>
+<li>Security reports (index) about every container image that's
+distributed</li>
+</ul>
+<p>The following screenshot []{#Chapter_8.xhtml#idx_ec302df1 .index-entry
+index-entry=&ldquo;Red Hat Container Registry&rdquo;}shows what this information
+looks like on the <strong>Red Hat Ecosystem Catalog</strong> page:</p>
+<figure class="mediaobject">
+<img src="images/B31467_8_3.png"
+style="width:528.0px; height:239.36581337737405px;" alt="Image 3" />
+</figure>
+<p>Figure 8.3 &ndash; Mariadb container image description page on Red Hat
+Ecosystem Catalog</p>
+<p>As we can see, the page shows the description of the container image we
+have selected (MariaDB database), the version, the available
+architectures, and various tags that can be selected from the respective
+drop-down menu.[]{.sentence-end} Some tabs also mention the keywords we
+are interested in: <strong>Security</strong> and <strong>Dockerfile</strong>.</p>
+<p>By clicking on the <strong>Security</strong> tab, we can see the status of the
+vulnerability scan that was executed for that image tag, as shown in the
+following screenshot:</p>
+<figure class="mediaobject">
+<img src="images/B31467_8_4.png"
+style="width:528.0px; height:275.5732009925559px;" alt="Image 4" />
+</figure>
+<p>Figure 8.4 &ndash; Mariadb container image Security page on Red Hat Ecosystem
+Catalog</p>
+<p>As we can[]{#Chapter_8.xhtml#idx_9d948382 .index-entry
+index-entry=&ldquo;Red Hat Container Registry&rdquo;} see, at the time of writing,
+for this latest image tag, a security vulnerability has already been
+identified that's affecting three packages.[]{.sentence-end} To the
+right, we can find the Red Hat Advisory ID, which is
+linked[]{#Chapter_8.xhtml#idx_03606bab .index-entry
+index-entry=&ldquo;Common Vulnerabilities and Exposures (CVEs)&rdquo;} to the public
+<strong>Common Vulnerabilities and Exposures</strong> (<strong>CVEs</strong>).</p>
+<p>By clicking on the <strong>Dockerfile</strong> tab, we can look at the source
+Containerfile that was used to build that container image:</p>
+<figure class="mediaobject">
+<img src="images/B31467_8_5.png"
+style="width:528.0px; height:275.5732009925559px;" alt="Image 5" />
+</figure>
+<p>Figure 8.5 &ndash; Mariadb container image Dockerfile page on Red Hat
+Ecosystem Catalog</p>
+<p>We can look at the source []{#Chapter_8.xhtml#idx_c2210816 .index-entry
+index-entry=&ldquo;Red Hat Container Registry&rdquo;}Containerfile that was used to
+build the container image that we are going to pull and
+run.[]{.sentence-end} This is a great feature that we can access by
+clicking on the same description page of the container image we are
+looking for.</p>
+<p>If you want to take a closer look at the preceding container image, you
+can visit this URL:
+<a href="https://catalog.redhat.com/software/containers/rhel9/mariadb-105/61a6084dbfd4a5234d596220" rel="external" target="_blank">[https://catalog.redhat.com/software/containers/rhel9/mariadb-105/61a6084dbfd4a5234d596220]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>Another interesting container image available on the Red Hat enterprise
+registry is the UBI:</p>
+<figure class="mediaobject">
+<img src="images/B31467_8_6.png"
+style="width:528.0px; height:275.5732009925559px;" alt="Image 6" />
+</figure>
+<p>Figure 8.6 &ndash; UBI 9 container image Dockerfile page on Red Hat Ecosystem
+Catalog</p>
+<p><strong>UBI</strong> stands for <strong>Universal Base Image</strong>.[]{.sentence-end} It
+is[]{#Chapter_8.xhtml#idx_af4f9a8d .index-entry
+index-entry=&ldquo;Universal Base Image (UBI)&rdquo;} an initiative that was
+launched by Red Hat that lets every user (Red Hat customer or not) open
+Red Hat container images.[]{.sentence-end} This allows the Red Hat
+ecosystem to expand by leveraging all the previously mentioned services
+that are offered by the Red Hat Ecosystem Catalog, as
+well[]{#Chapter_8.xhtml#idx_e24ee2fa .index-entry
+index-entry=&ldquo;Red Hat Container Registry&rdquo;} as by leveraging the updated
+packages that are directly from Red Hat.[]{.sentence-end} Depending on
+the RHEL release version, you will find a respective UBI version
+release.</p>
+<p>You can take a look at the container image by visiting this URL:
+<a href="https://catalog.redhat.com/software/containers/ubi9/ubi/615bcf606feffc5384e8452e" rel="external" target="_blank">[https://catalog.redhat.com/software/containers/ubi9/ubi/615bcf606feffc5384e8452e]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}.</p>
+<p>We will talk more about UBI and its container images later in this
+chapter.</p>
+<h1 id="h1_208" class="heading-1">Trusted container image sources<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In the previous section, we[]{#Chapter_8.xhtml#idx_31501b9a .index-entry
+index-entry=&ldquo;trusted container image sources&rdquo;} defined the central role
+of the image registry as a source of truth for valid, usable
+images.[]{.sentence-end} In this section, we want to stress the
+importance of adopting trusted images that come from trusted sources.</p>
+<p>An OCI image[]{#Chapter_8.xhtml#idx_dd004f93 .index-entry
+index-entry=&ldquo;OCI image&rdquo;} is used to package binaries and runtimes in a
+structured filesystem with the purpose of delivering a specific
+service.[]{.sentence-end} When we pull that image and run it on our
+systems without any kind of control, we implicitly trust the author not
+to have tampered with its content by using malicious
+components.[]{.sentence-end} But nowadays, trust is something that
+cannot be granted so easily.</p>
+<p>As we will see in <em><a href="/containers/containerimages/#Chapter_10.xhtml#h1_248">Chapter 10</a>{.chapref}</em>,
+<em>Securing Containers</em>, there are many attack use cases and malicious
+behaviors that can be conducted from a container: privilege escalation,
+data exfiltration, and miners are just a few examples.[]{.sentence-end}
+These behaviors can be amplified when containers that are run inside
+Kubernetes clusters (many thousands of clusters) can spawn malicious
+Pods across the infrastructure easily.</p>
+<p>To help security teams mitigate this, the MITRE Corporation periodically
+releases <strong>MITRE</strong> <strong>ATT&amp;CK</strong> matrices[]{#Chapter_8.xhtml#idx_3a43a9b7
+.index-entry index-entry=&ldquo;MITRE ATT&amp;CK matrices&rdquo;} to identify all the
+possible attack strategies and their related techniques, with real-life
+use cases, and their detection and mitigation best
+practices.[]{.sentence-end} One of these matrices is dedicated to
+containers, where many techniques are implemented based on insecure
+images, where malicious behaviors can be conducted successfully.</p>
+<p>packt_tip
+<strong>Important</strong> <strong>note</strong></p>
+<p>You should prefer images that come from a registry that supports
+vulnerability scans.[]{.sentence-end} If the scan results are available,
+check them carefully and avoid using images that spot critical
+vulnerabilities.</p>
+<p>With this in mind, what is the first step of creating a secure
+cloud-native infrastructure? The answer is choosing images that only
+come from trusted sources, and the first thing to do is to configure
+trusted registries and patterns to block disallowed
+ones.[]{.sentence-end} We will cover this in the following subsection.</p>
+<h2 id="h2_209" class="heading-2">Managing trusted registries<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>As shown in <em><a href="/containers/containerimages/#Chapter_3.xhtml#h1_83">Chapter 3</a>{.chapref}</em>, <em>Running
+the</em> <em>First Container</em>, in the <em>Preparing your environment</em> section,
+Podman can manage []{#Chapter_8.xhtml#idx_3a45c008 .index-entry
+index-entry=&ldquo;trusted registries:managing&rdquo;}trusted registries with config
+files.</p>
+<p>The
+<code>/</code>{.inlineCode}<code>etc</code>{.inlineCode}<code>/containers/</code>{.inlineCode}<code>registries.conf</code>{.inlineCode}
+file (overridden by the user-related
+<code>$HOME/.</code>{.inlineCode}<code>config</code>{.inlineCode}<code>/containers/</code>{.inlineCode}<code>registries.conf</code>{.inlineCode}
+file, if present) manages a list of trusted registries that Podman can
+safely contact to search and pull images.</p>
+<p>Let's look at an example of this file:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>unqualified-search-registries = [&#34;docker.io&#34;, &#34;quay.io&#34;]
+
+[[registry]]
+location = &#34;registry.example.com:5000&#34;
+insecure = false</code></pre></div>
+<p>This file helps us define the trusted registries that can be used by
+Podman, so it deserves a detailed analysis.</p>
+<p>Podman accepts both <strong>unqualified</strong> and <strong>fully</strong> <strong>qualified</strong>
+images.[]{.sentence-end} The difference is quite simple and can be
+illustrated as follows:</p>
+<ul>
+<li>A fully qualified image includes a registry server FQDN, namespace,
+image name, and tag.[]{.sentence-end} For example,
+<code>docker.io</code>{.inlineCode}<code>/library/</code>{.inlineCode}<code>nginx:latest</code>{.inlineCode}
+is a fully qualified image.[]{.sentence-end} It has a full name that
+cannot be confused with any other Nginx image.</li>
+<li>An unqualified image only includes the image's
+name.[]{.sentence-end} For example, the <code>nginx</code>{.inlineCode} image
+can have multiple instances in the searched
+registries.[]{.sentence-end} The majority of the images that result
+from the basic
+<code>podman</code>{.inlineCode}<code>search</code>{.inlineCode}<code>nginx</code>{.inlineCode}
+command will not be official and should be analyzed in detail to
+ensure they're trusted.[]{.sentence-end} The output can be filtered
+by the <code>OFFICIAL</code>{.inlineCode} flag and by the number of stars (more
+is better).</li>
+</ul>
+<p>The first global setting of the registries configuration file is the
+<code>unqualified-search-registry</code>{.inlineCode} array, which defines the
+search list of registries for unqualified images.[]{.sentence-end} When
+the user runs the
+<code>podman</code>{.inlineCode}<code>search</code>{.inlineCode}<code>&lt;</code>{.inlineCode}<code>image</code>{.inlineCode}<code>_name</code>{.inlineCode}<code>&gt;</code>{.inlineCode}
+command, Podman will search across the registries defined in this list.</p>
+<p>By removing a registry[]{#Chapter_8.xhtml#idx_e102b4df .index-entry
+index-entry=&ldquo;trusted container image sources&rdquo;} from the list, Podman
+will stop searching the registry.[]{.sentence-end} However, Podman will
+still be able to pull a fully qualified image from a foreign registry.</p>
+<p>To manage single registries and create matching patterns
+for[]{#Chapter_8.xhtml#idx_160b0bbc .index-entry
+index-entry=&ldquo;Tom&rsquo;s Obvious, Minimal Language (TOML) tables&rdquo;} specific
+images, we can use the <code>[[registry]]</code>{.inlineCode} <strong>Tom's Obvious,
+Minimal Language</strong> (<strong>TOML</strong>) tables.[]{.sentence-end} The main settings
+of these tables are as follows:</p>
+<ul>
+<li><code>prefix</code>{.inlineCode}: This is used to define the image names and
+can support multiple formats.[]{.sentence-end} In general, we can
+define images by following the
+<code>host[</code>{.inlineCode}<code>:port]/namespace[/_namespace_…]/repo(:_tag|@digest)</code>{.inlineCode}
+pattern, though simpler patterns, such as
+<code>host[:port]</code>{.inlineCode}, <code>host[:port]/namespace</code>{.inlineCode},
+and even <code>[*.]</code>{.inlineCode}<code>host</code>{.inlineCode}, can be
+applied.[]{.sentence-end} Following this approach, users can define
+a generic prefix for a registry or a more detailed prefix to match a
+specific image or tag.[]{.sentence-end} Given a fully qualified
+image, if two <code>[[registry]]</code>{.inlineCode} tables have a prefix with
+a partial match, the longest matching pattern will be used.</li>
+<li><code>insecure</code>{.inlineCode}: This is a Boolean (<code>true</code>{.inlineCode} or
+<code>false</code>{.inlineCode}) that allows unencrypted HTTP connections or
+TLS connections based on untrusted certificates.</li>
+<li><code>blocked</code>{.inlineCode}: This is a Boolean (<code>true</code>{.inlineCode} or
+<code>false</code>{.inlineCode}) that's used to define blocked
+registries.[]{.sentence-end} If it's set to <code>true</code>{.inlineCode},
+the registries or images that match the prefix are blocked.</li>
+<li><code>location</code>{.inlineCode}: This field defines the registry's
+location.[]{.sentence-end} By default, it is equal to
+<code>prefix</code>{.inlineCode}, but it can have a different
+value.[]{.sentence-end} In that case, a pattern that matches a
+custom prefix namespace will resolve to the <code>location</code>{.inlineCode}
+value.</li>
+</ul>
+<p>Along with the main <code>[[registry]]</code>{.inlineCode} table, we can define an
+array of
+<code>[[</code>{.inlineCode}<code>registry.mirror</code>{.inlineCode}<code>]]</code>{.inlineCode} TOML
+tables to provide alternate paths to the main registry or registry
+namespace.</p>
+<p>When multiple mirrors are provided, Podman will search across them first
+and then fall back to the location that's defined in the main
+<code>[[registry]]</code>{.inlineCode} table.</p>
+<p>The following example extends the previous one by defining a namespaced
+registry entry and its mirror:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>unqualified-search-registries = [&#34;docker.io&#34;, &#34;quay.io&#34;]
+
+[[registry]]
+location = &#34;registry.example.com:5000/foo&#34;
+insecure = false
+[[registry.mirror]]
+location = &#34;mirror1.example.com:5000/bar&#34;
+[[registry.mirror]]
+location = &#34;mirror2.example.com:5000/bar&#34;</code></pre></div>
+<p>According to this []{#Chapter_8.xhtml#idx_aa4a85cc .index-entry
+index-entry=&ldquo;trusted container image sources&rdquo;}example, if a user tries
+to pull the image tagged as
+<code>registry.example.com:5000</code>{.inlineCode}<code>/foo/</code>{.inlineCode}<code>app:latest</code>{.inlineCode},
+Podman will try
+<code>mirror1.example.com:5000</code>{.inlineCode}<code>/bar/</code>{.inlineCode}<code>app:latest</code>{.inlineCode},
+then
+<code>mirror2.example.com:5000</code>{.inlineCode}<code>/bar/</code>{.inlineCode}<code>app:latest</code>{.inlineCode},
+and fall back to
+<code>registry.example.com:5000</code>{.inlineCode}<code>/foo/</code>{.inlineCode}<code>app:latest</code>{.inlineCode}
+in case a failure occurs.</p>
+<p>Using a prefix provides even more flexibility.[]{.sentence-end} In the
+following example, all the images that match
+<code>example.com</code>{.inlineCode}<code>/foo</code>{.inlineCode} will be redirected to
+mirror locations and fall back to the main location at the end:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>unqualified-search-registries = [&#34;docker.io&#34;, &#34;quay.io&#34;]
+[[registry]]
+prefix = &#34;example.com/foo&#34;
+location = &#34;registry.example.com:5000/foo&#34;
+insecure = false
+[[registry.mirror]]
+location = &#34;mirror1.example.com:5000/bar&#34;
+[[registry.mirror]]
+location = &#34;mirror2.example.com:5000/bar&#34;</code></pre></div>
+<p>In this example, when we pull the
+<code>example.com</code>{.inlineCode}<code>/foo/</code>{.inlineCode}<code>app:latest</code>{.inlineCode}
+image, Podman will attempt
+<code>mirror1.example.com:5000</code>{.inlineCode}<code>/bar/</code>{.inlineCode}<code>app:latest</code>{.inlineCode},
+followed by
+<code>mirror2.example.com:5000</code>{.inlineCode}<code>/bar/</code>{.inlineCode}<code>app:latest</code>{.inlineCode}
+and
+<code>registry.example.com:5000</code>{.inlineCode}<code>/foo/</code>{.inlineCode}<code>app:latest</code>{.inlineCode}.</p>
+<p>It is possible to use mirroring in a more advanced way, such as
+replacing public registries with private mirrors in disconnected
+environments.[]{.sentence-end} The following example remaps the
+<code>docker.io</code>{.inlineCode} and <code>quay.io</code>{.inlineCode} registries to
+a[]{#Chapter_8.xhtml#idx_17f1557b .index-entry
+index-entry=&ldquo;trusted container image sources&rdquo;} private mirror with
+different namespaces:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>[[registry]]
+prefix=&#34;quay.io&#34;
+location=&#34;mirror-internal.example.com/quay&#34;
+[[registry]]
+prefix=&#34;docker.io&#34;
+location=&#34;mirror-internal.example.com/docker&#34;</code></pre></div>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>Mirror registries should be kept up to date with mirrored
+repositories.[]{.sentence-end} For this reason, administrators or SRE
+teams should implement an image sync policy to keep the repositories
+updated.</p>
+<p>Finally, we are going to learn how to block a source that is not
+considered trusted.[]{.sentence-end} This behavior could impact a single
+image, a namespace, or a whole registry.</p>
+<p>The following example tells Podman not to search for or pull images from
+a blocked registry:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>[[registry]]
+location = &#34;registry.rogue.io&#34;
+blocked = true</code></pre></div>
+<p>It is possible to refine the blocking policy by passing a specific
+namespace without blocking the whole registry.[]{.sentence-end} In the
+following example, every image search or pull that matches the
+<code>quay.io</code>{.inlineCode}<code>/foo</code>{.inlineCode} namespace pattern defined in
+the <code>prefix</code>{.inlineCode} field is blocked:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>[[registry]]
+prefix = &#34;quay.io/foo/&#34;
+location = &#34;quay.io&#34;
+blocked = true</code></pre></div>
+<p>According to this pattern, if[]{#Chapter_8.xhtml#idx_782da9af
+.index-entry index-entry=&ldquo;trusted container image sources&rdquo;} the user
+tries to pull an image called
+<code>quay.io</code>{.inlineCode}<code>/foo/</code>{.inlineCode}<code>nginx:latest</code>{.inlineCode} or
+<code>quay.io</code>{.inlineCode}<code>/foo/</code>{.inlineCode}<code>httpd:v2.4</code>{.inlineCode}, the
+prefix is matched and the pull is blocked.[]{.sentence-end} No blocking
+action occurs when the
+<code>quay.io</code>{.inlineCode}<code>/bar/</code>{.inlineCode}<code>fedora:latest</code>{.inlineCode}
+image is pulled.</p>
+<p>Users can also define a very specific blocking rule for a single image
+or even a single tag by using the same approach that was described for
+namespaces.[]{.sentence-end} The following example blocks a specific
+image tag:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>[[registry]]
+prefix = &#34;internal-registry.example.com/dev/app:v0.1&#34;
+location = &#34;internal-registry.example.com &#34;
+blocked = true</code></pre></div>
+<p>It is possible to combine many blocking rules and add mirror tables on
+top of them.</p>
+<p>packt_tip
+<strong>Important</strong> <strong>note</strong></p>
+<p>In a complex infrastructure with many machines running Podman (for
+example, developer workstations), a clever idea would be to keep the
+registry's configuration file updated using configuration management
+tools and declaratively apply the registry's filters.</p>
+<p><strong>Fully qualified image names</strong> (<strong>FQNs</strong>) can become quite long if we
+sum up the registry FQDN, namespace(s), repository, and tags.</p>
+<p>While using FQNs such as
+<code>quay.io</code>{.inlineCode}<code>/</code>{.inlineCode}<code>podman</code>{.inlineCode}<code>/</code>{.inlineCode}<code>stable:latest</code>{.inlineCode}
+is the gold standard for security and automation, they are often
+cumbersome to type manually.[]{.sentence-end} To bridge the gap between
+convenience and security, Podman utilizes a short-name aliasing system.</p>
+<p>Normally, when you provide an <em>unqualified</em> name (for example,
+<code>podman</code>{.inlineCode}<code> pull fedora</code>{.inlineCode}), Podman must iterate
+through a list of registries defined in the
+<code>[</code>{.inlineCode}<code>registries.search</code>{.inlineCode}<code>]</code>{.inlineCode} table
+of your configuration.[]{.sentence-end} This can be slow and, if not
+configured correctly, potentially insecure.</p>
+<p>Aliases change this behavior by short-circuiting the
+search.[]{.sentence-end} If a short name matches an entry in an alias
+table, Podman immediately resolves it to the specific, fully qualified
+name provided in the mapping, bypassing the search registry list
+entirely.</p>
+<p>On Fedora and RHEL, you don't have to build this list from
+scratch.[]{.sentence-end} The system comes pre-configured with an
+[]{#Chapter_8.xhtml#idx_7d70c80e .index-entry
+index-entry=&ldquo;trusted container image sources&rdquo;}extensive library of
+trusted mappings located at the following:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>/etc/containers/registries.conf.d/000-shortnames.conf</code></pre></div>
+<p>This file is maintained by the community and operating system vendors to
+ensure that common names point to their most logical and secure upstream
+sources.[]{.sentence-end} For example, an entry in this file might look
+as follows:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>[aliases]
+  &#34;fedora&#34; = &#34;registry.fedoraproject.org/fedora&#34;
+  &#34;ubi8&#34; = &#34;registry.access.redhat.com/ubi8&#34;
+  &#34;alpine&#34; = &#34;docker.io/library/alpine&#34;</code></pre></div>
+<p>When an alias matches a short name, it is immediately used without the
+registries defined in the <code>unqualified-search-registries</code>{.inlineCode}
+list being searched.</p>
+<p>note
+<strong>Important</strong> <strong>note</strong></p>
+<p>We can create custom files inside the
+<code>/</code>{.inlineCode}<code>etc</code>{.inlineCode}<code>/containers/</code>{.inlineCode}<code>registries.conf.d</code>{.inlineCode}<code>/</code>{.inlineCode}
+folder to define aliases without bloating the main configuration file.</p>
+<p>While aliases simplify management, they have specific boundaries:</p>
+<ul>
+<li><strong>No</strong> <strong>tags or</strong> <strong>digests</strong>: Aliases resolve the repository path,
+not a specific version.[]{.sentence-end} For example, if you alias
+<code>my-app</code>{.inlineCode} to
+<code>quay.io</code>{.inlineCode}<code>/org/my-app</code>{.inlineCode}, running
+<code>podman</code>{.inlineCode}<code>pull</code>{.inlineCode}<code>my-app</code>{.inlineCode}<code>:v2</code>{.inlineCode}
+will correctly resolve to
+<code>quay.io</code>{.inlineCode}<code>/org/</code>{.inlineCode}<code>my-app:v2</code>{.inlineCode}.[]{.sentence-end}
+The alias handles the prefix, while the tag remains dynamic.</li>
+<li><strong>Precedence</strong>: Local user-defined aliases (often found in
+<code>$HOME/.</code>{.inlineCode}<code>config</code>{.inlineCode}<code>/containers/</code>{.inlineCode}<code>registries.conf.d</code>{.inlineCode}<code>/</code>{.inlineCode})
+will typically override the global system aliases found in
+<code>/</code>{.inlineCode}<code>etc</code>{.inlineCode}<code>/containers/</code>{.inlineCode}.[]{.sentence-end}</li>
+</ul>
+<p>With that, we have learned how to manage trusted sources and block
+unwanted images, registries, or namespaces.[]{.sentence-end} This is a
+security best practice, but it does not relieve us from the
+responsibility of choosing a valid image that fits our needs while being
+trustworthy and having the lowest attack surface
+possible.[]{.sentence-end} This is also true when we're building a new
+application, where base images must be lightweight and
+secure.[]{.sentence-end} Red Hat UBI images can be a helpful solution
+for this problem.</p>
+<h1 id="h1_210" class="heading-1">Introducing the Universal Base Image<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>When working on enterprise []{#Chapter_8.xhtml#idx_1908d2f7 .index-entry
+index-entry=&ldquo;Universal Base Image (UBI)&quot;}environments, many users and
+companies adopt RHEL as the operating system of choice to execute
+workloads reliably and securely.[]{.sentence-end} RHEL-based container
+images are available too, and they take advantage of the same package
+versioning as the operating system release.[]{.sentence-end} All the
+security updates that are released for RHEL are immediately applied to
+OCI images, making them wealthy, secure images to build production-grade
+applications with.</p>
+<p>Unfortunately, RHEL images are not publicly available without a Red Hat
+subscription.[]{.sentence-end} Users who have activated a valid
+subscription can use them freely on their RHEL systems and build custom
+images on top of them, but they are not freely redistributable without
+breaking the Red Hat enterprise agreement.</p>
+<p>So, why worry? There are plenty of commonly used images that can replace
+them.[]{.sentence-end} This is true, but when it comes to reliability
+and security, many companies choose to stick to an enterprise-grade
+solution, and this is no exception for containers.</p>
+<p>For these reasons, and to address the redistribution limitations of RHEL
+images, Red Hat created <strong>UBI</strong>.[]{.sentence-end} UBI images are freely
+redistributable; can be used to build containerized applications,
+middleware, and utilities; and are constantly maintained and upgraded by
+Red Hat.</p>
+<p>UBI images are based on the currently supported versions of
+RHEL.[]{.sentence-end} At the time of writing, UBI 8, UBI 9, and UBI 10
+images are available, based on RHEL 8, RHEL 9, and RHEL 10,
+respectively.[]{.sentence-end} In general, UBI images can be considered
+a subset of the RHEL operating system.</p>
+<p>All UBI images are available on the public Red Hat registry
+(<a href="https://registry.access.redhat.com" rel="external" target="_blank">[registry.access.redhat.com]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;})
+and Docker Hub
+(<a href="https://docker.io" rel="external" target="_blank">[docker.io]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}).</p>
+<p>There are currently four different flavors of UBI images, each one
+specialized for a particular use case:</p>
+<ul>
+<li><strong>Standard</strong>: This is[]{#Chapter_8.xhtml#idx_694ea6a6 .index-entry
+index-entry=&ldquo;Universal Base Image (UBI):standard&rdquo;} the standard UBI
+image.[]{.sentence-end} It has the most features and package
+availability.</li>
+<li><strong>Minimal</strong>: This is a[]{#Chapter_8.xhtml#idx_43031c9e .index-entry
+index-entry=&ldquo;Universal Base Image (UBI):minimal&rdquo;} stripped-down
+version of the standard image with minimalistic package management.</li>
+<li><strong>Micro</strong>: This is a[]{#Chapter_8.xhtml#idx_d112baf2 .index-entry
+index-entry=&ldquo;Universal Base Image (UBI):micro&rdquo;} UBI version with the
+smallest footprint possible, without a package manager.</li>
+<li><strong>Init</strong>: This is a[]{#Chapter_8.xhtml#idx_f3d27bfd .index-entry
+index-entry=&ldquo;Universal Base Image (UBI):init&rdquo;} UBI image that
+includes the <code>systemd</code>{.inlineCode} init system so that you can
+manage the execution of multiple services in a single container.</li>
+</ul>
+<p>All of these are <em>free to use and redistribute</em> inside custom
+images.[]{.sentence-end} Unlike standard RHEL images, UBI is freely
+redistributable, allowing developers to build applications on a trusted
+foundation and share them anywhere, including public registries, without
+requiring a Red Hat subscription.[]{.sentence-end} In addition to that,
+UBI bridges the gap between development and production; you can build on
+a laptop running Fedora or a CI/CD pipeline in the cloud and deploy to a
+production RHEL or OpenShift environment with zero compatibility
+concerns.</p>
+<p>Let's describe each in detail, starting with the UBI Standard image.</p>
+<h2 id="h2_211" class="heading-2">The UBI Standard image<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>The UBI Standard image is the[]{#Chapter_8.xhtml#idx_7d9d5331
+.index-entry index-entry=&ldquo;UBI Standard image&rdquo;} most complete UBI image
+version and the closest one to standard RHEL images.[]{.sentence-end}
+It[]{#Chapter_8.xhtml#idx_5e7b4927 .index-entry
+index-entry=&ldquo;yum package manager&rdquo;} includes the <strong>yum</strong> package manager,
+which is available in RHEL, and can be customized by installing the
+packages that are available in its dedicated software repositories, that
+is, <code>ubi</code>{.inlineCode}<code>-8-</code>{.inlineCode}<code>baseos</code>{.inlineCode} and
+<code>ubi</code>{.inlineCode}<code>-8-</code>{.inlineCode}<code>appstream</code>{.inlineCode}.</p>
+<p>The following example shows a Dockerfile/Containerfile that uses a
+standard UBI 8 image to build a minimal <code>httpd</code>{.inlineCode} server:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>FROM registry.access.redhat.com/ubi8
+
+# Update image and install httpd
+RUN yum update -y &amp;&amp; yum install -y httpd &amp;&amp; yum clean all
+
+# Expose the default httpd port 80
+EXPOSE 80
+
+# Run the httpd
+CMD [&#34;/usr/sbin/httpd&#34;, &#34;-DFOREGROUND&#34;]</code></pre></div>
+<p>The UBI Standard image was designed for generic applications and
+packages that are available on RHEL and already includes a curated list
+of basic system tools (including <code>curl</code>{.inlineCode},
+<code>tar</code>{.inlineCode}, <code>vi</code>{.inlineCode}, <code>sed</code>{.inlineCode}, and
+<code>gzip</code>{.inlineCode}) and OpenSSL libraries while still retaining a small
+size (around 230 MiB): fewer packages mean more lightweight images and a
+smaller attack surface.</p>
+<p>In <em><a href="/containers/containerimages/#Chapter_6.xhtml#h1_163">Chapter 6</a>{.chapref}</em>, <em>Meet</em> <em>Buildah</em>
+<em>&ndash; Building Containers from Scratch</em>, we learned how to build a new
+container image starting from a Containerfile or a Dockerfile, so you
+can leverage Buildah to test the previous example.</p>
+<p>If the UBI Standard image is still considered too big, UBI Minimal can
+be a good fit.</p>
+<h2 id="h2_212" class="heading-2">The UBI Minimal image<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>The UBI Minimal image is a[]{#Chapter_8.xhtml#idx_f209bae0 .index-entry
+index-entry=&ldquo;UBI Minimal image&rdquo;} stripped-down version of UBI Standard
+and was designed for self-consistent applications and their runtimes
+(Python, Ruby, Node.js, and so on).[]{.sentence-end} For this reason,
+it's smaller in size, has a small selection of packages, and doesn't
+include the yum package manager; this has been replaced with a minimal
+tool called <code>microdnf</code>{.inlineCode}.[]{.sentence-end} The UBI Minimal
+image is smaller than UBI Standard and is roughly half its size.</p>
+<p>The following example shows a Dockerfile/Containerfile using a UBI 8
+minimal image to build a proof-of-concept Python web server:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># Based on the UBI8 Minimal image
+
+FROM registry.access.redhat.com/ubi8-minimal
+
+# Upgrade and install Python 3
+RUN microdnf upgrade &amp;&amp; microdnf install python3
+
+# Copy source code
+COPY entrypoint.sh http_server.py /
+
+# Expose the default httpd port 80
+EXPOSE 8080
+
+# Configure the container entrypoint
+ENTRYPOINT [&#34;/entrypoint.sh&#34;]
+
+# Run the httpd
+CMD [&#34;/usr/bin/python3&#34;, &#34;-u&#34;, &#34;/http_server.py&#34;]</code></pre></div>
+<p>By looking at the source code of the Python web server that's been
+executed by the container, we can see that the web server handler prints
+a <em>Hello World!</em> string when an HTTP GET request is
+received.[]{.sentence-end} The server also manages signal termination
+using the Python <code>signal</code>{.inlineCode} module, allowing the container to
+be stopped gracefully:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>#!/usr/bin/python3
+import http.server
+import socketserver
+import logging
+import sys
+import signal
+from http import HTTPStatus
+
+port = 8080
+message = b&#39;Hello World!\n&#39;
+logging.basicConfig(
+  stream = sys.stdout,
+  level = logging.INFO
+)
+
+def signal_handler(signum, frame):
+  sys.exit(0)
+
+
+class Handler(http.server.SimpleHTTPRequestHandler):
+  def do_GET(self):
+    self.send_response(HTTPStatus.OK)
+    self.end_headers()
+    self.wfile.write(message)
+
+if __name__ == &#34;__main__&#34;:
+  signal.signal(signal.SIGTERM, signal_handler)
+  signal.signal(signal.SIGINT, signal_handler)
+  try:
+    httpd = socketserver.TCPServer((&#39;&#39;, port), Handler)
+    logging.info(&#34;Serving on port %s&#34;, port)
+    httpd.serve_forever()
+  except SystemExit:
+    httpd.shutdown()
+    httpd.server_close()</code></pre></div>
+<p>Finally, the Python executable is called by a minimal entry point
+script:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>#!/bin/bash
+set -e
+exec $@</code></pre></div>
+<p>The script launches the []{#Chapter_8.xhtml#idx_71da92d3 .index-entry
+index-entry=&ldquo;UBI Minimal image&rdquo;}command that's passed by the array in
+the <code>CMD</code>{.inlineCode} instruction.[]{.sentence-end} Also, notice the
+<code>-u</code>{.inlineCode} option that's passed to the Python executable in the
+command array.[]{.sentence-end} This enables unbuffered output and has
+the container print access logs in real time.</p>
+<p>Let's try to build and run the container to see what happens:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ buildah build -t python_httpd .
+
+$ podman run -p 8080:8080 python_httpd
+INFO:root:Serving on port 8080</code></pre></div>
+<p>With that, our minimal Python <code>http</code>{.inlineCode} server is ready to
+operate and serve a lot of barely useful but warming <em>Hello World!</em>
+responses.[]{.sentence-end} You can find all these examples in the
+GitHub repository of the book.</p>
+<p>UBI Minimal works best for these kinds of use cases.[]{.sentence-end}
+However, an even smaller image may be necessary.[]{.sentence-end} This
+is the perfect use case for the UBI Micro image.</p>
+<h2 id="h2_213" class="heading-2">The UBI Micro image<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>The UBI Micro image is[]{#Chapter_8.xhtml#idx_9ab14788 .index-entry
+index-entry=&ldquo;UBI Micro image&rdquo;} the latest arrival to the UBI
+family.[]{.sentence-end} Its basic idea is to provide a distroless image
+and a stripped-down package manager, without all the unnecessary
+packages, to provide a very small image that could also offer a minimal
+attack surface.[]{.sentence-end} Reducing the attack surface is required
+to achieve secure, minimal images that are more complex to
+exploit.[]{.sentence-end} In addition to that, the small size also
+minimizes the amount of data that must be downloaded when using the
+image for the first time or after an update.</p>
+<p>The UBI 8 Micro image []{#Chapter_8.xhtml#idx_7899d69e .index-entry
+index-entry=&ldquo;UBI Micro image&rdquo;}is great in multi-stage builds, where the
+first stage creates the finished artifact(s) and the second stage copies
+them inside the final image.[]{.sentence-end} The following example
+shows a basic multi-stage Dockerfile/Containerfile where a minimal
+Golang application is being built inside a UBI Standard container while
+the final artifact is copied inside a UBI Micro image:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code># Builder image
+FROM registry.access.redhat.com/ubi8-minimal AS builder
+
+# Install Golang packages
+RUN microdnf upgrade &amp;&amp; \
+    microdnf install golang &amp;&amp; \
+    microdnf clean all
+
+# Copy files for build
+COPY go.mod /go/src/hello-world/
+COPY main.go /go/src/hello-world/
+
+# Set the working directory
+WORKDIR /go/src/hello-world
+
+# Download dependencies
+RUN go get -d -v ./...
+
+# Install the package
+RUN go build -v ./...
+
+# Runtime image
+FROM registry.access.redhat.com/ubi8/ubi-micro:latest
+COPY --from=builder /go/src/hello-world/hello-world /
+
+EXPOSE 8080
+
+CMD [&#34;/hello-world&#34;]</code></pre></div>
+<p>The build's []{#Chapter_8.xhtml#idx_189340fe .index-entry
+index-entry=&ldquo;UBI Micro image&rdquo;}output results in an image that's
+approximately 45 MB in size.</p>
+<p>The UBI Micro image has no built-in package manager, but it is still
+possible to install additional packages using Buildah native
+commands.[]{.sentence-end} This works effectively on an RHEL system,
+where all Red Hat GPG certificates are installed.</p>
+<p>The following example shows a build script that can be executed on RHEL
+8.[]{.sentence-end} Its purpose is to install additional Python packages
+using the host's <code>yum</code>{.inlineCode} package manager, on top of a UBI
+Micro image:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>#!/bin/bash
+
+set -euo pipefail
+
+if [ $UID -ne 0 ]; then
+    echo &#34;This script must be run as root&#34;
+    exit 1
+fi
+
+container=$(buildah from registry.access.redhat.com/ubi8/ubi-micro)
+mount=$(buildah mount $container)
+
+yum install -y \
+  --installroot $mount \
+  --setopt install_weak_deps=false \
+  --nodocs \
+  --noplugins \
+  --releasever 8 \
+  python3
+
+yum clean all --installroot $mount
+
+buildah umount $container
+buildah commit $container micro_python3</code></pre></div>
+<p>Notice that the <code>yum install</code>{.inlineCode} command is executed by
+passing the
+<code>--</code>{.inlineCode}<code>installroot</code>{.inlineCode}<code> $mount</code>{.inlineCode}
+option, which tells the installer to use the working container mount
+point as the temporary root to install the packages.</p>
+<p>UBI Minimal and UBI Micro images are great for implementing
+microservices architectures where we []{#Chapter_8.xhtml#idx_589535ca
+.index-entry index-entry=&ldquo;UBI Micro image&rdquo;}need to orchestrate multiple
+containers together, with each running a specific microservice.</p>
+<p>Now, let's look at the UBI Init image, which allows us to coordinate
+the execution of multiple services inside a container.</p>
+<h2 id="h2_214" class="heading-2">The UBI Init image<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>A common pattern in[]{#Chapter_8.xhtml#idx_da411fb0 .index-entry
+index-entry=&ldquo;UBI Init image&rdquo;} container development is to create highly
+specialized images with a single component running inside them.</p>
+<p>To implement multi-tier applications, such as those with a frontend,
+middleware, and a backend, the best practice is to create and
+orchestrate multiple containers, each one running a specific
+component.[]{.sentence-end} The goal is to have minimal and very
+specialized containers, each one running its own service/process while
+following[]{#Chapter_8.xhtml#idx_c6b3d1c4 .index-entry
+index-entry=&ldquo;Keep It Simple, Stupid (KISS)&rdquo;} the <strong>Keep It Simple,
+Stupid</strong> (<strong>KISS</strong>) philosophy, which has been carried out in UNIX
+systems since their inception.</p>
+<p>Despite being great for most use cases, this approach does not always
+suit some special scenarios where many processes need to be orchestrated
+together.[]{.sentence-end} An example is when we need to share all the
+container namespaces across processes, or when we just want a single,
+<em>uber</em> image.</p>
+<p>Container images are normally created without an init system, and the
+process that's executed inside the container (invoked by the
+<code>CMD</code>{.inlineCode} instruction) usually []{#Chapter_8.xhtml#idx_e34ad062
+.index-entry index-entry=&ldquo;PID 1&rdquo;}gets <strong>PID</strong> <strong>1</strong>.</p>
+<p>For this reason, Red Hat introduced the UBI Init image, which runs a
+minimal <strong>systemd</strong> init process inside the container, allowing multiple
+systemd[]{#Chapter_8.xhtml#idx_da1de8bc .index-entry
+index-entry=&ldquo;systemd&rdquo;} units that are governed by the systemd process
+with a PID of <code>1</code>{.inlineCode} to be executed.</p>
+<p>The UBI Init image is slightly smaller than the Standard image but has
+more packages available than the Minimal image.</p>
+<p>The default CMD is set to
+<code>/</code>{.inlineCode}<code>sbin</code>{.inlineCode}<code>/</code>{.inlineCode}<code>init</code>{.inlineCode},
+which corresponds to the systemd process.[]{.sentence-end} systemd
+ignores the <code>SIGTERM</code>{.inlineCode} and <code>SIGKILL</code>{.inlineCode} signals,
+which are used by Podman to stop running containers.[]{.sentence-end}
+For this reason, the image is configured to send
+<code>SIGRTMIN+3</code>{.inlineCode} signals for termination by passing the
+<code>STOPSIGNAL</code>{.inlineCode}<code> </code>{.inlineCode}<code>SIGRTMIN+3</code>{.inlineCode}
+instruction inside the image Dockerfile.</p>
+<p>The following example shows a Dockerfile/Containerfile that installs the
+<code>httpd</code>{.inlineCode} package and configures a <code>systemd</code>{.inlineCode}
+unit[]{#Chapter_8.xhtml#idx_c9696057 .index-entry
+index-entry=&ldquo;UBI Init image&rdquo;} to run the <code>httpd</code>{.inlineCode} service:</p>
+<div class="programlisting snippet-code highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>FROM registry.access.redhat.com/ubi8/ubi-init
+
+RUN yum -y install httpd &amp;&amp; \
+         yum clean all &amp;&amp; \
+         systemctl enable httpd
+
+RUN echo &#34;Successful Web Server Test&#34; &gt; /var/www/html/index.html
+
+RUN mkdir /etc/systemd/system/httpd.service.d/ &amp;&amp; \
+         echo -e &#39;[Service]\nRestart=always&#39; &gt; /etc/systemd/system/httpd.service.d/httpd.conf
+
+EXPOSE 80
+CMD [ &#34;/sbin/init&#34; ]</code></pre></div>
+<p>Notice the <code>RUN</code>{.inlineCode} instruction, where we create the
+<code>/</code>{.inlineCode}<code>etc</code>{.inlineCode}<code>/</code>{.inlineCode}<code>systemd</code>{.inlineCode}<code>/system/</code>{.inlineCode}<code>httpd.service.d</code>{.inlineCode}<code>/</code>{.inlineCode}
+folder and the systemd unit file.[]{.sentence-end} This minimal example
+could be replaced with a copy of pre-edited unit files, which is
+particularly useful when multiple services must be created.</p>
+<p>We can build and run the image and inspect the behavior of the
+<code>init</code>{.inlineCode} system inside the container using the
+<code>ps</code>{.inlineCode} command:</p>
+<div class="programlisting snippet-con highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ buildah build -t init_httpd .
+$ podman run -d --name httpd_init -p 8080:80 init_httpd
+$ podman exec -ti httpd_init /bin/bash
+[root@b4fb727f1907 /]# ps aux
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.1  0.0  89844  9404 ?        Ss   10:30   0:00 /sbin/init
+root          10  0.0  0.0  95552 10636 ?        Ss   10:30   0:00 /usr/lib/systemd/systemd-journald
+root          20  0.1  0.0 258068 10700 ?        Ss   10:30   0:00 /usr/sbin/httpd -DFOREGROUND
+dbus          21  0.0  0.0  54056  4856 ?        Ss   10:30   0:00 /usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+apache        23  0.0  0.0 260652  7884 ?        S    10:30   0:00 /usr/sbin/httpd -DFOREGROUND
+apache        24  0.0  0.0 2760308 9512 ?        Sl   10:30   0:00 /usr/sbin/httpd -DFOREGROUND
+apache        25  0.0  0.0 2563636 9748 ?        Sl   10:30   0:00 /usr/sbin/httpd -DFOREGROUND
+apache        26  0.0  0.0 2563636 9516 ?        Sl   10:30   0:00 /usr/sbin/httpd -DFOREGROUND
+root         238  0.0  0.0  19240  3564 pts/0    Ss   10:30   0:00 /bin/bash
+root         247  0.0  0.0  51864  3728 pts/0    R+   10:30   0:00 ps aux</code></pre></div>
+<p>Note that the
+<code>/</code>{.inlineCode}<code>sbin</code>{.inlineCode}<code>/</code>{.inlineCode}<code>init</code>{.inlineCode}
+process is executed with a PID of <code>1</code>{.inlineCode} and that it spawns
+the <code>httpd</code>{.inlineCode} processes.[]{.sentence-end} The container also
+executed <code>dbus</code>{.inlineCode}<code>-daemon</code>{.inlineCode}, which is used by
+systemd to expose its API, along with
+<code>systemd</code>{.inlineCode}<code>-journald</code>{.inlineCode} to handle logs.</p>
+<p>Following this approach, we []{#Chapter_8.xhtml#idx_e1916f51
+.index-entry index-entry=&ldquo;UBI Init image&rdquo;}can add multiple services that
+are supposed to work together in the same container and have them
+orchestrated by systemd.</p>
+<p>So far, we have looked at the four currently available UBI images and
+demonstrated how they can be used to create custom
+applications.[]{.sentence-end} Many public Red Hat images are based on
+UBI.[]{.sentence-end} Let's take a look.</p>
+<h2 id="h2_215" class="heading-2">Other UBI-based images<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Red Hat uses UBI[]{#Chapter_8.xhtml#idx_7a754a36 .index-entry
+index-entry=&ldquo;UBI-based images&rdquo;} images to produce many pre-built
+specialized images, especially for runtimes.[]{.sentence-end} They are
+usually expected not to have redistribution limitations.</p>
+<p>This allows runtime images to be created for languages, runtimes, and
+frameworks such as Python, Quarkus, Golang, Perl, PDP, .NET, Node.js,
+Ruby, and OpenJDK.</p>
+<p>UBI is also used as the base image for[]{#Chapter_8.xhtml#idx_cee5390c
+.index-entry index-entry=&ldquo;Source-to-Image (S2I) framework&rdquo;} the
+<strong>Source-to-Image</strong> (<strong>S2I</strong>) framework, which is used to build
+applications natively in OpenShift without the use of
+Dockerfiles.[]{.sentence-end} With S2I, it is possible to assemble
+images from user-defined custom scripts and, obviously, application
+source code.</p>
+<p>Last but not least, Red Hat's supported container releases of Buildah,
+Podman, and Skopeo are packaged using UBI 8 images.</p>
+<p>Moving beyond Red Hat's offering, other vendors use UBI images to
+release their images too &ndash; Intel, IBM, Isovalent, Cisco, Aqua Security,
+and many others adopt UBI as the base for their official images on the
+Red Hat Marketplace.</p>
+<h1 id="h1_216" class="heading-1">Summary<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>In this chapter, we learned about the OCI Image Specification and the
+role of container registries.[]{.sentence-end} After that, we learned
+how to adopt secure image registries and how to filter out those
+registries using custom policies that allow us to block specific
+registries, namespaces, or images.[]{.sentence-end} Finally, we
+introduced UBI as a solution to create lightweight, reliable, and
+redistributable images based on RHEL packages.</p>
+<p>With the knowledge you've gained in this chapter, you should be able to
+understand the OCI Image Specification in more detail and manage image
+registries securely.</p>
+<p>In the next chapter, we will explore the difference between private and
+public registries and how to create a private registry
+locally.[]{.sentence-end} Finally, we will learn how to manage container
+images with the specialized <strong>Skopeo</strong> tool.</p>
+<h1 id="h1_217" class="heading-1">Further reading<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>To learn more about the topics that were covered in this chapter, take a
+look at the following resources:</p>
+<ul>
+<li>[1] MITRE ATT&amp;CK® matrix:
+<a href="https://attack.mitre.org/matrices/enterprise/containers/" rel="external" target="_blank">[https://attack.mitre.org/matrices/enterprise/containers/]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>[2] Things you should know about the Kubernetes threat matrix:
+<a href="https://cloud.redhat.com/blog/2021-kubernetes-threat-matrix-updates-things-you-should-know" rel="external" target="_blank">[https://cloud.redhat.com/blog/2021-kubernetes-threat-matrix-updates-things-you-should-know]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>[3] How to manage Linux container registries:
+<a href="https://www.redhat.com/sysadmin/manage-container-registries" rel="external" target="_blank">[https://www.redhat.com/sysadmin/manage-container-registries]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>[4] (Re)Introducing the Red Hat Universal Base Image:
+<a href="https://www.redhat.com/en/blog/introducing-red-hat-universal-base-image" rel="external" target="_blank">[https://www.redhat.com/en/blog/introducing-red-hat-universal-base-image]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+<li>[5] Introduction to Red Hat's UBI Micro:
+<a href="https://www.redhat.com/en/blog/introduction-ubi-micro" rel="external" target="_blank">[https://www.redhat.com/en/blog/introduction-ubi-micro]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}</li>
+</ul>
+<h1 id="h1_218" class="heading-1">Join us on Discord<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>For discussions around the book and to connect with your peers, join us
+on Discord at
+<a href="https://packt.link/discordcloud" rel="external" target="_blank">[packt.link/discordcloud]{.url}</a>{style=&ldquo;text-decoration: none;&rdquo;}
+or scan the QR code below:</p>
+<p><a href="#R-image-04efef0cd00a20142148e4489c09319b" class="lightbox-link"><img alt="Image" class="lazy lightbox figure-image" loading="lazy" src="images/B31467_8_7.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-04efef0cd00a20142148e4489c09319b"><img alt="Image" class="lazy lightbox lightbox-image" loading="lazy" src="images/B31467_8_7.png"></a>{style=&ldquo;width:25%;&rdquo;}</p>
+<p>[]{#Chapter_9.xhtml}</p>
+<p>{.section .chapter}</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">ansible-navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready for RHCE<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/install-ansible-using-uv/"><a class="padding" href="/ansible/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/playbooks/"><a class="padding" href="/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/hostname-patterns/"><a class="padding" href="/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/include-and-import-files/"><a class="padding" href="/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2/"><a class="padding" href="/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/user-and-groups/"><a class="padding" href="/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/storage-partitions-and-lvm/"><a class="padding" href="/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/services/"><a class="padding" href="/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimize-ansible-processing/"><a class="padding" href="/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux/"><a class="padding" href="/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/tags/"><a class="padding" href="/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/loops-and-items/"><a class="padding" href="/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/modules-for-troubleshooting/"><a class="padding" href="/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Using Variables In Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/when/"><a class="padding" href="/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/secure-shell-service-ssh/"><a class="padding" href="/cyber-security/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ansiblepuppetchef/"><a class="padding" href="/networking/ccna/ccna-notes-1/ansiblepuppetchef/">Ansible, Puppet, and Chef<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscoacls/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscoacls/">Cisco ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscocli/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscocli/">Cisco CLI<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/classfulipv4/"><a class="padding" href="/networking/ccna/ccna-notes-1/classfulipv4/">Classful IPv4<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/cloudarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/cloudarchitecture/">Cloud Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/controllerbasednetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/controllerbasednetworking/">Controller-Based Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/device-management-protocols/"><a class="padding" href="/networking/ccna/ccna-notes-1/device-management-protocols/">Device Management Protocols<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-config/">DHCP Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/">DHCP Snooping and ARP Inspection<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-syncronization/"><a class="padding" href="/networking/dns-and-time-syncronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ethernetlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/ethernetlans/">Ethernet LANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/extended-acls/"><a class="padding" href="/networking/ccna/ccna-notes-1/extended-acls/">Extended ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-services/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-services/">IP Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-transport-and-applications/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-transport-and-applications/">IP Transport and Applications<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6/">IPv6<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/">IPv6 Addressing and Subnetting<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6configuration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6configuration/">IPv6 Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6routing/">IPv6 Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lan-architecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/lan-architecture/">LAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/l2-etherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/l2-etherchannel/">Layer 2 Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/network-devices-and-connections/"><a class="padding" href="/networking/network-devices-and-connections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospf-concepts/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospf-concepts/">OSPF Concepts<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfconfiguration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfconfiguration/">OSPF Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/">OSPF Network Types and Neighbors<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/restandjson/"><a class="padding" href="/networking/ccna/ccna-notes-1/restandjson/">REST and JSON<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/router_operation/"><a class="padding" href="/networking/ccna/ccna-notes-1/router_operation/">Router Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/routeroperation/"><a class="padding" href="/networking/ccna/ccna-notes-1/routeroperation/">ROuter Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lanrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/lanrouting/">Routing in the LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/rstpandetherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/rstpandetherchannel/">RSTP and Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/securing-network-devices/"><a class="padding" href="/networking/ccna/ccna-notes-1/securing-network-devices/">Securing Network Devices<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/security-architectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/security-architectures/">Security Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/softwaredefinedaccess/"><a class="padding" href="/networking/ccna/ccna-notes-1/softwaredefinedaccess/">Software-Defined Access (SDA)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/spanningtreeprotocol/"><a class="padding" href="/networking/ccna/ccna-notes-1/spanningtreeprotocol/">Spanning Tree Protocol<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/static-routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/static-routing/">Static Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchinterfaces/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchinterfaces/">Switch Interfaces<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switching/"><a class="padding" href="/networking/ccna/ccna-notes-1/switching/">Switching<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchport-security-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchport-security-config/">Switchport Security Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/tcpipbasic/"><a class="padding" href="/networking/ccna/ccna-notes-1/tcpipbasic/">TCP/IP Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/troubleshootingrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/troubleshootingrouting/">Troubleshooting Routing Issues<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/vlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/vlans/">VLANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wanarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/wanarchitecture/">WAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wansandiprouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/wansandiprouting/">WANs and IP Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessarchitectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessarchitectures/">Wireless Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_lan/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_lan/">Wireless LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessnetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessnetworking/">Wireless Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_security/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_security/">Wireless Security<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
+            <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/local-filesystems-and-swap/"><a class="padding" href="/storage/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/network-filesystem-nfs/"><a class="padding" href="/storage/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/partitioning-mbr-gpt/"><a class="padding" href="/storage/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/rm-filesystem-from-partition/"><a class="padding" href="/storage/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/remove-formatting-from-highlights/"><a class="padding" href="/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-docker-nginx/"><a class="padding" href="/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/you-need-to-learn-man-pages/"><a class="padding" href="/tools/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/proxmox-ha-proxy-setup/"><a class="padding" href="/tools/proxmox-ha-proxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/learning-touch-typing/"><a class="padding" href="/tools/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5" checked><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/">Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="active hidden " data-nav-id="/containers/containerimages/"><a class="padding" href="/containers/containerimages/"><i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/ansible-and-podman/"><a class="padding" href="/containers/ansible-and-podman/">Ansible and Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/intro-to-containers-1/"><a class="padding" href="/containers/intro-to-containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/convert-docker-compose-to-quadlets/"><a class="padding" href="/containers/convert-docker-compose-to-quadlets/">Convert Docker Compose to Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-links/"><a class="padding" href="/containers/podman-links/">Podman Links<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-quadlets/"><a class="padding" href="/containers/podman-quadlets/">Podman Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/">Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
+            <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users-and-Groups</span></label><a class="padding default-animation" href="/users-and-groups/">Users-and-Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
+            <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/virtualization/"><input type="checkbox" id="R-section-da8ee4406de37987b502b79e5b0a9d1c" aria-controls="R-subsections-da8ee4406de37987b502b79e5b0a9d1c"><label for="R-section-da8ee4406de37987b502b79e5b0a9d1c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualizations</span></label><a class="padding default-animation" href="/virtualization/">Virtualizations<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-da8ee4406de37987b502b79e5b0a9d1c" class="collapsible-menu">
+            <li class="" data-nav-id="/virtualization/using-vagrant-on-linux/"><a class="padding" href="/virtualization/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/booknotes/"><a class="padding" href="/booknotes/"><i class='fas fa-fw fa-book'></i> Book Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/now/"><a class="padding" href="/now/"><i class='fas fa-fw fa-clock'></i> Now<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780154752" defer></script>
+    <script src="/js/theme.js?1780154752" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>

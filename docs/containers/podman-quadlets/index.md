@@ -2,6 +2,12 @@
 
 Rootless container quadlet files go under /etc/containers/systemd/users/${UID}/ and the user session will activate the quadlet.
 
+Rootless quadlet files generate systemd unit files located here:  
+`/run/user/{UID}/systemd/generator/`
+
+Quadlet files go here:
+`/etc/containers/systemd/users/{{ podman_user }}/`
+
 If you put it under etc/containers/systemd/users/ then all user sessions will activate the quadlet
 
 When starting a container unit, systemd may time out due to the time it takes to pull a container. Use the TimeoutStartSec Service option to extend the default 90 second timeout or pre-pill the image. 
