@@ -11,4 +11,4 @@ build:
   publishResources: true
 ---
 
-{{< children type="card" description="false" >}}
+{{< children type="card" description="true" >}}
