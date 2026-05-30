@@ -11,4 +11,4 @@ featured_image = "images/packages.png"
   publishResources = true
 +++
 
-{{% children type="card" description="true" %}}
+{{< children type="card" description="true" >}}

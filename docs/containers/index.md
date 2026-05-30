@@ -1,3 +1,3 @@
 # Containers
 
-{{% children type="card" description="false" %}}
+{{< children type="card" description="false" >}}

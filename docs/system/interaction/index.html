@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="description" content="Basic Commands and Directory Structure">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Interaction">
+    <meta name="twitter:description" content="Basic Commands and Directory Structure">
+    <meta property="og:url" content="http://localhost:1313/system/interaction/">
+    <meta property="og:title" content="Interaction">
+    <meta property="og:description" content="Basic Commands and Directory Structure">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="System">
+    <meta itemprop="name" content="Interaction">
+    <meta itemprop="description" content="Basic Commands and Directory Structure">
+    <meta itemprop="wordCount" content="2953">
+    <title>Interaction</title>
+    <link href="/system/interaction/index.md" rel="alternate" type="text/markdown" title="Interaction">
+    <link href="/images/favicon.svg?1780156896" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1780156896" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1780156896" defer></script>
+    <script src="/js/search-lunr.js?1780156896" defer></script>
+    <script src="/js/search.js?1780156896" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1780156896";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1780156896" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1780156896" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1780156896" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1780156896" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1780156896" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780156896" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780156896" rel="stylesheet">
+    <link href="/css/theme.css?1780156896" rel="stylesheet">
+    <link href="/css/format-html.css?1780156896" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/system\/interaction\/';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:1313';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script><script defer src="https://cloud.umami.is/script.js" data-website-id="d179743c-138a-4212-8906-28f70628ef95"></script>
+<style>
+:root {
+    --MENU-S-width: 15rem;
+    --MENU-M-width: 15rem;
+    --MENU-L-width: 18rem;
+    --MAIN-MAX-width: 100rem;
+}
+html {
+  zoom: 1.2;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif,
+               "Apple Color Emoji", "Segoe UI Emoji" !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500 !important;
+  letter-spacing: 0.7px;
+}
+
+code, kbd, pre, samp {
+  font-family: "Fira Code", "Hack", "Source Code Pro", Consolas, Menlo, monospace !important;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+  <body class="mobile-support html" data-origin="/system/interaction/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#redhat-rhel9-graphical-environment-wayland">RedHat (RHEL9) Graphical Environment (Wayland)</a></li>
+    <li><a href="#file-system-and-directory-hierarchy">File System and Directory Hierarchy</a>
+      <ul>
+        <li><a href="#key-directories-in-">Key Directories in /</a></li>
+        <li><a href="#procfs-file-system-proc">Procfs File System (/proc)</a></li>
+        <li><a href="#runtime-file-system-run">Runtime File System (/run)</a></li>
+        <li><a href="#the-system-file-system-sys">The System File System (/sys)</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#tree-command">tree command</a></li>
+      </ul>
+    </li>
+    <li><a href="#labs">Labs</a>
+      <ul>
+        <li><a href="#list-only-the-directories--d-in-the-root-users-home-directory-root">List only the directories (-d) in the root user’s home directory (/root).</a></li>
+        <li><a href="#list-files-in-the-etcsysconfig-directory-along-with-their-permissions-sizes-in-human-readable-format-and-full-path">List files in the /etc/sysconfig directory along with their permissions, sizes in human-readable format, and full path.</a></li>
+        <li><a href="#view-tree-man-pages">View tree man pages.</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#listing-files-and-directories">Listing Files and Directories</a></li>
+    <li><a href="#ls">ls</a>
+      <ul>
+        <li><a href="#labs-1">labs:</a></li>
+        <li><a href="#printing-working-directory-pwd-command">Printing Working Directory (pwd) command</a></li>
+      </ul>
+    </li>
+    <li><a href="#navigating-directories">Navigating Directories</a>
+      <ul>
+        <li><a href="#labs-2">Labs:</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#tty-command">tty command</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#uptime-command"><code>uptime</code> command</a>
+      <ul>
+        <li><a href="#clear-command">clear command</a></li>
+      </ul>
+    </li>
+    <li><a href="#determining-command-path">Determining Command Path</a></li>
+    <li><a href="#which-command"><code>which</code> command</a></li>
+    <li><a href="#whereis-command"><code>whereis</code> command</a></li>
+    <li><a href="#type-command"><code>type</code> command</a></li>
+    <li><a href="#viewing-system-information">Viewing System Information</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#viewing-cpu-specs">Viewing CPU Specs</a></li>
+    <li><a href="#lscpu-command"><code>lscpu</code> command</a></li>
+    <li><a href="#getting-help">Getting Help</a>
+      <ul>
+        <li><a href="#manual-pages">Manual pages</a></li>
+        <li><a href="#man-page-navigation">Man page navigation</a></li>
+      </ul>
+    </li>
+    <li><a href="#headings-in-the-manual">Headings in the Manual</a></li>
+    <li><a href="#manual-sections">Manual Sections</a></li>
+    <li><a href="#searching-by-keyword">Searching by Keyword</a></li>
+    <li><a href="#apropos-command"><code>apropos</code> command</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#info-and-pinfo-commands"><code>info</code> and <code>pinfo</code> Commands</a>
+      <ul>
+        <li><a href="#info-page-navigation">info page Navigation</a></li>
+      </ul>
+    </li>
+    <li><a href="#documentation-in--usrsharedoc">Documentation in  /usr/share/doc/</a></li>
+    <li><a href="#online-rhel-documentation">Online RHEL Documentation</a></li>
+    <li><a href="#labs-3">Labs</a>
+      <ul>
+        <li><a href="#lab-2-navigate-linux-directory-tree">Lab 2: Navigate Linux Directory Tree</a></li>
+        <li><a href="#lab-miscellaneous-tasks">Lab: Miscellaneous Tasks</a></li>
+        <li><a href="#lab-identify-system-and-kernel-information">Lab: Identify System and Kernel Information</a></li>
+        <li><a href="#lab-man">Lab: Man</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/system/"><span itemprop="name">System</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">Interaction</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/system/interaction/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/system/installation/" title="Installing RHEL Linux (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/system/process-and-task-scheduling/" title="Process and Task Scheduling (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable system" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="interaction">Interaction</h1>
+
+<p>Looking to get started using Fedora or Red Hat operating systems?</p>
+<p>This guide with get you started with the RHEL Graphical environment, file system, and essential commands to get started using Fedora, Red Hat, or other RHEL based systems.</p>
+<h2 id="redhat-rhel9-graphical-environment-wayland">RedHat (RHEL9) Graphical Environment (Wayland)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Redhat runs a graphical environment called Wayland. This is the foundation for running GUI apps. Wayland is a client/server display protocol. Which just means that the user (the client) requests a resource and the display manager (the server) serves those resources.</p>
+<p>Wayland is slowly replaced and older display protocol called &ldquo;X&rdquo;. And has better graphics capabilities, features, and performance than X. And consists of a Display or Login manager and a Desktop environment.</p>
+<p>The Display/ Login manager presents the login screen for users to log in. Once you log in, you get to the pre-configured desktop manager or Desktop Environment (DE). The GNOME Display Manager. (GDM)</p>
+<h2 id="file-system-and-directory-hierarchy">File System and Directory Hierarchy<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>The standard for the Linux filesystem is the Filesystem Hierarchy Standard (FHS). Which describes locations, names, and permissions for a variety of file types and directories.</p>
+<p>The directory structure starts at the root. Which is notated by a &ldquo;/&rdquo;. The top levels of the directory can be viewed by running the <code>ls</code> command on the root of the directory tree.</p>
+<p>Size of the root file system is automatically determined by the installer program based on the available disk space when you select the default partitioning (it may be altered). Here is a listing of the contents of /:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>$ ls /
+afs  bin  boot  dev  etc  home  lib  lib64  lost+found  media  mnt  opt  proc  root  run  sbin  snap  srv  sys  tmp  usr  var</code></pre></div>
+<p>Some of these directories hold static data such as commands, configuration files, kernel and device files, etc. And some hold dynamic data such as log and status files.</p>
+<p>There are three major categories of file systems. They are:</p>
+<ol>
+<li>disk-based</li>
+<li>network-based</li>
+<li>memory-based</li>
+</ol>
+<p><strong>Disk-based</strong> files systems are physical media such as a hard drive or a USB flash drive and store information persistently. The root and boot file systems and both disk-based and created automatically when you select the default partitioning.</p>
+<p><strong>Network-Based</strong> file systems are disk-based file systems that are shared over the network for remote access. (Also stored persistently)</p>
+<p><strong>Memory-Based</strong> filesystems are virtual. And are created automatically at system startup and destroyed when the system goes down.</p>
+<h3 id="key-directories-in-">Key Directories in /<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<h4 id="etc-extended-text-configuration">/etc (extended text configuration)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>This directory contains system configuration files for systemd, LVM, and user shell startup template files.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>david@fedora:$ ls /etc
+abrt                    dhcp                        gshadow-       locale.conf               openldap            request-key.d          sysctl.conf
+adjtime                 DIR_COLORS                  gss            localtime                 opensc.conf         resolv.conf            sysctl.d
+aliases                 DIR_COLORS.lightbgcolor     gssproxy       login.defs                opensc-x86_64.conf  rpc                    systemd
+alsa                    dleyna-server-service.conf  host.conf      logrotate.conf            openvpn             rpm                    system-release
+alternatives            dnf                         hostname       logrotate.d               opt                 rpmdevtools            system-release-cpe
+anaconda                dnsmasq.conf                hosts          lvm                       os-release          rpmlint                tcsd.conf
+anthy-unicode.conf      dnsmasq.d                   hp             machine-id                ostree              rsyncd.conf            terminfo
+apk                     dracut.conf                 httpd          magic                     PackageKit          rwtab.d                thermald
+appstream.conf          dracut.conf.d               idmapd.conf    mailcap                   pam.d               rygel.conf             timidity++.cfg
+asound.conf             egl                         ImageMagick-7  makedumpfile.conf.sample  paperspecs          samba                  tmpfiles.d
+audit                   environment                 init.d         man_db.conf               passwd              sane.d                 tpm2-tss
+authselect              ethertypes                  inittab        mcelog                    passwd-             sasl2                  Trolltech.conf
+avahi                   exports                     inputrc        mdevctl.d                 passwdqc.conf       security               trusted-key.key
+bash_completion.d       exports.d                   ipp-usb        mercurial                 pinforc             selinux                ts.conf
+bashrc                  favicon.png                 iproute2       mime.types                pkcs11              services               udev
+bindresvport.blacklist  fedora-release              iscsi          mke2fs.conf               pkgconfig           sestatus.conf          udisks2
+binfmt.d                filesystems                 issue          modprobe.d                pki                 sgml                   unbound
+bluetooth               firefox                     issue.d        modules-load.d            plymouth            shadow                 updatedb.conf
+brlapi.key              firewalld                   issue.net      mono                      pm                  shadow-                UPower
+brltty                  flatpak                     java           motd                      polkit-1            shells                 uresourced.conf
+brltty.conf             fonts                       jvm            motd.d                    popt.d              skel                   usb_modeswitch.conf
+ceph                    fprintd.conf                jvm-common     mtab                      ppp                 sos                    vconsole.conf
+chkconfig.d             fstab                       kdump          mtools.conf               printcap            speech-dispatcher      vdpau_wrapper.cfg
+chromium                fuse.conf                   kdump.conf     my.cnf                    profile             ssh                    vimrc
+chrony.conf             fwupd                       kernel         my.cnf.d                  profile.d           ssl                    virc
+cifs-utils              gcrypt                      keys           nanorc                    protocols           sssd                   vmware-tools
+containers              gdbinit                     keyutils       ndctl                     pulse               statetab.d             vpl
+credstore               gdbinit.d                   krb5.conf      ndctl.conf.d              qemu                subgid                 vpnc
+credstore.encrypted     gdm                         krb5.conf.d    netconfig                 qemu-ga             subgid-                vulkan
+crypto-policies         geoclue                     ld.so.cache    NetworkManager            rc0.d               subuid                 wgetrc
+crypttab                glvnd                       ld.so.conf     networks                  rc1.d               subuid-                whois.conf
+csh.cshrc               gnupg                       ld.so.conf.d   nfs.conf                  rc2.d               subversion             wireplumber
+csh.login               GREP_COLORS                 libaudit.conf  nfsmount.conf             rc3.d               sudo.conf              wpa_supplicant
+cups                    groff                       libblockdev    nftables                  rc4.d               sudoers                X11
+cupshelpers             group                       libibverbs.d   nilfs_cleanerd.conf       rc5.d               sudoers.d              xattr.conf
+dbus-1                  group-                      libnl          npmrc                     rc6.d               swid                   xdg
+dconf                   grub2.cfg                   libreport      nsswitch.conf             rc.d                swtpm-localca.conf     xml
+debuginfod              grub2-efi.cfg               libssh         nvme                      reader.conf.d       swtpm-localca.options  yum.repos.d
+default                 grub.d                      libuser.conf   odbc.ini                  redhat-release      swtpm_setup.conf       zfs-fuse
+depmod.d                gshadow                     libvirt        odbcinst.ini              request-key.conf    sysconfig</code></pre></div>
+<p>As you can see, there is a lot of stuff here.</p>
+<h4 id="root">/root<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>This is the default home directory for the root user.</p>
+<h4 id="mnt">/mnt<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>/mnt is used to temporarily mount a file system.</p>
+<h4 id="boot-disk-based">/boot (Disk-Based)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>This directory contains the Linux Kernel, as well as boot support and configuration files.</p>
+<p>The size of /boot is determined by the installer program based on the available disk space when you select the default partitioning. It may be set to a different size during or after the installation.</p>
+<h4 id="home">/home<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>This is used to store user home directories and other user contents.</p>
+<h4 id="opt-optional">/opt (Optional)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>This directory holds additional software that may need to be installed on the system. A sub directory is created for each installed software.</p>
+<h4 id="usr-unix-system-resources">/usr (UNIX System Resources)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Holds most of the system files such as:</p>
+<h5 id="usrbin">/usr/bin<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h5>
+<p>Binary directory for user executable commands</p>
+<h5 id="usrsbin">/usr/sbin<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h5>
+<p>System binaries required at boot and system administration commands not intended for execution by normal users. This directory is not included in the default search path for normal users.</p>
+<h5 id="usrlib-and-usrlib64">/usr/lib and /usr/lib64<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h5>
+<p>Contain shared library routines required by many commands/programs located in /usr/bin and /usr/sbin. These are used by kernel and other applications and programs for their successful installation and operation.</p>
+<p>/usr/lib directory also stores system initialization and service management programs. /usr/lib64 contains 64-bit shared library routines.</p>
+<h5 id="usrinclude">/usr/include<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h5>
+<p>Contains header files for the C programming language.</p>
+<h5 id="usrlocal">/usr/local:<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h5>
+<p>This is a system administrator repository for storing commands and tools. These commands not generally included with the original Linux distribution.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Directory</th>
+          <th>Contains</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>/usr/local/bin</td>
+          <td>ecutables</td>
+      </tr>
+      <tr>
+          <td>/usr/local/etc</td>
+          <td>configuration files</td>
+      </tr>
+      <tr>
+          <td>/usr/local/lib and /usr/local/lib64</td>
+          <td>library routines</td>
+      </tr>
+      <tr>
+          <td>/usr/share</td>
+          <td>manual pages, documentation, sample templates, configuration files</td>
+      </tr>
+  </tbody>
+</table>
+<h5 id="usrsrc">/usr/src:<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h5>
+<p>This directory is used to store source code.</p>
+<h4 id="variable-directory-var">Variable Directory (/var)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>For data that frequently changes while the system is operational. Such as log, status, spool, lock, etc.</p>
+<p>Common sub directories in /var:</p>
+<h5 id="varlog">/var/log<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h5>
+<p>Contains most system log files. Such as boot logs, user logs, failed user logs, installation logs, cron logs, mail logs, etc.</p>
+<h5 id="varopt">/var/opt<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h5>
+<p>Log, status, etc. for software installed in /opt.</p>
+<h5 id="varspool">/var/spool<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h5>
+<p>Queued files such as print jobs, cron jobs, mail messages, etc.</p>
+<h5 id="vartmp">/var/tmp<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h5>
+<p>For large or longer term temporary files that need to survive system reboots. These are deleted if they are not accessed for a period of 30 days.</p>
+<h4 id="tmp-temporary">/tmp (Temporary)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Temporary files that survive system reboots. These are deleted after 10 days if they are not accessed. Programs may need to create temporary files in order to run.</p>
+<h4 id="dev-devices">/dev (Devices)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Contains Device nodes for physical and virtual devices. Linux kernel talks to devices through these nodes. Device nodes are automatically created and deleted by the udevd service. Which dynamically manages devices.</p>
+<p>The two types of device files are character (or raw) and block.</p>
+<h4 id="character-devices">Character devices<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<ul>
+<li>Accessed serially.</li>
+<li>Console, serial printers, mice, keyboards, terminals, etc.</li>
+</ul>
+<h4 id="block-devices">Block devices<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<ul>
+<li>Accessed in a parallel fashion with data exchanged in blocks.</li>
+<li>Data on block devices is accessed randomly.</li>
+<li>Hard disk drives, optical drives, parallel printers, etc.</li>
+</ul>
+<h3 id="procfs-file-system-proc">Procfs File System (/proc)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Config and status info on:
+<ul>
+<li>Kernel, CPU, memory, disks, partitioning, file systems, networking, running processes, etc.</li>
+</ul>
+</li>
+<li>Zero-length pseudo files point to data maintained by the kernel in the memory.</li>
+<li>Interface to interact with kernel-maintained information.</li>
+<li>Contents created in memory at system boot time, updated during runtime, and destroyed at system shutdown.</li>
+</ul>
+<h3 id="runtime-file-system-run">Runtime File System (/run)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Data for processes running on the system.
+<ul>
+<li>/run/media</li>
+</ul>
+</li>
+<li>Used to automatically mount external file systems (CD, DVD, flash USB.)</li>
+<li>Contents deleted at shutdown.</li>
+</ul>
+<h3 id="the-system-file-system-sys">The System File System (/sys)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Info about hardware devices, drivers, and some kernel features.</li>
+<li>Used by the kernel to load necessary support for devices, create device nodes in /dev, and configure devices.</li>
+<li>Auto-maintained.</li>
+</ul>
+<h1 id="essential-system-commands">Essential System Commands<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<h3 id="tree-command">tree command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>List hierarchy of directories and files.</li>
+<li>Column 2
+<ul>
+<li>Size.</li>
+</ul>
+</li>
+<li>Column 3
+<ul>
+<li>Full path.</li>
+</ul>
+</li>
+</ul>
+<p>Options.
+tree -a :: Include hidden files in the output.
+tree -d :: Exclude files from the output.
+tree -h :: Displays file sizes in human-friendly format.
+tree -f :: Prints the full path for each file.
+tree -p :: Includes file permissions in the output</p>
+<h2 id="labs">Labs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="list-only-the-directories--d-in-the-root-users-home-directory-root">List only the directories (-d) in the root user’s home directory (/root).<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>tree -d /root</code></pre></div>
+<h3 id="list-files-in-the-etcsysconfig-directory-along-with-their-permissions-sizes-in-human-readable-format-and-full-path">List files in the /etc/sysconfig directory along with their permissions, sizes in human-readable format, and full path.<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>tree -phf /etc/sysconfig</code></pre></div>
+<h3 id="view-tree-man-pages">View tree man pages.<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>man tree</code></pre></div>
+<h1 id="prompt-symbols">Prompt Symbols<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<ul>
+<li>Hash sign (#) for root user.</li>
+<li>Dollar sign ($) for normal users.</li>
+</ul>
+<h1 id="linux-commands">Linux Commands<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Two types of commands:</p>
+<ol>
+<li>User
+<ul>
+<li>General purpose.</li>
+<li>For any user.</li>
+</ul>
+</li>
+<li>System Management
+<ul>
+<li>Superuser.</li>
+<li>Require elevated privileges.</li>
+</ul>
+</li>
+</ol>
+<h1 id="command-mechanics">Command Mechanics<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<p>Basic Syntax</p>
+<ul>
+<li>command option(s) argument(s)</li>
+<li>Many commands have preconfigured default options and arguments.</li>
+</ul>
+<p>An option that starts with a single hyphen character (-la, for instance) ::: Short-option format.</p>
+<ul>
+<li>Two hyphen characters (&ndash;all, for instance)  ::: Long-option format.</li>
+</ul>
+<h2 id="listing-files-and-directories">Listing Files and Directories<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h2 id="ls">ls<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>ll :: shortcut for ls -l</li>
+</ul>
+<p>Flags
+ls -l ::: View long listing format.
+ls -d ::: View info on the specified directory.
+ls -h ::: Human readable format.
+ls -a ::: List all files, including the hidden files.
+ls -t ::: Sort output by date and time with the newest file first.
+ls -R ::: List contents recursively.
+ls -i ::: View inode information.</p>
+<h3 id="labs-1">labs:<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<h4 id="show-the-long-listing-of-only-usr-without-showing-its-contents">Show the long listing of only /usr without showing its contents.<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ls -ld /usr</code></pre></div>
+<h4 id="display-all-files-in-the-current-directory-with-their-sizes-in-human-friendly-format">Display all files in the current directory with their sizes in human-friendly format.<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ls -lh</code></pre></div>
+<h4 id="list-all-files-including-the-hidden-files-in-the-current-directory-with-detailed-information">List all files, including the hidden files, in the current directory with detailed information.<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ls -la</code></pre></div>
+<h4 id="sort-output-by-date-and-time-with-the-newest-file-first">Sort output by date and time with the newest file first.<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ls -lt</code></pre></div>
+<h4 id="list-contents-of-the-etc-directory-recursively">List contents of the /etc directory recursively.<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ls -R /etc</code></pre></div>
+<h4 id="list-directory-info-and-the-contents-of-a-directory-recursively">List directory info and the contents of a directory recursively.<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ls -lR /etc</code></pre></div>
+<h4 id="view-ls-manpage">View ls manpage.<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>man ls</code></pre></div>
+<h3 id="printing-working-directory-pwd-command">Printing Working Directory (pwd) command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Returns the absolute path to a file or directory.</li>
+</ul>
+<h2 id="navigating-directories">Navigating Directories<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Absolute path (full path or a fully qualified pathname) :: Points to a file or directory in relation to the top of the directory tree. It always starts with the forward slash (/).</p>
+<p>Relative path :: Points to a file or directory in relation to your current location.</p>
+<h3 id="labs-2">Labs:<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<h4 id="go-one-level-up-into-the-parent-directory-using-the-relative-path">Go one level up into the parent directory using the relative path<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>cd ..</code></pre></div>
+<h4 id="cd-into-etcsysconfig-using-the-absolute-path-etcsysconfig-or-the-relative-path-etcsysconfig">cd into /etc/sysconfig using the absolute path (/etc/sysconfig), or the relative path (etc/sysconfig)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>cd /etc/sysconfig
+cd /
+cd etc/sysconfig</code></pre></div>
+<h4 id="change-into-the-usrbin-directory-from-etcsysconfig-using-relative-or-absolute-path">Change into the /usr/bin directory from /etc/sysconfig using relative or absolute path<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>cd /usr/bin</code></pre></div>
+<p>or</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>cd ../usr/bin</code></pre></div>
+<h4 id="return-to-your-home-directory">Return to your home directory<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>cd</code></pre></div>
+<p>or</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>cd ~</code></pre></div>
+<h4 id="use-the-absolute-path-to-change-into-the-home-directory-of-the-root-user-from-etcsysconfig">Use the absolute path to change into the home directory of the root user from /etc/sysconfig<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>cd ../../root</code></pre></div>
+<h4 id="switch-between-the-current-and-previous-directories">Switch between the current and previous directories<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>cd ..</code></pre></div>
+<h4 id="use-the-cd-command-to-print-the-home-directory-of-the-current-user">use the cd command to print the home directory of the current user<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>cd -</code></pre></div>
+<h1 id="terminal-device-files">Terminal Device Files<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<ul>
+<li>Unique pseudo (or virtual) numbered device files that represent terminal sessions opened by users.</li>
+<li>Used to communicate with individual sessions.</li>
+<li>Stored in the /dev/pts/ (pseudo terminal session).</li>
+<li>Created  when a user opens a new terminal session.</li>
+<li>Removed when a session closes.</li>
+</ul>
+<h2 id="tty-command">tty command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Identify current terminal session.</li>
+<li>Displays filename and location.</li>
+<li>Example: /dev/pts/0</li>
+</ul>
+<h1 id="inspecting-systems-uptime-and-processor-load">Inspecting System’s Uptime and Processor Load<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
+<h2 id="uptime-command"><code>uptime</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Displays:
+<ul>
+<li>System’s current time.</li>
+<li>System up time.</li>
+<li>Number of users currently logged in.</li>
+<li>Average % CPU load over the past 1, 5, and 15 minutes.
+<ul>
+<li>0.00 and 1.00 represent no load and full load.</li>
+<li>Greater than 1.00 signifies excess load (over 100%).</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="clear-command">clear command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Clears the terminal screen and places the cursor at the top left of the screen.</li>
+<li>Can also use Ctrl+l for this command.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>clear</code></pre></div>
+<h2 id="determining-command-path">Determining Command Path<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Tools for identifying the absolute path of the command that will be executed when you run it without specifying its full path.</p>
+<p><code>which</code>, <code>whereis</code>, and <code>type</code></p>
+<p>show the full location of the ls command:</p>
+<h2 id="which-command"><code>which</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Show command aliases and location.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>[root@server1 bin]# which ls
+alias ls=&#39;ls --color=auto&#39;
+        /usr/bin/ls</code></pre></div>
+<h2 id="whereis-command"><code>whereis</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Locates binary, source, and manual files for specified command name.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>[root@server1 bin]# whereis ls
+ls: /usr/bin/ls /usr/share/man/man1/ls.1.gz /usr/share/man/man1p/ls.1p.gz&gt;)</code></pre></div>
+<h2 id="type-command"><code>type</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Find whether the given command is an alias, shell built-in, file, function, or keyword.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>type ls</code></pre></div>
+<h2 id="viewing-system-information">Viewing System Information<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h4 id="uname-command"><code>uname</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<ul>
+<li>Show system operating system name.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>root@server1 bin<span style="color:#ff7b72;font-weight:bold">]</span><span style="color:#8b949e;font-style:italic"># uname</span>
+</span></span><span style="display:flex;"><span>Linux</span></span></code></pre></div>
+<p>Flags
+uname -s ::: Show kernel name.
+uname -n ::: Show hostname.
+uname -r ::: Show kernel release.
+uname -v ::: Show kernel build date.
+uname -m ::: Show machine hardware name.
+uname -p ::: Show processor type.
+uname -i ::: Show hardware platform.
+uname -o ::: Show OS name.
+uname -a ::: Show kernel name, nodename, release, version, machine, and os.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>uname</code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>uname -a</code></pre></div>
+<pre><code>Linux = Kernel name
+server1.example.com = Hostname of the system
+4.18.0-80.el8.x86_64 = Kernel release
+#1 SMP Wed Mar 13 12:02:46 UTC 2019 = Date and time of the kernel built
+x86_64 = Machine hardware name
+x86_64 = Processor type
+x86_64 = Hardware platform
+GNU/Linux = Operating system name
+</code></pre>
+<h2 id="viewing-cpu-specs">Viewing CPU Specs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h2 id="lscpu-command"><code>lscpu</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Shows CPU:
+<ul>
+<li>Architecture.</li>
+<li>Operating modes.</li>
+<li>Vendor.</li>
+<li>Family.</li>
+<li>Model.</li>
+<li>Speed.</li>
+<li>Cache memory.</li>
+<li>Virtualization support type.</li>
+</ul>
+</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>lscpu</code></pre></div>
+<pre><code>architecture of the CPU (x86_64)
+supported modes of operation (32-bit and 64-bit)
+sequence number of the CPU on this system (1)
+threads per core (1)
+cores per socket (1)
+number of sockets (1)
+vendor ID (GenuineIntel)
+CPU model (58) model name (Intel …)
+speed (2294.784 MHz)
+amount and levels of cache memory (L1d, L1i, L2, and L3)
+</code></pre>
+<h2 id="getting-help">Getting Help<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="manual-pages">Manual pages<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Informational pages stored in /usr/share/man for each program.</li>
+</ul>
+<p>See <a href="/tools/you-need-to-learn-man-pages/">you-need-to-learn-man-pages</a> for more.</p>
+<h4 id="man-command"><code>man</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<p>Flags:
+-k</p>
+<ul>
+<li>Perform a keyword search on manual pages.</li>
+<li>Must build the database with <code>mandb</code> first.</li>
+</ul>
+<p>-f</p>
+<ul>
+<li>Equivalent to whatis.</li>
+</ul>
+<h4 id="commands-to-find-informationhelp-about-programs">Commands to find information/help about programs.<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<ul>
+<li><code>apropos </code></li>
+<li><code>whatis</code></li>
+<li><code>info</code></li>
+<li><code>pinfo</code></li>
+</ul>
+<p><em>/usr/share/doc/</em></p>
+<ul>
+<li>Directory with additional program documentation.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>man passwd</span></span></code></pre></div>
+<p>line at the bottom indicates the line number of the manual page.</p>
+<h3 id="man-page-navigation">Man page navigation<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>h ::: Help on navigation.
+q ::: Quit the man page.
+Up arrow key ::: Scroll up one line.
+Enter or Down arrow key ::: Scroll down one line.
+f / Spacebar / Page down ::: Move forward one page.
+b / Page up ::: Move backward one page.
+d / u ::: Move down/up half a page.
+g / G ::: Move to the beginning / end of the man pages.
+:f ::: Display line number and bytes being viewed.
+/pattern ::: Searches forward for the specified pattern.
+?pattern ::: Searches backward for the specified pattern.
+n / N ::: Find the next / previous occurrence of a pattern.</p>
+<h2 id="headings-in-the-manual">Headings in the Manual<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p><strong>NAME</strong></p>
+<ul>
+<li>Name of the command or file with a short description.
+<strong>SYNOPSIS</strong></li>
+<li>Syntax summary.
+<strong>DESCRIPTION</strong></li>
+<li>Overview of the command or file.
+<strong>OPTIONS</strong></li>
+<li>Options available for use.
+<strong>EXAMPLES</strong></li>
+<li>Some examples to explain the usage.
+<strong>FILES</strong></li>
+<li>A list of related files.
+<strong>SEE ALSO</strong></li>
+<li>Reference to other manual pages or topics.
+<strong>BUGS</strong></li>
+<li>Any reported bugs or issues.
+<strong>AUTHOR</strong></li>
+<li>Contributor information.</li>
+</ul>
+<h2 id="manual-sections">Manual Sections<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Manual information is split into nine sections for organization and clarity.</li>
+<li>Man searches through each section until it finds a match.
+<ul>
+<li>Starts at section 1, then section 2, etc.</li>
+</ul>
+</li>
+<li>Some commands in Linux also have a configuration file with an identical name.
+<ul>
+<li>Ex: <code>passwd</code> command in /usr/bin and the passwd file in /etc.</li>
+</ul>
+</li>
+<li>Specify the section to find that page only.
+<ul>
+<li>Ex: <code>man 5 passwd</code></li>
+</ul>
+</li>
+<li>Section number is located at the top (header) of the page.</li>
+</ul>
+<p><strong>Section 1</strong></p>
+<ul>
+<li>Refers to user commands.
+<strong>Section 4</strong></li>
+<li>Contains special files.
+<strong>Section 5</strong></li>
+<li>Describes file formats for many system configuration files.
+<strong>Section 8</strong></li>
+<li>Documents system administration and privileged commands designed for the root user.</li>
+</ul>
+<p>Run <code>man man</code> for more details.</p>
+<h2 id="searching-by-keyword">Searching by Keyword<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h2 id="apropos-command"><code>apropos</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Search all sections of the manual pages and show a list of all entries matching the specified keyword in their names or descriptions.</li>
+<li>Must <code>mandb</code> command in order to build an indexed database of the manual pages prior to using.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mandb</span></span></code></pre></div>
+<h4 id="mandb-command"><code>mandb</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<ul>
+<li>Build an indexed database of the manual pages.</li>
+</ul>
+<h4 id="lab-find-a-forgotten-xfs-administration-command">Lab: Find a forgotten XFS administration command.<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>man -k xfs
+or
+apropos xfs</code></pre></div>
+<h4 id="lab-show-a-brief-list-of-options-and-a-description">Lab: Show a brief list of options and a description.<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>passwd --help
+or
+passwd -?</code></pre></div>
+<h4 id="whatis-command"><code>whatis</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
+<ul>
+<li>Same output as <code>man -f</code></li>
+<li>Display one-line manual page descriptions.</li>
+</ul>
+<h2 id="info-and-pinfo-commands"><code>info</code> and <code>pinfo</code> Commands<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>Display command detailed documentation.</li>
+<li>Divided into sections called nodes.</li>
+<li>Header:
+<ul>
+<li>Name of the file being displayed.</li>
+<li>Names of the current, next, and previous nodes.</li>
+</ul>
+</li>
+<li>Almost identical to each other.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>info ls</span></span></code></pre></div>
+<p>u navigate efficiently.</p>
+<h3 id="info-page-navigation">info page Navigation<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Down / Up arrows</p>
+<ul>
+<li>Move forward / backward one line.
+Spacebar / Del</li>
+<li>Move forward / backward one page.
+q</li>
+<li>Quit the info page.
+t</li>
+<li>Go to the top node of the document.
+s</li>
+<li>Search</li>
+</ul>
+<h2 id="documentation-in--usrsharedoc">Documentation in  /usr/share/doc/<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p><em>/usr/share/doc/</em></p>
+<ul>
+<li>Stores general documentation for installed packages under subdirectories that match their names.</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ls -l /usr/share/doc/gzip</code></pre></div>
+<h2 id="online-rhel-documentation">Online RHEL Documentation<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>docs.redhat.com</li>
+<li>Release notes and guides on planning, installation, administration, security, storage management, virtualization, etc.</li>
+<li>access.redhat.com</li>
+</ul>
+<h2 id="labs-3">Labs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="lab-2-navigate-linux-directory-tree">Lab 2: Navigate Linux Directory Tree<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Check your location in the directory tree.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pwd</span></span></code></pre></div>
+<p>Show file permissions in the current directory including the hidden files.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls -la</span></span></code></pre></div>
+<p>Change directory into /etc and confirm the directory change.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd /etc
+</span></span><span style="display:flex;"><span>pwd</span></span></code></pre></div>
+<p>Switch back to the directory where you were before, and run pwd again to verify.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd -
+</span></span><span style="display:flex;"><span>pwd</span></span></code></pre></div>
+<h3 id="lab-miscellaneous-tasks">Lab: Miscellaneous Tasks<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Identify the terminal device file.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>tty</span></span></code></pre></div>
+<p>Open a couple of terminal sessions. Compare the terminal numbers.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>tty
+</span></span><span style="display:flex;"><span>/dev/pts/1</span></span></code></pre></div>
+<p>Execute the uptime command and analyze the system uptime and processor load information.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>uptime</span></span></code></pre></div>
+<p>Use three commands to identify the location of the vgs command.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>which vgs
+</span></span><span style="display:flex;"><span>whereis vgs
+</span></span><span style="display:flex;"><span>type vgs</span></span></code></pre></div>
+<h3 id="lab-identify-system-and-kernel-information">Lab: Identify System and Kernel Information<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>Analyze the basic information about the system and kernel reported.</li>
+</ol>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>uname -a</span></span></code></pre></div>
+<p>Examine the key items relevant to the processor.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>lscpu</span></span></code></pre></div>
+<h3 id="lab-man">Lab: Man<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>View man page for uname.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>man uname</span></span></code></pre></div>
+<p>View the 5 man page section for the shadow.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>man <span style="color:#a5d6ff">5</span> shadow</span></span></code></pre></div>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search>
+          <div class="searchbox default-animation">
+            <i class="fas fa-fw fa-search" title="Search (CTRL+ALT+f)"></i>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/"><i class="fa-solid fa-box-open"></i> Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
+            <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
+            <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/local-filesystems-and-swap/"><a class="padding" href="/storage/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/network-filesystem-nfs/"><a class="padding" href="/storage/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/partitioning-mbr-gpt/"><a class="padding" href="/storage/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/rm-filesystem-from-partition/"><a class="padding" href="/storage/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/system/"><input type="checkbox" id="R-section-0ea554b019cc5a3e6337c45b68b3a647" aria-controls="R-subsections-0ea554b019cc5a3e6337c45b68b3a647" checked><label for="R-section-0ea554b019cc5a3e6337c45b68b3a647"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/system/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-0ea554b019cc5a3e6337c45b68b3a647" class="collapsible-menu">
+            <li class="" data-nav-id="/system/installation/"><a class="padding" href="/system/installation/">Installing RHEL Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="active " data-nav-id="/system/interaction/"><a class="padding" href="/system/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/system/process-and-task-scheduling/"><a class="padding" href="/system/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/remove-formatting-from-highlights/"><a class="padding" href="/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-docker-nginx/"><a class="padding" href="/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/you-need-to-learn-man-pages/"><a class="padding" href="/tools/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/proxmox-ha-proxy-setup/"><a class="padding" href="/tools/proxmox-ha-proxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/learning-touch-typing/"><a class="padding" href="/tools/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users and Groups</span></label><a class="padding default-animation" href="/users-and-groups/"><i class="fa-solid fa-users"></i> Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
+            <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/virtualization/"><input type="checkbox" id="R-section-da8ee4406de37987b502b79e5b0a9d1c" aria-controls="R-subsections-da8ee4406de37987b502b79e5b0a9d1c"><label for="R-section-da8ee4406de37987b502b79e5b0a9d1c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualization</span></label><a class="padding default-animation" href="/virtualization/"><i class="fa-solid fa-microchip"></i> Virtualization<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-da8ee4406de37987b502b79e5b0a9d1c" class="collapsible-menu">
+            <li class="" data-nav-id="/virtualization/using-vagrant-on-linux/"><a class="padding" href="/virtualization/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/booknotes/"><a class="padding" href="/booknotes/"><i class='fas fa-fw fa-book'></i> Book Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/now/"><a class="padding" href="/now/"><i class='fas fa-fw fa-clock'></i> Now<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780156896" defer></script>
+    <script src="/js/theme.js?1780156896" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>
