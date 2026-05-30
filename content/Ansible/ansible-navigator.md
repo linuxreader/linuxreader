@@ -1,10 +1,10 @@
 ---
-title: ansible-navigator
+title: Ansible Navigator
 date: 2026-02-22
 draft: false
 ---
 
-## Ansible Navigator`
+Here's my basic setup to get started with Ansible Navigator. A great tool for running Ansible Execution environments, checking a hosts variables, running playbooks and more.
 ### ansible-navigator setup
 
 Register subscription manager
