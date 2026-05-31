@@ -1,7 +1,7 @@
-+++
-title = 'How to Study for the CCNA Exam'
-description = 'Guide to how you should approach studying for the CCNA exam'
-+++
+---
+title: 'How I Studied For CCNA'
+description: 'How I approached my CCNA studies.'
+---
 
 ![CCNA Study Calendar](/images/CCNA.png)
 

@@ -1,4 +1,4 @@
-# How to Study for the CCNA Exam
+# How I Studied For CCNA
 
 ![CCNA Study Calendar](/images/CCNA.png)
 

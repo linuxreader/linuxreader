@@ -1,4 +1,7 @@
-## Customizing Podman's behavior
+---
+title: Customizing Podman's Behavior
+summary: Custom options for Podman configuration
+---
 
 Podman's default configuration works out of the box for most use cases, but its configuration is highly flexible. The following configuration files are available for customizing its behavior:
 

@@ -1,6 +1,6 @@
 ---
 title: 'SSH Connections'
-description: 'SSH Connections'
+description: 'Manage SSH Connections with Ansible'
 ---
 
 ### Managing SSH Connections

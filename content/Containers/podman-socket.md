@@ -1,3 +1,8 @@
+---
+title: Podman Socket
+summary: Activating the Podman Daemon
+---
+
 ## Optional -- enable socket-based services
 
 Users may need to interact with the Libpod APIs exposed by Podman, and in addition to that, Podman also has Docker-compatible APIs

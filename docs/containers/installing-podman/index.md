@@ -1,4 +1,4 @@
-# 
+# Installing Podman
 
 ### Installing Podman on Fedora, CentOS Stream, Rocky Linux
 

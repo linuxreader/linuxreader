@@ -5,43 +5,43 @@
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <meta name="generator" content="Hugo 0.154.5">
     <meta name="generator" content="Relearn 9.0.3">
-    <meta name="description" content="Ansible and PodmanIf you’re used to managing packages installed on VMs, it’s definitely a step up to run containers in podman via quadlet units ansible &#43; podman is pretty close to k8s in terms of overall “how easy is this to manage”-ness, just not in terms of your RTO times or your overall scalability or resiliency You would totally use ansible to generate the necessary configuration file(s) via jinja templates, confirm the desired state of your runtime/selinux/firewalls/OS/whatever, and then containers.podman.podman_container or containers.podman.podman_play or whateverContainersPodman Podman PodmanConvert Docker Compose to QuadletsIn order to support compose, podman needs to expose it’s REST API service through a local UNIX socket. This supports Docker-compatible APIs and native Libpod APIs. Install required packages:">
+    <meta name="description" content="Ansible and PodmanAnsible and podman quadletsContainer BasicsContainer Basics with PodmanContainersPodman Podman PodmanConvert Docker Compose to QuadletsHow to convert Docker COmpose to Podman QuadletsCustomizing Podman’s BehaviorCustom options for Podman configurationDistrobox BasicsGetting started with DistroboxInstalling PodmanInstalling Podman on different systemsIntroduction to ContainersGetting a Basic understanding of how containers workPodman QuadletsPodman quadlet basicsPodman SocketActivating the Podman Daemon">
     <meta name="author" content="">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Containers">
-    <meta name="twitter:description" content="Ansible and PodmanIf you’re used to managing packages installed on VMs, it’s definitely a step up to run containers in podman via quadlet units ansible &#43; podman is pretty close to k8s in terms of overall “how easy is this to manage”-ness, just not in terms of your RTO times or your overall scalability or resiliency You would totally use ansible to generate the necessary configuration file(s) via jinja templates, confirm the desired state of your runtime/selinux/firewalls/OS/whatever, and then containers.podman.podman_container or containers.podman.podman_play or whateverContainersPodman Podman PodmanConvert Docker Compose to QuadletsIn order to support compose, podman needs to expose it’s REST API service through a local UNIX socket. This supports Docker-compatible APIs and native Libpod APIs. Install required packages:">
+    <meta name="twitter:description" content="Ansible and PodmanAnsible and podman quadletsContainer BasicsContainer Basics with PodmanContainersPodman Podman PodmanConvert Docker Compose to QuadletsHow to convert Docker COmpose to Podman QuadletsCustomizing Podman’s BehaviorCustom options for Podman configurationDistrobox BasicsGetting started with DistroboxInstalling PodmanInstalling Podman on different systemsIntroduction to ContainersGetting a Basic understanding of how containers workPodman QuadletsPodman quadlet basicsPodman SocketActivating the Podman Daemon">
     <meta property="og:url" content="https://www.linuxreader.com/containers/">
     <meta property="og:title" content="Containers">
-    <meta property="og:description" content="Ansible and PodmanIf you’re used to managing packages installed on VMs, it’s definitely a step up to run containers in podman via quadlet units ansible &#43; podman is pretty close to k8s in terms of overall “how easy is this to manage”-ness, just not in terms of your RTO times or your overall scalability or resiliency You would totally use ansible to generate the necessary configuration file(s) via jinja templates, confirm the desired state of your runtime/selinux/firewalls/OS/whatever, and then containers.podman.podman_container or containers.podman.podman_play or whateverContainersPodman Podman PodmanConvert Docker Compose to QuadletsIn order to support compose, podman needs to expose it’s REST API service through a local UNIX socket. This supports Docker-compatible APIs and native Libpod APIs. Install required packages:">
+    <meta property="og:description" content="Ansible and PodmanAnsible and podman quadletsContainer BasicsContainer Basics with PodmanContainersPodman Podman PodmanConvert Docker Compose to QuadletsHow to convert Docker COmpose to Podman QuadletsCustomizing Podman’s BehaviorCustom options for Podman configurationDistrobox BasicsGetting started with DistroboxInstalling PodmanInstalling Podman on different systemsIntroduction to ContainersGetting a Basic understanding of how containers workPodman QuadletsPodman quadlet basicsPodman SocketActivating the Podman Daemon">
     <meta property="og:locale" content="en_us">
     <meta property="og:type" content="website">
     <meta itemprop="name" content="Containers">
-    <meta itemprop="description" content="Ansible and PodmanIf you’re used to managing packages installed on VMs, it’s definitely a step up to run containers in podman via quadlet units ansible &#43; podman is pretty close to k8s in terms of overall “how easy is this to manage”-ness, just not in terms of your RTO times or your overall scalability or resiliency You would totally use ansible to generate the necessary configuration file(s) via jinja templates, confirm the desired state of your runtime/selinux/firewalls/OS/whatever, and then containers.podman.podman_container or containers.podman.podman_play or whateverContainersPodman Podman PodmanConvert Docker Compose to QuadletsIn order to support compose, podman needs to expose it’s REST API service through a local UNIX socket. This supports Docker-compatible APIs and native Libpod APIs. Install required packages:">
-    <meta itemprop="wordCount" content="549">
+    <meta itemprop="description" content="Ansible and PodmanAnsible and podman quadletsContainer BasicsContainer Basics with PodmanContainersPodman Podman PodmanConvert Docker Compose to QuadletsHow to convert Docker COmpose to Podman QuadletsCustomizing Podman’s BehaviorCustom options for Podman configurationDistrobox BasicsGetting started with DistroboxInstalling PodmanInstalling Podman on different systemsIntroduction to ContainersGetting a Basic understanding of how containers workPodman QuadletsPodman quadlet basicsPodman SocketActivating the Podman Daemon">
+    <meta itemprop="wordCount" content="73">
     <title>Containers</title>
     <link href="/containers/index.xml" rel="alternate" type="application/rss+xml" title="Containers">
     <link href="/containers/index.md" rel="alternate" type="text/markdown" title="Containers">
-    <link href="/images/favicon.svg?1780177301" rel="icon" type="image/svg+xml">
-    <link href="/css/auto-complete/auto-complete.min.css?1780177301" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1780177301" defer></script>
-    <script src="/js/search-lunr.min.js?1780177301" defer></script>
-    <script src="/js/search.min.js?1780177301" defer></script>
+    <link href="/images/favicon.svg?1780231304" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1780231304" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1780231304" defer></script>
+    <script src="/js/search-lunr.min.js?1780231304" defer></script>
+    <script src="/js/search.min.js?1780231304" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1780177301";
+      window.relearn.index_js_url="/searchindex.en.js?1780231304";
     </script>
-    <script src="/js/lunr/lunr.min.js?1780177301" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1780177301" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1780177301" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1780177301" defer></script>
+    <script src="/js/lunr/lunr.min.js?1780231304" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1780231304" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1780231304" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1780231304" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/all.min.css?1780177301" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780177301" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780177301" rel="stylesheet">
-    <link href="/css/theme.min.css?1780177301" rel="stylesheet">
-    <link href="/css/format-html.min.css?1780177301" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/all.min.css?1780231304" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780231304" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780231304" rel="stylesheet">
+    <link href="/css/theme.min.css?1780231304" rel="stylesheet">
+    <link href="/css/format-html.min.css?1780231304" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -184,19 +184,41 @@ code, kbd, pre, samp {
 
         
 
+        
+
+        
+
+        
+
+        
+
+        
+
         <ul class="card-container">
 <li>
-  <article class="card card-popout" aria-labelledby="R-card-84962d1125443d9d188c66fcc4502fb0">
+  <article class="card card-popout" aria-labelledby="R-card-c9159203aaa9868c4783e7e725f699ef">
     <div class="card-content">
-      <div class="card-title" id="R-card-84962d1125443d9d188c66fcc4502fb0">
+      <div class="card-title" id="R-card-c9159203aaa9868c4783e7e725f699ef">
         <a href="/containers/ansible-and-podman/">
         Ansible and Podman
         </a>
       </div>
       <div class="card-content-text">
-          If you’re used to managing packages installed on VMs, it’s definitely a step up to run containers in podman via quadlet units
-ansible + podman is pretty close to k8s in terms of overall “how easy is this to manage”-ness, just not in terms of your RTO times or your overall scalability or resiliency
-You would totally use ansible to generate the necessary configuration file(s) via jinja templates, confirm the desired state of your runtime/selinux/firewalls/OS/whatever, and then containers.podman.podman_container or containers.podman.podman_play or whatever
+          Ansible and podman quadlets
+      </div>
+    </div>
+  </article>
+</li>
+<li>
+  <article class="card card-popout" aria-labelledby="R-card-ed463f534b91686494a6f099ded853de">
+    <div class="card-content">
+      <div class="card-title" id="R-card-ed463f534b91686494a6f099ded853de">
+        <a href="/containers/container-basics/">
+        Container Basics
+        </a>
+      </div>
+      <div class="card-content-text">
+          Container Basics with Podman
       </div>
     </div>
   </article>
@@ -205,7 +227,7 @@ You would totally use ansible to generate the necessary configuration file(s) vi
   <article class="card card-popout" aria-labelledby="R-card-0a701699c04713cffe2b5100ef571db7">
     <div class="card-content">
       <div class="card-title" id="R-card-0a701699c04713cffe2b5100ef571db7">
-        <a href="/containers/intro-to-containers-1/">
+        <a href="/containers/intro-to-podman/">
         Containers
         </a>
       </div>
@@ -216,55 +238,99 @@ You would totally use ansible to generate the necessary configuration file(s) vi
   </article>
 </li>
 <li>
-  <article class="card card-popout" aria-labelledby="R-card-7a9d3e95c2fbb4b3466efff25b08a713">
+  <article class="card card-popout" aria-labelledby="R-card-a6ffde20b9dc3a04fb111a882f325be2">
     <div class="card-content">
-      <div class="card-title" id="R-card-7a9d3e95c2fbb4b3466efff25b08a713">
+      <div class="card-title" id="R-card-a6ffde20b9dc3a04fb111a882f325be2">
         <a href="/containers/convert-docker-compose-to-quadlets/">
         Convert Docker Compose to Quadlets
         </a>
       </div>
       <div class="card-content-text">
-          <p>In order to support compose, podman needs to expose it’s REST API service through a local UNIX socket. This supports Docker-compatible APIs and native Libpod APIs.
-Install required packages:</p>
-<ul>
-<li>podlet - podman-compose Enable podman-socket:
-plausible-ce on  v3.1.0 ❯ systemctl &ndash;user enable &ndash;now podman.socket Created symlink &lsquo;/var/home/davidt/.config/systemd/user/sockets.target.wants/podman.socket&rsquo; → &lsquo;/usr/lib/systemd/user/podman.socket&rsquo;. plausible-ce on  v3.1.0 ❯ systemctl &ndash;user status podman.socket ● podman.socket - Podman API Socket Loaded: loaded (/usr/lib/systemd/user/podman.socket; enabled; preset: disabled) Active: active (listening) since Mon 2025-11-24 04:23:24 MST; 2s ago Invocation: 3b507e6408b8497481567234857b057e Triggers: ● podman.service Docs: man:podman-system-service(1) Listen: /run/user/1000/podman/podman.sock (Stream) Nov 24 04:23:24 bluefin systemd[4543]: Listening on podman.socket - Podman API Socket. Clone plausible to your project directory: git clone -b v3.1.0 &ndash;single-branch <a href="https://github.com/plausible/community-edition" rel="external" target="_blank">https://github.com/plausible/community-edition</a> plausible-ce</li>
-</ul>
+          How to convert Docker COmpose to Podman Quadlets
       </div>
     </div>
   </article>
 </li>
 <li>
-  <article class="card card-popout" aria-labelledby="R-card-3a6a247cc3424f3824d7d1f7d023dacb">
+  <article class="card card-popout" aria-labelledby="R-card-b3db905089618df6ea45e000189a74a8">
     <div class="card-content">
-      <div class="card-title" id="R-card-3a6a247cc3424f3824d7d1f7d023dacb">
-        <a href="/containers/podman-links/">
-        Podman Links
+      <div class="card-title" id="R-card-b3db905089618df6ea45e000189a74a8">
+        <a href="/containers/customizing-podman/">
+        Customizing Podman&rsquo;s Behavior
         </a>
       </div>
       <div class="card-content-text">
-          podman desktop tutorial <a href="https://www.youtube.com/watch?v=YXfA5O5Mr18&t=216s" rel="external" target="_blank">https://www.youtube.com/watch?v=YXfA5O5Mr18&t=216s</a>
-Connecting to remote machine
-It&rsquo;s still experimental though, and buried in the menus (Settings -&gt; Preferences -&gt; Podman Extension -&gt; Remote (a toggle button). But the GUI seemed to throw js errors until after I had podman remote properly setup on the cli as follows, so only turn it on after the cli works! First, you will need to have your ssh keys already setup correctly to ssh in passwordlessly, and I have read that the ed25519 ssh key algorithm is preferred (YMMV). There are many generate and ssh-copy-id tutorials on the internet. But then you still have to add the remote connection at the command line, and not in the GUI. E.g. <code>podman --remote system connection add &lt;&lt;NICKNAMEYOURREMOTEMACHINEHERE&gt;&gt; --identity ~/.ssh/id_ed25519 ssh://&lt;&lt;YOURREMOTEUSERNAMEHERE&gt;&gt;@&lt;&lt;YOURIPHERE&gt;&gt;/run/user/&lt;&lt;YOURUIDHERE&gt;&gt;/podman/podman.sock</code> You should test it at the command-line with something like: podman -c REMOTEMACHINENICKNAME ps Once I sorted through the various connection errors (I initially had the wrong uid &amp; had to upgrade my remote podman to version 4) and got it to work at the cli, I turned it on in the GUI and it worked. I can say the Podman Desktop GUI makes it easier to admin remote podman containers. But there are a few issues I can already see with it, such as it does not not yet visually distinguish between a remote and a local container. Again, it is very early stage&hellip; ctop to view metrics So, to work with podman there are some quick steps to set the socket enabled and be transparent with docker-ctop:
+          Custom options for Podman configuration
       </div>
     </div>
   </article>
 </li>
 <li>
-  <article class="card card-popout" aria-labelledby="R-card-a5d1e4476fc72a403858c01867ca6a27">
+  <article class="card card-popout" aria-labelledby="R-card-19c498f5adc4a1daed89636f4fa2c3c9">
     <div class="card-content">
-      <div class="card-title" id="R-card-a5d1e4476fc72a403858c01867ca6a27">
+      <div class="card-title" id="R-card-19c498f5adc4a1daed89636f4fa2c3c9">
+        <a href="/containers/distrobox/">
+        Distrobox Basics
+        </a>
+      </div>
+      <div class="card-content-text">
+          Getting started with Distrobox
+      </div>
+    </div>
+  </article>
+</li>
+<li>
+  <article class="card card-popout" aria-labelledby="R-card-33ee767808a2512ba48720fded2be293">
+    <div class="card-content">
+      <div class="card-title" id="R-card-33ee767808a2512ba48720fded2be293">
+        <a href="/containers/installing-podman/">
+        Installing Podman
+        </a>
+      </div>
+      <div class="card-content-text">
+          Installing Podman on different systems
+      </div>
+    </div>
+  </article>
+</li>
+<li>
+  <article class="card card-popout" aria-labelledby="R-card-443725019c9ea8cf9ffa9a7877528985">
+    <div class="card-content">
+      <div class="card-title" id="R-card-443725019c9ea8cf9ffa9a7877528985">
+        <a href="/containers/intro-to-containers/">
+        Introduction to Containers
+        </a>
+      </div>
+      <div class="card-content-text">
+          Getting a Basic understanding of how containers work
+      </div>
+    </div>
+  </article>
+</li>
+<li>
+  <article class="card card-popout" aria-labelledby="R-card-207548bd1f7d4a75209b4b27c174a945">
+    <div class="card-content">
+      <div class="card-title" id="R-card-207548bd1f7d4a75209b4b27c174a945">
         <a href="/containers/podman-quadlets/">
         Podman Quadlets
         </a>
       </div>
       <div class="card-content-text">
-          Rootless container quadlet files go under /etc/containers/systemd/users/${UID}/ and the user session will activate the quadlet.
-Rootless quadlet files generate systemd unit files located here:
-/run/user/{UID}/systemd/generator/
-Quadlet files go here: /etc/containers/systemd/users/{{ podman_user }}/
-If you put it under etc/containers/systemd/users/ then all user sessions will activate the quadlet
-When starting a container unit, systemd may time out due to the time it takes to pull a container. Use the TimeoutStartSec Service option to extend the default 90 second timeout or pre-pill the image.
+          Podman quadlet basics
+      </div>
+    </div>
+  </article>
+</li>
+<li>
+  <article class="card card-popout" aria-labelledby="R-card-46e878bf8d78876869464dc26bb1e306">
+    <div class="card-content">
+      <div class="card-title" id="R-card-46e878bf8d78876869464dc26bb1e306">
+        <a href="/containers/podman-socket/">
+        Podman Socket
+        </a>
+      </div>
+      <div class="card-content-text">
+          Activating the Podman Daemon
       </div>
     </div>
   </article>
@@ -317,7 +383,6 @@ When starting a container unit, systemd may time out due to the time it takes to
           <ul class="enlarge morespace collapsible-menu">
             <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
             <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">Ansible Navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/ansible/getting-ready-for-rhce/"><a class="padding" href="/ansible/getting-ready-for-rhce/">Getting Ready for RHCE<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/install-ansible-using-uv/"><a class="padding" href="/ansible/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
@@ -325,6 +390,7 @@ When starting a container unit, systemd may time out due to the time it takes to
             <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/awx-minikube-install/"><a class="padding" href="/ansible/awx-minikube-install/">AWX MiniKube Install<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
@@ -340,6 +406,7 @@ When starting a container unit, systemd may time out due to the time it takes to
             <li class="" data-nav-id="/ansible/selinux/"><a class="padding" href="/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/tags/"><a class="padding" href="/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/filters/"><a class="padding" href="/ansible/filters/">Using Filters in Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/loops-and-items/"><a class="padding" href="/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/modules-for-troubleshooting/"><a class="padding" href="/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Using Variables In Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
@@ -352,10 +419,15 @@ When starting a container unit, systemd may time out due to the time it takes to
             <li class="" data-nav-id="/boot/sys-init-logging-and-tuning/"><a class="padding" href="/boot/sys-init-logging-and-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
             <li class="active parent " data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5" checked><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
             <li class="" data-nav-id="/containers/ansible-and-podman/"><a class="padding" href="/containers/ansible-and-podman/">Ansible and Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/containers/intro-to-containers-1/"><a class="padding" href="/containers/intro-to-containers-1/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/container-basics/"><a class="padding" href="/containers/container-basics/">Container Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/intro-to-podman/"><a class="padding" href="/containers/intro-to-podman/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/containers/convert-docker-compose-to-quadlets/"><a class="padding" href="/containers/convert-docker-compose-to-quadlets/">Convert Docker Compose to Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/containers/podman-links/"><a class="padding" href="/containers/podman-links/">Podman Links<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/containers/podman-quadlets/"><a class="padding" href="/containers/podman-quadlets/">Podman Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/containers/customizing-podman/"><a class="padding" href="/containers/customizing-podman/">Customizing Podman&#39;s Behavior<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/distrobox/"><a class="padding" href="/containers/distrobox/">Distrobox Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/installing-podman/"><a class="padding" href="/containers/installing-podman/">Installing Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/intro-to-containers/"><a class="padding" href="/containers/intro-to-containers/">Introduction to Containers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-quadlets/"><a class="padding" href="/containers/podman-quadlets/">Podman Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-socket/"><a class="padding" href="/containers/podman-socket/">Podman Socket<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
             <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
             <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
@@ -363,63 +435,18 @@ When starting a container unit, systemd may time out due to the time it takes to
             <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
             <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
             <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My old Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
             <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ansiblepuppetchef/"><a class="padding" href="/networking/ccna/ccna-notes-1/ansiblepuppetchef/">Ansible, Puppet, and Chef<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscoacls/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscoacls/">Cisco ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ciscocli/"><a class="padding" href="/networking/ccna/ccna-notes-1/ciscocli/">Cisco CLI<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/classfulipv4/"><a class="padding" href="/networking/ccna/ccna-notes-1/classfulipv4/">Classful IPv4<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/cloudarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/cloudarchitecture/">Cloud Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/classfulipv4/"><a class="padding" href="/networking/classfulipv4/">Classful IPv4<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/controllerbasednetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/controllerbasednetworking/">Controller-Based Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/device-management-protocols/"><a class="padding" href="/networking/ccna/ccna-notes-1/device-management-protocols/">Device Management Protocols<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-config/">DHCP Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/"><a class="padding" href="/networking/ccna/ccna-notes-1/dhcp-snooping-and-arp-inspection/">DHCP Snooping and ARP Inspection<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/networking/dns-and-time-syncronization/"><a class="padding" href="/networking/dns-and-time-syncronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ethernetlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/ethernetlans/">Ethernet LANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/extended-acls/"><a class="padding" href="/networking/ccna/ccna-notes-1/extended-acls/">Extended ACLs<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How to Study for the CCNA Exam<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-services/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-services/">IP Services<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ip-transport-and-applications/"><a class="padding" href="/networking/ccna/ccna-notes-1/ip-transport-and-applications/">IP Transport and Applications<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6/">IPv6<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6addressingandsubnetting/">IPv6 Addressing and Subnetting<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6configuration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6configuration/">IPv6 Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ipv6routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/ipv6routing/">IPv6 Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How I Studied For CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lan-architecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/lan-architecture/">LAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/l2-etherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/l2-etherchannel/">Layer 2 Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes/my-ccna-notes/"><a class="padding" href="/networking/ccna/ccna-notes/my-ccna-notes/">My CCNA Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/networking/network-devices-and-connections/"><a class="padding" href="/networking/network-devices-and-connections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospf-concepts/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospf-concepts/">OSPF Concepts<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfconfiguration/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfconfiguration/">OSPF Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/"><a class="padding" href="/networking/ccna/ccna-notes-1/ospfnetworktypesandneighbors/">OSPF Network Types and Neighbors<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/restandjson/"><a class="padding" href="/networking/ccna/ccna-notes-1/restandjson/">REST and JSON<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/router_operation/"><a class="padding" href="/networking/ccna/ccna-notes-1/router_operation/">Router Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/routeroperation/"><a class="padding" href="/networking/ccna/ccna-notes-1/routeroperation/">ROuter Operation<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/lanrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/lanrouting/">Routing in the LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/rstpandetherchannel/"><a class="padding" href="/networking/ccna/ccna-notes-1/rstpandetherchannel/">RSTP and Etherchannel<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/securing-network-devices/"><a class="padding" href="/networking/ccna/ccna-notes-1/securing-network-devices/">Securing Network Devices<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/security-architectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/security-architectures/">Security Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/softwaredefinedaccess/"><a class="padding" href="/networking/ccna/ccna-notes-1/softwaredefinedaccess/">Software-Defined Access (SDA)<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/spanningtreeprotocol/"><a class="padding" href="/networking/ccna/ccna-notes-1/spanningtreeprotocol/">Spanning Tree Protocol<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/static-routing/"><a class="padding" href="/networking/ccna/ccna-notes-1/static-routing/">Static Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchinterfaces/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchinterfaces/">Switch Interfaces<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switching/"><a class="padding" href="/networking/ccna/ccna-notes-1/switching/">Switching<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/switchport-security-config/"><a class="padding" href="/networking/ccna/ccna-notes-1/switchport-security-config/">Switchport Security Configuration<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/tcpipbasic/"><a class="padding" href="/networking/ccna/ccna-notes-1/tcpipbasic/">TCP/IP Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/troubleshootingrouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/troubleshootingrouting/">Troubleshooting Routing Issues<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/vlans/"><a class="padding" href="/networking/ccna/ccna-notes-1/vlans/">VLANs<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wanarchitecture/"><a class="padding" href="/networking/ccna/ccna-notes-1/wanarchitecture/">WAN Architecture<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wansandiprouting/"><a class="padding" href="/networking/ccna/ccna-notes-1/wansandiprouting/">WANs and IP Routing<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/what-to-learn-after-ccna/"><a class="padding" href="/networking/what-to-learn-after-ccna/">What to Learn After CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessarchitectures/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessarchitectures/">Wireless Architectures<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_lan/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_lan/">Wireless LAN<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wirelessnetworking/"><a class="padding" href="/networking/ccna/ccna-notes-1/wirelessnetworking/">Wireless Networking<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/networking/ccna/ccna-notes-1/wireless_security/"><a class="padding" href="/networking/ccna/ccna-notes-1/wireless_security/">Wireless Security<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
             <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/"><i class="fa-solid fa-box-open"></i> Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
             <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
@@ -457,6 +484,8 @@ When starting a container unit, systemd may time out due to the time it takes to
             <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/booknotes/"><a class="padding" href="/booknotes/"><i class='fas fa-fw fa-book'></i> Book Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/now/"><a class="padding" href="/now/"><i class='fas fa-fw fa-clock'></i> Now<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="https://github.com/linuxreader"><a class="padding" href="https://github.com/linuxreader" rel="external" target="_blank"><i class='fab fa-fw fa-github'></i> GitHub<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="https://linkedin.com/in/linuxreader/"><a class="padding" href="https://linkedin.com/in/linuxreader/" rel="external" target="_blank"><i class='fab fa-fw fa-linkedin'></i> LinkedIn<i class="fa-fw fas fa-check read-icon"></i></a></li>
           </ul>
         </div>
         <div id="R-footer-margin" class="default-animation"></div>
@@ -480,8 +509,8 @@ When starting a container unit, systemd may time out due to the time it takes to
 <div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780177301" defer></script>
-    <script src="/js/theme.min.js?1780177301" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780231304" defer></script>
+    <script src="/js/theme.min.js?1780231304" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

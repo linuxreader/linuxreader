@@ -1,7 +1,8 @@
-+++
-title = 'The Linux Firewall'
-description = 'Firewalld stuff mostly'
-+++
+---
+title: 'The Linux Firewall'
+description: 'Firewalld stuff mostly'
+---
+
 # `firewalld` Zones
 
 ## `firewalld`

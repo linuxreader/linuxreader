@@ -1,7 +1,7 @@
-+++
-title = 'Consoling in to MX80 from linux'
-description = 'How to console into an MX80 router from linux'
-+++
+---
+title: 'Consoling in to MX80 from linux'
+description: 'How to console into an MX80 router from linux'
+---
 
 Plug console cable in
 

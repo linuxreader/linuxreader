@@ -1,6 +1,6 @@
 ---
 title: "DNS"
-description: "DNS Stuff"
+description: "Basic DNS Concepts"
 showDate: false
 ---
 ## DNS and Name Resolution   

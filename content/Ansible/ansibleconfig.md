@@ -1,6 +1,6 @@
 ---
 title: 'Ansible.cfg'
-description: 'Ansible.cfg'
+description: 'Ansible.cfg common options'
 showDate: false
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: Ansible Navigator
+description: Basic setup for Ansible Navigator
 date: 2026-02-22
 draft: false
 ---

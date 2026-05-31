@@ -1,9 +1,8 @@
-+++ 
-type = " "
-categories = ["explanation"] 
-description = "My Fedora Setup" 
-title = "My Fedora Setup" 
-+++
+---
+title: My old Fedora Setup
+description: "My Old, un-ansibled Fedora Setup" 
+---
+
 When you first download Fedora Workstation, it's going to be a little hard to figure out how to make it usable. Especially if you've never tinkered with Linux before.
 
 This is because Fedora with Gnome desktop is a blank canvas. The point is to let you customize it to your needs. When I first install Fedora, I pull my justfile to install most of the programs I use:

@@ -1,4 +1,4 @@
-# My Fedora Setup
+# My old Fedora Setup
 
 When you first download Fedora Workstation, it's going to be a little hard to figure out how to make it usable. Especially if you've never tinkered with Linux before.
 

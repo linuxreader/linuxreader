@@ -1,6 +1,6 @@
 ---
 title: 'Ansible Vault'
-description: 'Ansible Vault'
+description: 'Ansible Vault Basics'
 showDate: false
 ---
 

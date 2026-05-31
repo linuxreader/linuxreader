@@ -1,6 +1,6 @@
 ---
 title: 'Handlers'
-description: 'Handlers'
+description: 'Ansible handlers for running tasks later'
 showDate: false
 ---
 

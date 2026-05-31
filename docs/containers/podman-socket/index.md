@@ -1,4 +1,4 @@
-# 
+# Podman Socket
 
 ## Optional -- enable socket-based services
 

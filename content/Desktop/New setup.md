@@ -1,8 +1,7 @@
-+++ 
-type = " "
-description = "New Fedora Build Using Ansible" 
-title = "Configure Fedora Desktop using Ansible" 
-+++
+---
+description: "New Fedora Build Using Ansible" 
+title: "Configure Fedora Desktop using Ansible" 
+---
 
 ```bash
 sudo dnf -y install vim

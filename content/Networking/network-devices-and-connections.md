@@ -86,11 +86,11 @@ ip addr
 
 ### Classful Network Addressing
 
-See [classfulipv4](../Networking/CCNA/CCNA%20Notes%201/classfulipv4.md)
+See [classfulipv4](classfulipv4.md)
 
 ### IPv6 Address
 
-See [ipv6](../Networking/CCNA/CCNA%20Notes%201/ipv6.md)
+See [ipv6](drafts/ipv6.md)
 
 The `ip addr` command also shows IPv6 addresses for the interfaces:
 ```bash
@@ -121,7 +121,7 @@ Tools:
 `cat /etc/protocols`
 ### TCP and UDP Protocols
 
-See [IP Transport and Applications](../Networking/CCNA/CCNA%20Notes%201/IP%20Transport%20and%20Applications.md) and [tcp_ip_basic](../networking/CCNA%20Notes/tcp_ip_basic.md)
+See [IP Transport and Applications](drafts/IP%20Transport%20and%20Applications.md) and [tcp_ip_basic](../networking/CCNA%20Notes/tcp_ip_basic.md)
 
 ### ICMP
 

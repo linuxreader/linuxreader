@@ -1,7 +1,7 @@
-+++
-title = 'Juniper CLI Basics'
-description = 'Juniper Basics'
-+++
+---
+title: 'Juniper CLI Basics'
+description: 'How to do basic stuff with Junos'
+---
 
 ## Connection Methods
 

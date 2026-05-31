@@ -1,4 +1,4 @@
-# 
+# Distrobox Basics
 
 Github: https://github.com/89luca89/distrobox
 

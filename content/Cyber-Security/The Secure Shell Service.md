@@ -1,7 +1,7 @@
-+++
-title = 'The Secure Shell Service'
-description = 'OpenSSH, system access, file transfer'
-+++
+---
+title: 'The Secure Shell Service'
+description: 'OpenSSH, system access, file transfer'
+---
 ## The OpenSSH Service 
 
 **Secure Shell (SSH)** 

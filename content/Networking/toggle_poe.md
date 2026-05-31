@@ -1,7 +1,7 @@
-+++
-title = 'Toggle PoE on a Juniper Switch'
-description = 'How to toggle PoE on a Juniper switch.'
-+++
+---
+title: 'Toggle PoE on a Juniper Switch'
+description: 'How to toggle PoE on a Juniper switch.'
+---
 
 ```bash
 Configure

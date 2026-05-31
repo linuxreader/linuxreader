@@ -1,5 +1,6 @@
 ---
 title: Convert Docker Compose to Quadlets
+summary: How to convert Docker COmpose to Podman Quadlets
 ---
 
 In order to support compose, podman needs to expose it's REST API service through a local UNIX socket. This supports Docker-compatible APIs and native Libpod APIs.
@@ -42,10 +43,6 @@ Expose the container to the internet:
 ```bash
 echo "HTTP_PORT=80" >> .env
 echo "HTTPS_PORT=443" >> .env
-```
-
-```bash
-
 ```
 
 Convert the data [volumes](https://docs.docker.com/engine/storage/volumes/#backup-restore-or-migrate-data-volumes) to easier to manage files and add :z to each volume for SELinux. Example:

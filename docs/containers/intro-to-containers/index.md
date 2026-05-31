@@ -1,4 +1,4 @@
-# 
+# Introduction to Containers
 
 Before asking ourselves what a container is, we should answer another question: what is a **process**?
 

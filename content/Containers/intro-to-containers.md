@@ -1,3 +1,8 @@
+---
+title: "Introduction to Containers"
+summary: "Getting a Basic understanding of how containers work"
+---
+
 Before asking ourselves what a container is, we should answer another question: what is a **process**?
 
 - A *process* is an instance of an executing program. 

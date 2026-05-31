@@ -1,4 +1,4 @@
-# 
+# Container Basics
 
 Podman interacts with both SELinux and AppArmor to provide better container isolation, but the underlying interfaces are different.
 
