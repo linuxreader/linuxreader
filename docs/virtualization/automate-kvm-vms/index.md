@@ -1,6 +1,6 @@
 # Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments
 
-![](../images/automate-kvm.png)
+![](/images/automate-kvm.png)
 When I started studying for RHCE, I was spending tons of time manually creating and destroying virtual machines. 
 
 I thought.. 

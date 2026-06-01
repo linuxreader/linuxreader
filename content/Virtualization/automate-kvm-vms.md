@@ -2,10 +2,11 @@
 title: 'Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments'
 summary: 'How to build local KVM virtual machines using Ansible and Libvirt'
 date: 2026-01-22
-tags: ["articles"]
+featured_image: /images/automate-kvm.png
 draft: false
 ---
-![](../images/automate-kvm.png)
+
+![](/images/automate-kvm.png)
 When I started studying for RHCE, I was spending tons of time manually creating and destroying virtual machines. 
 
 I thought.. 
