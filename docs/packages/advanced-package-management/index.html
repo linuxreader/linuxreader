@@ -18,30 +18,30 @@
     <meta property="article:section" content="Packages">
     <meta itemprop="name" content="Advanced Package Management">
     <meta itemprop="description" content="Managing package groups, application streams, modules, and DNF">
-    <meta itemprop="wordCount" content="4221">
+    <meta itemprop="wordCount" content="3644">
     <title>Advanced Package Management</title>
     <link href="/packages/advanced-package-management/index.md" rel="alternate" type="text/markdown" title="Advanced Package Management">
-    <link href="/images/favicon.svg?1780413099" rel="icon" type="image/svg+xml">
-    <link href="/css/auto-complete/auto-complete.min.css?1780413099" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1780413099" defer></script>
-    <script src="/js/search-lunr.min.js?1780413099" defer></script>
-    <script src="/js/search.min.js?1780413099" defer></script>
+    <link href="/images/favicon.svg?1780416962" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1780416962" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1780416962" defer></script>
+    <script src="/js/search-lunr.min.js?1780416962" defer></script>
+    <script src="/js/search.min.js?1780416962" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1780413099";
+      window.relearn.index_js_url="/searchindex.en.js?1780416962";
     </script>
-    <script src="/js/lunr/lunr.min.js?1780413099" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1780413099" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1780413099" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1780413099" defer></script>
+    <script src="/js/lunr/lunr.min.js?1780416962" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1780416962" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1780416962" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1780416962" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/all.min.css?1780413099" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780413099" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780413099" rel="stylesheet">
-    <link href="/css/theme.min.css?1780413099" rel="stylesheet">
-    <link href="/css/format-html.min.css?1780413099" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/all.min.css?1780416962" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780416962" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780416962" rel="stylesheet">
+    <link href="/css/theme.min.css?1780416962" rel="stylesheet">
+    <link href="/css/format-html.min.css?1780416962" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -139,11 +139,6 @@ code, kbd, pre, samp {
                 <div class="topbar-content-wrapper">
 <nav class="TableOfContents">
   <ul>
-    <li><a href="#packagegroups">Package Groups</a>
-      <ul>
-        <li><a href="#package-group">package group</a></li>
-      </ul>
-    </li>
     <li><a href="#individual-packages-package-groups-and-modules">Individual packages, package groups, and modules:</a>
       <ul>
         <li><a href="#individual-package-management">Individual Package Management</a></li>
@@ -156,11 +151,6 @@ code, kbd, pre, samp {
         <li><a href="#removing-packages">Removing Packages</a></li>
         <li><a href="#lab-manipulate-individual-packages">Lab: Manipulate Individual Packages</a></li>
         <li><a href="#determining-provider-and-searching-package-metadata">Determining Provider and Searching Package Metadata</a></li>
-        <li><a href="#package-group-management">Package Group Management</a></li>
-        <li><a href="#listing-available-and-installed-package-groups">Listing Available and Installed Package Groups</a></li>
-        <li><a href="#installing-and-updating-package-groups">Installing and Updating Package Groups</a></li>
-        <li><a href="#removing-package-groups">Removing Package Groups</a></li>
-        <li><a href="#lab-manipulate-package-groups">Lab: Manipulate Package Groups</a></li>
       </ul>
     </li>
     <li><a href="#application-streams-and-modules">Application Streams and Modules</a>
@@ -233,22 +223,6 @@ code, kbd, pre, samp {
 
 <h1 id="advanced-package-management">Advanced Package Management</h1>
 
-<h2 id="packagegroups">Package Groups<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
-<h3 id="package-group">package group<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<ul>
-<li>Group of packages that serve a common purpose.</li>
-<li>Can query, install, and delete as a single unit rather than dealing with packages individually.</li>
-<li>Two types of package groups: <em>environment groups</em> and <em>package groups</em>.</li>
-</ul>
-<p><strong>environment groups</strong> available in RHEL 9:</p>
-<ul>
-<li>server, server with GUI, minimal install, workstation, virtualization host, and custom operating system.</li>
-<li>Listed on the software selection window during RHEL 9 installation.</li>
-</ul>
-<p><strong>Package groups</strong> include:</p>
-<ul>
-<li>container management, smart card support, security tools, system tools, network servers, etc.</li>
-</ul>
 <h2 id="individual-packages-package-groups-and-modules">Individual packages, package groups, and modules:<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <h3 id="individual-package-management">Individual Package Management<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>List, install, query, and remove packages.</p>
@@ -390,103 +364,6 @@ its dependencies and confirm the removal.</p>
 <p>To search for all the packages that match the specified string in their
 name or summary:</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf search system-config</span></span></code></pre></div>
-<h3 id="package-group-management">Package Group Management<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<ul>
-<li><code>group</code> subcommand</li>
-<li>list, install, query, and remove groups of packages.</li>
-</ul>
-<h3 id="listing-available-and-installed-package-groups">Listing Available and Installed Package Groups<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<p><code>group list</code> subcommand:</p>
-<ul>
-<li>list the package groups available for installation from either or both repos</li>
-<li>list the package groups that are already installed on the system.</li>
-</ul>
-<p>List all available and installed package groups from all repositories:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf group list</span></span></code></pre></div>
-<p>output:</p>
-<ul>
-<li>two categories of package groups:
-<ul>
-<li>Environment group</li>
-<li>Package groups</li>
-</ul>
-</li>
-</ul>
-<p>Environment group:</p>
-<ul>
-<li>Larger collection of RHEL packages that provides all necessary software to build the operating system foundation for a desired purpose.</li>
-</ul>
-<p>Package group</p>
-<ul>
-<li>Small bunch of RHEL packages that serve a common purpose.</li>
-<li>Saves time on the deployment of individual and dependent packages.</li>
-<li>Output shows installed and available package groups.</li>
-</ul>
-<p>Display the number of installed and available package groups:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf group summary</span></span></code></pre></div>
-<p>List all installed and available package groups including those that
-are hidden:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf group list hidden</span></span></code></pre></div>
-<p>Try <em>group list</em> with --installed and --available options to narrow
-down the output list.</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf group list --installed</span></span></code></pre></div>
-<p>List all packages that a specific package group such as Base contains:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf group info Base</span></span></code></pre></div>
-<p>-v option with the group info subcommand for more
-information.</p>
-<p>Review group list and group info subsections of the <code>dnf</code> man pages.</p>
-<h3 id="installing-and-updating-package-groups">Installing and Updating Package Groups<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<ul>
-<li>Creates the necessary directory structure for all the packages included in the group and all dependent packages.</li>
-<li>Installs the required files.</li>
-<li>Runs any post-installation steps.</li>
-<li>Attempts to update all the packages included in the group to the latest available versions.</li>
-</ul>
-<p>Install a package group called Emacs. Update if it detects an older version.</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf -y groupinstall emacs</span></span></code></pre></div>
-<p>Update the <em>smart card support</em> package group to the latest version:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf groupupdate <span style="color:#a5d6ff">&#34;Smart Card Support&#34;</span></span></span></code></pre></div>
-<p>Refer to the <em>group install</em> and <em>group update</em> subsections of the <em>dnf</em> command manual pages for more details.</p>
-<h3 id="removing-package-groups">Removing Package Groups<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<ul>
-<li>Uninstalls all the included packages and deletes all associated files and directory structure.</li>
-<li>Erases any dependencies</li>
-</ul>
-<p>Erase the <em>smart card support</em> package group that was installed:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf -y groupremove <span style="color:#a5d6ff">&#39;smart card support&#39;</span></span></span></code></pre></div>
-<p>Refer to the <em>remove</em> subsection of the <em>dnf</em> command manual pages for
-more details.</p>
-<h3 id="lab-manipulate-package-groups">Lab: Manipulate Package Groups<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<p>Perform management operations on a package group called <em>system tools</em>. Determine if this group is already installed and if it is available for installation. List the packages it contains and install it. Remove the group along with its dependencies and confirm the removal.</p>
-<ol>
-<li>Check whether the <em>system tools</em> package group is already installed:</li>
-</ol>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf group list installed</span></span></code></pre></div>
-<ol start="2">
-<li>Determine if the <em>system tools</em> group is available for installation:</li>
-</ol>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf group list available</span></span></code></pre></div>
-<p>The group name is exhibited at the bottom of the list under the
-available groups.</p>
-<ol start="3">
-<li>Display the list of packages this group contains:</li>
-</ol>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf group info <span style="color:#a5d6ff">&#39;system tools&#39;</span></span></span></code></pre></div>
-<ul>
-<li>All of the packages will be installed as part of the group installation.</li>
-</ul>
-<ol start="4">
-<li>Install the group:</li>
-</ol>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf group install <span style="color:#a5d6ff">&#39;system tools&#39;</span></span></span></code></pre></div>
-<ol start="5">
-<li>Remove the group:</li>
-</ol>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf group remove <span style="color:#a5d6ff">&#39;system tools&#39;</span> -y</span></span></code></pre></div>
-<ol start="6">
-<li>Confirm the removal:</li>
-</ol>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf group list installed</span></span></code></pre></div>
 <h2 id="application-streams-and-modules">Application Streams and Modules<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p><strong>Application Streams</strong></p>
 <ul>
@@ -1309,7 +1186,8 @@ Line 5 shows if packages are to be GPGchecked for authenticity.</p>
             <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
             <li class="parent " data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" checked><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/"><i class="fa-solid fa-box-open"></i> Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
             <li class="active " data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/dnf-package-groups/"><a class="padding" href="/packages/dnf-package-groups/">DNF Package Groups<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
             <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
             <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/storage/local-filesystems-and-swap/"><a class="padding" href="/storage/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
@@ -1374,8 +1252,8 @@ Line 5 shows if packages are to be GPGchecked for authenticity.</p>
 <div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780413099" defer></script>
-    <script src="/js/theme.min.js?1780413099" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780416962" defer></script>
+    <script src="/js/theme.min.js?1780416962" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

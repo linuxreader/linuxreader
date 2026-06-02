@@ -18,30 +18,30 @@
     <meta property="article:section" content="System">
     <meta itemprop="name" content="Installing RHEL Linux">
     <meta itemprop="description" content="Installation Logs and Cockpit">
-    <meta itemprop="wordCount" content="429">
+    <meta itemprop="wordCount" content="456">
     <title>Installing RHEL Linux</title>
     <link href="/system/installation/index.md" rel="alternate" type="text/markdown" title="Installing RHEL Linux">
-    <link href="/images/favicon.svg?1780413099" rel="icon" type="image/svg+xml">
-    <link href="/css/auto-complete/auto-complete.min.css?1780413099" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1780413099" defer></script>
-    <script src="/js/search-lunr.min.js?1780413099" defer></script>
-    <script src="/js/search.min.js?1780413099" defer></script>
+    <link href="/images/favicon.svg?1780416962" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1780416962" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1780416962" defer></script>
+    <script src="/js/search-lunr.min.js?1780416962" defer></script>
+    <script src="/js/search.min.js?1780416962" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1780413099";
+      window.relearn.index_js_url="/searchindex.en.js?1780416962";
     </script>
-    <script src="/js/lunr/lunr.min.js?1780413099" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1780413099" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1780413099" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1780413099" defer></script>
+    <script src="/js/lunr/lunr.min.js?1780416962" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1780416962" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1780416962" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1780416962" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/all.min.css?1780413099" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780413099" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780413099" rel="stylesheet">
-    <link href="/css/theme.min.css?1780413099" rel="stylesheet">
-    <link href="/css/format-html.min.css?1780413099" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/all.min.css?1780416962" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780416962" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780416962" rel="stylesheet">
+    <link href="/css/theme.min.css?1780416962" rel="stylesheet">
+    <link href="/css/format-html.min.css?1780416962" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -139,14 +139,34 @@ code, kbd, pre, samp {
                 <div class="topbar-content-wrapper">
 <nav class="TableOfContents">
   <ul>
-    <li><a href="#about-rhel9">About RHEL9</a></li>
+    <li><a href="#about-rhel-9">About RHEL 9</a></li>
     <li><a href="#installation-logs">Installation Logs</a></li>
-    <li><a href="#6-virtual-consoles">6 Virtual Consoles</a></li>
-    <li><a href="#setting-up-vm1">Setting up VM1</a></li>
-    <li><a href="#using-cockpit">Using cockpit</a></li>
+    <li><a href="#6-virtual-consoles">6 Virtual Consoles</a>
+      <ul>
+        <li><a href="#console-1-ctrlaltf1">Console 1 (Ctrl+Alt+F1)</a></li>
+        <li><a href="#console-2-ctrlaltf2">Console 2 (Ctrl+Alt+F2)</a></li>
+        <li><a href="#console-3-ctrlaltf3">Console 3 (Ctrl+Alt+F3)</a></li>
+        <li><a href="#console-4-ctrlaltf4">Console 4 (Ctrl+Alt+F4)</a></li>
+        <li><a href="#console-5-ctrlaltf5">Console 5 (Ctrl+Alt+F5)</a></li>
+        <li><a href="#console-6-ctrlaltf6">Console 6 (Ctrl+Alt+F6)</a></li>
+      </ul>
+    </li>
+    <li><a href="#lab-setup">Lab Setup</a>
+      <ul>
+        <li><a href="#vm1">VM1</a></li>
+        <li><a href="#vm2">VM2</a></li>
+      </ul>
+    </li>
+    <li><a href="#setting-up-vm1">Setting Up VM1</a>
+      <ul>
+        <li><a href="#network--hostname-settings">Network &amp; Hostname Settings</a></li>
+        <li><a href="#change-the-boot-order">Change the Boot Order</a></li>
+      </ul>
+    </li>
+    <li><a href="#using-cockpit">Using Cockpit</a></li>
     <li><a href="#labs">Labs</a>
       <ul>
-        <li><a href="#lab">Lab:</a></li>
+        <li><a href="#lab-enable-cockpit">Lab: Enable Cockpit</a></li>
       </ul>
     </li>
   </ul>
@@ -188,126 +208,215 @@ code, kbd, pre, samp {
 
 <h1 id="installing-rhel-linux">Installing RHEL Linux</h1>
 
-<h2 id="about-rhel9">About RHEL9<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h2 id="about-rhel-9">About RHEL 9<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <ul>
-<li>Kernel 5.14</li>
-<li>Released May 2019</li>
-<li>Built along side of Fedora 34</li>
-<li>Installer program = Anaconda</li>
-<li>Default Bootloader = GRUB2</li>
-<li>Default automatic partitioning = /boot, /, swap</li>
-<li>Default desktop environment = GNOME</li>
+<li>
+<p>Kernel 5.14</p>
+</li>
+<li>
+<p>Released May 2019</p>
+</li>
+<li>
+<p>Built alongside Fedora 34</p>
+</li>
+<li>
+<p>Installer program = Anaconda</p>
+</li>
+<li>
+<p>Default bootloader = GRUB2</p>
+</li>
+<li>
+<p>Default automatic partitioning = /boot, /, swap</p>
+</li>
+<li>
+<p>Default desktop environment = GNOME</p>
+</li>
 </ul>
 <h2 id="installation-logs">Installation Logs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
-<p><strong>/root/anaconda-ks.cfg</strong> Configuration entered</p>
-<p><strong>/var/log/anaconda/anaconda.log</strong> Contains informational, debug, and other general messages</p>
-<p><strong>/var/log/anaconda/journal.log</strong> Stores messages generated by many services and components during system installation</p>
-<p><strong>/var/log/anaconda/packaging.log</strong> Records messages generated by the dnf and rpm commands during software installation</p>
-<p><strong>/var/log/anaconda/program.log</strong> Captures messages generated by external programs</p>
-<p><strong>/var/log/anaconda/storage.log</strong> Records messages generated by storage modules</p>
-<p><strong>/var/log/anaconda/syslog</strong> Records messages related to the kernel</p>
-<p><strong>/var/log/anaconda/X.log</strong> Stores X Window System information</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>Note: Logs are created in /tmp then transferred over to /var/log/anaconda once the install is finished.</code></pre></div>
+<p><strong>/root/anaconda-ks.cfg</strong> - Configuration entered during installation</p>
+<p><strong>/var/log/anaconda/anaconda.log</strong> - Contains informational, debug, and other general messages</p>
+<p><strong>/var/log/anaconda/journal.log</strong> - Stores messages generated by many services and components during system installation</p>
+<p><strong>/var/log/anaconda/packaging.log</strong> - Records messages generated by the dnf and rpm commands during software installation</p>
+<p><strong>/var/log/anaconda/program.log</strong> - Captures messages generated by external programs</p>
+<p><strong>/var/log/anaconda/storage.log</strong> - Records messages generated by storage modules</p>
+<p><strong>/var/log/anaconda/syslog</strong> - Records messages related to the kernel</p>
+<p><strong>/var/log/anaconda/X.log</strong> - Stores X Window System information</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>Note: Logs are created in /tmp and then transferred to /var/log/anaconda once the installation is finished.</code></pre></div>
 <h2 id="6-virtual-consoles">6 Virtual Consoles<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <ul>
-<li>Monitor the installation process.</li>
-<li>View diagnostic messages.</li>
-<li>Discover and fix any issues encountered.</li>
-<li>Information displayed on the console screens is captured in installation log files.</li>
-</ul>
-<p>Console 1 (Ctrl+Alt+F1)</p>
-<ul>
-<li>Main screen</li>
-<li>Select language</li>
-<li>Then switches default console to 6</li>
-</ul>
-<p>Console 2 (Ctrl_Alt+F2)</p>
-<ul>
-<li>Shell interface for root user</li>
-</ul>
-<p>Console 3 (Ctrl_Alt+F3)</p>
-<ul>
-<li>Displays install messages</li>
-<li>Stores them in /tmp/anaconda.log</li>
-<li>Info on detected hardware, etc.</li>
-</ul>
-<p>Console 4 (Ctrl_Alt+F4)</p>
-<ul>
-<li>Shows storage messages</li>
-<li>Stores them in /tmp/storage.log</li>
-</ul>
-<p>Console 5 (Ctrl_Alt+F5)</p>
-<ul>
-<li>Program messages</li>
-<li>Stores them in /tmp/program.log</li>
-</ul>
-<p>Console 6 (Ctrl_Alt+F6)</p>
-<ul>
-<li>Default Graphical configuration and installation console screen</li>
-</ul>
-<p>Console 1 Brings you to the log in screen. Console 2 does nothing. Console 3-6 all bring you to this log in screen</p>
-<p>Lab Setup</p>
-<p>VM1</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>server1.example.om 
-192.168.0.110 
-Memory: 2GB 
-Storage: 1x20GB 
-2 vCPUs</code></pre></div>
-<p>VM2</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>server2.exmple.om 
-192.168.0.120 
-Memory: 2048 
-Storage: 1x20GB 
-	4x250 MB data disk 
-	1x5GB data disk 
-2 vCPUs</code></pre></div>
-<h2 id="setting-up-vm1">Setting up VM1<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
-<p>Download the disc iso on Redhat&rsquo;s website: <a href="https://access.redhat.com/downloads/content/rhel" rel="external" target="_blank">https://access.redhat.com/downloads/content/rhel</a></p>
-<p>Name RHEL9-VM1 Accept defaults.</p>
-<p>Set drive to 20 gigs</p>
-<p>press &ldquo;spe&rdquo; to hlt utooot</p>
-<p>Selet instll</p>
-<p>selet lnguge</p>
-<p>onfigure timezone under time &amp; dte</p>
-<p>go into instlltion destintion nd li &ldquo;done&rdquo;</p>
-<p>Networ nd hostnme settings</p>
-<ol>
-<li>hnge the hostnme to <a href="http://server1.exmple.om/" rel="external" target="_blank">server1.exmple.om</a></li>
-<li>go to IPv4 settings in networ nd host nd set to mnul ddress: 192.168.0.110 netms 24 gtewy 192.168.0.1 then sve</li>
-<li>slide the on/off swith in the min menu to on</li>
-</ol>
-<p>Set root pssword</p>
-<p>Chnge the oot order</p>
-<ol>
-<li>power off the vm</li>
-<li>Set oot sequene to hrd dis first then optil, remove floppy</li>
-</ol>
-<p>Accept license terms and rete user</p>
-<p>ssh from host os with putty</p>
-<p>Issue these Commnds after set up</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>whoami 
-hostname 
-pwd 
-logout or ctrl+d</code></pre></div>
-<h2 id="using-cockpit">Using cockpit<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
-<ul>
-<li>Web gui for managing RHEL system</li>
-<li>Comes pre-installed
-<ul>
-<li>if not then install with:</li>
-</ul>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>sudo dnf install cockpit</code></pre></div>
+<li>
+<p>Monitor the installation process.</p>
 </li>
-<li>must enable cockpit socket
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>sudo systemctl enable --now cockpit.socket</code></pre></div>
+<li>
+<p>View diagnostic messages.</p>
 </li>
-<li>https://yourip:9090</li>
+<li>
+<p>Discover and fix any issues encountered.</p>
+</li>
+<li>
+<p>Information displayed on the console screens is captured in installation log files.</p>
+</li>
 </ul>
+<h3 id="console-1-ctrlaltf1">Console 1 (Ctrl+Alt+F1)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>
+<p>Main screen</p>
+</li>
+<li>
+<p>Select language</p>
+</li>
+<li>
+<p>Then switches the default console to 6</p>
+</li>
+</ul>
+<h3 id="console-2-ctrlaltf2">Console 2 (Ctrl+Alt+F2)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Shell interface for the root user</li>
+</ul>
+<h3 id="console-3-ctrlaltf3">Console 3 (Ctrl+Alt+F3)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>
+<p>Displays installation messages</p>
+</li>
+<li>
+<p>Stores them in /tmp/anaconda.log</p>
+</li>
+<li>
+<p>Information on detected hardware, etc.</p>
+</li>
+</ul>
+<h3 id="console-4-ctrlaltf4">Console 4 (Ctrl+Alt+F4)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>
+<p>Shows storage messages</p>
+</li>
+<li>
+<p>Stores them in /tmp/storage.log</p>
+</li>
+</ul>
+<h3 id="console-5-ctrlaltf5">Console 5 (Ctrl+Alt+F5)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>
+<p>Program messages</p>
+</li>
+<li>
+<p>Stores them in /tmp/program.log</p>
+</li>
+</ul>
+<h3 id="console-6-ctrlaltf6">Console 6 (Ctrl+Alt+F6)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ul>
+<li>Default graphical configuration and installation console screen</li>
+</ul>
+<p>Console 1 brings you to the login screen. Console 2 does nothing. Consoles 3-6 all bring you to the login screen.</p>
+<h2 id="lab-setup">Lab Setup<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="vm1">VM1<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>server1.example.com
+192.168.0.110
+Memory: 2 GB
+Storage: 1x20 GB
+2 vCPUs</code></pre></div>
+<h3 id="vm2">VM2<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>server2.example.com
+192.168.0.120
+Memory: 2048 MB
+Storage: 1x20 GB
+    4x250 MB data disks
+    1x5 GB data disk
+2 vCPUs</code></pre></div>
+<h2 id="setting-up-vm1">Setting Up VM1<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Download the ISO from Red Hat&rsquo;s website:</p>
+<p><a href="https://access.redhat.com/downloads/content/rhel" rel="external" target="_blank">https://access.redhat.com/downloads/content/rhel</a></p>
+<p>Name the VM <strong>RHEL9-VM1</strong> and accept the defaults.</p>
+<p>Set the drive size to 20 GB.</p>
+<p>Press <strong>Space</strong> to halt autoboot.</p>
+<p>Select <strong>Install</strong>.</p>
+<p>Select language.</p>
+<p>Configure the timezone under <strong>Time &amp; Date</strong>.</p>
+<p>Go into <strong>Installation Destination</strong> and click <strong>Done</strong>.</p>
+<h3 id="network--hostname-settings">Network &amp; Hostname Settings<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>
+<p>Change the hostname to <code>server1.example.com</code></p>
+</li>
+<li>
+<p>Go to IPv4 Settings in <strong>Network &amp; Hostname</strong> and set:</p>
+<ul>
+<li>
+<p>Method: Manual</p>
+</li>
+<li>
+<p>Address: 192.168.0.110</p>
+</li>
+<li>
+<p>Netmask: 24</p>
+</li>
+<li>
+<p>Gateway: 192.168.0.1</p>
+</li>
+<li>
+<p>Save</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Slide the On/Off switch in the main menu to <strong>On</strong></p>
+</li>
+</ol>
+<p>Set the root password.</p>
+<h3 id="change-the-boot-order">Change the Boot Order<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<ol>
+<li>
+<p>Power off the VM.</p>
+</li>
+<li>
+<p>Set the boot sequence to:</p>
+<ul>
+<li>
+<p>Hard Disk first</p>
+</li>
+<li>
+<p>Optical Drive second</p>
+</li>
+<li>
+<p>Remove Floppy</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>Accept the license terms and create a user.</p>
+<p>SSH from the host OS using PuTTY.</p>
+<p>Issue these commands after setup:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>hostname
+</span></span><span style="display:flex;"><span>pwd
+</span></span><span style="display:flex;"><span>logout
+</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># or press Ctrl+D</span></span></span></code></pre></div>
+<h2 id="using-cockpit">Using Cockpit<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<ul>
+<li>
+<p>Web GUI for managing RHEL systems</p>
+</li>
+<li>
+<p>Comes pre-installed</p>
+<ul>
+<li>If not installed:</li>
+</ul>
+</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo dnf install cockpit</span></span></code></pre></div>
+<ul>
+<li>Enable the Cockpit socket:</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo systemctl enable --now cockpit.socket</span></span></code></pre></div>
+<ul>
+<li>Access via:</li>
+</ul>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>https://your-ip:9090</code></pre></div>
 <h2 id="labs">Labs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
-<h3 id="lab">Lab:<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<p>Enable cockpit.socket:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>sudo systemctl enable --now cockpit.socket</code></pre></div>
-<p>In a web browser, go to https://&lt;your-ip&gt;:9090</p>
+<h3 id="lab-enable-cockpit">Lab: Enable Cockpit<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo systemctl enable --now cockpit.socket</span></span></code></pre></div>
+<p>In a web browser, go to:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>https://&lt;your-ip&gt;:9090</code></pre></div>
 
   <footer class="footline">
   </footer>
@@ -423,7 +532,8 @@ logout or ctrl+d</code></pre></div>
             <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
             <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/"><i class="fa-solid fa-box-open"></i> Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
             <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/dnf-package-groups/"><a class="padding" href="/packages/dnf-package-groups/">DNF Package Groups<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
             <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
             <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/storage/local-filesystems-and-swap/"><a class="padding" href="/storage/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
@@ -488,8 +598,8 @@ logout or ctrl+d</code></pre></div>
 <div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780413099" defer></script>
-    <script src="/js/theme.min.js?1780413099" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780416962" defer></script>
+    <script src="/js/theme.min.js?1780416962" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>
