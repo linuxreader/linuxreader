@@ -1,6 +1,6 @@
 # book notes
 
-These are the summaries and notes of books I have read. I also keep a [Master Reading list](masterlist.md) of all of the books I have read. And a [Book Graveyard](bookgraveyard/) for books that I did not finish.
+These are the summaries and notes of books I have read. I also keep a list of the [Books I've Read](books-ive-read/) And a [Book Graveyard](bookgraveyard/) for books that I did not finish.
 
 
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
