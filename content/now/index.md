@@ -18,6 +18,6 @@ Currently spend most of my fun time just hanging out with the family at home. Pl
 
 I am alternating between fiction and non fiction. Here is my current read: 
 
-![](pfd.jpg?classes=left&width=200px)
+![](nlmg.jpg?classes=left&width=200px)
 
-Updated: 05/29/2026
+Updated: 06/02/2026
