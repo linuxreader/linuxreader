@@ -18,30 +18,30 @@
     <meta property="article:section" content="Packages">
     <meta itemprop="name" content="DNF Package Groups">
     <meta itemprop="description" content="All about DNF Package groups">
-    <meta itemprop="wordCount" content="644">
+    <meta itemprop="wordCount" content="561">
     <title>DNF Package Groups</title>
     <link href="/packages/dnf-package-groups/index.md" rel="alternate" type="text/markdown" title="DNF Package Groups">
-    <link href="/images/favicon.svg?1780416962" rel="icon" type="image/svg+xml">
-    <link href="/css/auto-complete/auto-complete.min.css?1780416962" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1780416962" defer></script>
-    <script src="/js/search-lunr.min.js?1780416962" defer></script>
-    <script src="/js/search.min.js?1780416962" defer></script>
+    <link href="/images/favicon.svg?1780418997" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1780418997" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1780418997" defer></script>
+    <script src="/js/search-lunr.min.js?1780418997" defer></script>
+    <script src="/js/search.min.js?1780418997" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1780416962";
+      window.relearn.index_js_url="/searchindex.en.js?1780418997";
     </script>
-    <script src="/js/lunr/lunr.min.js?1780416962" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1780416962" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1780416962" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1780416962" defer></script>
+    <script src="/js/lunr/lunr.min.js?1780418997" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1780418997" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1780418997" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1780418997" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/all.min.css?1780416962" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780416962" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780416962" rel="stylesheet">
-    <link href="/css/theme.min.css?1780416962" rel="stylesheet">
-    <link href="/css/format-html.min.css?1780416962" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/all.min.css?1780418997" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780418997" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780418997" rel="stylesheet">
+    <link href="/css/theme.min.css?1780418997" rel="stylesheet">
+    <link href="/css/format-html.min.css?1780418997" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -144,7 +144,6 @@ code, kbd, pre, samp {
         <li><a href="#listing-available-and-installed-package-groups">Listing Available and Installed Package Groups</a></li>
         <li><a href="#installing-and-updating-package-groups">Installing and Updating Package Groups</a></li>
         <li><a href="#removing-package-groups">Removing Package Groups</a></li>
-        <li><a href="#lab-manipulate-package-groups">Lab: Manipulate Package Groups</a></li>
       </ul>
     </li>
   </ul>
@@ -198,7 +197,7 @@ code, kbd, pre, samp {
 <li>Virtualization Host</li>
 <li>Custom Operating System</li>
 </ul>
-<p><strong>Package groups</strong> are groups of packages that serve a common purpose. These include:</p>
+<p><strong>Package groups</strong> are groups of packages that serve a common purpose.They help save time on the deployment of individual and dependent packages. These include:</p>
 <ul>
 <li>Container Management</li>
 <li>Headless Management</li>
@@ -250,77 +249,81 @@ code, kbd, pre, samp {
 </span></span><span style="display:flex;"><span>   Fedora Packager
 </span></span><span style="display:flex;"><span>   VideoLAN Client
 </span></span><span style="display:flex;"><span>   Xfce</span></span></code></pre></div>
-<p>Package group</p>
-<ul>
-<li>Small bunch of RHEL packages that serve a common purpose.</li>
-<li>Saves time on the deployment of individual and dependent packages.</li>
-<li>Output shows installed and available package groups.</li>
-</ul>
-<p>Display the number of installed and available package groups:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf group summary</span></span></code></pre></div>
-<p>List all installed and available package groups including those that
-are hidden:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf group list hidden</span></span></code></pre></div>
-<p>Try <em>group list</em> with --installed and --available options to narrow
-down the output list.</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf group list --installed</span></span></code></pre></div>
-<p>List all packages that a specific package group such as Base contains:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf group info Base</span></span></code></pre></div>
-<p>-v option with the group info subcommand for more
-information.</p>
-<p>Review group list and group info subsections of the <code>dnf</code> man pages.</p>
+<p>Show packages included in a given package group:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo dnf group info <span style="color:#a5d6ff">&#34;Scientific Support&#34;</span>
+</span></span><span style="display:flex;"><span>Last metadata expiration check: 2:04:48 ago on Tue <span style="color:#a5d6ff">02</span> Jun <span style="color:#a5d6ff">2026</span> 07:21:12 AM MST.
+</span></span><span style="display:flex;"><span>Group: Scientific Support
+</span></span><span style="display:flex;"><span> Description: Tools <span style="color:#ff7b72">for</span> mathematical and scientific computations, and parallel computing.
+</span></span><span style="display:flex;"><span> Optional Packages:
+</span></span><span style="display:flex;"><span>   atlas
+</span></span><span style="display:flex;"><span>   fftw
+</span></span><span style="display:flex;"><span>   fftw-devel
+</span></span><span style="display:flex;"><span>   fftw-static
+</span></span><span style="display:flex;"><span>   lapack
+</span></span><span style="display:flex;"><span>   mpich-devel
+</span></span><span style="display:flex;"><span>   openmpi
+</span></span><span style="display:flex;"><span>   openmpi-devel
+</span></span><span style="display:flex;"><span>   python3-numpy
+</span></span><span style="display:flex;"><span>   python3-scipy
+</span></span><span style="display:flex;"><span>   units</span></span></code></pre></div>
+<p>Show all available package groups:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>dnf group list</span></span></code></pre></div>
+<p>List installed package groups:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo dnf group list --installed
+</span></span><span style="display:flex;"><span>Last metadata expiration check: 2:07:40 ago on Tue <span style="color:#a5d6ff">02</span> Jun <span style="color:#a5d6ff">2026</span> 07:21:12 AM MST.
+</span></span><span style="display:flex;"><span>Installed Environment Groups:
+</span></span><span style="display:flex;"><span>   Server
+</span></span><span style="display:flex;"><span>Installed Groups:
+</span></span><span style="display:flex;"><span>   Container Management
+</span></span><span style="display:flex;"><span>   Headless Management</span></span></code></pre></div>
 <h3 id="installing-and-updating-package-groups">Installing and Updating Package Groups<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<ul>
-<li>Creates the necessary directory structure for all the packages included in the group and all dependent packages.</li>
-<li>Installs the required files.</li>
-<li>Runs any post-installation steps.</li>
-<li>Attempts to update all the packages included in the group to the latest available versions.</li>
-</ul>
-<p>Install a package group called Emacs. Update if it detects an older version.</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf -y groupinstall emacs</span></span></code></pre></div>
-<p>Update the <em>smart card support</em> package group to the latest version:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf groupupdate <span style="color:#a5d6ff">&#34;Smart Card Support&#34;</span></span></span></code></pre></div>
-<p>Refer to the <em>group install</em> and <em>group update</em> subsections of the <em>dnf</em> command manual pages for more details.</p>
+<p>When you install a package group dnf will create the directory structure for all the packages included in the group. Along with any dependent packages. It will install required files and run any required post installation tasks. It will also update all packages in the group to the latest version if they aren&rsquo;t already.</p>
+<p>Install the &ldquo;Scientific Support&rdquo; package group:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo dnf group install <span style="color:#a5d6ff">&#34;Scientific Support&#34;</span>
+</span></span><span style="display:flex;"><span>Last metadata expiration check: 0:02:51 ago on Tue <span style="color:#a5d6ff">02</span> Jun <span style="color:#a5d6ff">2026</span> 09:39:23 AM MST.
+</span></span><span style="display:flex;"><span>Dependencies resolved.
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">===============================================================================================</span>
+</span></span><span style="display:flex;"><span> Package               Architecture         Version                Repository             <span style="color:#79c0ff">Size</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">===============================================================================================</span>
+</span></span><span style="display:flex;"><span>Installing Groups:
+</span></span><span style="display:flex;"><span> Scientific Support                                                                           
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Transaction <span style="color:#79c0ff">Summary</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">===============================================================================================</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Is this ok <span style="color:#ff7b72;font-weight:bold">[</span>y/N<span style="color:#ff7b72;font-weight:bold">]</span>: y
+</span></span><span style="display:flex;"><span>Complete!</span></span></code></pre></div>
+<p>To update it to the latest version:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo dnf group update <span style="color:#a5d6ff">&#34;Scientific Support&#34;</span>
+</span></span><span style="display:flex;"><span>Last metadata expiration check: 0:07:38 ago on Tue <span style="color:#a5d6ff">02</span> Jun <span style="color:#a5d6ff">2026</span> 09:39:23 AM MST.
+</span></span><span style="display:flex;"><span>Dependencies resolved.
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">===============================================================================================</span>
+</span></span><span style="display:flex;"><span> Package               Architecture         Version                Repository             <span style="color:#79c0ff">Size</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">===============================================================================================</span>
+</span></span><span style="display:flex;"><span>Upgrading Groups:
+</span></span><span style="display:flex;"><span> Scientific Support                                                                           
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Transaction <span style="color:#79c0ff">Summary</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">===============================================================================================</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Is this ok <span style="color:#ff7b72;font-weight:bold">[</span>y/N<span style="color:#ff7b72;font-weight:bold">]</span>: y
+</span></span><span style="display:flex;"><span>Complete!</span></span></code></pre></div>
 <h3 id="removing-package-groups">Removing Package Groups<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<ul>
-<li>Uninstalls all the included packages and deletes all associated files and directory structure.</li>
-<li>Erases any dependencies</li>
-</ul>
-<p>Erase the <em>smart card support</em> package group that was installed:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf -y groupremove <span style="color:#a5d6ff">&#39;smart card support&#39;</span></span></span></code></pre></div>
-<p>Refer to the <em>remove</em> subsection of the <em>dnf</em> command manual pages for
-more details.</p>
-<h3 id="lab-manipulate-package-groups">Lab: Manipulate Package Groups<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<p>Perform management operations on a package group called <em>system tools</em>. Determine if this group is already installed and if it is available for installation. List the packages it contains and install it. Remove the group along with its dependencies and confirm the removal.</p>
-<ol>
-<li>Check whether the <em>system tools</em> package group is already installed:</li>
-</ol>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf group list installed</span></span></code></pre></div>
-<ol start="2">
-<li>Determine if the <em>system tools</em> group is available for installation:</li>
-</ol>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf group list available</span></span></code></pre></div>
-<p>The group name is exhibited at the bottom of the list under the
-available groups.</p>
-<ol start="3">
-<li>Display the list of packages this group contains:</li>
-</ol>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf group info <span style="color:#a5d6ff">&#39;system tools&#39;</span></span></span></code></pre></div>
-<ul>
-<li>All of the packages will be installed as part of the group installation.</li>
-</ul>
-<ol start="4">
-<li>Install the group:</li>
-</ol>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf group install <span style="color:#a5d6ff">&#39;system tools&#39;</span></span></span></code></pre></div>
-<ol start="5">
-<li>Remove the group:</li>
-</ol>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> sudo dnf group remove <span style="color:#a5d6ff">&#39;system tools&#39;</span> -y</span></span></code></pre></div>
-<ol start="6">
-<li>Confirm the removal:</li>
-</ol>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> dnf group list installed</span></span></code></pre></div>
+<p>Removing a package group uninstalls all packages and dependencies included in the group. It also deletes associated files and directory structure.</p>
+<p>Erase all evidence of the &ldquo;Scientific Support&rdquo; package group:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo dnf group remove <span style="color:#a5d6ff">&#34;Scientific Support&#34;</span>
+</span></span><span style="display:flex;"><span>Dependencies resolved.
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">===============================================================================================</span>
+</span></span><span style="display:flex;"><span> Package               Architecture         Version                Repository             <span style="color:#79c0ff">Size</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">===============================================================================================</span>
+</span></span><span style="display:flex;"><span>Removing Groups:
+</span></span><span style="display:flex;"><span> Scientific Support                                                                           
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Transaction <span style="color:#79c0ff">Summary</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">===============================================================================================</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Is this ok <span style="color:#ff7b72;font-weight:bold">[</span>y/N<span style="color:#ff7b72;font-weight:bold">]</span>: y
+</span></span><span style="display:flex;"><span>Complete!</span></span></code></pre></div>
 
   <footer class="footline">
   </footer>
@@ -502,8 +505,8 @@ available groups.</p>
 <div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780416962" defer></script>
-    <script src="/js/theme.min.js?1780416962" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780418997" defer></script>
+    <script src="/js/theme.min.js?1780418997" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

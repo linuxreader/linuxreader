@@ -19,6 +19,7 @@ Make sure to check the box "run a custom command instead of my shell"
 Then set a custom shortcut in your OS to that terminal profile
 `gnome-terminal --profile=ubuntu`
 
+Find a list of containers supported here: https://distrobox.it/compatibility/#containers-distros
 ## How to Install
 
 `curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sudo sh`

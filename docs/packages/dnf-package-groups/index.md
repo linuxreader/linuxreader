@@ -13,7 +13,7 @@ There are two types of package groups: _environment groups_ and _package grou
 - Virtualization Host
 - Custom Operating System
 
-**Package groups** are groups of packages that serve a common purpose. These include:
+**Package groups** are groups of packages that serve a common purpose.They help save time on the deployment of individual and dependent packages. These include:
 - Container Management
 - Headless Management
 - Console Internet Tools
@@ -72,106 +72,99 @@ Available Groups:
    Xfce
 ```
 
-
-
-Package group
-- Small bunch of RHEL packages that serve a common purpose. 
-- Saves time on the deployment of individual and dependent packages. 
-- Output shows installed and available package groups.
-
-Display the number of installed and available package groups:
+Show packages included in a given package group:
 ```bash
- sudo dnf group summary
+sudo dnf group info "Scientific Support"
+Last metadata expiration check: 2:04:48 ago on Tue 02 Jun 2026 07:21:12 AM MST.
+Group: Scientific Support
+ Description: Tools for mathematical and scientific computations, and parallel computing.
+ Optional Packages:
+   atlas
+   fftw
+   fftw-devel
+   fftw-static
+   lapack
+   mpich-devel
+   openmpi
+   openmpi-devel
+   python3-numpy
+   python3-scipy
+   units
 ```
 
-List all installed and available package groups including those that
-are hidden:
+Show all available package groups:
 ```bash
- sudo dnf group list hidden
+dnf group list
 ```
 
-Try *group list* with \--installed and \--available options to narrow
-down the output list.
+List installed package groups:
 ```bash
- sudo dnf group list --installed
+sudo dnf group list --installed
+Last metadata expiration check: 2:07:40 ago on Tue 02 Jun 2026 07:21:12 AM MST.
+Installed Environment Groups:
+   Server
+Installed Groups:
+   Container Management
+   Headless Management
 ```
-
-List all packages that a specific package group such as Base contains:
-```bash
- sudo dnf group info Base
-```
-
--v option with the group info subcommand for more
-information. 
-
-Review group list and group info subsections of the `dnf` man pages.
 
 ### Installing and Updating Package Groups
 
-- Creates the necessary directory structure for all the packages included in the group and all dependent packages.
-- Installs the required files.
-- Runs any post-installation steps.
-- Attempts to update all the packages included in the group to the latest available versions. 
+When you install a package group dnf will create the directory structure for all the packages included in the group. Along with any dependent packages. It will install required files and run any required post installation tasks. It will also update all packages in the group to the latest version if they aren't already. 
 
-Install a package group called Emacs. Update if it detects an older version.
+Install the "Scientific Support" package group:
 ```bash
- sudo dnf -y groupinstall emacs
+sudo dnf group install "Scientific Support"
+Last metadata expiration check: 0:02:51 ago on Tue 02 Jun 2026 09:39:23 AM MST.
+Dependencies resolved.
+===============================================================================================
+ Package               Architecture         Version                Repository             Size
+===============================================================================================
+Installing Groups:
+ Scientific Support                                                                           
+
+Transaction Summary
+===============================================================================================
+
+Is this ok [y/N]: y
+Complete!
 ```
 
-Update the *smart card support* package group to the latest version:
+To update it to the latest version:
 ```bash
- dnf groupupdate "Smart Card Support"
-```
+sudo dnf group update "Scientific Support"
+Last metadata expiration check: 0:07:38 ago on Tue 02 Jun 2026 09:39:23 AM MST.
+Dependencies resolved.
+===============================================================================================
+ Package               Architecture         Version                Repository             Size
+===============================================================================================
+Upgrading Groups:
+ Scientific Support                                                                           
 
-Refer to the *group install* and *group update* subsections of the *dnf* command manual pages for more details.
+Transaction Summary
+===============================================================================================
+
+Is this ok [y/N]: y
+Complete!
+```
 
 ### Removing Package Groups
-- Uninstalls all the included packages and deletes all associated files and directory structure.
-- Erases any dependencies
+Removing a package group uninstalls all packages and dependencies included in the group. It also deletes associated files and directory structure.
 
-Erase the *smart card support* package group that was installed:
-
+Erase all evidence of the "Scientific Support" package group:
 ```bash
- sudo dnf -y groupremove 'smart card support'
-```
+sudo dnf group remove "Scientific Support"
+Dependencies resolved.
+===============================================================================================
+ Package               Architecture         Version                Repository             Size
+===============================================================================================
+Removing Groups:
+ Scientific Support                                                                           
 
-Refer to the *remove* subsection of the *dnf* command manual pages for
-more details.
+Transaction Summary
+===============================================================================================
 
-### Lab: Manipulate Package Groups
-Perform management operations on a package group called *system tools*. Determine if this group is already installed and if it is available for installation. List the packages it contains and install it. Remove the group along with its dependencies and confirm the removal.
+Is this ok [y/N]: y
+Complete!
 
-1. Check whether the *system tools* package group is already installed:
-```bash
- dnf group list installed
-```
-
-2. Determine if the *system tools* group is available for installation:
-```bash
- dnf group list available
-```
-
-The group name is exhibited at the bottom of the list under the
-available groups.
-
-3. Display the list of packages this group contains:
-```bash
- dnf group info 'system tools'
-```
-
-- All of the packages will be installed as part of the group installation.
-
-4. Install the group:
-```bash
- sudo dnf group install 'system tools'
-```
-
-5. Remove the group:
-```bash
- sudo dnf group remove 'system tools' -y
-```
-
-6. Confirm the removal:
-```bash
- dnf group list installed
 ```
