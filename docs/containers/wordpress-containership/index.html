@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html id="R-html" lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Relearn 9.0.3">
+    <meta name="description" content="Wordpress setup using Ansible and Podman Quadlets to deploy new Wordpress sites in under a minute.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Automating Wordpress Containers with Ansible and Podman">
+    <meta name="twitter:description" content="Wordpress setup using Ansible and Podman Quadlets to deploy new Wordpress sites in under a minute.">
+    <meta property="og:url" content="http://localhost:1313/containers/wordpress-containership/">
+    <meta property="og:title" content="Automating Wordpress Containers with Ansible and Podman">
+    <meta property="og:description" content="Wordpress setup using Ansible and Podman Quadlets to deploy new Wordpress sites in under a minute.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Containers">
+    <meta property="article:published_time" content="2026-06-03T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-06-03T00:00:00+00:00">
+    <meta itemprop="name" content="Automating Wordpress Containers with Ansible and Podman">
+    <meta itemprop="description" content="Wordpress setup using Ansible and Podman Quadlets to deploy new Wordpress sites in under a minute.">
+    <meta itemprop="datePublished" content="2026-06-03T00:00:00+00:00">
+    <meta itemprop="dateModified" content="2026-06-03T00:00:00+00:00">
+    <meta itemprop="wordCount" content="2025">
+    <title>Automating Wordpress Containers with Ansible and Podman</title>
+    <link href="/containers/wordpress-containership/index.md" rel="alternate" type="text/markdown" title="Automating Wordpress Containers with Ansible and Podman">
+    <link href="/images/favicon.svg?1780524341" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1780524341" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1780524341" defer></script>
+    <script src="/js/search-lunr.js?1780524341" defer></script>
+    <script src="/js/search.js?1780524341" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.index_js_url="/searchindex.en.js?1780524341";
+    </script>
+    <script src="/js/lunr/lunr.min.js?1780524341" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1780524341" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1780524341" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1780524341" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.contentLangs=['en'];
+    </script>
+    <link href="/fonts/fontawesome/css/all.min.css?1780524341" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1780524341" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1780524341" rel="stylesheet">
+    <link href="/css/theme.css?1780524341" rel="stylesheet">
+    <link href="/css/format-html.css?1780524341" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = ``;
+      window.relearn.path='\/containers\/wordpress-containership\/';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='http:\/\/localhost:1313';
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // translations
+      window.T_Copy_to_clipboard = `Copy text to clipboard`;
+      window.T_Copied_to_clipboard = `Text copied to clipboard!`;
+      window.T_Link_copied_to_clipboard = `Link copied to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+      window.T_Browser_unsupported_feature = `This browser doesn't support this feature`;
+      // variant stuff
+      window.relearn.themevariants = [ 'oled' ];
+      window.relearn.customvariantprefix = "my-custom-";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( !variant ||
+            (!variant.startsWith(window.relearn.customvariantprefix) && !window.relearn.themevariants.includes(variant)) ||
+            (variant.startsWith(window.relearn.customvariantprefix) && !window.localStorage.getItem(window.relearn.absBaseUri + "/variantstylesheet-" + variant)) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+    </script><script defer src="https://cloud.umami.is/script.js" data-website-id="d179743c-138a-4212-8906-28f70628ef95"></script>
+<style>
+:root {
+    --MENU-S-width: 15rem;
+    --MENU-M-width: 15rem;
+    --MENU-L-width: 18rem;
+    --MAIN-MAX-width: 100rem;
+}
+html {
+  zoom: 1.2;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif,
+               "Apple Color Emoji", "Segoe UI Emoji" !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500 !important;
+  letter-spacing: 0.7px;
+}
+
+code, kbd, pre, samp {
+  font-family: "Fira Code", "Hack", "Source Code Pro", Consolas, Menlo, monospace !important;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+  <body class="mobile-support html" data-origin="/containers/wordpress-containership/">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar" class="default-animation">
+        <div class="topbar-wrapper default-animation">
+          <div class="topbar-sidebar-divider default-animation"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar default-animation" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button></span>
+            </div>
+            <div class="topbar-button topbar-button-toc default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-table-list"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#building-the-ansible-container-role">Building the Ansible container role</a>
+      <ul>
+        <li><a href="#container-shiptasks"><code>container-ship/tasks/</code></a></li>
+        <li><a href="#container-shipdefaults">`container-ship/defaults/</a></li>
+        <li><a href="#container-shiphandlers"><code>container-ship/handlers</code></a></li>
+        <li><a href="#container-shiptemplates"><code>container-ship/templates/</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#setting-up-the-target-hosts-variables">Setting up the target host&rsquo;s variables</a>
+      <ul>
+        <li><a href="#ansible-vault-entries">Ansible Vault entries</a></li>
+        <li><a href="#inventorieshost_varshostnameyml"><code>inventories/host_vars/hostname.yml</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#setting-up-required-collections">Setting up required collections</a></li>
+    <li><a href="#finally-running-the-playbook">Finally running the playbook!</a></li>
+    <li><a href="#are-we-done">Are we done?</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/containers/"><span itemprop="name">Containers</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">Automating Wordpress Containers with Ansible and Podman</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/wordpress-containership/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/" title="Containers (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/ansible-and-podman/" title="Ansible and Podman (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+            </div>
+            <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
+<span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable containers" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="automating-wordpress-containers-with-ansible-and-podman">Automating Wordpress Containers with Ansible and Podman</h1>
+
+<p><a href="#R-image-fd454734f74ac9a48f8a5034fd077b94" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/wordpress-ansible-quadlet.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-fd454734f74ac9a48f8a5034fd077b94"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/wordpress-ansible-quadlet.png"></a></p>
+<p>If you asked, &ldquo;how I set up WordPress sites super fast and easy using Podman quadlet files and Ansible?&rdquo;</p>
+<p>You&rsquo;ve come to the right place.</p>
+<p>This guide includes:</p>
+<ul>
+<li>Ansible role for running rootless WordPress pods.</li>
+<li>Running those pods as a systemd startup service.</li>
+<li>Backing up your WordPress and SQL Podman volumes.</li>
+<li>Automatic container updates and rollbacks.</li>
+</ul>
+<p>I&rsquo;m using AlmaLinux 10 as the OS. Feel free to use whatever ya like. Just make adjustments as needed. You&rsquo;ll also need an Ansible control node set up to run playbooks on the target server. This not a guide for all that so you are on your own!</p>
+<h2 id="building-the-ansible-container-role">Building the Ansible container role<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Let&rsquo;s create a role that sets up a host to run containers via Podman Quadlets as a rootless user. In my lab, the role is called <code>container-ship</code>.</p>
+<p>Here&rsquo;s how I set up the proper directory structure for this role:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ansible-galxy role init container-ship</span></span></code></pre></div>
+<h3 id="container-shiptasks"><code>container-ship/tasks/</code><span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Under the role directory, I set up <code>tasks/main.yml</code> to include:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#7ee787">block</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">import_tasks</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">pre.yml</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">tags</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">pre</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">import_tasks</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">it-tools-container.yml</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">block</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#7ee787">include_tasks</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">wordpress_pod.yml</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">loop</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ wordpress_sites | default([]) }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">when</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#a5d6ff">wordpress_pod</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#a5d6ff">wordpress_sites is defined</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">tags</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">wordpress_pod</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">tags</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">containers</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">when</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">containers</span></span></span></code></pre></div>
+<p>Notice the <code>it-tools-container.yml</code> import. This role can be used to run other containers as well.</p>
+<p>The pre-tasks set up a host to run rootless containers under a dedicated user. Then, any other containers on the system are set up. The WordPress block will loop through a list of sites defined in a host&rsquo;s variable file.</p>
+<p>Let&rsquo;s look at <code>tasks/pre.yml</code>:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat tasks/pre.yml </span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Make sure rootless user exists to run containers</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">user</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ podman_user }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">uid</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ podman_user_uid }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">password</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ podman_user_password }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">create_home</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">yes</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">shell</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/bin/bash</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">present</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Enable linger for {{ podman_user }}</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">command</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">loginctl enable-linger {{ podman_user }}</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">yes</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Create quadlet directory</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">file</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">path</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/etc/containers/systemd/users/{{ podman_user }}</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">directory</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">mode</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;0755&#39;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Enable podman socket</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become_user</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ podman_user }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">ansible.builtin.systemd_service</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">podman.socket</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">started</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">enabled</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">scope</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">user</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">environment</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">XDG_RUNTIME_DIR</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;/run/user/{{ podman_user_uid }}&#34;</span></span></span></code></pre></div>
+<p>The pre-tasks set up the rootless user for running the containers, enable linger for the user so that we can run the container as a user service, and creates the Quadlet directory for the user.</p>
+<p>There is also a task for enabling the Podman Socket. This is not needed for this setup. I just have it so that I can interact with Podman using Podman Desktop.</p>
+<p>Also note, you&rsquo;ll need to set up an <a href="/ansible/encrypted-passwords/">encrypted password</a> for the <code>podman_user_password</code> variable. Mine is in my <a href="/ansible/ansible-vault/">Ansible Vault</a>.</p>
+<p>Next, are the tasks that actually set up the WordPress containers:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat tasks/wordpress_pod.yml </span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Allow HTTP traffic on port {{ item.external_port }}</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">ansible.posix.firewalld</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">port</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ item.external_port }}/tcp&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">permanent</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">enabled</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">notify</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Reload firewalld</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Pull wordpress podman image</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">containers.podman.podman_image</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ wordpress_image }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">present</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">false</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become_user</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ podman_user }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Pull mysql image</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">containers.podman.podman_image</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ mysql_image }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">present</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">false</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become_user</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ podman_user }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Add the wordpress quadlet file</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">template</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">src</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">wordpress.j2</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">dest</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/etc/containers/systemd/users/{{ podman_user }}/{{ item.site_name }}-wordpress.container</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">notify</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">daemon reload</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Add the sql quadlet file</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">template</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">src</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">wordpress_db.j2</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">dest</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/etc/containers/systemd/users/{{ podman_user }}/{{ item.site_name }}-db.container</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">notify</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">daemon reload</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Add the pod quadlet file</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">template</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">src</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">wordpress_pod.j2</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">dest</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/etc/containers/systemd/users/{{ podman_user }}/{{ item.site_name }}.pod</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">notify</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">daemon reload</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">reload daemon</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become_user</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ podman_user }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">ansible.builtin.systemd_service</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">daemon_reload</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">scope</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">user</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">environment</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">XDG_RUNTIME_DIR</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;/run/user/{{ podman_user_uid }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Run and enable wordpress pod</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become_user</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ podman_user }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">ansible.builtin.systemd_service</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ item.site_name }}-pod&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">started</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">enabled</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">scope</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">user</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">environment</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">XDG_RUNTIME_DIR</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;/run/user/{{ podman_user_uid }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Create backup directory for podman volume exports</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">file</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">path</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ podman_backup_dir | default(&#39;/home/&#39; + podman_user + &#39;/backups&#39;) }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">directory</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">owner</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ podman_user }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">group</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ podman_user }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">mode</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;0750&#39;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681"> 
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Set up weekly cron job to back up podman volumes</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become_user</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ podman_user }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">ansible.builtin.cron</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;Weekly podman volume backup - {{ item.site_name }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">weekday</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;0&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">hour</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;2&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">minute</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;0&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">job</span>:<span style="color:#6e7681"> </span>&gt;-<span style="color:#a5d6ff">
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">      BACKUP_DIR=&#34;{{ podman_backup_dir | default(&#39;/home/&#39; + podman_user + &#39;/backups&#39;) }}&#34; &amp;&amp;
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">      DATE=$(date +\%Y-\%m-\%d) &amp;&amp;
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">      podman volume export {{ item.site_name }}
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">      --output &#34;${BACKUP_DIR}/{{ item.site_name }}_${DATE}.tar&#34; &amp;&amp;
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">      podman volume export {{ item.site_name }}db
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">      --output &#34;${BACKUP_DIR}/{{ item.site_name }}db_${DATE}.tar&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">present</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681"> 
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Set up weekly cron job to delete backups older than 3 months</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become_user</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ podman_user }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">ansible.builtin.cron</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;Weekly podman backup cleanup - {{ item.site_name }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">weekday</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;0&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">hour</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;3&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">minute</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;0&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">job</span>:<span style="color:#6e7681"> </span>&gt;-<span style="color:#a5d6ff">
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">      find &#34;{{ podman_backup_dir | default(&#39;/home/&#39; + podman_user + &#39;/backups&#39;) }}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">      -name &#34;{{ item.site_name }}-*.tar&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">      -mtime +90
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">      -delete</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">present</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Enable podman auto-update timer</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become_user</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ podman_user }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">ansible.builtin.systemd_service</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">podman-auto-update.timer</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">started</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">enabled</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">scope</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">user</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">environment</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">XDG_RUNTIME_DIR</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;/run/user/{{ podman_user_uid }}&#34;</span></span></span></code></pre></div>
+<p>There is a lot here, but the gist is:</p>
+<ul>
+<li>Add firewall rule for port used. You will add the port for each site later.</li>
+<li>Add the Pod, Database, and WordPress Quadlet files.</li>
+<li>Reload the container user&rsquo;s daemon so systemd detects the Quadlet file.</li>
+<li>Run and enable the Pod service.</li>
+<li>Create the volume backup directory under <code>/home/podman_user/backups/</code></li>
+<li>Set up cron jobs to take volume backups and delete old backups. This uses Podman volume export to export the volumes to the directory mentioned above. You can restore these with <code>Podman volume import {{ filename }}</code>.</li>
+<li>Enable Podman auto-update. Later, you&rsquo;ll see that the Quadlet files have auto-updates enabled. The auto-update timer automatically updates container images at midnight each day. If a health check fails, then it will automatically rollback the changes.</li>
+</ul>
+<h3 id="container-shipdefaults">`container-ship/defaults/<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Set up the default variables under defaults/main.yml:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat main.yml </span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">containers</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">false</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">podman_user</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">dogman</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">podman_user_uid</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">22222</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">###########################################</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">##### Worpress Pod ########################</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">###########################################</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">wordpress_image</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">docker.io/wordpress:latest</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">mysql_image</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">docker.io/mysql:latest</span></span></span></code></pre></div>
+<p>By default, container pre-tasks are turned off. So we&rsquo;ll enable them in the host&rsquo;s variables later. Then we have defaults for the rootless Podman user and UID. The WordPress and MySQL images are set with the tag &ldquo;latest&rdquo;. This will let us automatically get the latest images for these tools.</p>
+<p>Technically, this can be dangerous without testing major releases for MySQL before upgrading. But I am willing to accept the risk since I have volume backups and can rollback if something breaks.</p>
+<p>Also note, there is nothing magic about containers, you could build these images out yourself. Which is a great option if you don&rsquo;t trust others..</p>
+<h3 id="container-shiphandlers"><code>container-ship/handlers</code><span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Under handlers/main.yml, we simply have tasks that reload daemons as needed:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat main.yml </span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">daemon reload</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become_user</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ podman_user }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">ansible.builtin.systemd_service</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">daemon_reload</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">scope</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">user</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">environment</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">XDG_RUNTIME_DIR</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;/run/user/{{ podman_user_uid }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Reload firewalld</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">ansible.builtin.command</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">firewall-cmd --reload</span></span></span></code></pre></div>
+<h3 id="container-shiptemplates"><code>container-ship/templates/</code><span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Here&rsquo;s were we get to the Quadlet files. I&rsquo;ve set the Quadlet files to be reusable with Jinja2. Which let&rsquo;s our loop mentioned earlier create multiple sites.</p>
+<p>There are two ways to go about this. We can:</p>
+<ol>
+<li>Add MySQL and WordPress containers to a pod. That way they share the same network namespace by default. Or:</li>
+<li>Add each container to it&rsquo;s own pod, and create a shared network used by both pods.</li>
+</ol>
+<p>Option 2 is closer to how Kubernetes pods work, and would be better if you wanted to migrate this setup to Kubernetes later. But I decided to go with option 1 for simplicity.</p>
+<p>Let&rsquo;s look under <code>templates/</code>. First, the Pod Quadlet template, which defines networking options for all containers in the Pod:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code class="language-jinja2" data-lang="jinja2">❯ cat wordpress_pod.j2
+[Unit]
+Description=Wordpress Pod
+
+[Pod]
+PublishPort={{ item.external_port }}:80
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target</code></pre></div>
+<p><code>wordpress_db.j2</code> defines the environment variables, image used to build the container, assigned pod, volumes, auto-update options, and health checks:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code class="language-jinja2" data-lang="jinja2">❯ cat wordpress_db.j2 
+[Container]
+Environment=MYSQL_DATABASE={{ item.site_name }}db MYSQL_USER={{ item.database_user }} MYSQL_PASSWORD={{ item.database_password }} MYSQL_RANDOM_ROOT_PASSWORD=1
+Image={{ mysql_image }}
+Pod={{ item.site_name }}.pod
+Volume={{ item.site_name }}db:/var/lib/mysql
+AutoUpdate=registry
+HealthCmd=CMD-SHELL mysqladmin ping -h localhost -u root -p$MYSQL_ROOT_PASSWORD || exit 1
+HealthInterval=30s
+HealthRetries=3
+HealthStartPeriod=30s
+
+[Service]
+Restart=always</code></pre></div>
+<p><code>wordpress.j2</code> as much of the same:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code class="language-jinja2" data-lang="jinja2">❯ cat wordpress.j2 
+[Container]
+Environment=WORDPRESS_DB_HOST=systemd-{{ item.site_name }}-db WORDPRESS_DB_USER={{ item.database_user }} WORDPRESS_DB_PASSWORD={{ item.database_password }} WORDPRESS_DB_NAME={{ item.site_name }}db
+Image={{ wordpress_image }}
+Pod={{ item.site_name }}.pod
+Volume={{ item.site_name }}:/var/www/html
+AutoUpdate=registry
+HealthCmd=CMD-SHELL wget -q --spider http://localhost || exit 1
+HealthInterval=30s
+HealthRetries=3
+HealthStartPeriod=30s
+
+[Service]
+Restart=always</code></pre></div>
+<h2 id="setting-up-the-target-hosts-variables">Setting up the target host&rsquo;s variables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Now, we need to set up the MySQL database passwords. Which I&rsquo;ve chosen to add to my Ansible Vault. Our test sites will be named:</p>
+<ul>
+<li>potato</li>
+<li>tomato</li>
+<li>sandwhich</li>
+</ul>
+<h3 id="ansible-vault-entries">Ansible Vault entries<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>podman_user_password: encryptedstringgoeshere
+potato_db_password: yousay
+tomato_db_password: isay
+sandwich_db_password: letseat</code></pre></div>
+<h3 id="inventorieshost_varshostnameyml"><code>inventories/host_vars/hostname.yml</code><span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>The host I am testing this on is <code>dt-lab3</code>. To configure the host, I need to add the correct variables to it&rsquo;s variable file under inventories/host_vars/dt-lab3.yml:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat inventories/host_vars/dt-lab3.yml</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">containers</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">it_tools_container</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">wordpress_pod</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">wordpress_sites</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">potato</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">external_port</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">8086</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">site_name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">potato</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">database_user</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">potato</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">database_password</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ potato_db_password }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">tomato</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">external_port</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">8085</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">site_name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">tomato</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">database_user</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">tomato</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">database_password</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ tomato_db_password }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">sandwich</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">external_port</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">8087</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">site_name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">sandwich</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">database_user</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">sandwich</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">database_password</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ sandwich_db_password }}&#34;</span></span></span></code></pre></div>
+<p>Notice I have set containers to true. The default being false let&rsquo;s me choose which hosts are going to run container pre-tasks. I have another container for running <a href="https://it-tools.tech/" rel="external" target="_blank">IT Tools</a> on this server. That is enabled with <code>it_tools_container: true</code>.</p>
+<p>The <code>wordpress_pod: true</code> variable enables WordPress container tasks. Assuming that <code>wordpress_sites</code> is defined correctly.</p>
+<p>For each site, we have a unique external port, site name. As well as the database username and password for that site.</p>
+<h2 id="setting-up-required-collections">Setting up required collections<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>You need the following collections installed on your Ansible control node I manage my collections in a <code>requirements.yml</code> file:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat requirements.yml </span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#7ee787">collections</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">ansible.posix</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">community.general</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">containers.podman</span></span></span></code></pre></div>
+<p>Then install with:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ansible-galaxy install -r requirements.yml </span></span></code></pre></div>
+<h2 id="finally-running-the-playbook">Finally running the playbook!<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>At this point, everything should be hot-n-dandy. In my Ansible lab, everything branches off of <code>site.yml</code>:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat site.yml</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">import_playbook</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">playbooks/homelab.yml</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">import_playbook</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">playbooks/desktop.yml</span></span></span></code></pre></div>
+<p>The <code>homelab.yml</code> playbook calls my container-ship role:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat playbooks/homelab.yml </span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Configure homelab</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">homelab</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">roles</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span>- <span style="color:#a5d6ff">base-config</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span>- <span style="color:#a5d6ff">container-ship</span></span></span></code></pre></div>
+<p>Let&rsquo;s run a timed test to see how long it takes to build our 3 test sites:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>time ansible-playbook site.yml -l dt-lab3 -t containers
+</span></span><span style="display:flex;"><span>real	1m51.199s</span></span></code></pre></div>
+<p>1 minute and 52 seconds is not bad!</p>
+<p>Let&rsquo;s verify, as the Podman user (dogman in our case) run <code>podman ps</code> to see the running containers:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>dogman@dt-lab3:~$ podman ps
+</span></span><span style="display:flex;"><span>CONTAINER ID  IMAGE                                 COMMAND               CREATED        STATUS                    PORTS                                      NAMES
+</span></span><span style="display:flex;"><span>f09e74c5b2e3  docker.io/corentinth/it-tools:latest  nginx -g daemon o...  <span style="color:#a5d6ff">2</span> days ago     Up <span style="color:#a5d6ff">2</span> days                 0.0.0.0:8080-&gt;80/tcp                       it-tools
+</span></span><span style="display:flex;"><span>a0f73383ff29                                                              <span style="color:#a5d6ff">4</span> minutes ago  Up <span style="color:#a5d6ff">4</span> minutes              0.0.0.0:8086-&gt;80/tcp                       systemd-potato-infra
+</span></span><span style="display:flex;"><span>c488e7a668d2  docker.io/library/mysql:latest        mysqld                <span style="color:#a5d6ff">4</span> minutes ago  Up <span style="color:#a5d6ff">4</span> minutes <span style="color:#ff7b72;font-weight:bold">(</span>healthy<span style="color:#ff7b72;font-weight:bold">)</span>    0.0.0.0:8086-&gt;80/tcp, 3306/tcp, 33060/tcp  systemd-potato-db
+</span></span><span style="display:flex;"><span>baa4266c4009  docker.io/library/wordpress:latest    apache2-foregroun...  <span style="color:#a5d6ff">4</span> minutes ago  Up <span style="color:#a5d6ff">4</span> minutes <span style="color:#ff7b72;font-weight:bold">(</span>unhealthy<span style="color:#ff7b72;font-weight:bold">)</span>  0.0.0.0:8086-&gt;80/tcp                       systemd-potato-wordpress
+</span></span><span style="display:flex;"><span>aa6187dbd166                                                              <span style="color:#a5d6ff">4</span> minutes ago  Up <span style="color:#a5d6ff">4</span> minutes              0.0.0.0:8085-&gt;80/tcp                       systemd-tomato-infra
+</span></span><span style="display:flex;"><span>c3a0eeef4fff  docker.io/library/mysql:latest        mysqld                <span style="color:#a5d6ff">4</span> minutes ago  Up <span style="color:#a5d6ff">4</span> minutes <span style="color:#ff7b72;font-weight:bold">(</span>healthy<span style="color:#ff7b72;font-weight:bold">)</span>    0.0.0.0:8085-&gt;80/tcp, 3306/tcp, 33060/tcp  systemd-tomato-db
+</span></span><span style="display:flex;"><span>50b05ce44da4  docker.io/library/wordpress:latest    apache2-foregroun...  <span style="color:#a5d6ff">4</span> minutes ago  Up <span style="color:#a5d6ff">4</span> minutes <span style="color:#ff7b72;font-weight:bold">(</span>unhealthy<span style="color:#ff7b72;font-weight:bold">)</span>  0.0.0.0:8085-&gt;80/tcp                       systemd-tomato-wordpress
+</span></span><span style="display:flex;"><span>f29bb5f71dbf                                                              <span style="color:#a5d6ff">4</span> minutes ago  Up <span style="color:#a5d6ff">4</span> minutes              0.0.0.0:8087-&gt;80/tcp                       systemd-sandwich-infra
+</span></span><span style="display:flex;"><span>8c8d8af3ddde  docker.io/library/mysql:latest        mysqld                <span style="color:#a5d6ff">4</span> minutes ago  Up <span style="color:#a5d6ff">4</span> minutes <span style="color:#ff7b72;font-weight:bold">(</span>healthy<span style="color:#ff7b72;font-weight:bold">)</span>    0.0.0.0:8087-&gt;80/tcp, 3306/tcp, 33060/tcp  systemd-sandwich-db
+</span></span><span style="display:flex;"><span>7ce5c6130a4d  docker.io/library/wordpress:latest    apache2-foregroun...  <span style="color:#a5d6ff">4</span> minutes ago  Up <span style="color:#a5d6ff">4</span> minutes <span style="color:#ff7b72;font-weight:bold">(</span>unhealthy<span style="color:#ff7b72;font-weight:bold">)</span>  0.0.0.0:8087-&gt;80/tcp                       systemd-sandwich-wordpress</span></span></code></pre></div>
+<p>As you can see, we now have three rootless pods running under our dogman user. Each pod starts an <code>infra</code> container, as well as the <code>mysql</code> and <code>wordpress</code> container.</p>
+<p>We can verify the sites are live by visiting the browser using the port numbers for each site. 8085, 8086, and 8087.
+<a href="#R-image-a2e6404a1aae3c1f65a20ea2b3699281" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../images/Pasted%20image%2020260603103253.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-a2e6404a1aae3c1f65a20ea2b3699281"><img class="lazy lightbox lightbox-image" loading="lazy" src="../images/Pasted%20image%2020260603103253.png"></a></p>
+<p>You should now get a WordPress setup page for all three sites now. What&rsquo;s next? You can configure the sites and pipe DNS records into a reverse proxy that handles SSL certs or whatever you like.</p>
+<p>To view what containers were updated and when, and if any rollbacks happened run:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>journalctl --user -u podman-auto-update.service</span></span></code></pre></div>
+<h2 id="are-we-done">Are we done?<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>There is a lot more you can do with this setup. For example, you could set up the volumes to be sent to multiple other hosts as RO copies. Then you can load balance the live site through a proxy. Or you could keep expanding the resiliency by version controlling  bind-mounted volumes in git instead of using Podman volumes.</p>
+<p>I like this setup though. Maybe we&rsquo;ll get a part two with some of those adjustments some day.</p>
+<p>P.S. Feel free to <a href="https://www.linuxreader.com/contact/" rel="external" target="_blank">reach out</a> with any questions or improvements to this setup! I&rsquo;m always open to doing things better and/or more efficient.</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation"><a href="https://linuxreader.com">
+  <img src="/images/linuxreader.svg" alt="Linux Reader" >
+</a>
+
+        <search><form action="/search/" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-fw fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-fw fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks default-animation">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-headercontrols default-animation">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-main default-animation">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/ansible/"><input type="checkbox" id="R-section-e5b911977d99c31c82b120cc3d2f2606" aria-controls="R-subsections-e5b911977d99c31c82b120cc3d2f2606"><label for="R-section-e5b911977d99c31c82b120cc3d2f2606"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Ansible</span></label><a class="padding default-animation" href="/ansible/"><i class="fa-solid fa-robot"></i> Ansible<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e5b911977d99c31c82b120cc3d2f2606" class="collapsible-menu">
+            <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">Ansible Navigator<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/install-ansible-using-uv/"><a class="padding" href="/ansible/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/playbooks/"><a class="padding" href="/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/awx-minikube-install/"><a class="padding" href="/ansible/awx-minikube-install/">AWX MiniKube Install<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/encrypted-passwords/"><a class="padding" href="/ansible/encrypted-passwords/">Encrypted passwords<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/handlers/"><a class="padding" href="/ansible/handlers/">Handlers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/hostname-patterns/"><a class="padding" href="/ansible/hostname-patterns/">Host Name Patterns<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/include-and-import-files/"><a class="padding" href="/ansible/include-and-import-files/">Including and importing Files<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/jinja2/"><a class="padding" href="/ansible/jinja2/">Jinja2 templates<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/user-and-groups/"><a class="padding" href="/ansible/user-and-groups/">Manage Users and Groups with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/packages-repos-and-subscriptions/"><a class="padding" href="/ansible/packages-repos-and-subscriptions/">Managing Packages, Repositories, and Subscriptions with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/storage-partitions-and-lvm/"><a class="padding" href="/ansible/storage-partitions-and-lvm/">Managing Partitions and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/services/"><a class="padding" href="/ansible/services/">Managing Services with Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/optimize-ansible-processing/"><a class="padding" href="/ansible/optimize-ansible-processing/">Optimizing Ansible Processing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/selinux/"><a class="padding" href="/ansible/selinux/">SeLinux File Properties<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ssh-connections/"><a class="padding" href="/ansible/ssh-connections/">SSH Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/tags/"><a class="padding" href="/ansible/tags/">Using Ansible Tags<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/filters/"><a class="padding" href="/ansible/filters/">Using Filters in Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/loops-and-items/"><a class="padding" href="/ansible/loops-and-items/">Using Loops and Items<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/modules-for-troubleshooting/"><a class="padding" href="/ansible/modules-for-troubleshooting/">Using Modules for Troubleshooting and Testing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/variables/"><a class="padding" href="/ansible/variables/">Using Variables In Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/when/"><a class="padding" href="/ansible/when/">Using when to Run Tasks Conditionally<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/bash/"><input type="checkbox" id="R-section-4b42c24c987a75657a389c72aa61a56d" aria-controls="R-subsections-4b42c24c987a75657a389c72aa61a56d"><label for="R-section-4b42c24c987a75657a389c72aa61a56d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Bash</span></label><a class="padding default-animation" href="/bash/"><i class="fa-fw fas fa-code"></i> Bash<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-4b42c24c987a75657a389c72aa61a56d" class="collapsible-menu">
+            <li class="" data-nav-id="/bash/bash-shell/"><a class="padding" href="/bash/bash-shell/">Bash<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/boot/"><input type="checkbox" id="R-section-a53bfb333437907a8d5bdc636d15c75d" aria-controls="R-subsections-a53bfb333437907a8d5bdc636d15c75d"><label for="R-section-a53bfb333437907a8d5bdc636d15c75d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Boot</span></label><a class="padding default-animation" href="/boot/"><i class="fa-solid fa-hourglass-start"></i> Boot<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-a53bfb333437907a8d5bdc636d15c75d" class="collapsible-menu">
+            <li class="" data-nav-id="/boot/boot-process-grub2-kernel/"><a class="padding" href="/boot/boot-process-grub2-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/boot/sys-init-logging-and-tuning/"><a class="padding" href="/boot/sys-init-logging-and-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="parent " data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5" checked><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="active " data-nav-id="/containers/wordpress-containership/"><a class="padding" href="/containers/wordpress-containership/">Automating Wordpress Containers with Ansible and Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/ansible-and-podman/"><a class="padding" href="/containers/ansible-and-podman/">Ansible and Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/container-basics/"><a class="padding" href="/containers/container-basics/">Container Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/intro-to-podman/"><a class="padding" href="/containers/intro-to-podman/">Containers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/convert-docker-compose-to-quadlets/"><a class="padding" href="/containers/convert-docker-compose-to-quadlets/">Convert Docker Compose to Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/customizing-podman/"><a class="padding" href="/containers/customizing-podman/">Customizing Podman&#39;s Behavior<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/distrobox/"><a class="padding" href="/containers/distrobox/">Distrobox Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/installing-podman/"><a class="padding" href="/containers/installing-podman/">Installing Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/intro-to-containers/"><a class="padding" href="/containers/intro-to-containers/">Introduction to Containers<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-quadlets/"><a class="padding" href="/containers/podman-quadlets/">Podman Quadlets<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/containers/podman-socket/"><a class="padding" href="/containers/podman-socket/">Podman Socket<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/cyber-security/"><input type="checkbox" id="R-section-f95cf8cea1c115dd046e46a833f33dfa" aria-controls="R-subsections-f95cf8cea1c115dd046e46a833f33dfa"><label for="R-section-f95cf8cea1c115dd046e46a833f33dfa"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Cyber Security</span></label><a class="padding default-animation" href="/cyber-security/"><i class="fa-solid fa-user-secret"></i> Cyber Security<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-f95cf8cea1c115dd046e46a833f33dfa" class="collapsible-menu">
+            <li class="" data-nav-id="/cyber-security/security-enhanced-linux/"><a class="padding" href="/cyber-security/security-enhanced-linux/">Security Enhanced Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-linux-firewall/"><a class="padding" href="/cyber-security/the-linux-firewall/">The Linux Firewall<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/secure-shell-service-ssh/"><a class="padding" href="/cyber-security/secure-shell-service-ssh/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/cyber-security/the-secure-shell-service/"><a class="padding" href="/cyber-security/the-secure-shell-service/">The Secure Shell Service<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/desktop/"><input type="checkbox" id="R-section-e1fc414efb00462ad25041a21e45e696" aria-controls="R-subsections-e1fc414efb00462ad25041a21e45e696"><label for="R-section-e1fc414efb00462ad25041a21e45e696"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Desktop</span></label><a class="padding default-animation" href="/desktop/"><i class="fa-fw fas fa-computer"></i> Desktop<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-e1fc414efb00462ad25041a21e45e696" class="collapsible-menu">
+            <li class="" data-nav-id="/desktop/new-setup/"><a class="padding" href="/desktop/new-setup/">Configure Fedora Desktop using Ansible<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/my-fedora-setup/"><a class="padding" href="/desktop/my-fedora-setup/">My old Fedora Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/desktop/silverblue/"><a class="padding" href="/desktop/silverblue/">Silverblue<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/files/"><input type="checkbox" id="R-section-31e56884d732922d4a0e407592968056" aria-controls="R-subsections-31e56884d732922d4a0e407592968056"><label for="R-section-31e56884d732922d4a0e407592968056"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Files</span></label><a class="padding default-animation" href="/files/"><i class="fa-solid fa-copy"></i> Files<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-31e56884d732922d4a0e407592968056" class="collapsible-menu">
+            <li class="" data-nav-id="/files/advanced-file-management/"><a class="padding" href="/files/advanced-file-management/">Advanced File Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/files/file-management/"><a class="padding" href="/files/file-management/">Basic File Managment<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/networking/"><input type="checkbox" id="R-section-d7c3359b808d40df139a3bb9f9073483" aria-controls="R-subsections-d7c3359b808d40df139a3bb9f9073483"><label for="R-section-d7c3359b808d40df139a3bb9f9073483"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Networking</span></label><a class="padding default-animation" href="/networking/"><i class="fa-fw fas fa-network-wired"></i> Networking<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-d7c3359b808d40df139a3bb9f9073483" class="collapsible-menu">
+            <li class="" data-nav-id="/networking/classfulipv4/"><a class="padding" href="/networking/classfulipv4/">Classful IPv4<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/consoling_in_to_mx80_from_linux/"><a class="padding" href="/networking/consoling_in_to_mx80_from_linux/">Consoling in to MX80 from linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/dns-and-time-syncronization/"><a class="padding" href="/networking/dns-and-time-syncronization/">DNS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/how-to-study-for-the-ccna-exam/"><a class="padding" href="/networking/how-to-study-for-the-ccna-exam/">How I Studied For CCNA<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/juniper_cli_basics/"><a class="padding" href="/networking/juniper_cli_basics/">Juniper CLI Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/network-devices-and-connections/"><a class="padding" href="/networking/network-devices-and-connections/">Networking Devices and Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/networking-network-devices-and-network-connections/"><a class="padding" href="/networking/networking-network-devices-and-network-connections/">Networking Network Devices and Network Connections<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/time-synchronization/"><a class="padding" href="/networking/time-synchronization/">Time Synchronization<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/networking/toggle_poe/"><a class="padding" href="/networking/toggle_poe/">Toggle PoE on a Juniper Switch<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/packages/"><input type="checkbox" id="R-section-bdf1e8ce92aa8ff6883c617f10480430" aria-controls="R-subsections-bdf1e8ce92aa8ff6883c617f10480430"><label for="R-section-bdf1e8ce92aa8ff6883c617f10480430"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Packages</span></label><a class="padding default-animation" href="/packages/"><i class="fa-solid fa-box-open"></i> Packages<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bdf1e8ce92aa8ff6883c617f10480430" class="collapsible-menu">
+            <li class="" data-nav-id="/packages/advanced-package-management/"><a class="padding" href="/packages/advanced-package-management/">Advanced Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/basic-package-management/"><a class="padding" href="/packages/basic-package-management/">Basic Package Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/packages/dnf-package-groups/"><a class="padding" href="/packages/dnf-package-groups/">DNF Package Groups<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/storage/"><input type="checkbox" id="R-section-28a53f7a259bc0e6bfd5bf73591250a9" aria-controls="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9"><label for="R-section-28a53f7a259bc0e6bfd5bf73591250a9"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Storage</span></label><a class="padding default-animation" href="/storage/"><i class="fa-solid fa-hard-drive"></i> Storage<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-28a53f7a259bc0e6bfd5bf73591250a9" class="collapsible-menu">
+            <li class="" data-nav-id="/storage/autofs/"><a class="padding" href="/storage/autofs/">AutoFS<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/local-filesystems-and-swap/"><a class="padding" href="/storage/local-filesystems-and-swap/">Local File Systems and Swap<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/network-filesystem-nfs/"><a class="padding" href="/storage/network-filesystem-nfs/">Network File System (NFS)<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/partitioning-mbr-gpt/"><a class="padding" href="/storage/partitioning-mbr-gpt/">Partitioning, MBR, and GPT<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/rm-filesystem-from-partition/"><a class="padding" href="/storage/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/system/"><input type="checkbox" id="R-section-0ea554b019cc5a3e6337c45b68b3a647" aria-controls="R-subsections-0ea554b019cc5a3e6337c45b68b3a647"><label for="R-section-0ea554b019cc5a3e6337c45b68b3a647"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/system/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-0ea554b019cc5a3e6337c45b68b3a647" class="collapsible-menu">
+            <li class="" data-nav-id="/system/installation/"><a class="padding" href="/system/installation/">Installing RHEL Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/system/interaction/"><a class="padding" href="/system/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/system/process-and-task-scheduling/"><a class="padding" href="/system/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
+            <li class="" data-nav-id="/tools/remove-formatting-from-highlights/"><a class="padding" href="/tools/remove-formatting-from-highlights/">How to Remove Formatting From Ebook Highlights With Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-docker-nginx/"><a class="padding" href="/tools/calibre-web-docker-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/you-need-to-learn-man-pages/"><a class="padding" href="/tools/you-need-to-learn-man-pages/">You Need to Learn Man Pages<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/proxmox-ha-proxy-setup/"><a class="padding" href="/tools/proxmox-ha-proxy-setup/">Proxmox PfSense HaProxy Setup<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/calibre-web-with-docker-and-nginx/"><a class="padding" href="/tools/calibre-web-with-docker-and-nginx/">Calibre Web with Docker and NGINX<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-build-a-website-with-hugo/"><a class="padding" href="/tools/how-to-build-a-website-with-hugo/">How to Build a website With Hugo<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/process-bookfusion-highlights/"><a class="padding" href="/tools/process-bookfusion-highlights/">How to Process Bookfusion Highlights with Vim<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/how-to-set-up-hugo-relearn-theme/"><a class="padding" href="/tools/how-to-set-up-hugo-relearn-theme/">How to Set Up Hugo Relearn Theme<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/learning-touch-typing/"><a class="padding" href="/tools/learning-touch-typing/">Learning Touch Typing<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/nextcloud-on-rhel-based-systems/"><a class="padding" href="/tools/nextcloud-on-rhel-based-systems/">Nextcloud on RHEL Based Systems<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/setting-up-a-self-hosted-nextcloud-server/"><a class="padding" href="/tools/setting-up-a-self-hosted-nextcloud-server/">Self hosting a Nextcloud Server<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/tools/vimguide/"><a class="padding" href="/tools/vimguide/">Vim Guide<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/virtualization/"><input type="checkbox" id="R-section-da8ee4406de37987b502b79e5b0a9d1c" aria-controls="R-subsections-da8ee4406de37987b502b79e5b0a9d1c"><label for="R-section-da8ee4406de37987b502b79e5b0a9d1c"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Virtualization</span></label><a class="padding default-animation" href="/virtualization/"><i class="fa-solid fa-microchip"></i> Virtualization<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-da8ee4406de37987b502b79e5b0a9d1c" class="collapsible-menu">
+            <li class="" data-nav-id="/virtualization/automate-kvm-vms/"><a class="padding" href="/virtualization/automate-kvm-vms/">Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/virtualization/using-vagrant-on-linux/"><a class="padding" href="/virtualization/using-vagrant-on-linux/">Using Vagrant on Linux<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+            <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users and Groups</span></label><a class="padding default-animation" href="/users-and-groups/"><i class="fa-solid fa-users"></i> Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
+            <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts default-animation">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/contact/"><a class="padding" href="/contact/"><i class='fas fa-fw fa-envelope'></i> Contact<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/booknotes/"><a class="padding" href="/booknotes/"><i class='fas fa-fw fa-book'></i> Book Notes<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/now/"><a class="padding" href="/now/"><i class='fas fa-fw fa-clock'></i> Now<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="https://github.com/linuxreader"><a class="padding" href="https://github.com/linuxreader" rel="external" target="_blank"><i class='fab fa-fw fa-github'></i> GitHub<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="https://linkedin.com/in/linuxreader/"><a class="padding" href="https://linkedin.com/in/linuxreader/" rel="external" target="_blank"><i class='fab fa-fw fa-linkedin'></i> LinkedIn<i class="fa-fw fas fa-check read-icon"></i></a></li>
+          </ul>
+        </div>
+        <div id="R-footer-margin" class="default-animation"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding default-animation">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-footercontrols default-animation">
+          <ul class="">
+            <li class="R-historyclearer">
+              <div class="padding menu-control">
+                <i class="fa-fw fas fa-history"></i>
+                <span>&nbsp;</span>
+                <div class="control-style">
+                  <button>Clear History</button>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+<div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1780524341" defer></script>
+    <script src="/js/theme.js?1780524341" defer></script>
+    <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+  </body>
+</html>
