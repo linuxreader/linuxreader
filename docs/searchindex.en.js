@@ -117,7 +117,7 @@ var relearn_searchindex = [
     "description": "Wordpress setup using Ansible and Podman Quadlets to deploy new Wordpress sites in under a minute.",
     "tags": [],
     "title": "Automating Wordpress Containers with Ansible and Podman",
-    "uri": "/containers/wordpress-containership/"
+    "uri": "/containers/automating-wordpress-containers/"
   },
   {
     "breadcrumb": "Linux Reader \u003e Ansible",
