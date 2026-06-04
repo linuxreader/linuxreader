@@ -1,7 +1,5 @@
 # The Linux Firewall
 
-# `firewalld` Zones
-
 ## `firewalld`
 - The host-based firewall solution employed in RHEL uses a kernel module called **netfilter** together with a filtering and packet classification framework called **nftables** for policing the traffic movement. 
 - It also supports other advanced features such as **Network Address Translation (NAT)** and **port forwarding**. 
