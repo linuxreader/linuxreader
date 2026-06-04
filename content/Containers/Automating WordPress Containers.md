@@ -427,7 +427,7 @@ f29bb5f71dbf                                                              4 minu
 As you can see, we now have three rootless pods running under our dogman user. Each pod starts an `infra` container, as well as the `mysql` and `wordpress` container.
 
 We can verify the sites are live by visiting the browser using the port numbers for each site. 8085, 8086, and 8087. 
-![](../images/Pasted%20image%2020260603103253.png)
+![](/images/Pasted%20image%2020260603103253.png)
 
 You should now get a WordPress setup page for all three sites now. What's next? You can configure the sites and pipe DNS records into a reverse proxy that handles SSL certs or whatever you like. 
 
