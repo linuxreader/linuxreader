@@ -1834,6 +1834,13 @@ unreferenced blob could still be reused in the future by another
 image.[]{.sentence-end} If deleted, it could be necessary to upload it
 again eventually.
 
+## From Podman build page, my notes
+
+After building, we can *tag* the image with the target registry name. The following example tags the image applying the `v1.0` tag and the `latest` tag:
+
+``` $ podman tag localhost/myhttpd quay.io/<username>/myhttpd:v1.0 ```
+
+After tagging, the image will be ready to be pushed to the remote registry. 
 # Summary {#Chapter_9.xhtml#h1_245 .heading-1}
 
 In this chapter, we explored how to interact with container registries,

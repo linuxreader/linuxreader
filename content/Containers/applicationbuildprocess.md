@@ -1,6 +1,4 @@
-# 7 {#Chapter_7.xhtml#h1_183 .chapterNumber}
-
-# Integrating with Existing Application Build Processes {#Chapter_7.xhtml#h1_184 .chapterTitle}
+# Integrating with Existing Application Build Processes 
 
 After learning how to create custom container images using Podman and
 Buildah, we can now focus on special use cases that can make our build

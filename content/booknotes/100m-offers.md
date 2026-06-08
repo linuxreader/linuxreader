@@ -4,7 +4,7 @@ date: 2026-02-09
 draft: false
 ---
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="/images/100m-offers.png" style="width:25%; height:auto;" />
+  <img src="/images/100m-offers.png" style="flex: 0 0 19%; max-width:19%; height:auto;" />
   <div>
     <h2 class="mb-1">
     </h2>

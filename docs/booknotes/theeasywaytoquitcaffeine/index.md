@@ -1,7 +1,7 @@
 # The Easy Way to Quit Caffeine Summary and Notes
 
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="/images/easywaytoquitcaffeine.png" style="width:25%; height:auto;" />
+  <img src="/images/easywaytoquitcaffeine.png" style="flex: 0 0 19%; max-width:19%; height:auto;" />
   <div>
     <h3 class="mb-1">
     </h3>

@@ -4,7 +4,7 @@ These are the summaries and notes of books I have read. I also keep a list of th
 
 
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
-  <img src="/images/willpowerinstinct.png" style="width:19%; height:auto;" />
+  <img src="/images/willpowerinstinct.png" style="flex: 0 0 15%; max-width:15%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/booknotes/thewillpowerinstinct" class="hover:underline">
@@ -21,7 +21,7 @@ These are the summaries and notes of books I have read. I also keep a list of th
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
-  <img src="/images/dopaminenation.png" style="width:19%; height:auto;" />
+  <img src="/images/dopaminenation.png" style="flex: 0 0 15%; max-width:15%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/booknotes/dopaminenation/" class="hover:underline">
@@ -38,7 +38,7 @@ These are the summaries and notes of books I have read. I also keep a list of th
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
-  <img src="/images/goodinside.png" style="width:19%; height:auto; " />
+  <img src="/images/goodinside.png" style="flex: 0 0 15%; max-width:15%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/booknotes/goodinside/" class="hover:underline">
@@ -55,7 +55,7 @@ These are the summaries and notes of books I have read. I also keep a list of th
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
-  <img src="/images/therelationshiphandbook.png" style="width:19%; height:auto;" />
+  <img src="/images/therelationshiphandbook.png" style="flex: 0 0 15%; max-width:15%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/booknotes/therelationshiphandbook/" class="hover:underline">
@@ -72,7 +72,7 @@ These are the summaries and notes of books I have read. I also keep a list of th
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
-  <img src="/images/positivedogtraining.png" style="width:19%; height:auto;" />
+  <img src="/images/positivedogtraining.png" style="flex: 0 0 15%; max-width:15%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/booknotes/thepowerofpositivedogtraining/" class="hover:underline">
@@ -89,7 +89,7 @@ These are the summaries and notes of books I have read. I also keep a list of th
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
-  <img src="/images/nonviolentcommunication.png" style="width:19%; height:auto;" />
+  <img src="/images/nonviolentcommunication.png" style="flex: 0 0 15%; max-width:15%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/booknotes/nonviolentcommunication/" class="hover:underline">
@@ -104,8 +104,9 @@ These are the summaries and notes of books I have read. I also keep a list of th
     </p>
   </div>
 </div>
+
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
-  <img src="/images/100m-offers.png" style="width:19%; height:auto;" />
+  <img src="/images/100m-offers.png" style="flex: 0 0 15%; max-width:15%; height:auto;" />
   <div>
     <h2 class="mb-1">
     <a href="/booknotes/100m-offers/" class="hover:underline">
@@ -122,7 +123,7 @@ These are the summaries and notes of books I have read. I also keep a list of th
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
-  <img src="/images/meditations.png" style="width:19%; height:auto;" />
+  <img src="/images/meditations.png" style="flex: 0 0 15%; max-width:15%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/booknotes/meditations/" class="hover:underline">
@@ -139,7 +140,7 @@ These are the summaries and notes of books I have read. I also keep a list of th
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
-  <img src="/images/caffeineblues.png" style="width:19%; height:auto;" />
+  <img src="/images/caffeineblues.png" style="flex: 0 0 15%; max-width:15%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/booknotes/caffeineblues/" class="hover:underline">
@@ -156,7 +157,7 @@ These are the summaries and notes of books I have read. I also keep a list of th
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
-  <img src="/images/psychologyofmoney.png" style="width:19%; height:auto;" />
+  <img src="/images/psychologyofmoney.png" style="flex: 0 0 15%; max-width:15%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/booknotes/thepsychologyofmoney/" class="hover:underline">
@@ -173,7 +174,7 @@ These are the summaries and notes of books I have read. I also keep a list of th
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
-  <img src="/images/milliondollarweekend.png" style="width:19%; height:auto;" />
+  <img src="/images/milliondollarweekend.png" style="flex: 0 0 15%; max-width:15%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/booknotes/milliondollarweekend/" class="hover:underline">
@@ -190,7 +191,7 @@ These are the summaries and notes of books I have read. I also keep a list of th
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
-  <img src="/images/anythingyouwant.png" style="width:19%; height:auto;" />
+  <img src="/images/anythingyouwant.png" style="flex: 0 0 15%; max-width:15%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/booknotes/anythingyouwant/" class="hover:underline">
@@ -207,7 +208,7 @@ These are the summaries and notes of books I have read. I also keep a list of th
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
-  <img src="/images/the12weekyear.png" style="width:19%; height:auto;" />
+  <img src="/images/the12weekyear.png" style="flex: 0 0 15%; max-width:15%; height:auto;" />
   <div>
     <h2 class="mb-1">
     <a href="/booknotes/the12weekyear/" class="hover:underline">
@@ -224,7 +225,7 @@ These are the summaries and notes of books I have read. I also keep a list of th
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
-  <img src="/images/tribes.png" style="width:19%; height:auto;" />
+  <img src="/images/tribes.png" style="flex: 0 0 15%; max-width:15%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/booknotes/tribes/" class="hover:underline">
@@ -241,7 +242,7 @@ These are the summaries and notes of books I have read. I also keep a list of th
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
-  <img src="/images/blogstartup.png" style="width:19%; height:auto;" />
+  <img src="/images/blogstartup.png" style="flex: 0 0 15%; max-width:15%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/booknotes/theblogstartup/" class="hover:underline">
@@ -258,7 +259,7 @@ These are the summaries and notes of books I have read. I also keep a list of th
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
-  <img src="/images/easywaytoquitcaffeine.png" style="width:19%; height:auto;" />
+  <img src="/images/easywaytoquitcaffeine.png" style="flex: 0 0 15%; max-width:15%; height:auto;" />
   <div>
     <h3 class="mb-1">
      <a href="/booknotes/theeasywaytoquitcaffeine/" class="hover:underline">
@@ -275,7 +276,7 @@ These are the summaries and notes of books I have read. I also keep a list of th
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
-  <img src="/images/123magic.png" style="width:19%; height:auto;" />
+  <img src="/images/123magic.png" style="flex: 0 0 15%; max-width:15%; height:auto;" />
   <div>
     <h3 class="mb-1">
     <a href="/booknotes/123magic/" class="hover:underline">

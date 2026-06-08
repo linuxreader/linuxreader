@@ -6,7 +6,7 @@ summary: "The 12 Week Year Summary and Notes"
 draft: false
 ---
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="/images/the12weekyear.png" style="width:25%; height:auto;" />
+  <img src="/images/the12weekyear.png" style="flex: 0 0 19%; max-width:19%; height:auto;" />
   <div>
     <h2 class="mb-1">
     </h2>

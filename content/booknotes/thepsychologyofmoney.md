@@ -9,7 +9,7 @@ featureimage: psychologyofmoney.png
 draft: false
 ---
 <div style="display:flex; gap:1rem; align-items:flex-start;">
-  <img src="/images/psychologyofmoney.png" style="width:25%; height:auto;" />
+  <img src="/images/psychologyofmoney.png" style="flex: 0 0 19%; max-width:19%; height:auto;" />
   <div>
     <h3 class="mb-1">
     </h3>
