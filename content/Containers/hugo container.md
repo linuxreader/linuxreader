@@ -3,6 +3,50 @@ title: Automating and Containerizing my Hugo Site
 summary: Using Ansible and Podman to Automatate my Hugo site. 
 draft: true
 ---
+James: i like to add the base image manifest hash as a label on my final image
+latest tag is fine imo, as long as you're doing like --pull=newer on build or w/e
+the exact manifest hash is usually trackable somewhere
+
+https://registry.jharmison.com/image/bootc-image/tag/desktop
+
+^-- all the way at the bottom, very last layer
+
+zot OCI-native Container Image Registry
+zot OCI-native Container Image Registry
+
+registry.jharmison.com
+
+
+manifest hash of my base image
+commit hash of the git commit that built it
+also another tag with commit short hash suffix pointing to same manifest so it's easier to track
+smig
+If all you’re doing is a static site, you don’t need to constantly build a new image either. Use a mount
+James Harmison
+https://registry.jharmison.com/image/bootc-image/tag/desktop-7618524
+
+zot OCI-native Container Image Registry
+zot OCI-native Container Image Registry
+
+registry.jharmison.com
+
+ehhhhhhhhhhhhhhhhhhhh i like packing static content into image
+it's fast if you're just copying content 😛
+https://git.jharmison.dev/james/blog/src/commit/14085b53aa327495294416861082c4738f52322d/Containerfile#L28
+
+blog/Containerfile at 14085b53aa327495294416861082c4738f52322d
+blog
+
+Forgejo: Beyond coding. We forge.
+
+that image == my blog
+no mount required
+
+podman run --rm -p 8080:8080/tcp registry.jharmison.com/james/blog:latest <--run it anywhere, it's a small-ish image (that hasn't been updated in way too long)
+
+could it be smaller? sure. is it egregiously big? no. do i already have the vast majority of that image on every node in my k8s cluster? yes, yes i do
+
+---
 
 My website is awesome. But I want to make it better. Currently, I take a few folders from my obsidian notebook, `rsync` them to another folder on my system that contains my website theme, build the site using Hugo, then push the site to GitHub. 
 
