@@ -21,6 +21,7 @@
 [![](/images/theprophet.jpg?classes=inline,border&width=100px&lightbox=false)](https://amzn.to/4ch83E4)
 [![](/images/wabi.jpg?classes=inline,border&width=100px&lightbox=false)](https://amzn.to/4e0bTks)
 [![](/images/harrypotter.jpg?classes=inline,border&width=100px&lightbox=false)](https://amzn.to/4omRNWF)
+[![](/images/nlmg.jpg?classes=inline,border&width=100px&lightbox=false)](https://amzn.to/43mbzYy)
 
 ## Writing
 

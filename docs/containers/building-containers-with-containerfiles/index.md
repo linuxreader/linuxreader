@@ -146,7 +146,6 @@ Documents/podman/httpd took 51s
 FROM registry.access.redhat.com/ubi9/ubi:latest
 
 RUN set -euo pipefail; \
-dnf upgrade -y; \
 dnf install -y httpd; \
 dnf clean all -y; \
 rm -rf /var/cache/dnf/*

@@ -1,4 +1,6 @@
-
+---
+draft: true
+---
 - Most companies and organizations adopt enterprise-grade registries to rely on secure and resilient solutions for their container image storage. 
 - Most enterprise registries also offer advanced features such as **role-based access control** (**RBAC**), an image vulnerability scanner, mirroring, geo-replication, and high availability, becoming the default choice for production and mission-critical environments.
 

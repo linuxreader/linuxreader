@@ -5,22 +5,24 @@
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <meta name="generator" content="Hugo 0.154.5">
     <meta name="generator" content="Relearn 9.0.3">
-    <meta name="description" content="Installation Logs and Cockpit">
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+    <meta name="description" content="Managing container images with Skopeo So far, we have learned about many container registry concepts, including the differences between private and public registries, their compliance with OCI image specifications, and how to consume images with Podman and Buildah to build and run containers.
+However, sometimes we need to implement simple image manipulation tasks such as moving an image from a registry to a mirror, inspecting a remote image without the need to pull it locally, or even signing images.">
     <meta name="author" content="">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Installing RHEL Linux">
-    <meta name="twitter:description" content="Installation Logs and Cockpit">
-    <meta property="og:url" content="https://www.linuxreader.com/system/installation/">
-    <meta property="og:title" content="Installing RHEL Linux">
-    <meta property="og:description" content="Installation Logs and Cockpit">
+    <meta name="twitter:description" content="Managing container images with Skopeo So far, we have learned about many container registry concepts, including the differences between private and public registries, their compliance with OCI image specifications, and how to consume images with Podman and Buildah to build and run containers.
+However, sometimes we need to implement simple image manipulation tasks such as moving an image from a registry to a mirror, inspecting a remote image without the need to pull it locally, or even signing images.">
+    <meta property="og:url" content="https://www.linuxreader.com/containers/manage-container-images-with-skopeo/">
+    <meta property="og:description" content="Managing container images with Skopeo So far, we have learned about many container registry concepts, including the differences between private and public registries, their compliance with OCI image specifications, and how to consume images with Podman and Buildah to build and run containers.
+However, sometimes we need to implement simple image manipulation tasks such as moving an image from a registry to a mirror, inspecting a remote image without the need to pull it locally, or even signing images.">
     <meta property="og:locale" content="en_us">
     <meta property="og:type" content="article">
-    <meta property="article:section" content="System">
-    <meta itemprop="name" content="Installing RHEL Linux">
-    <meta itemprop="description" content="Installation Logs and Cockpit">
-    <meta itemprop="wordCount" content="456">
-    <title>Installing RHEL Linux</title>
-    <link href="/system/installation/index.md" rel="alternate" type="text/markdown" title="Installing RHEL Linux">
+    <meta property="article:section" content="Containers">
+    <meta itemprop="description" content="Managing container images with Skopeo So far, we have learned about many container registry concepts, including the differences between private and public registries, their compliance with OCI image specifications, and how to consume images with Podman and Buildah to build and run containers.
+However, sometimes we need to implement simple image manipulation tasks such as moving an image from a registry to a mirror, inspecting a remote image without the need to pull it locally, or even signing images.">
+    <meta itemprop="wordCount" content="3636">
+    <title></title>
+    <link href="/containers/manage-container-images-with-skopeo/index.md" rel="alternate" type="text/markdown" title="">
     <link href="/images/favicon.svg?1781048495" rel="icon" type="image/svg+xml">
     <link href="/css/auto-complete/auto-complete.min.css?1781048495" rel="stylesheet">
     <script src="/js/auto-complete/auto-complete.min.js?1781048495" defer></script>
@@ -46,7 +48,7 @@
       window.relearn = window.relearn || {};
       // configuration
       window.relearn.min = `.min`;
-      window.relearn.path='\/system\/installation\/';
+      window.relearn.path='\/containers\/manage-container-images-with-skopeo\/';
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..';
       window.relearn.absBaseUri='https:\/\/www.linuxreader.com';
@@ -123,7 +125,7 @@ code, kbd, pre, samp {
 </style>
 
   </head>
-  <body class="mobile-support html" data-origin="/system/installation/">
+  <body class="mobile-support html" data-origin="/containers/manage-container-images-with-skopeo/">
     <div id="R-body" class="default-animation">
       <div id="R-body-overlay"></div>
       <nav id="R-topbar" class="default-animation">
@@ -139,53 +141,34 @@ code, kbd, pre, samp {
                 <div class="topbar-content-wrapper">
 <nav class="TableOfContents">
   <ul>
-    <li><a href="#about-rhel-9">About RHEL 9</a></li>
-    <li><a href="#installation-logs">Installation Logs</a></li>
-    <li><a href="#6-virtual-consoles">6 Virtual Consoles</a>
+    <li><a href="#managing-container-images-with-skopeo">Managing container images with Skopeo</a>
       <ul>
-        <li><a href="#console-1-ctrlaltf1">Console 1 (Ctrl+Alt+F1)</a></li>
-        <li><a href="#console-2-ctrlaltf2">Console 2 (Ctrl+Alt+F2)</a></li>
-        <li><a href="#console-3-ctrlaltf3">Console 3 (Ctrl+Alt+F3)</a></li>
-        <li><a href="#console-4-ctrlaltf4">Console 4 (Ctrl+Alt+F4)</a></li>
-        <li><a href="#console-5-ctrlaltf5">Console 5 (Ctrl+Alt+F5)</a></li>
-        <li><a href="#console-6-ctrlaltf6">Console 6 (Ctrl+Alt+F6)</a></li>
+        <li><a href="#installing-skopeo">Installing Skopeo</a></li>
+        <li><a href="#verifying-the-installation">Verifying the installation</a></li>
+        <li><a href="#copying-images-across-locations">Copying images across locations</a></li>
+        <li><a href="#inspecting-remote-images">Inspecting remote images</a></li>
+        <li><a href="#synchronizing-registries-and-local-directories">Synchronizing registries and local directories</a></li>
+        <li><a href="#deleting-images">Deleting images</a></li>
       </ul>
     </li>
-    <li><a href="#lab-setup">Lab Setup</a>
-      <ul>
-        <li><a href="#vm1">VM1</a></li>
-        <li><a href="#vm2">VM2</a></li>
-      </ul>
-    </li>
-    <li><a href="#setting-up-vm1">Setting Up VM1</a>
-      <ul>
-        <li><a href="#network--hostname-settings">Network &amp; Hostname Settings</a></li>
-        <li><a href="#change-the-boot-order">Change the Boot Order</a></li>
-      </ul>
-    </li>
-    <li><a href="#using-cockpit">Using Cockpit</a></li>
-    <li><a href="#labs">Labs</a>
-      <ul>
-        <li><a href="#lab-enable-cockpit">Lab: Enable Cockpit</a></li>
-      </ul>
-    </li>
+    <li><a href="#from-podman-build-page-my-notes">From Podman build page, my notes</a></li>
   </ul>
 </nav>
                 </div>
               </div>
             </div>
           </div>
-          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/system/"><span itemprop="name">System</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">Installing RHEL Linux</span><meta itemprop="position" content="3"></li>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/"><span itemprop="name">Linux Reader</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/containers/"><span itemprop="name">Containers</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li>
           </ol>
           <div class="topbar-area topbar-area-end" data-area="end">
             <div class="topbar-button topbar-button-markdown default-animation" data-content-empty="disable" data-width-s="area-more" data-width-m="show" data-width-l="show">
-<span class="btn cstyle button link noborder notitle interactive"><a href="/system/installation/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/manage-container-images-with-skopeo/index.md" title="Show Markdown"><i class="fa-fw fab fa-markdown"></i></a></span>
             </div>
             <div class="topbar-button topbar-button-prev default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
-<span class="btn cstyle button link noborder notitle interactive"><a href="/system/" title="System (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/automating-wordpress-containers/" title="Automating Wordpress Containers with Ansible and Podman (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
             </div>
             <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
-<span class="btn cstyle button link noborder notitle interactive"><a href="/system/interaction/" title="Interaction (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+<span class="btn cstyle button link noborder notitle interactive"><a href="/containers/ansible-and-podman/" title="Ansible and Podman (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
             </div>
             <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
 <span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
@@ -200,223 +183,236 @@ code, kbd, pre, samp {
         </div>
       </nav>
       <div id="R-main-overlay"></div>
-      <main id="R-body-inner" class="highlightable system" tabindex="-1">
+      <main id="R-body-inner" class="highlightable containers" tabindex="-1">
         <div class="flex-block-wrapper">
 <article class="default">
   <header class="headline">
   </header>
 
-<h1 id="installing-rhel-linux">Installing RHEL Linux</h1>
+<h1 id=""></h1>
 
-<h2 id="about-rhel-9">About RHEL 9<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h2 id="managing-container-images-with-skopeo">Managing container images with Skopeo<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>So far, we have learned about many container registry concepts, including the differences between private and public registries, their compliance with OCI image specifications, and how to consume images with Podman and Buildah to build and run containers.</p>
+<p>However, sometimes we need to implement simple image manipulation tasks such as moving an image from a registry to a mirror, inspecting a remote image without the need to pull it locally, or even signing images.</p>
+<p>The community that gave birth to Podman and Buildah developed a third amazing tool, <strong>Skopeo</strong> (<a href="https://github.com/containers/skopeo)" rel="external" target="_blank">https://github.com/containers/skopeo)</a>, which exactly implements the features described previously.</p>
+<p>Skopeo was designed as an image and registry manipulation tool for DevOps teams and is not intended to run containers (the main role of Podman) nor build OCI images (the main role of Buildah). Instead, it offers a minimal and straightforward command-line interface with basic image manipulation commands that will prove to be extremely useful in different contexts.</p>
+<p>Let's inspect the most interesting features in the next subsections.</p>
+<h3 id="installing-skopeo">Installing Skopeo<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Skopeo is a Go binary tool that is already packaged and available for many distributions. It can also be built and installed from source directly.</p>
+<p>This section provides a non-exhaustive list of installation examples on the major distributions. For the sake of clarity, it is important to reiterate that the book lab environments were all based on Fedora 40:</p>
+<ul>
+<li><strong>Fedora,</strong> <strong>RHEL 8/9, CentOS 8,</strong> <strong>and CentOS Stream 8/9</strong>: To install Skopeo on RHEL-like systems, run the following <code>dnf</code> command:</li>
+</ul>
+<p><code>$ sudo dnf -y install skopeo </code></p>
+<ul>
+<li><strong>Debian</strong>: To install Skopeo on Debian Bullseye, Testing, and Unstable (Sid), run the following <code>apt-get</code> commands:</li>
+</ul>
+<p><code>$ sudo apt-get update $ sudo apt-get -y install skopeo </code></p>
+<ul>
+<li><strong>Ubuntu</strong>: To install Skopeo on Ubuntu 20.10 and newer, run the following command:</li>
+</ul>
+<p><code>$ sudo apt-get -y update $ sudo apt-get -y install skopeo </code></p>
+<ul>
+<li><strong>Arch Linux</strong>: To install Skopeo on Arch Linux, run the following <code>pacman</code> command:</li>
+</ul>
+<p><code>$ sudo pacman -S skopeo </code></p>
+<ul>
+<li><strong>openSUSE</strong>: To install Skopeo on openSUSE, run the following <code>zypper</code> command:</li>
+</ul>
+<p><code>{.programlisting .snippet-con-one} $ sudo zypper install skopeo</code></p>
+<ul>
+<li><strong>macOS</strong>: To install Skopeo on macOS, run the following <code>brew</code> command:</li>
+</ul>
+<p><code>{.programlisting .snippet-con-one} $ brew install skopeo</code></p>
+<ul>
+<li><strong>Building from source</strong>: Skopeo can also be built from source. As for Buildah, for the purposes of this book, we will keep the focus on simple deployment methods, but if you're curious, you can find a dedicated <em>install</em> section in the main project repository that illustrates how to build Skopeo from source: <a href="https://github.com/containers/skopeo/blob/main/install.md#building-from-source" rel="external" target="_blank">https://github.com/containers/skopeo/blob/main/install.md#building-from-source</a>.</li>
+</ul>
+<p>The preceding link shows examples of containerized and non-containerized builds.</p>
+<ul>
+<li><strong>Running Skopeo in a container</strong>: Skopeo is also released as a container image that can be executed with Podman. To pull and run the latest version of Skopeo as a container, use the following <code>podman</code> command:</li>
+</ul>
+<p><code>{.programlisting .snippet-con-one} $ podman run quay.io/skopeo/stable:latest &lt;command&gt; &lt;options&gt;</code></p>
+<ul>
+<li><strong>Windows</strong>: At the time of writing this book, there is no build available for Microsoft Windows. However, you can install it in <strong>Windows Linux Subsystem</strong> (<strong>WSL</strong>). Since WSL is essentially a Linux environment, the installation process for Skopeo depends entirely on which distribution you have installed (Fedora, Ubuntu, and so on).</li>
+</ul>
+<p>Skopeo uses the same system and local configuration files described for Podman and Buildah; therefore, we can immediately focus on the installation verification and the analysis of the most common use cases.</p>
+<h3 id="verifying-the-installation">Verifying the installation<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>To verify the correct installation, simply run the <code>skopeo</code> command with the <code>-h</code> or <code>--help</code> option to view all available commands, as in the following example:</p>
+<p><code>$ skopeo -h</code></p>
+<p>The expected output will show, among the utility options, all the available commands, each one with a description of the command scope. The full list of commands is as follows:</p>
+<ul>
+<li><code>copy</code>: Copy an image across locations, using different transports, such as the Docker Registry, local directories, OCI, tarballs, OSTree, and OCI archives</li>
+<li><code>delete</code>: Delete an image from a target location</li>
+<li><code>generate-sigstore-key</code>: Generate a <code>sigstore</code> public/private key pair</li>
+<li><code>help</code>: Print <code>help</code> commands</li>
+<li><code>inspect</code>: Inspect the metadata, tags, and configuration of an image in a target location</li>
+<li><code>list-tags</code>: Show the available tags for a specific image repository</li>
+<li><code>login</code>: Authenticate to a remote registry</li>
+<li><code>logout</code>: Log out from a remote registry</li>
+<li><code>manifest-digest</code>: Produce a manifest digest for a file</li>
+<li><code>standalone-sign</code>: A debugging tool to publish and sign an image using local files</li>
+<li><code>standalone-verify</code>: Verify an image signature using local files</li>
+<li><code>sync</code>: Synchronize one or more images across locations</li>
+</ul>
+<p>Let's now inspect in greater detail some of the most interesting Skopeo commands.</p>
+<h3 id="copying-images-across-locations">Copying images across locations<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Podman, just like Docker, can be used not only to run containers but also to pull images locally and push them to other locations. However, one of the main caveats is the need to run two commands, one to pull and one to push, while the local image store remains filled with the pulled images. Therefore, users should periodically clean up the local store.</p>
+<p>Skopeo offers a smarter and simpler way to achieve this goal with the <code>skopeo copy</code> command. The command implements the following syntax:</p>
+<p><code>skopeo copy [command options] SOURCE-IMAGE DESTINATION-IMAGE</code></p>
+<p>In this generic description, <code>SOURCE-IMAGE</code> and <code>DESTINATION-IMAGE</code> are images belonging to local or remote locations and reachable using one of the following transports:</p>
+<ul>
+<li><code>docker://docker-reference</code>: This transport is related to images stored in registries implementing the <em>Docker Registry HTTP API V2</em>.</li>
+</ul>
+<p>This setting uses the <code>/etc/containers/registries.conf</code> or <code>$HOME/.config/containers/registries.conf</code> file to obtain further registry configurations.</p>
+<p>The <code>docker-reference</code> field follows the format <code>name[:tag|@digest]</code>.</p>
+<ul>
+<li><code>containers-storage:[[storage-specifier]]{image-id|docker-reference[@image-id]}</code>: This setting refers to an image in local container storage.</li>
+</ul>
+<p>The <code>storage-specifier</code> field is in the format <code>[[driver@]root[+run-root][:options]]</code>.</p>
 <ul>
 <li>
-<p>Kernel 5.14</p>
+<p><code>dir:path</code>: This setting refers to an existing local directory that holds manifests, layers (in tarball format), and signatures</p>
 </li>
 <li>
-<p>Released May 2019</p>
+<p><code>docker-archive:path[:{docker-reference|@source-index}]</code>: This setting refers to a Docker archive obtained with the <code>docker save</code> or <code>podman save</code> command</p>
 </li>
 <li>
-<p>Built alongside Fedora 34</p>
+<p><code>docker-daemon:docker-reference|algo:digest</code>: This setting refers to image storage in the Docker daemon's internal storage</p>
 </li>
 <li>
-<p>Installer program = Anaconda</p>
+<p><code>oci:path[:tag]</code>: This setting refers to an image stored in a local path compliant with the OCI layout specifications</p>
 </li>
 <li>
-<p>Default bootloader = GRUB2</p>
-</li>
-<li>
-<p>Default automatic partitioning = /boot, /, swap</p>
-</li>
-<li>
-<p>Default desktop environment = GNOME</p>
+<p><code>oci-archive:path[:tag]</code>: This setting refers to an OCI layout specification-compliant image stored in tarball format</p>
 </li>
 </ul>
-<h2 id="installation-logs">Installation Logs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
-<p><strong>/root/anaconda-ks.cfg</strong> - Configuration entered during installation</p>
-<p><strong>/var/log/anaconda/anaconda.log</strong> - Contains informational, debug, and other general messages</p>
-<p><strong>/var/log/anaconda/journal.log</strong> - Stores messages generated by many services and components during system installation</p>
-<p><strong>/var/log/anaconda/packaging.log</strong> - Records messages generated by the dnf and rpm commands during software installation</p>
-<p><strong>/var/log/anaconda/program.log</strong> - Captures messages generated by external programs</p>
-<p><strong>/var/log/anaconda/storage.log</strong> - Records messages generated by storage modules</p>
-<p><strong>/var/log/anaconda/syslog</strong> - Records messages related to the kernel</p>
-<p><strong>/var/log/anaconda/X.log</strong> - Stores X Window System information</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>Note: Logs are created in /tmp and then transferred to /var/log/anaconda once the installation is finished.</code></pre></div>
-<h2 id="6-virtual-consoles">6 Virtual Consoles<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>Let's inspect some usage examples of the <code>skopeo copy</code> command in real-world scenarios. The first example shows how to copy an image from a remote registry to another remote registry:</p>
+<p><code>$ skopeo copy \ docker://docker.io/library/nginx:latest \ docker://private-registry.example.com/lab/nginx:latest</code></p>
+<p>The preceding example does not take care of registry authentication, which is usually a requirement to push images to the remote repository. In the next example, we show a variant where both source and target registry are decorated with authentication options:</p>
+<p><code>$ skopeo copy \ --src-creds USERNAME:PASSWORD \ --dest-creds USERNAME:PASSWORD \ docker://registry1.example.com/mirror/nginx:latest \ docker://registry2.example.com/lab/nginx:latest</code></p>
+<p>The previous approach, despite working perfectly, has the limitation of passing username and password strings as clear-text strings. To avoid this, we can use the <code>skopeo login</code> command to authenticate to our registries before running <code>skopeo copy</code>.</p>
+<p>The third example shows a pre-authentication to the destination registry, assuming that the source registry is publicly accessible for pulls:</p>
+<p><code>$ skopeo login private-registry.example.com $ skopeo copy \ docker://docker.io/library/nginx:latest \ docker://private-registry.example.com/lab/nginx:latest</code></p>
+<p>When we log in to the source/target registries, the system persists the registry-provided auth tokens in dedicated auth files that we can reuse later for further access.</p>
+<p>By default, Skopeo looks at the <code>${XDG_RUNTIME_DIR}/containers/auth.json</code> path, but we can provide a custom location for the auth file. For example, if we used the Docker container runtime before, we could find it in the <code>${HOME}/.docker/config.json</code> path. This file contains a simple JSON object that holds, for every used registry, the token obtained upon authentication. The client (Podman, Skopeo, or Buildah) will use this token to directly access the registry. Basically, once one tool logs in, all tools can use the token. <code>podman login</code> allows <code>skopeo copy</code> and <code>buildah push</code> to access the registry, for example.</p>
+<p>The following example shows the usage of the auth file, provided with a custom path:</p>
+<p><code>$ skopeo copy \ --authfile ${HOME}/.docker/config.json \ docker://docker.io/library/nginx:latest \ docker://private-registry.example.com/lab/nginx:latest</code></p>
+<p>Another common issue that can be encountered when working with a private registry is the lack of certificates signed by a known <strong>certification authority</strong> (<strong>CA</strong>) or the lack of HTTPS communication (which means that all traffic is completely unencrypted). If we consider these totally non-secure scenarios safe to trust in a lab environment, we can skip the TLS verification with the <code>--dest-tls-verify</code> and <code>--src-tls-verify</code> options, which accept a simple Boolean value.</p>
+<p>The following example shows how to skip the TLS verification on the target registry:</p>
+<p><code>$ skopeo copy \ --authfile ${HOME}/.docker/config.json \ --dest-tls-verify false \ docker://docker.io/library/nginx:latest \ docker://private-registry.example.com/lab/nginx:latest</code></p>
+<p>So far, we've seen how to move images across public and private registries, but we can use Skopeo to move images to and from local stores easily. For example, we can use Skopeo as a highly specialized push/pull tool for images inside our build pipelines.</p>
+<p>The next example shows how to push a locally built image to a public registry. The image already exists locally and is then pushed to the remote registry:</p>
+<p><code>$ podman images REPOSITORY TAG IMAGE ID CREATED SIZE &lt;namespace&gt;/python_httpd latest 4067fa24786a 12 days ago 318 MB $ skopeo copy \ --authfile ${HOME}/.docker/config.json \ containers-storage:quay.io/&lt;namespace&gt;/python_httpd \ docker://quay.io/&lt;namespace&gt;/python_httpd:latest</code></p>
+<p>This is an amazing way to manage an image push with total control over the push/pull process and shows how the three tools
+&ndash; Podman, Buildah, and Skopeo &ndash; can fulfill specialized tasks in our DevOps environment, each one accomplishing the purpose it was designed for at its best.</p>
+<p>Let's see another example, this time showing how to pull an image from a remote registry to an OCI-compliant local store:</p>
+<p><code>$ skopeo copy \ --authfile ${HOME}/.docker/config.json \ docker://docker.io/library/nginx:latest \ oci:/tmp/nginx</code></p>
+<p>The output folder is compliant with the OCI image specifications and will have the following structure (blob hashes cut for layout reasons). This basically expands the image tarball at a specified location, allowing for easy inspection:</p>
+<p><code>$ tree /tmp/nginx /tmp/nginx/ ├─ blobs │ └─sha256 │ ├──21e0df283cd68384e5e8dff7e6be1774c86ea3110c1b1e932[...] │ ├──44be98c0fab60b6cef9887dbad59e69139cab789304964a19[...] │ ├──77700c52c9695053293be96f9cbcf42c91c5e097daa382933[...] │ ├──81d15e9a49818539edb3116c72fbad1df1241088116a7363a[...] │ ├──881ff011f1c9c14982afc6e95ae70c25e38809843bb7d42ab[...] │ ├──d86da3a6c06fb46bc76d6dc7b591e87a73cb456c990d814fd[...] │ ├──e5ae68f740265288a4888db98d2999a638fdcb6d725f42767[...] │ └──ed835de16acd8f5821cf3f3ef77a66922510ee6349730d89a[...] ├─ index.json └─ oci-layout</code></p>
+<p>The files inside the <code>blobs/sha256</code> folder include the image manifest (in JSON format) and the image layers in compressed tarball format</p>
+<p>It's interesting to know that Podman can seamlessly run a container based on a local folder compliant with the OCI image specifications. The next example shows how to run an NGINX container from the previously downloaded image:</p>
+<p><code>$ podman run -d oci:/tmp/nginx Getting image source signatures Copying blob e5ae68f74026 done Copying blob 21e0df283cd6 done Copying blob ed835de16acd done Copying blob 881ff011f1c9 done Copying blob 77700c52c969 done Copying blob 44be98c0fab6 done Copying config 81d15e9a49 done Writing manifest to image destination Storing signatures 90493fe89f024cfffda3f626acb5ba8735cadd827be6c26fa44971108e09b54f</code></p>
+<p>Notice the <code>oci:</code> prefix before the image path, necessary to specify that the path provided is OCI compliant.</p>
+<p>Besides, it is interesting to show that Podman copies and extracts the blobs inside its local store (under <code>$HOME/.local/share/containers/storage</code> for a rootless container like the one in the previous example).</p>
+<p>After learning how to copy images with Skopeo, let's see how to inspect remote images without the need to pull them locally.</p>
+<h3 id="inspecting-remote-images">Inspecting remote images<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Sometimes we need to verify the configurations, tags, or metadata of an image before pulling and executing it locally. For this purpose, Skopeo offers the useful <code>skopeo inspect</code> command to inspect images over supported transports.</p>
+<p>The first example shows how to inspect the official NGINX image repository:</p>
+<p><code>$ skopeo inspect docker://docker.io/library/nginx</code></p>
+<p>The <code>skopeo inspect</code> command creates a JSON-formatted output with the following fields:</p>
 <ul>
-<li>
-<p>Monitor the installation process.</p>
-</li>
-<li>
-<p>View diagnostic messages.</p>
-</li>
-<li>
-<p>Discover and fix any issues encountered.</p>
-</li>
-<li>
-<p>Information displayed on the console screens is captured in installation log files.</p>
-</li>
+<li><code>Name</code>: The name of the image repository.</li>
+<li><code>Digest</code>: The SHA256 calculated digest.</li>
+<li><code>RepoTags</code>: The full list of available image tags in the repository. This list will be empty when inspecting local transports, such as <code>containers-storage:</code> or <code>oci:</code>, since they will be referred to as a single image.</li>
+<li><code>Created</code>: The creation date of the repository or image.</li>
+<li><code>DockerVersion</code>: The version of Docker used to create the image. This value is empty for images created with Podman, Buildah, or other tools.</li>
+<li><code>Labels</code>: Additional labels applied to the image at build time.</li>
+<li><code>Architecture</code>: The target system architecture for which the image was built. This value is <code>amd64</code> for x86-64 systems.</li>
+<li><code>Os</code>: The target operating system the image was built for.</li>
+<li><code>Layers</code>: The list of layers that compose the image, along with their SHA256 digest.</li>
+<li><code>Env</code>: Additional environment variables defined in the image at build time.</li>
 </ul>
-<h3 id="console-1-ctrlaltf1">Console 1 (Ctrl+Alt+F1)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>The same considerations illustrated previously about authentication and TLS verification apply to the <code>skopeo inspect</code> command: it is possible to inspect images on a private registry upon authentication and skip the TLS verification. The next example shows this use case:</p>
+<p><code>$ skopeo inspect \ --authfile ${HOME}/.docker/config.json \ --tls-verify false \ registry.example.com/library/test-image</code></p>
+<p>Inspecting local images is possible by passing the correct transport. The next example shows how to inspect a local OCI image:</p>
+<p><code>$ skopeo inspect oci:/tmp/custom_image</code></p>
+<p>The output of this command will have an empty <code>RepoTags</code> field.</p>
+<p>In addition, it is possible to use the <code>--no-tags</code> option to intentionally skip the repository tags, like in the following example:</p>
+<p><code>$ skopeo inspect --no-tags docker://docker.io/library/nginx</code></p>
+<p>On the other hand, if we need to print only the available repository tags, we can use the <code>skopeo list-tags</code> command. The next example prints all the available tags of the official NGINX repository:</p>
+<p><code>$ skopeo list-tags docker://docker.io/library/nginx</code></p>
+<p>The third use case we are going to analyze is the synchronization of images across registries and local stores.</p>
+<h3 id="synchronizing-registries-and-local-directories">Synchronizing registries and local directories<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>When working with disconnected environments, a quite common scenario is the need to synchronize repositories from a remote registry locally.</p>
+<p>To serve this purpose, Skopeo introduced the <code>skopeo sync</code> command, which helps synchronize content between a source and destination, supporting different transport kinds.</p>
+<p>We can use this command to synchronize a whole repository, with all the available tags inside it, between a source and a destination. Alternatively, it is possible to synchronize only a specific image tag.</p>
+<p>The first example shows how to synchronize the official <code>busybox</code> repository from a private registry to the local filesystem. This command pulls all the tags contained in the remote repository to the local destination (the target directory must already exist):</p>
+<p><code>$ mkdir /tmp/images $ skopeo sync \ --src docker --dest dir \ registry.example.com/lab/busybox /tmp/images</code></p>
+<p>Notice the use of the <code>--src</code> and <code>--dest</code> options to define the kind of transport. Supported transport types are as follows:</p>
 <ul>
-<li>
-<p>Main screen</p>
-</li>
-<li>
-<p>Select language</p>
-</li>
-<li>
-<p>Then switches the default console to 6</p>
-</li>
+<li><strong>Source</strong>: <code>docker</code>, <code>dir</code>, and <code>yaml</code> (covered later in this section)</li>
+<li><strong>Destination</strong>: <code>docker</code> and <code>dir</code></li>
 </ul>
-<h3 id="console-2-ctrlaltf2">Console 2 (Ctrl+Alt+F2)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<ul>
-<li>Shell interface for the root user</li>
-</ul>
-<h3 id="console-3-ctrlaltf3">Console 3 (Ctrl+Alt+F3)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<ul>
-<li>
-<p>Displays installation messages</p>
-</li>
-<li>
-<p>Stores them in /tmp/anaconda.log</p>
-</li>
-<li>
-<p>Information on detected hardware, etc.</p>
-</li>
-</ul>
-<h3 id="console-4-ctrlaltf4">Console 4 (Ctrl+Alt+F4)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<ul>
-<li>
-<p>Shows storage messages</p>
-</li>
-<li>
-<p>Stores them in /tmp/storage.log</p>
-</li>
-</ul>
-<h3 id="console-5-ctrlaltf5">Console 5 (Ctrl+Alt+F5)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<ul>
-<li>
-<p>Program messages</p>
-</li>
-<li>
-<p>Stores them in /tmp/program.log</p>
-</li>
-</ul>
-<h3 id="console-6-ctrlaltf6">Console 6 (Ctrl+Alt+F6)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<ul>
-<li>Default graphical configuration and installation console screen</li>
-</ul>
-<p>Console 1 brings you to the login screen. Console 2 does nothing. Consoles 3-6 all bring you to the login screen.</p>
-<h2 id="lab-setup">Lab Setup<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
-<h3 id="vm1">VM1<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>server1.example.com
-192.168.0.110
-Memory: 2 GB
-Storage: 1x20 GB
-2 vCPUs</code></pre></div>
-<h3 id="vm2">VM2<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>server2.example.com
-192.168.0.120
-Memory: 2048 MB
-Storage: 1x20 GB
-    4x250 MB data disks
-    1x5 GB data disk
-2 vCPUs</code></pre></div>
-<h2 id="setting-up-vm1">Setting Up VM1<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
-<p>Download the ISO from Red Hat&rsquo;s website:</p>
-<p><a href="https://access.redhat.com/downloads/content/rhel" rel="external" target="_blank">https://access.redhat.com/downloads/content/rhel</a></p>
-<p>Name the VM <strong>RHEL9-VM1</strong> and accept the defaults.</p>
-<p>Set the drive size to 20 GB.</p>
-<p>Press <strong>Space</strong> to halt autoboot.</p>
-<p>Select <strong>Install</strong>.</p>
-<p>Select language.</p>
-<p>Configure the timezone under <strong>Time &amp; Date</strong>.</p>
-<p>Go into <strong>Installation Destination</strong> and click <strong>Done</strong>.</p>
-<h3 id="network--hostname-settings">Network &amp; Hostname Settings<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<ol>
-<li>
-<p>Change the hostname to <code>server1.example.com</code></p>
-</li>
-<li>
-<p>Go to IPv4 Settings in <strong>Network &amp; Hostname</strong> and set:</p>
-<ul>
-<li>
-<p>Method: Manual</p>
-</li>
-<li>
-<p>Address: 192.168.0.110</p>
-</li>
-<li>
-<p>Netmask: 24</p>
-</li>
-<li>
-<p>Gateway: 192.168.0.1</p>
-</li>
-<li>
-<p>Save</p>
-</li>
-</ul>
-</li>
-<li>
-<p>Slide the On/Off switch in the main menu to <strong>On</strong></p>
-</li>
-</ol>
-<p>Set the root password.</p>
-<h3 id="change-the-boot-order">Change the Boot Order<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<ol>
-<li>
-<p>Power off the VM.</p>
-</li>
-<li>
-<p>Set the boot sequence to:</p>
-<ul>
-<li>
-<p>Hard Disk first</p>
-</li>
-<li>
-<p>Optical Drive second</p>
-</li>
-<li>
-<p>Remove Floppy</p>
-</li>
-</ul>
-</li>
-</ol>
-<p>Accept the license terms and create a user.</p>
-<p>SSH from the host OS using PuTTY.</p>
-<p>Issue these commands after setup:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>whoami
-</span></span><span style="display:flex;"><span>hostname
-</span></span><span style="display:flex;"><span>pwd
-</span></span><span style="display:flex;"><span>logout
-</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># or press Ctrl+D</span></span></span></code></pre></div>
-<h2 id="using-cockpit">Using Cockpit<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
-<ul>
-<li>
-<p>Web GUI for managing RHEL systems</p>
-</li>
-<li>
-<p>Comes pre-installed</p>
-<ul>
-<li>If not installed:</li>
-</ul>
-</li>
-</ul>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo dnf install cockpit</span></span></code></pre></div>
-<ul>
-<li>Enable the Cockpit socket:</li>
-</ul>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo systemctl enable --now cockpit.socket</span></span></code></pre></div>
-<ul>
-<li>Access via:</li>
-</ul>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>https://your-ip:9090</code></pre></div>
-<h2 id="labs">Labs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
-<h3 id="lab-enable-cockpit">Lab: Enable Cockpit<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo systemctl enable --now cockpit.socket</span></span></code></pre></div>
-<p>In a web browser, go to:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>https://&lt;your-ip&gt;:9090</code></pre></div>
+<p>By default, Skopeo syncs the repository content to the destination without the whole image source path. This could represent a limitation when we need to sync repositories with the same name from multiple sources. To solve this limitation, we can add the <code>--scoped</code> option and get the full image source path copied in the destination tree.</p>
+<p>The second example shows a scoped synchronization of the <code>busybox</code> repository:</p>
+<p><code>$ skopeo sync \ --src docker --dest dir --scoped \ registry.example.com/lab/busybox /tmp/images</code></p>
+<p>The resulting path in the destination directory will contain the registry name and the related namespace, with a new folder named after the image tag.</p>
+<p>The next example shows the directory structure of the destination after a successful synchronization:</p>
+<p><code>ls -A1 /tmp/images/docker.io/library/ busybox:1 busybox:1.21.0-ubuntu busybox:1.21-ubuntu busybox:1.23 busybox:1.23.2 busybox:1-glibc busybox:1-musl busybox:1-ubuntu busybox:1-uclibc [...omitted output...]</code></p>
+<p>If we need to synchronize only a specific image tag, it is possible to specify the tag name in the source argument, as in this third example:</p>
+<p><code>$ skopeo sync --src docker --dest dir docker.io/library/busybox:latest /tmp/images</code></p>
+<p>We can directly synchronize two registries using Docker, both for the source and destination transport. This is especially useful in disconnected environments where systems are allowed to reach a local registry only. The local registry can mirror repositories from other public or private registries, and the task can be scheduled periodically to keep the mirror updated.</p>
+<p>packt_tip <strong>Important note</strong></p>
+<p>Docker Hub imposes strict pull rate limits on unauthenticated (anonymous) users. If you are following along with these exercises and are not logged into a Docker account, you may quickly hit these limits, causing your image pulls to fail. To avoid <em>Too Many Requests</em> errors and ensure a more reliable experience, we recommend using the images hosted on Quay, which currently offers a more generous path for public, unauthenticated pulls.</p>
+<p>The next example shows how to synchronize the UBI9 image and all its tags from the public Red Hat repository to a local mirror registry:</p>
+<p><code>$ skopeo sync \ --src docker --dest docker \ --dest-tls-verify=false \ registry.access.redhat.com/ubi9 \ mirror-registry.example.com</code></p>
+<p>The preceding command will mirror all the UBI9 image tags to the target registry.</p>
+<p>Notice the <code>--dest-tls-verify=false</code> option to disable TLS certificate checks on the destination.</p>
+<p>The <code>skopeo sync</code> command is great to mirror repositories and single images between locations, but when it comes to mirroring full registries or a large set of repositories, we should run the command many times, passing different source arguments.</p>
+<p>To avoid this limitation, the source transport can be defined as a YAML file to include an exhaustive list of registries, repositories, and images. It is also possible to use regular expressions to capture only selected subsets of image tags.</p>
+<p>The following is an example of a custom YAML file that will be passed as a source argument to Skopeo (<code>Chapter09/example_sync.yaml</code>):</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>{.programlisting .snippet-code} docker.io: tls-verify: true images: alpine: [] nginx:
+- &#34;latest&#34; images-by-tag-regex: httpd: ^2\.4\.[0-9]*-alpine$ quay.io: tls-verify: true images: fedora/fedora:
+- latest registry.access.redhat.com: tls-verify: true images: ubi9 :
+- &#34;9 .4&#34;
+- &#34;9 .5&#34; 
+  </code></pre></div>
+<p>In the preceding example, different images and repositories are defined, and therefore, the file content deserves a detailed description.</p>
+<p>The whole <code>alpine</code> repository is pulled from <code>docker.io</code>, along with the <code>nginx:latest</code> image tag. Also, a regular expression is used to define a pattern of tags for the <code>httpd</code> image, in order to pull Alpine-based image version 2.4.z only.</p>
+<p>The file also defines a specific tag (<code>latest</code>) for the <code>fedora</code> image stored under <a href="https://quay.io/" rel="external" target="_blank">https://quay.io/</a> and the <code>9.4</code> and <code>9.5</code> tags for the <code>ubi9</code> image stored under the <code>registry.access.redhat.com</code> registry.</p>
+<p>Once defined, the file is passed as an argument to Skopeo, along with the destination:</p>
+<p><code>$ skopeo sync \ --src yaml --dest dir \ --scoped example_sync.yaml /tmp/images</code></p>
+<p>All the contents listed in the <code>example_sync.yaml</code> file will be copied to the destination directory, following the previously mentioned filtering rules.</p>
+<p>The next example shows a larger mirroring use case, applied to the OpenShift release images. The following <code>openshift_sync.yaml</code> file defines a regular expression to sync all the images for version 4.17.z of OpenShift built for the x86_64 architecture (<code>Chapter09/openshift_sync.yaml</code>):</p>
+<p><code>{.programlisting .snippet-code} quay.io: tls-verify: true images-by-tag-regex: openshift-release-dev/ocp-release: ^4\.17 \..*-x86_64$</code></p>
+<p>The <strong>z stream</strong> in a version number (such as <code>x.y.z</code>) that typically represents patch releases containing bug fixes and minor improvements that do not introduce new features. Increasing the <code>z</code> value indicates a stable, backward-compatible update focused on enhancing the existing version's quality.</p>
+<p>We can use this file to mirror a whole minor release of OpenShift to an internal registry accessible from disconnected environments and use this mirror to successfully conduct an air-gapped installation of OpenShift Container Platform. The next command example shows this use case:</p>
+<p><code>$ skopeo sync \ --src yaml --dest docker \ --dest-tls-verify=false \ --src-authfile pull_secret.json \ openshift_sync.yaml mirror-registry.example.com:5000</code></p>
+<p>It is worth noticing the usage of a pull secret file, passed with the <code>--src-authfile</code> option, to authenticate on the Quay public registry and pull images from the <code>ocp-release</code> repository.</p>
+<p>There is a final Skopeo feature that captures our interest: the remote deletion of images, covered in the next subsection.</p>
+<h3 id="deleting-images">Deleting images<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>A registry can be imagined as a specialized object store that implements a set of HTTP APIs to manipulate its content and push/pull objects in the form of image layers and metadata.</p>
+<p>The <strong>Docker Registry v2</strong> protocol is a standard API specification that is widely adopted among many registry projects <em>[3]</em>. This set of API specifications covers all the registry functions that are expected to be exposed to an external client through standard HTTP <code>GET</code>, <code>PUT</code>, <code>DELETE</code>, <code>POST</code>, and <code>PATCH</code> methods.</p>
+<p>This means that we could interact with a registry with any kind of HTTP client capable of managing the requests correctly, for example, the <code>curl</code> command.</p>
+<p>Any container engine uses, at a lower level, HTTP client libraries to execute the various methods against the registry (for example, for an image pull).</p>
+<p>The Docker v2 protocol also supports the remote deletion of images, and any registry that implements this protocol supports the following <code>DELETE</code> request for images:</p>
+<p><code>DELETE /v2/&lt;name&gt;/manifests/&lt;reference&gt;</code></p>
+<p>The following example represents a theoretical <code>DELETE</code> command issued with the <code>curl</code> command against a local registry:</p>
+<p><code>$ curl -v --silent \ -H &quot;Accept: application/vnd.docker.distribution.manifest.v2+json&quot; \ -X DELETE http://127.0.0.1:5000/v2/&lt;name&gt;/manifests/sha256:&lt;image_tag_digest&gt;</code></p>
+<p>The preceding example intentionally avoids including the management of authorization tokens for readability.</p>
+<p>Podman and Docker, designed to work as registry engines, do not implement a remote <code>delete</code> feature among their command interfaces.</p>
+<p>Fortunately, Skopeo comes to the rescue with its built-in <code>skopeo delete</code> command to manage remote image deletion with a simple and user-friendly syntax.</p>
+<p>The following example deletes an image on a hypothetical internal <code>mirror-registry.example.com:5000</code> registry:</p>
+<p><code>$ skopeo delete \ docker://mirror-registry.example.com:5000/foo:bar</code></p>
+<p>The command immediately deletes the image tag references in the remote registry.</p>
+<p>When deleting images with Skopeo, it is necessary to enable image deletion in the remote registry, as covered in the next section, <em>Running a local container registry</em>.</p>
+<p>In this section, we have learned how to use Skopeo to copy, delete, inspect, and sync images or even whole repositories across different transports, including private local registries, gaining control over daily image manipulation operations.</p>
+<p>We did not cover the container image's signature process here; we will explore it in depth with practical examples in <em><a href="/containers/manage-container-images-with-skopeo/#Chapter_10.xhtml#h1_248">Chapter 10</a>{.chapref}</em>, <em>Securing</em> <em>Containers</em>.</p>
+<p>In the next section, we will learn how to run and configure a local container registry to directly manage image storage in our lab or development environments.</p>
+<h2 id="from-podman-build-page-my-notes">From Podman build page, my notes<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>After building, we can <em>tag</em> the image with the target registry name. The following example tags the image applying the <code>v1.0</code> tag and the <code>latest</code> tag:</p>
+<p><code>$ podman tag localhost/myhttpd quay.io/&lt;username&gt;/myhttpd:v1.0</code></p>
+<p>After tagging, the image will be ready to be pushed to the remote registry.</p>
 
   <footer class="footline">
   </footer>
@@ -497,8 +493,9 @@ Storage: 1x20 GB
             <li class="" data-nav-id="/boot/"><input type="checkbox" id="R-section-a53bfb333437907a8d5bdc636d15c75d" aria-controls="R-subsections-a53bfb333437907a8d5bdc636d15c75d"><label for="R-section-a53bfb333437907a8d5bdc636d15c75d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Boot</span></label><a class="padding default-animation" href="/boot/"><i class="fa-solid fa-hourglass-start"></i> Boot<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-a53bfb333437907a8d5bdc636d15c75d" class="collapsible-menu">
             <li class="" data-nav-id="/boot/boot-process-grub2-kernel/"><a class="padding" href="/boot/boot-process-grub2-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/boot/sys-init-logging-and-tuning/"><a class="padding" href="/boot/sys-init-logging-and-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
-            <li class="" data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5"><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
+            <li class="parent " data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5" checked><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
             <li class="" data-nav-id="/containers/automating-wordpress-containers/"><a class="padding" href="/containers/automating-wordpress-containers/">Automating Wordpress Containers with Ansible and Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="active hidden " data-nav-id="/containers/manage-container-images-with-skopeo/"><a class="padding" href="/containers/manage-container-images-with-skopeo/"><i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/containers/ansible-and-podman/"><a class="padding" href="/containers/ansible-and-podman/">Ansible and Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/containers/building-containers-with-containerfiles/"><a class="padding" href="/containers/building-containers-with-containerfiles/">Building Containers with Containerfiles<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/containers/container-basics/"><a class="padding" href="/containers/container-basics/">Container Basics<i class="fa-fw fas fa-check read-icon"></i></a></li>
@@ -543,8 +540,8 @@ Storage: 1x20 GB
             <li class="" data-nav-id="/storage/rm-filesystem-from-partition/"><a class="padding" href="/storage/rm-filesystem-from-partition/">Remove a filesystem from a partition<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/storage/thin-provisioning/"><a class="padding" href="/storage/thin-provisioning/">Thin Provisioning and LVM<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/storage/virtual-data-optimizer-vdo/"><a class="padding" href="/storage/virtual-data-optimizer-vdo/">Virtual Data Optimizer (VDO)<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
-            <li class="parent " data-nav-id="/system/"><input type="checkbox" id="R-section-0ea554b019cc5a3e6337c45b68b3a647" aria-controls="R-subsections-0ea554b019cc5a3e6337c45b68b3a647" checked><label for="R-section-0ea554b019cc5a3e6337c45b68b3a647"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/system/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-0ea554b019cc5a3e6337c45b68b3a647" class="collapsible-menu">
-            <li class="active " data-nav-id="/system/installation/"><a class="padding" href="/system/installation/">Installing RHEL Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/system/"><input type="checkbox" id="R-section-0ea554b019cc5a3e6337c45b68b3a647" aria-controls="R-subsections-0ea554b019cc5a3e6337c45b68b3a647"><label for="R-section-0ea554b019cc5a3e6337c45b68b3a647"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu System</span></label><a class="padding default-animation" href="/system/"><i class="fa-solid fa-server"></i> System<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-0ea554b019cc5a3e6337c45b68b3a647" class="collapsible-menu">
+            <li class="" data-nav-id="/system/installation/"><a class="padding" href="/system/installation/">Installing RHEL Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/system/interaction/"><a class="padding" href="/system/interaction/">Interaction<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/system/process-and-task-scheduling/"><a class="padding" href="/system/process-and-task-scheduling/">Process and Task Scheduling<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
             <li class="" data-nav-id="/tools/"><input type="checkbox" id="R-section-bf1399820dde3dd110e03ace4147ff86" aria-controls="R-subsections-bf1399820dde3dd110e03ace4147ff86"><label for="R-section-bf1399820dde3dd110e03ace4147ff86"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Tools</span></label><a class="padding default-animation" href="/tools/"><i class="fa-solid fa-screwdriver-wrench"></i> Tools<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-bf1399820dde3dd110e03ace4147ff86" class="collapsible-menu">
