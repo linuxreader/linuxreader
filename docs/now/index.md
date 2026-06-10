@@ -4,8 +4,7 @@ What I am up to [Now](https://nownownow.com/about).
 ## Career
 I am currently deep diving container technology. And studying for the [RedHat Certified Developer in Cloud-native Applications exam](https://www.redhat.com/en/services/training/ex188-red-hat-certified-specialist-containers-exam). 
 ## Health
-Really focusing on reducing my caffeine intake right now. Current intake:  
-305mg
+Really focusing on reducing my caffeine intake right now.
 
 ## Fun
 Currently spend most of my fun time just hanging out with the family at home. Playing a little Beyond All Reason and Starcraft 2 here and there. 

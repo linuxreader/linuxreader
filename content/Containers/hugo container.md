@@ -137,3 +137,5 @@ COPY --from=build /blog/public /var/www/html
 ENTRYPOINT ["httpd"]
 CMD ["-D", "FOREGROUND"]
 ```
+
+Push image to registry:  

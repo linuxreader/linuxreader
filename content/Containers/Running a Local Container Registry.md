@@ -11,44 +11,20 @@ draft: true
 
 ## Running a containerized registry 
 
-Like every application, a local registry can be installed on the host by its administrators. Alternatively, a commonly preferred approach is to run the registry itself inside a container.
 
-The most used containerized registry solution is based on the official **Docker Registry 2.0** image, which offers all the necessary functionalities for a basic registry and is very easy to use.
+- Must define a destination directory to host all image layers and metadata. 
+- `5000/tcp` is default port for this service. 
 
-When running a local registry, containerized or not, we must define a destination directory to host all image layers and metadata. The next example shows the first execution of a containerized registry, with the `/var/lib/registry` volume created and mounted to hold image data:
 
+- Can use Podman or its companion tools, Buildah or Skopeo to push to a registry. 
+- With Skopeo,  we do not even need to scope the image name with the registry name.
+
+Push the new image to the registry with Skopeo:
+```bash
+$ skopeo copy --dest-tls-verify=false \
+containers-storage:localhost/minimal_httpd \
+docker://localhost:5000/minimal_httpd 
 ```
-# podman volume create registry_data
-# podman run -d \
- --name local_registry \
-  -p 5000:5000 \
-   -v registry_data:/var/lib/registry:Z \
- --restart=always registry:2 
-```
-
-The registry will be reachable at the host address on port `5000/tcp`, which is also the default port for this service. If we run the registry on our local workstation, it will be reachable at `localhost:5000`, and exposed to the external connection using the assigned IP address or its **Fully Qualified Domain Name** (**FQDN**) if the workstation/laptop is resolved by a local DNS service.
-
-For example, if a host has the IP address `10.10.2.30` and FQDN `registry.example.com` correctly resolved by DNS queries, the registry service will be reachable at `10.10.2.30:5000` or at `registry.example.com:5000`.
-
- packt_tip **Important** **note**
-
-If the host runs a local firewall service or is behind a corporate firewall, do not forget to open the correct ports to expose the registry externally.
-
-We can try to build and push a test image to the new registry. The following Containerfile builds a basic UBI-based `httpd` server (`Chapter09/local_registry/minimal_httpd/Containerfile`):
-
-``` 
-FROM registry.access.redhat.com/ubi8:latest RUN dnf install -y httpd && dnf clean all -y COPY index.html /var/www/html RUN dnf install -y git && dnf clean all -y CMD ["/usr/sbin/httpd", "-DFOREGROUND"] 
-```
-
-We can build the new image with Buildah:
-
-``` $ buildah build -t minimal_httpd . ```
-
-To push the image to the local registry, we can use Podman or its companion tools, Buildah or Skopeo. Skopeo is very handy for these use cases since we do not even need to scope the image name with the registry name.
-
-The next command shows how to push the new image to the registry:
-
-``` $ skopeo copy --dest-tls-verify=false \ containers-storage:localhost/minimal_httpd \ docker://localhost:5000/minimal_httpd ```
 
 Notice the use of `--dest-tls-verify=false`: this is necessary since the local registry doesn\'t have TLS or a trusted certificate; it provides an HTTP transport by default.
 
