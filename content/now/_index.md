@@ -1,5 +1,10 @@
-# Now
-
+---
+title: Now
+build:
+  render: "alway"
+  list: "never"
+  publishResources: true
+---
 What I am up to [Now](https://nownownow.com/about).
 ## Career
 I am currently deep diving container technology. And studying for the [RedHat Certified Developer in Cloud-native Applications exam](https://www.redhat.com/en/services/training/ex188-red-hat-certified-specialist-containers-exam). 
