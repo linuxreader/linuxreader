@@ -20,8 +20,7 @@ Also been running and swimming once a week. And getting 15k steps in most days.
 
 ## What I am reading
 
-[![](/images/chle.jpg?classes=inline,border&width=100px&lightbox=false)](https://amzn.to/4cOqPT0)
-[![](castle.jpg?classes=inline,border&width=100px&lightbox=false)](https://amzn.to/4bxr04G)
+[![](/images/tgrre.png?classes=inline,border&width=100px&lightbox=false)](https://link.amazon/B09XHfHaU)
 
+Updated: 09/18/2026
 
-Updated: 08/30/2026

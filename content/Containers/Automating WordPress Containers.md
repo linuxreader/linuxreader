@@ -217,7 +217,7 @@ There is a lot here, but the gist is:
 - Set up cron jobs to take volume backups and delete old backups. This uses Podman volume export to export the volumes to the directory mentioned above. You can restore these with `Podman volume import {{ filename }}`.
 - Enable Podman auto-update. Later, you'll see that the Quadlet files have auto-updates enabled. The auto-update timer automatically updates container images at midnight each day. If a health check fails, then it will automatically rollback the changes. 
 
-### `container-ship/defaults/
+### `container-ship/defaults/`
 Set up the default variables under defaults/main.yml:  
 ```yaml
 ❯ cat main.yml 
