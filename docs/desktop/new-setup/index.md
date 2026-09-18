@@ -1,5 +1,14 @@
 # Configure Fedora Desktop using Ansible
 
+Install ansible:
+`rmp-ostree install ansible`
+
+then generate host keys:  
+`ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -N ""`
+
+Copy key locally:  
+`ssh-copy-id davidt@127.0.0.1`
+
 ```bash
 sudo dnf -y install vim
 

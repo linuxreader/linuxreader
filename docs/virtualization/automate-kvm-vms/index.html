@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Hugo 0.166.0">
     <meta name="generator" content="Relearn 9.0.3">
     <meta name="description" content="How to build local KVM virtual machines using Ansible and Libvirt">
     <meta name="author" content="">
@@ -25,27 +25,27 @@
     <meta itemprop="wordCount" content="1606">
     <title>Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments</title>
     <link href="/virtualization/automate-kvm-vms/index.md" rel="alternate" type="text/markdown" title="Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments">
-    <link href="/images/favicon.svg?1788091472" rel="icon" type="image/svg+xml">
-    <link href="/css/auto-complete/auto-complete.min.css?1788091472" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1788091472" defer></script>
-    <script src="/js/search-lunr.min.js?1788091472" defer></script>
-    <script src="/js/search.min.js?1788091472" defer></script>
+    <link href="/images/favicon.svg?1789754030" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1789754030" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1789754030" defer></script>
+    <script src="/js/search-lunr.min.js?1789754030" defer></script>
+    <script src="/js/search.min.js?1789754030" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1788091472";
+      window.relearn.index_js_url="/searchindex.en.js?1789754030";
     </script>
-    <script src="/js/lunr/lunr.min.js?1788091472" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1788091472" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1788091472" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1788091472" defer></script>
+    <script src="/js/lunr/lunr.min.js?1789754030" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1789754030" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1789754030" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1789754030" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/all.min.css?1788091472" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1788091472" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1788091472" rel="stylesheet">
-    <link href="/css/theme.min.css?1788091472" rel="stylesheet">
-    <link href="/css/format-html.min.css?1788091472" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/all.min.css?1789754030" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1789754030" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1789754030" rel="stylesheet">
+    <link href="/css/theme.min.css?1789754030" rel="stylesheet">
+    <link href="/css/format-html.min.css?1789754030" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -193,8 +193,8 @@ code, kbd, pre, samp {
 
 <h1 id="using-libvirt-and-ansible-to-automate-kvm-virtual-machine-deployments">Using Libvirt and Ansible to Automate KVM Virtual Machine Deployments</h1>
 
-<p><a href="#R-image-bdb3cac76ada1e088168d93563d26ebf" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/automate-kvm.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-bdb3cac76ada1e088168d93563d26ebf"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/automate-kvm.png"></a>
+<p><a href="#R-image-324b25e4eee7597f620b2a690a55d35a" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/automate-kvm.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-324b25e4eee7597f620b2a690a55d35a"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/automate-kvm.png"></a>
 When I started studying for RHCE, I was spending tons of time manually creating and destroying virtual machines.</p>
 <p>I thought..</p>
 <p>Why not start my automation journey right and automate the deployment stage of my home lab?</p>
@@ -212,12 +212,12 @@ When I started studying for RHCE, I was spending tons of time manually creating 
 <p>This setup may seem daunting at first, but the power comes later when you just need a single line to provision a new virtual machine.</p>
 <h2 id="creating-the-role">Creating the role<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>First, initialize the role and remove unused directories. We&rsquo;ll be working out of your Ansible directory from here on out:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd roles <span style="color:#ff7b72;font-weight:bold">&amp;&amp;</span> ansible-galaxy role init kvm_provision <span style="color:#ff7b72;font-weight:bold">&amp;&amp;</span> cd kvm_provision/ <span style="color:#ff7b72;font-weight:bold">&amp;&amp;</span> rm -r files handlers vars<span style="color:#a5d6ff">`</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd roles <span style="color:#ff7b72;font-weight:bold">&amp;&amp;</span> ansible-galaxy role init kvm_provision <span style="color:#ff7b72;font-weight:bold">&amp;&amp;</span> cd kvm_provision/ <span style="color:#ff7b72;font-weight:bold">&amp;&amp;</span> rm -r files handlers vars<span style="color:#a5d6ff">`</span></span></span></code></pre></div>
 <h3 id="defining-role-variables">Defining role variables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>Add these default variables to main.yml. You can do a web search for cloud images if you want a different OS. Here, you also define hardware specs, root password information, and IP addressing.</p>
 <p>We&rsquo;ll override some of this in our deployment script later:
 <code>cat defaults/main.yml</code></p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#7ee787">base_image_name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">AlmaLinux-10-GenericCloud-latest.x86_64.qcow2</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#7ee787">base_image_url</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">https://repo.almalinux.org/almalinux/10/cloud/x86_64/images/{{ base_image_name }}</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># SHA found next to the image on the site above.</span><span style="color:#6e7681">
@@ -237,12 +237,12 @@ When I started studying for RHCE, I was spending tons of time manually creating 
 <h3 id="libvirt-vm-jinja-template">Libvirt VM Jinja template<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>The <a href="https://docs.ansible.com/projects/ansible/latest/collections/community/libvirt/virt_module.html" rel="external" target="_blank">community.libvirt.virt </a>Ansible module will be used to provision our KVM Virtual Machine.</p>
 <p>Install the collection:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ansible-galaxy collection install community.libvirt</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ansible-galaxy collection install community.libvirt</span></span></code></pre></div>
 <p>This module uses a VM definition file in XML format with <a href="https://libvirt.org/formatdomain.html" rel="external" target="_blank">libvirt syntax</a>. You can get a template from a current VM and edit from there.</p>
 <p>The power of using a <a href="https://www.davidwrites.xyz/notes/rhce-notes/jinja2templates/" rel="external" target="_blank">Jinja template</a> is that we can insert variables to the template for re-usability. This let&rsquo;s us select the RAM, Disk Size, Mac Address, CPUs, and more. The variables are enclosed in curly brackets.</p>
 <p>And it&rsquo;s all part of our Ansible automation:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat templates/vm-template.xml.j2 </span></span></code></pre></div>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#7ee787">&lt;domain</span> type=<span style="color:#a5d6ff">&#39;kvm&#39;</span><span style="color:#7ee787">&gt;</span>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat templates/vm-template.xml.j2 </span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#7ee787">&lt;domain</span> type=<span style="color:#a5d6ff">&#39;kvm&#39;</span><span style="color:#7ee787">&gt;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#7ee787">&lt;name&gt;</span>{{ vm_name }}<span style="color:#7ee787">&lt;/name&gt;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#7ee787">&lt;memory</span> unit=<span style="color:#a5d6ff">&#39;MiB&#39;</span><span style="color:#7ee787">&gt;</span>{{ vm_ram_mb }}<span style="color:#7ee787">&lt;/memory&gt;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#7ee787">&lt;vcpu</span> placement=<span style="color:#a5d6ff">&#39;static&#39;</span><span style="color:#7ee787">&gt;</span>{{ vm_vcpus }}<span style="color:#7ee787">&lt;/vcpu&gt;</span>
@@ -300,7 +300,7 @@ When I started studying for RHCE, I was spending tons of time manually creating 
 </span></span><span style="display:flex;"><span><span style="color:#7ee787">&lt;/domain&gt;</span></span></span></code></pre></div>
 <h3 id="defining-role-tasks">Defining role tasks<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>Here is the task list for this playbook.</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># Commented out for Fedora BlueFin compatibility. Uncomment this if these tools are not installed on your system already.</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#- name: Ensure requirements in place</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#  community.general.package:</span><span style="color:#6e7681">
@@ -368,10 +368,10 @@ When I started studying for RHCE, I was spending tons of time manually creating 
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">when</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">cleanup_tmp | bool</span></span></span></code></pre></div>
 <h2 id="creating-the-playbook">Creating the playbook<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>You&rsquo;ll want to make sure you have proper permissions to the libvirt directory. I just made myself the owner. Since I am the only one who uses my PC:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>chown -R david:david /var/lib/libvirt/images</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>chown -R david:david /var/lib/libvirt/images</span></span></code></pre></div>
 <p>This playbook will gather variables and run our provisioning role. I have <strong>become</strong> set to <strong>no</strong> for compatibility with immutable distros. You may need to change this to yes if things aren&rsquo;t working right.</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat kvm_provision.yaml</span></span></code></pre></div>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat kvm_provision.yaml</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># Example useage: ansible-playbook kvm_provision.yaml -K -e vm=testvm-01 -e ip_addr=192.168.122.3 -e disk_size=31 -e vm_mac=52:54:00:a0:b0:01</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Deploy VM based on cloud image</span><span style="color:#6e7681">
@@ -413,7 +413,7 @@ When I started studying for RHCE, I was spending tons of time manually creating 
 <p>Edit the network xml with:</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>virsh net-edit default</code></pre></div>
 <p>I added 4 DHCP reservations:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#7ee787">&lt;network&gt;</span>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#7ee787">&lt;network&gt;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#7ee787">&lt;name&gt;</span>default<span style="color:#7ee787">&lt;/name&gt;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#7ee787">&lt;uuid&gt;</span>4b633d5e-d41d-46da-a383-16e28c61ad05<span style="color:#7ee787">&lt;/uuid&gt;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#7ee787">&lt;forward</span> mode=<span style="color:#a5d6ff">&#39;nat&#39;</span><span style="color:#7ee787">/&gt;</span>
@@ -435,7 +435,7 @@ virsh net-start default</code></pre></div>
 <h2 id="site-deployment-script">Site Deployment Script<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>Now, we just need a script that defines all of the virtual machines for our lab. Here is my script that creates four virtual machines. You&rsquo;ll need the VM name and Mac-address at minimum for this to work.</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>cat ansible-lab.sh</code></pre></div>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#8b949e;font-weight:bold;font-style:italic">#!/bin/bash
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#8b949e;font-weight:bold;font-style:italic">#!/bin/bash
 </span></span></span><span style="display:flex;"><span>ansible-playbook kvm_provision.yaml -K -e <span style="color:#79c0ff">vm</span><span style="color:#ff7b72;font-weight:bold">=</span>podman-01 -e <span style="color:#79c0ff">ip_addr</span><span style="color:#ff7b72;font-weight:bold">=</span>192.168.122.3 -e <span style="color:#79c0ff">disk_size</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">31</span> -e <span style="color:#79c0ff">vm_mac</span><span style="color:#ff7b72;font-weight:bold">=</span>52:54:00:a0:b0:01
 </span></span><span style="display:flex;"><span>ansible-playbook kvm_provision.yaml -K -e <span style="color:#79c0ff">vm</span><span style="color:#ff7b72;font-weight:bold">=</span>podman-02 -e <span style="color:#79c0ff">ip_addr</span><span style="color:#ff7b72;font-weight:bold">=</span>192.168.122.4 -e <span style="color:#79c0ff">disk_size</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">31</span> -e <span style="color:#79c0ff">vm_mac</span><span style="color:#ff7b72;font-weight:bold">=</span>52:54:00:a0:b0:02
 </span></span><span style="display:flex;"><span>ansible-playbook kvm_provision.yaml -K -e <span style="color:#79c0ff">vm</span><span style="color:#ff7b72;font-weight:bold">=</span>ansible1 -e <span style="color:#79c0ff">ip_addr</span><span style="color:#ff7b72;font-weight:bold">=</span>192.168.122.5 -e <span style="color:#79c0ff">disk_size</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">31</span> -e <span style="color:#79c0ff">vm_mac</span><span style="color:#ff7b72;font-weight:bold">=</span>52:54:00:a0:b0:03
@@ -445,13 +445,13 @@ virsh net-start default</code></pre></div>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>chmod u+x ansible_lab.sh &amp;&amp; ./ansible_lab.sh</code></pre></div>
 <p>This run took 8.5 minutes to deploy 4 VMs. In RedHat&rsquo;s guide, they deploy a single virtual machine in 30 seconds. When I added an additional machine to the script with everything cached, it took about 3.5 minutes.</p>
 <p>I have no clue why this setup is taking longer, but I suspect it has something to do with Bluefin, because I was getting much better times when I tried on Fedora.</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PLAY RECAP *************************************************************************************************************************************************
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>PLAY RECAP *************************************************************************************************************************************************
 </span></span><span style="display:flex;"><span>localhost                  : <span style="color:#79c0ff">ok</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">9</span>    <span style="color:#79c0ff">changed</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">4</span>    <span style="color:#79c0ff">unreachable</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span>    <span style="color:#79c0ff">failed</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span>    <span style="color:#79c0ff">skipped</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">1</span>    <span style="color:#79c0ff">rescued</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span>    <span style="color:#79c0ff">ignored</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span>   
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>real	8m21.007s</span></span></code></pre></div>
 <p>Regardless, you should have all of the VMs you listed in your script:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>❯ virsh list
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>❯ virsh list
 </span></span><span style="display:flex;"><span> Id   Name        State
 </span></span><span style="display:flex;"><span>---------------------------
 </span></span><span style="display:flex;"><span> <span style="color:#a5d6ff">10</span>   podman-01   running
@@ -459,10 +459,10 @@ virsh net-start default</code></pre></div>
 </span></span><span style="display:flex;"><span> <span style="color:#a5d6ff">12</span>   ansible1    running
 </span></span><span style="display:flex;"><span> <span style="color:#a5d6ff">13</span>   ansible2    running</span></span></code></pre></div>
 <p>If you want a graphical interface to see your VMs, <a href="https://virt-manager.org/" rel="external" target="_blank">Virtual Machine Manager</a> is my go to:
-<a href="#R-image-9dbb3566c185d0fac0d2145b1b0f9cea" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../../../images/Pasted%20image%2020260122050728.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-9dbb3566c185d0fac0d2145b1b0f9cea"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../../../images/Pasted%20image%2020260122050728.png"></a></p>
+<a href="#R-image-56d501e032044e1f810aa8d70934e970" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../../../images/Pasted%20image%2020260122050728.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-56d501e032044e1f810aa8d70934e970"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../../../images/Pasted%20image%2020260122050728.png"></a></p>
 <p>Let&rsquo;s test an ssh connection to podman-01:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>❯ ssh root@podman-01
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>❯ ssh root@podman-01
 </span></span><span style="display:flex;"><span>The authenticity of host <span style="color:#a5d6ff">&#39;podman-01 (192.168.122.3)&#39;</span> can<span style="color:#a5d6ff">&#39;t be established.
 </span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">ED25519 key fingerprint is SHA256:OqxACSatamLG4JAkoP9OA/seMBYYgZRV1ll8h4ExgkE.
 </span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">This key is not known by any other names.
@@ -662,8 +662,8 @@ virsh net-start default</code></pre></div>
 <div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1788091472" defer></script>
-    <script src="/js/theme.min.js?1788091472" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1789754030" defer></script>
+    <script src="/js/theme.min.js?1789754030" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

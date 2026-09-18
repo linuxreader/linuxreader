@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Hugo 0.166.0">
     <meta name="generator" content="Relearn 9.0.3">
     <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
     <meta name="description" content="Introducing Buildah, Podman’s companion Podman does an excellent job in plain builds with Dockerfiles/Containerfiles and helps teams to preserve their previously implemented build pipelines without the need for new investments.
@@ -23,27 +23,27 @@ However, when it comes to more specialized build tasks or when users need more c
     <meta itemprop="wordCount" content="5869">
     <title></title>
     <link href="/containers/using-buildah-to-build-container-images/index.md" rel="alternate" type="text/markdown" title="">
-    <link href="/images/favicon.svg?1788091472" rel="icon" type="image/svg+xml">
-    <link href="/css/auto-complete/auto-complete.min.css?1788091472" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1788091472" defer></script>
-    <script src="/js/search-lunr.min.js?1788091472" defer></script>
-    <script src="/js/search.min.js?1788091472" defer></script>
+    <link href="/images/favicon.svg?1789754030" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1789754030" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1789754030" defer></script>
+    <script src="/js/search-lunr.min.js?1789754030" defer></script>
+    <script src="/js/search.min.js?1789754030" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1788091472";
+      window.relearn.index_js_url="/searchindex.en.js?1789754030";
     </script>
-    <script src="/js/lunr/lunr.min.js?1788091472" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1788091472" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1788091472" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1788091472" defer></script>
+    <script src="/js/lunr/lunr.min.js?1789754030" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1789754030" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1789754030" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1789754030" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/all.min.css?1788091472" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1788091472" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1788091472" rel="stylesheet">
-    <link href="/css/theme.min.css?1788091472" rel="stylesheet">
-    <link href="/css/format-html.min.css?1788091472" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/all.min.css?1789754030" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1789754030" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1789754030" rel="stylesheet">
+    <link href="/css/theme.min.css?1789754030" rel="stylesheet">
+    <link href="/css/format-html.min.css?1789754030" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -194,7 +194,7 @@ code, kbd, pre, samp {
 <p>The same community that develops Podman brought to life the Buildah (pronounced <em>build-ah</em>) project, a tool to manage OCI builds with support for multiple building strategies. Images created with Buildah are fully portable and compatible with Docker, and all engines are compliant with the OCI image and runtime specs.</p>
 <p>Buildah is an open source project released under the Apache 2.0 license. Sources are available on GitHub at the following URL: <a href="https://github.com/containers/buildah" rel="external" target="_blank">https://github.com/containers/buildah</a>.</p>
 <p>Buildah is complementary to Podman, which borrows its build logic by vendoring its libraries to implement basic build functionalities against Dockerfiles and Containerfiles. The final Podman binary, which is compiled in Go as a statically linked single file, embeds Buildah packages to manage the build steps.</p>
-<p>Buildah uses the <code>containers/image</code> project (<a href="https://github.com/containers/image" rel="external" target="_blank">https://github.com/containers/image</a>) to manage an image's life cycle and its interaction with registries, and the <code>containers/storage</code> project (<a href="https://github.com/containers/storage" rel="external" target="_blank">https://github.com/containers/storage</a>) to manage images and container filesystem layers. These libraries are the same that Podman uses, and they have both now been moved into the <code>containers/containers-libs</code> project (<a href="https://github.com/containers/container-libs)" rel="external" target="_blank">https://github.com/containers/container-libs)</a>.</p>
+<p>Buildah uses the <code>containers/image</code> project (<a href="https://github.com/containers/image" rel="external" target="_blank">https://github.com/containers/image</a>) to manage an image's life cycle and its interaction with registries, and the <code>containers/storage</code> project (<a href="https://github.com/containers/storage" rel="external" target="_blank">https://github.com/containers/storage</a>) to manage images and container filesystem layers. These libraries are the same that Podman uses, and they have both now been moved into the <code>containers/containers-libs</code> project (<a href="https://github.com/containers/container-libs" rel="external" target="_blank">https://github.com/containers/container-libs</a>).</p>
 <p>The advanced build strategy of Buildah is based on the parallel support for traditional Dockerfile/Containerfile-based builds, and for builds driven by native Buildah commands that replicate the Dockerfile instructions.</p>
 <p>By replicating Dockerfile instructions in standard commands, Buildah becomes a scriptable tool that can be interpolated with custom logic and native shell constructs such as conditionals, loops, or environment variables. For example, the <code>RUN</code> instruction in a Dockerfile can be replaced with a <code>buildah run</code> command.</p>
 <p>If teams need to preserve the build logic implemented in previous Dockerfiles, Buildah offers the <code>buildah build</code> (or its alias, <code>buildah bud</code>) command, which builds the image reading from the provided Dockerfile/Containerfile, as in a typical <code>podman build</code> command.</p>
@@ -231,8 +231,8 @@ code, kbd, pre, samp {
 <p>The flexible and embeddable nature of this approach is remarkable &ndash;
 Buildah commands can be included anywhere, and users can choose between a fully automated build process and a more interactive one.</p>
 <p>For example, Buildah can be easily integrated with <strong>Ansible</strong>, the open source automation engine, to provide automated builds using native connection plugins that enable communication with working containers.</p>
-<p>You can choose to include Buildah inside a CI pipeline (such as <strong>Jenkins</strong>, <strong>Tekton</strong>, or <strong>GitLab CI/CD</strong>) to gain full control of the build and integration tasks. Tekton, the cloud-native CI/CD tool (<a href="https://tekton.dev/)" rel="external" target="_blank">https://tekton.dev/)</a>, offers a collection of template tasks, the building block of Tekton pipelines, on the Tekton Hub repository (<a href="https://hub.tekton.dev/);" rel="external" target="_blank">https://hub.tekton.dev/);</a> Buildah tasks are also available on Tekton Hub (<a href="https://hub.tekton.dev/tekton/task/buildah)" rel="external" target="_blank">https://hub.tekton.dev/tekton/task/buildah)</a>. In addition, Buildah can be run inside a container without issue, allowing it to run in many other CI pipelines, even if they do not normally support container builds.</p>
-<p>Buildah is also included in larger projects of the cloud-native community, such as the <strong>Shipwright</strong> project (<a href="https://github.com/shipwright-io/build)" rel="external" target="_blank">https://github.com/shipwright-io/build)</a>.</p>
+<p>You can choose to include Buildah inside a CI pipeline (such as <strong>Jenkins</strong>, <strong>Tekton</strong>, or <strong>GitLab CI/CD</strong>) to gain full control of the build and integration tasks. Tekton, the cloud-native CI/CD tool (<a href="https://tekton.dev/" rel="external" target="_blank">https://tekton.dev/</a>), offers a collection of template tasks, the building block of Tekton pipelines, on the Tekton Hub repository (<a href="https://hub.tekton.dev/);" rel="external" target="_blank">https://hub.tekton.dev/);</a> Buildah tasks are also available on Tekton Hub (<a href="https://hub.tekton.dev/tekton/task/buildah" rel="external" target="_blank">https://hub.tekton.dev/tekton/task/buildah</a>). In addition, Buildah can be run inside a container without issue, allowing it to run in many other CI pipelines, even if they do not normally support container builds.</p>
+<p>Buildah is also included in larger projects of the cloud-native community, such as the <strong>Shipwright</strong> project (<a href="https://github.com/shipwright-io/build" rel="external" target="_blank">https://github.com/shipwright-io/build</a>).</p>
 <p>Shipwright is an extensible build framework for Kubernetes that provides the flexibility of customizing image builds using custom resource definitions and different build tools. Buildah is one of the available solutions that you can choose when designing your build processes.</p>
 <p>We will see more detailed and richer examples in the next subsections. Now that we have seen an overview of Buildah's capabilities and use cases, let's dive into the installation and environment preparation steps.</p>
 <h1 id="preparing-our-environment">Preparing our environment<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h1>
@@ -643,8 +643,8 @@ echo &#34;### Build test completed successfully!&#34; exit 0 </code></pre></div>
 <div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1788091472" defer></script>
-    <script src="/js/theme.min.js?1788091472" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1789754030" defer></script>
+    <script src="/js/theme.min.js?1789754030" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

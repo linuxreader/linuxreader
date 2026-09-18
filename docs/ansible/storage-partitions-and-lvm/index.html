@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Hugo 0.166.0">
     <meta name="generator" content="Relearn 9.0.3">
     <meta name="description" content="Managing Partitions and LVM">
     <meta name="author" content="">
@@ -21,27 +21,27 @@
     <meta itemprop="wordCount" content="3554">
     <title>Managing Partitions and LVM</title>
     <link href="/ansible/storage-partitions-and-lvm/index.md" rel="alternate" type="text/markdown" title="Managing Partitions and LVM">
-    <link href="/images/favicon.svg?1788091472" rel="icon" type="image/svg+xml">
-    <link href="/css/auto-complete/auto-complete.min.css?1788091472" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1788091472" defer></script>
-    <script src="/js/search-lunr.min.js?1788091472" defer></script>
-    <script src="/js/search.min.js?1788091472" defer></script>
+    <link href="/images/favicon.svg?1789754030" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1789754030" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1789754030" defer></script>
+    <script src="/js/search-lunr.min.js?1789754030" defer></script>
+    <script src="/js/search.min.js?1789754030" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1788091472";
+      window.relearn.index_js_url="/searchindex.en.js?1789754030";
     </script>
-    <script src="/js/lunr/lunr.min.js?1788091472" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1788091472" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1788091472" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1788091472" defer></script>
+    <script src="/js/lunr/lunr.min.js?1789754030" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1789754030" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1789754030" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1789754030" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/all.min.css?1788091472" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1788091472" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1788091472" rel="stylesheet">
-    <link href="/css/theme.min.css?1788091472" rel="stylesheet">
-    <link href="/css/format-html.min.css?1788091472" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/all.min.css?1789754030" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1789754030" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1789754030" rel="stylesheet">
+    <link href="/css/theme.min.css?1789754030" rel="stylesheet">
+    <link href="/css/format-html.min.css?1789754030" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -242,7 +242,7 @@ code, kbd, pre, samp {
 <li>The advantage of using the assert module is that an error message can be printed if the condition is not met.</li>
 </ul>
 <p><strong>Listing 15-2</strong> Using assert to Run a Task Only If a Device Exists</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#6e7681">    </span>---<span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#6e7681">    </span>---<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">search for /dev/sdb continue only if it is found</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">all</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">vars</span>:<span style="color:#6e7681">
@@ -259,7 +259,7 @@ code, kbd, pre, samp {
 <p>The <strong>set_fact</strong> argument comes in handy to do so.</p>
 <p>You can use it in combination with a <strong>when</strong> conditional statement to store a detected device name in a variable.</p>
 <p>Storing the Detected Disk Device Name in a Variable</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#6e7681">    </span>---<span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#6e7681">    </span>---<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">define variable according to diskname detected</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">all</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">tasks</span>:<span style="color:#6e7681">
@@ -267,7 +267,7 @@ code, kbd, pre, samp {
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">set_fact</span>:<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">disk2name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">sdb</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">when</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">ansible_facts[’devices’][’sdb’]</span></span></span></code></pre></div>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Detect secondary disk name</span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Detect secondary disk name</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">ignore_errors</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">yes</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">set_fact</span>:<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">disk2name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">vda</span><span style="color:#6e7681">
@@ -318,7 +318,7 @@ the available disk space.</li>
 <li>Set specific partition properties such as LVM partition type.</li>
 <li>Required for LVM partition type</li>
 </ul>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">create new partition</span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">create new partition</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">parted</span>:<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">files</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">label</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">gpt</span><span style="color:#6e7681">
@@ -353,7 +353,7 @@ the available disk space.</li>
 <li><strong>pvs</strong> argument to identify the physical volume (which is often a partition or a disk device) on which the volume group needs to be created.</li>
 <li>May need to specify the <strong>pesize</strong> to refer to the size of the physical extents.</li>
 </ul>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">create a volume group</span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">create a volume group</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">lvg</span>:<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">vg</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">vgdata</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">pesize</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;8&#34;</span><span style="color:#6e7681">
@@ -375,7 +375,7 @@ vg</li>
 <li>VG is which the lv should be created</li>
 </ul>
 <p>Creating an LVM Logical Volume</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">create a logical volume</span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">create a logical volume</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">lvol</span>:<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">lv</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">lvdata</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">size</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">100</span><span style="color:#a5d6ff">%FREE</span><span style="color:#6e7681">
@@ -397,7 +397,7 @@ resizefs</li>
 <li>Extends the filesystem if set to yes. Extended to the current block size</li>
 </ul>
 <p>Creating an XFS File System</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">create an XFS filesystem</span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">create an XFS filesystem</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">filesystem</span>:<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">dev</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/dev/vgdata/lvdata</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">fstype</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">xfs</span></span></span></code></pre></div>
@@ -420,7 +420,7 @@ state</li>
 <li>mounted to mount device now</li>
 <li>present to set in /etc/fstab but not mount it now</li>
 </ul>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">mount the filesystem</span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">mount the filesystem</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">mount</span>:<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">src</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/dev/vgdata/lvdata</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">fstype</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">xfs</span><span style="color:#6e7681">
@@ -449,7 +449,7 @@ state</li>
 </ul>
 <p>A conditional check is performed, and additional swap space is configured if the current
 amount of swap space is lower than 256 MiB.</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#6e7681">    </span>---<span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#6e7681">    </span>---<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">configure swap storage</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">ansible2</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">tasks</span>:<span style="color:#6e7681">
@@ -463,7 +463,7 @@ amount of swap space is lower than 256 MiB.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">command</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">swapon /dev/sdb1</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">when</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">ansible_swaptotal_mb &lt; 256</span></span></span></code></pre></div>
 <p>Run an ad hoc command to ensure that /dev/sdb on the target host is empty:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ansible ansible2 -a <span style="color:#a5d6ff">&#34;dd if=/dev/zero of=/dev/sdb bs=1M count=10&#34;</span></span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ansible ansible2 -a <span style="color:#a5d6ff">&#34;dd if=/dev/zero of=/dev/sdb bs=1M count=10&#34;</span></span></span></code></pre></div>
 <p>To make sure that you don&rsquo;t get any errors about partitions that are in use, also reboot the target host:</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code class="language-pre1" data-lang="pre1">ansible ansible2 -m reboot</code></pre></div>
 <ul>
@@ -908,8 +908,8 @@ drive. You should see that all has worked out well and you are done!
 <div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1788091472" defer></script>
-    <script src="/js/theme.min.js?1788091472" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1789754030" defer></script>
+    <script src="/js/theme.min.js?1789754030" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

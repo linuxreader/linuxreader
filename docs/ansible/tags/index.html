@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Hugo 0.166.0">
     <meta name="generator" content="Relearn 9.0.3">
     <meta name="description" content="Guide for how to use Ansible Tags. What are they, and some examples to put them to use.">
     <meta name="author" content="">
@@ -21,27 +21,27 @@
     <meta itemprop="wordCount" content="616">
     <title>Using Ansible Tags</title>
     <link href="/ansible/tags/index.md" rel="alternate" type="text/markdown" title="Using Ansible Tags">
-    <link href="/images/favicon.svg?1788091472" rel="icon" type="image/svg+xml">
-    <link href="/css/auto-complete/auto-complete.min.css?1788091472" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1788091472" defer></script>
-    <script src="/js/search-lunr.min.js?1788091472" defer></script>
-    <script src="/js/search.min.js?1788091472" defer></script>
+    <link href="/images/favicon.svg?1789754030" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1789754030" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1789754030" defer></script>
+    <script src="/js/search-lunr.min.js?1789754030" defer></script>
+    <script src="/js/search.min.js?1789754030" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1788091472";
+      window.relearn.index_js_url="/searchindex.en.js?1789754030";
     </script>
-    <script src="/js/lunr/lunr.min.js?1788091472" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1788091472" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1788091472" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1788091472" defer></script>
+    <script src="/js/lunr/lunr.min.js?1789754030" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1789754030" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1789754030" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1789754030" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/all.min.css?1788091472" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1788091472" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1788091472" rel="stylesheet">
-    <link href="/css/theme.min.css?1788091472" rel="stylesheet">
-    <link href="/css/format-html.min.css?1788091472" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/all.min.css?1789754030" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1789754030" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1789754030" rel="stylesheet">
+    <link href="/css/theme.min.css?1789754030" rel="stylesheet">
+    <link href="/css/format-html.min.css?1789754030" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -185,7 +185,7 @@ code, kbd, pre, samp {
 Use <code>ansible-playbook --tags</code> or <code>ansible-playbook --skip-tags</code> to specify which tags need to be executed.</p>
 <p>Using <strong>tags</strong> in a Playbook
 tags.yml</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">using tags</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">all</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">yes</span><span style="color:#6e7681">
@@ -238,7 +238,7 @@ all - Runs all tasks</p>
 <p>Set a <strong>debug</strong> tag to easily identify tasks that should be run only if you specifically want to run debug tasks as well. If combined with the <strong>never</strong> tag, the
 task that is tagged with the <strong>debug,never</strong> tasks runs only if the <strong>debug</strong> tag is specifically requested. Then run debug tasks with <code>ansible-playbook --tags all,debug</code> command.</p>
 <p>never-tags.yml</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">using assert to check if volume group vgdata exists</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">all</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">tasks</span>:<span style="color:#6e7681">
@@ -258,7 +258,7 @@ task that is tagged with the <strong>debug,never</strong> tasks runs only if the
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">success_msg</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">volume group was found</span></span></span></code></pre></div>
 <p>Apply tags to an entire play.
 play-tags.yml</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">webservers</span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">webservers</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">tags</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">deploy</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">roles</span>:<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span>- <span style="color:#7ee787">role</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">tomcat</span><span style="color:#6e7681">
@@ -286,7 +286,7 @@ a series (or, alternatively, if you want to exclude a play or included tasks), t
 <p>There is one caveat when adding one or multiple tags using the <code>tags</code> option in a playbook: you can use the shorthand <code>tags: tagname</code> when
 adding just one tag, but if adding more than one tag, you have to use
 YAML&rsquo;s list syntax, for example:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># Shorthand list</span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># Shorthand list</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#7ee787">tags</span>:<span style="color:#6e7681"> </span>[<span style="color:#a5d6ff">&#39;one&#39;</span>,<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;two&#39;</span>,<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;three&#39;</span>]<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># Explicit list</span><span style="color:#6e7681">
@@ -489,8 +489,8 @@ Find a tagging style that suits your needs and lets you run (or <em>not</em> run
 <div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1788091472" defer></script>
-    <script src="/js/theme.min.js?1788091472" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1789754030" defer></script>
+    <script src="/js/theme.min.js?1789754030" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

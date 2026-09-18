@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.154.5">
+    <meta name="generator" content="Hugo 0.166.0">
     <meta name="generator" content="Relearn 9.0.3">
     <meta name="description" content="Wordpress setup using Ansible and Podman Quadlets to deploy new Wordpress sites in under a minute.">
     <meta name="author" content="">
@@ -25,27 +25,27 @@
     <meta itemprop="wordCount" content="2025">
     <title>Automating Wordpress Containers with Ansible and Podman</title>
     <link href="/containers/automating-wordpress-containers/index.md" rel="alternate" type="text/markdown" title="Automating Wordpress Containers with Ansible and Podman">
-    <link href="/images/favicon.svg?1788091472" rel="icon" type="image/svg+xml">
-    <link href="/css/auto-complete/auto-complete.min.css?1788091472" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1788091472" defer></script>
-    <script src="/js/search-lunr.min.js?1788091472" defer></script>
-    <script src="/js/search.min.js?1788091472" defer></script>
+    <link href="/images/favicon.svg?1789754030" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1789754030" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1789754030" defer></script>
+    <script src="/js/search-lunr.min.js?1789754030" defer></script>
+    <script src="/js/search.min.js?1789754030" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1788091472";
+      window.relearn.index_js_url="/searchindex.en.js?1789754030";
     </script>
-    <script src="/js/lunr/lunr.min.js?1788091472" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1788091472" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1788091472" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1788091472" defer></script>
+    <script src="/js/lunr/lunr.min.js?1789754030" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1789754030" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1789754030" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1789754030" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/all.min.css?1788091472" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1788091472" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1788091472" rel="stylesheet">
-    <link href="/css/theme.min.css?1788091472" rel="stylesheet">
-    <link href="/css/format-html.min.css?1788091472" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/all.min.css?1789754030" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1789754030" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1789754030" rel="stylesheet">
+    <link href="/css/theme.min.css?1789754030" rel="stylesheet">
+    <link href="/css/format-html.min.css?1789754030" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -146,7 +146,7 @@ code, kbd, pre, samp {
     <li><a href="#building-the-ansible-container-role">Building the Ansible container role</a>
       <ul>
         <li><a href="#container-shiptasks"><code>container-ship/tasks/</code></a></li>
-        <li><a href="#container-shipdefaults">`container-ship/defaults/</a></li>
+        <li><a href="#container-shipdefaults"><code>container-ship/defaults/</code></a></li>
         <li><a href="#container-shiphandlers"><code>container-ship/handlers</code></a></li>
         <li><a href="#container-shiptemplates"><code>container-ship/templates/</code></a></li>
       </ul>
@@ -199,8 +199,8 @@ code, kbd, pre, samp {
 
 <h1 id="automating-wordpress-containers-with-ansible-and-podman">Automating Wordpress Containers with Ansible and Podman</h1>
 
-<p><a href="#R-image-8cd0480492530432d58d59b0d4c7f887" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/wordpress-ansible-quadlet.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-8cd0480492530432d58d59b0d4c7f887"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/wordpress-ansible-quadlet.png"></a></p>
+<p><a href="#R-image-777d8afff7ba45f3717c217a7353b0a3" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/wordpress-ansible-quadlet.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-777d8afff7ba45f3717c217a7353b0a3"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/wordpress-ansible-quadlet.png"></a></p>
 <p>If you asked, &ldquo;how I set up WordPress sites super fast and easy using Podman quadlet files and Ansible?&rdquo;</p>
 <p>You&rsquo;ve come to the right place.</p>
 <p>This guide includes:</p>
@@ -214,10 +214,10 @@ code, kbd, pre, samp {
 <h2 id="building-the-ansible-container-role">Building the Ansible container role<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>Let&rsquo;s create a role that sets up a host to run containers via Podman Quadlets as a rootless user. In my lab, the role is called <code>container-ship</code>.</p>
 <p>Here&rsquo;s how I set up the proper directory structure for this role:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ansible-galxy role init container-ship</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ansible-galxy role init container-ship</span></span></code></pre></div>
 <h3 id="container-shiptasks"><code>container-ship/tasks/</code><span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>Under the role directory, I set up <code>tasks/main.yml</code> to include:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#7ee787">block</span>:<span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#7ee787">block</span>:<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">import_tasks</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">pre.yml</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">tags</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">pre</span><span style="color:#6e7681">
@@ -235,7 +235,7 @@ code, kbd, pre, samp {
 <p>Notice the <code>it-tools-container.yml</code> import. This role can be used to run other containers as well.</p>
 <p>The pre-tasks set up a host to run rootless containers under a dedicated user. Then, any other containers on the system are set up. The WordPress block will loop through a list of sites defined in a host&rsquo;s variable file.</p>
 <p>Let&rsquo;s look at <code>tasks/pre.yml</code>:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat tasks/pre.yml </span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat tasks/pre.yml </span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Make sure rootless user exists to run containers</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">user</span>:<span style="color:#6e7681">
@@ -270,7 +270,7 @@ code, kbd, pre, samp {
 <p>There is also a task for enabling the Podman Socket. This is not needed for this setup. I just have it so that I can interact with Podman using Podman Desktop.</p>
 <p>Also note, you&rsquo;ll need to set up an <a href="/ansible/encrypted-passwords/">encrypted password</a> for the <code>podman_user_password</code> variable. Mine is in my <a href="/ansible/ansible-vault/">Ansible Vault</a>.</p>
 <p>Next, are the tasks that actually set up the WordPress containers:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat tasks/wordpress_pod.yml </span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat tasks/wordpress_pod.yml </span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Allow HTTP traffic on port {{ item.external_port }}</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">ansible.posix.firewalld</span>:<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">port</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ item.external_port }}/tcp&#34;</span><span style="color:#6e7681">
@@ -390,9 +390,9 @@ code, kbd, pre, samp {
 <li>Set up cron jobs to take volume backups and delete old backups. This uses Podman volume export to export the volumes to the directory mentioned above. You can restore these with <code>Podman volume import {{ filename }}</code>.</li>
 <li>Enable Podman auto-update. Later, you&rsquo;ll see that the Quadlet files have auto-updates enabled. The auto-update timer automatically updates container images at midnight each day. If a health check fails, then it will automatically rollback the changes.</li>
 </ul>
-<h3 id="container-shipdefaults">`container-ship/defaults/<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<h3 id="container-shipdefaults"><code>container-ship/defaults/</code><span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>Set up the default variables under defaults/main.yml:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat main.yml </span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat main.yml </span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#7ee787">containers</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">false</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#7ee787">podman_user</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">dogman</span><span style="color:#6e7681">
@@ -408,7 +408,7 @@ code, kbd, pre, samp {
 <p>Also note, there is nothing magic about containers, you could build these images out yourself. Which is a great option if you don&rsquo;t trust others..</p>
 <h3 id="container-shiphandlers"><code>container-ship/handlers</code><span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>Under handlers/main.yml, we simply have tasks that reload daemons as needed:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat main.yml </span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat main.yml </span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">daemon reload</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
@@ -486,7 +486,7 @@ tomato_db_password: isay
 sandwich_db_password: letseat</code></pre></div>
 <h3 id="inventorieshost_varshostnameyml"><code>inventories/host_vars/hostname.yml</code><span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>The host I am testing this on is <code>dt-lab3</code>. To configure the host, I need to add the correct variables to it&rsquo;s variable file under inventories/host_vars/dt-lab3.yml:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat inventories/host_vars/dt-lab3.yml</span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat inventories/host_vars/dt-lab3.yml</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#7ee787">containers</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#7ee787">it_tools_container</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#7ee787">wordpress_pod</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
@@ -511,20 +511,20 @@ sandwich_db_password: letseat</code></pre></div>
 <p>For each site, we have a unique external port, site name. As well as the database username and password for that site.</p>
 <h2 id="setting-up-required-collections">Setting up required collections<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>You need the following collections installed on your Ansible control node I manage my collections in a <code>requirements.yml</code> file:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat requirements.yml </span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat requirements.yml </span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#7ee787">collections</span>:<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">ansible.posix</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">community.general</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">containers.podman</span></span></span></code></pre></div>
 <p>Then install with:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ansible-galaxy install -r requirements.yml </span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ansible-galaxy install -r requirements.yml </span></span></code></pre></div>
 <h2 id="finally-running-the-playbook">Finally running the playbook!<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>At this point, everything should be hot-n-dandy. In my Ansible lab, everything branches off of <code>site.yml</code>:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat site.yml</span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat site.yml</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">import_playbook</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">playbooks/homelab.yml</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">import_playbook</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">playbooks/desktop.yml</span></span></span></code></pre></div>
 <p>The <code>homelab.yml</code> playbook calls my container-ship role:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat playbooks/homelab.yml </span><span style="color:#6e7681">
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat playbooks/homelab.yml </span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Configure homelab</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">homelab</span><span style="color:#6e7681">
@@ -532,11 +532,11 @@ sandwich_db_password: letseat</code></pre></div>
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span>- <span style="color:#a5d6ff">base-config</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span>- <span style="color:#a5d6ff">container-ship</span></span></span></code></pre></div>
 <p>Let&rsquo;s run a timed test to see how long it takes to build our 3 test sites:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>time ansible-playbook site.yml -l dt-lab3 -t containers
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>time ansible-playbook site.yml -l dt-lab3 -t containers
 </span></span><span style="display:flex;"><span>real	1m51.199s</span></span></code></pre></div>
 <p>1 minute and 52 seconds is not bad!</p>
 <p>Let&rsquo;s verify, as the Podman user (dogman in our case) run <code>podman ps</code> to see the running containers:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>dogman@dt-lab3:~$ podman ps
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>dogman@dt-lab3:~$ podman ps
 </span></span><span style="display:flex;"><span>CONTAINER ID  IMAGE                                 COMMAND               CREATED        STATUS                    PORTS                                      NAMES
 </span></span><span style="display:flex;"><span>f09e74c5b2e3  docker.io/corentinth/it-tools:latest  nginx -g daemon o...  <span style="color:#a5d6ff">2</span> days ago     Up <span style="color:#a5d6ff">2</span> days                 0.0.0.0:8080-&gt;80/tcp                       it-tools
 </span></span><span style="display:flex;"><span>a0f73383ff29                                                              <span style="color:#a5d6ff">4</span> minutes ago  Up <span style="color:#a5d6ff">4</span> minutes              0.0.0.0:8086-&gt;80/tcp                       systemd-potato-infra
@@ -550,11 +550,11 @@ sandwich_db_password: letseat</code></pre></div>
 </span></span><span style="display:flex;"><span>7ce5c6130a4d  docker.io/library/wordpress:latest    apache2-foregroun...  <span style="color:#a5d6ff">4</span> minutes ago  Up <span style="color:#a5d6ff">4</span> minutes <span style="color:#ff7b72;font-weight:bold">(</span>unhealthy<span style="color:#ff7b72;font-weight:bold">)</span>  0.0.0.0:8087-&gt;80/tcp                       systemd-sandwich-wordpress</span></span></code></pre></div>
 <p>As you can see, we now have three rootless pods running under our dogman user. Each pod starts an <code>infra</code> container, as well as the <code>mysql</code> and <code>wordpress</code> container.</p>
 <p>We can verify the sites are live by visiting the browser using the port numbers for each site. 8085, 8086, and 8087.
-<a href="#R-image-209083f072a9358d6dac6e6ace16671b" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020260603103253.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-209083f072a9358d6dac6e6ace16671b"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020260603103253.png"></a></p>
+<a href="#R-image-6f95aa32d15638706fac11da9cfe9655" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020260603103253.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-6f95aa32d15638706fac11da9cfe9655"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020260603103253.png"></a></p>
 <p>You should now get a WordPress setup page for all three sites now. What&rsquo;s next? You can configure the sites and pipe DNS records into a reverse proxy that handles SSL certs or whatever you like.</p>
 <p>To view what containers were updated and when, and if any rollbacks happened run:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>journalctl --user -u podman-auto-update.service</span></span></code></pre></div>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>journalctl --user -u podman-auto-update.service</span></span></code></pre></div>
 <h2 id="are-we-done">Are we done?<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p>There is a lot more you can do with this setup. For example, you could set up the volumes to be sent to multiple other hosts as RO copies. Then you can load balance the live site through a proxy. Or you could keep expanding the resiliency by version controlling  bind-mounted volumes in git instead of using Podman volumes.</p>
 <p>I like this setup though. Maybe we&rsquo;ll get a part two with some of those adjustments some day.</p>
@@ -748,8 +748,8 @@ sandwich_db_password: letseat</code></pre></div>
 <div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1788091472" defer></script>
-    <script src="/js/theme.min.js?1788091472" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1789754030" defer></script>
+    <script src="/js/theme.min.js?1789754030" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

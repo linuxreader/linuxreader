@@ -6,6 +6,24 @@ This is because Fedora with Gnome desktop is a blank canvas. The point is to let
 
 	`curl -sL https://raw.githubusercontent.com/linuxreader/dotfiles/main/dot_justfile -o ~/.justfile`
 
+## Hotkeys
+Navigation
+switch to workspace on the right alt + right
+switch to workspace on the left alt + left
+
+Windows
+close current window alt + c
+
+Screenshots
+
+![](../../images/Pasted%20image%2020260911125033.png)
+
+Open blackbox
+![](../../images/Pasted%20image%2020260911125400.png)
+
+## Tiling shell
+![](../../images/Pasted%20image%2020260911125516.png)
+
 ## Install just and run the justfile
 
 To run the just file, I then install the just program and run it on the justfile:

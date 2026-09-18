@@ -31,6 +31,8 @@ following ad hoc command (a link to instructions is referenced in the user ansib
 
 `ansible localhost -m debug -a "msg={{ ‘password’ | password_hash(‘sha512’,’myrandomsalt’) }}"`
 
+`ansible all -i localhost, -m debug -a "msg={{ 'mypassword' | password_hash('sha512', 'mysecretsalt') }}"`
+
 Playbook that prompts for the user password and that uses the debug module:
 ```yml
  > cat create-user-pass.yml
