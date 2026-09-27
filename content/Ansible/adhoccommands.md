@@ -1,8 +1,8 @@
 ---
 title: 'Ad Hoc Ansible Commands'
-summary: 'How to use Ad-Hoc Ansible Commands'
+description: 'How to use Ad-Hoc Ansible Commands'
 showDate: false
-featured_image: /images/ansibleadhoccommands.png
+featured_image: /images/adhocansiblecommands.png
 ---
 ![](/images/adhocansiblecommands.png)
 
