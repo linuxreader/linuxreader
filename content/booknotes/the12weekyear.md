@@ -194,9 +194,9 @@ The sooner you confront yout outcomes, the sooner you can figure out what works 
 
 Measure lead and lag indicators. 
 
-Lag indicators measure overall results such as lbs lost, money made, etc. Lead indicators measure the activities that produce the results. Are you following through with your plan? 
+**Lag indicators** measure overall results such as lbs lost, money made, etc. **Lead indicators** measure the activities that produce the results. Are you following through with your plan? 
 
-You can always control results, but you can control execution in real time. So Lead indicators should be your primary focus. 
+You can't always control results, but you can control execution in real time. So Lead indicators should be your primary focus. 
 
 If you are not hitting your goals, is it a problem with the plan? Or with the execution of that plan? Is your strategy flawed? Or are you failing to implement that strategy? Once you identify your problem, you can address it head on. 
 
@@ -317,14 +317,8 @@ Every time you complete this cycle, your capacity and confidence increase. Aware
 
 ---
 
-Author book recommendations:
+## Books Mentioned
 
-- Switch by Chip and Dan Heath
-- The Power of Habit by Charles Duhigg
-- Feel the Fear and do it anyway by Susan Jeffers
-
-### If you made it this far…
-
-Please consider giving me some feedback. I want to become a better writer and help others grow along with me. Feedback is invaluable for this goal.
-
-Thanks for reading!
+Switch - Chip and Dan Heath
+The Power of Habit - Charles Duhigg
+Feel the Fear and do it anyway - Susan Jeffers

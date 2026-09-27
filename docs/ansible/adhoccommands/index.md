@@ -1,9 +1,10 @@
 # Ad Hoc Ansible Commands
 
-## Ansible ad hoc commands
- Ad hoc commands are ansible tasks you can run against managed hosts without the need of a playbook or script. These are used for bringing nodes to their desired states, verifying playbook results, and verifying nodes meet any needed criteria/pre-requisites. 
+![](/images/adhocansiblecommands.png)
 
-Here is how you would run an ad hoc ansible command:
+ Ad hoc commands are Ansible tasks you can run against managed hosts without the need of a playbook or script. These are used for bringing nodes to their desired states, verifying playbook results, and verifying nodes meet any needed criteria/prerequisites. 
+
+Here is how you would run an ad hoc Ansible command:
 
 `ansible {command} {host} -m {module} -a {"argument1 argument2 argument3"}`
 
@@ -18,8 +19,8 @@ Regardless of current condition, the host is brought to the desired state. Even 
 
 | Option | Function                                                           |
 | ------ | ------------------------------------------------------------------ |
-| `-u`   | specify the Ansible user that Ansible will use to run the command. |
-| `-f`   | run on specified number of hosts at the same time.                 |
+| `-u`   | Specify the Ansible user that Ansible will use to run the command. |
+| `-f`   | Run on specified number of hosts at the same time.                 |
 
 Read more about the `ansible` commands [here](https://docs.ansible.com/projects/ansible/latest/command_guide/intro_adhoc.html). 
 

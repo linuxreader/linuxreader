@@ -18,30 +18,30 @@
     <meta property="article:section" content="Ansible">
     <meta itemprop="name" content="Ad Hoc Ansible Commands">
     <meta itemprop="description" content="How to use Ad-Hoc Ansible Commands">
-    <meta itemprop="wordCount" content="185">
+    <meta itemprop="wordCount" content="181">
     <title>Ad Hoc Ansible Commands</title>
     <link href="/ansible/adhoccommands/index.md" rel="alternate" type="text/markdown" title="Ad Hoc Ansible Commands">
-    <link href="/images/favicon.svg?1789754188" rel="icon" type="image/svg+xml">
-    <link href="/css/auto-complete/auto-complete.min.css?1789754188" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1789754188" defer></script>
-    <script src="/js/search-lunr.min.js?1789754188" defer></script>
-    <script src="/js/search.min.js?1789754188" defer></script>
+    <link href="/images/favicon.svg?1790505284" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1790505284" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1790505284" defer></script>
+    <script src="/js/search-lunr.min.js?1790505284" defer></script>
+    <script src="/js/search.min.js?1790505284" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1789754188";
+      window.relearn.index_js_url="/searchindex.en.js?1790505284";
     </script>
-    <script src="/js/lunr/lunr.min.js?1789754188" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1789754188" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1789754188" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1789754188" defer></script>
+    <script src="/js/lunr/lunr.min.js?1790505284" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1790505284" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1790505284" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1790505284" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/all.min.css?1789754188" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1789754188" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1789754188" rel="stylesheet">
-    <link href="/css/theme.min.css?1789754188" rel="stylesheet">
-    <link href="/css/format-html.min.css?1789754188" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/all.min.css?1790505284" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1790505284" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1790505284" rel="stylesheet">
+    <link href="/css/theme.min.css?1790505284" rel="stylesheet">
+    <link href="/css/format-html.min.css?1790505284" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -139,7 +139,6 @@ code, kbd, pre, samp {
                 <div class="topbar-content-wrapper">
 <nav class="TableOfContents">
   <ul>
-    <li><a href="#ansible-ad-hoc-commands">Ansible ad hoc commands</a></li>
     <li><a href="#common-options">Common options</a></li>
   </ul>
 </nav>
@@ -180,9 +179,10 @@ code, kbd, pre, samp {
 
 <h1 id="ad-hoc-ansible-commands">Ad Hoc Ansible Commands</h1>
 
-<h2 id="ansible-ad-hoc-commands">Ansible ad hoc commands<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
-<p>Ad hoc commands are ansible tasks you can run against managed hosts without the need of a playbook or script. These are used for bringing nodes to their desired states, verifying playbook results, and verifying nodes meet any needed criteria/pre-requisites.</p>
-<p>Here is how you would run an ad hoc ansible command:</p>
+<p><a href="#R-image-9f2ff834a59c41a942dd66a74a1e904e" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/adhocansiblecommands.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-9f2ff834a59c41a942dd66a74a1e904e"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/adhocansiblecommands.png"></a></p>
+<p>Ad hoc commands are Ansible tasks you can run against managed hosts without the need of a playbook or script. These are used for bringing nodes to their desired states, verifying playbook results, and verifying nodes meet any needed criteria/prerequisites.</p>
+<p>Here is how you would run an ad hoc Ansible command:</p>
 <p><code>ansible {command} {host} -m {module} -a {&quot;argument1 argument2 argument3&quot;}</code></p>
 <p>The results of the command show up on screen. Ansible commands to not show up on the targets bash history.</p>
 <p>If you do not specify a module, the command module is specified by default.</p>
@@ -199,11 +199,11 @@ Regardless of current condition, the host is brought to the desired state. Even 
 	<tbody>
 			<tr>
 					<td><code>-u</code></td>
-					<td>specify the Ansible user that Ansible will use to run the command.</td>
+					<td>Specify the Ansible user that Ansible will use to run the command.</td>
 			</tr>
 			<tr>
 					<td><code>-f</code></td>
-					<td>run on specified number of hosts at the same time.</td>
+					<td>Run on specified number of hosts at the same time.</td>
 			</tr>
 	</tbody>
 </table>
@@ -400,8 +400,8 @@ Regardless of current condition, the host is brought to the desired state. Even 
 <div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1789754188" defer></script>
-    <script src="/js/theme.min.js?1789754188" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1790505284" defer></script>
+    <script src="/js/theme.min.js?1790505284" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

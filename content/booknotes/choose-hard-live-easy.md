@@ -400,8 +400,280 @@ Don't forget to look how far you've come and how much you've grown. Record your 
 Break an impossible task down into small and winnable daily units. 
 
 Make things inconvenient for your worst self for when your willpower breaks down. Make it hard for "worst you" to sabotage. 
+
+Gain momentum by commiting to 10 minutes of whatever you need to do. 
+
+Set up discipline triggers. Whenever A happens I do B. 
 #### Discomfort
 Sacrificing short term comfort. 
+
+"Live Hard" exsists in a small comfort zone. "Live Easy" exists in a large one. Your comfort zone is either a prison or paradise. 
+
+Discipline is pulling the trigger (executing the plan). Discomfort is proof you fired a live round (You feel the burn, the anxiety and the craving). No discomfort? You fired a blank. 
+
+##### Strategies
+
+**Gratitude** - My worst day is someone else's dream life. If you have the luxury of chasing dreams, you are already living the dream. 
+
+Pain discomfort and challenge prove your dream isn't dead.
+
+Millions of people on this planet lack the luxury of self-improvement. They're simply fighting to survive. Their discomfort isn't a choice; it's a life sentence. 
+
+Self-imposed discomfort is a status symbol to be worn with more pride then an expensive watch. It's proof you have won the landmass lottery and have the freedom to chase your best life. 
+
+Instead of complaining, moaning, or whining. Think how it makes your stronger, tougher, and how you are lucky to be able to do this. 
+
+**10 minutes stretegy**
+Commit to 10 minutes of getting through the discomfort. 
+
+**Maestro Visualization**
+Fast-forward and see yourself not as a clumsy beginner but as a master. Visualize the eventuality of your actions. 
+
+**Pain is information**
+"No pain no gain" mentality. Pain is not punishment but a sign of growth. 
+
+**Embrace the suck**
+Every time you activate discipline and face discomfort, you are applying intense, focused pressure, prying open the twisted metal of your limits. The suck is temporary, but the growth is permanent. 
+
+##### Intel
+**The "grit" muscle**
+The anterior midcingulate (aMCC) is the willpower part of the brain. It physically grows larger and becomes more active when you continuously engage in discipline and discomfort. 
+
+**The dopamine lie**
+Choosing Hard and embracing the suck is the holy sustainable way to keep your motivation fueled. The discomfort, the grind, the struggle, the pursuit are the very things that release the chemicals that make you want to keep going. The suck is part of the reward mechanism. 
+
+**The stress switch**
+Discomfort is simply a state of unfamiliarity or temporary pain. Ultimately, you decide whether it’s a poison that weakens you or a steroid that makes you stronger. By consciously reframing the suck of a Hard choice as a challenge that makes you tougher, you literally change the chemical signals in your brain. You flip a switch that turns your body’s stress response from a liability into a weapon.
+
+## Defend Decision Power
+
+### Culture
+Culture’s primary weapon is Gravity, an omnipresent, invisible, and subversive force that siphons your power with the weapons of Easy. It attacks from two fronts: the chains of Tradition (“this is how it’s always been done”) and the siren song of Conformity (“everyone is doing it”).
+
+#### 5 Members of the culture cartel:
+
+**Big Food:** The Architect of Obesity and Disease
+The ultimate mind fuck: showing people addicted to Easy, yet living with the results of Hard. ( Commercials of fit people eating junk)
+
+**Big Pharma:** The Architect of Dependency
+Go ahead and consume the poisons we just advertised, because when you inevitably get sick, we’re here to sell you the monthly treatment.
+
+**Big Education:** The Architect of Obedience
+They weren’t interested in creating employers; they were in the business of manufacturing employees.
+
+
+**Big Finance:** The Architect of Debt
+The system survives on your endless desire to consume beyond your means. Worse, the unhappier you are, the faster this slave system spins.
+
+But here’s where the scheme becomes truly sinister. What if you reject the cycle of debt and consumption? Don’t worry; the cartel has a different kind of servitude in store. Instead of being a consumer promised happiness, you are encouraged to become an investor promised freedom.
+
+**Big Media:** The Architect of Distraction
+This hijacking is the main goal of Big Media, the propaganda arm of the Cultural Cartel. Its primary weapon is Distraction, which diverts your Awareness toward fabricated enemies and trivial spectacles, such as millionaire athletes playing games. Then, you’re assured you won’t notice the bars of your own cage.
+
+**Verdict**
+How you spend your time now determines how you spend your life later.
+
+### Expectosis
+Expectosis is an affliction of Easy, characterized by false, lofty expectations.
+
+**The Complication of Unpreparedness:** You pack for a beach vacation and find yourself in a warzone.
+
+**The Complication of Resilience:** Your mental armor, built for Easy, shatters on impact when Hard appears.
+
+**The Complication of Willpower:** With your resilience broken, your energy and will to continue the fight drain to zero.
+
+your expectations not only influence your choices but also forecast your future behavior.
+  
+
+#### The Complications of Unpreparedness, Resilience, and Willpower
+Too many aspiring entrepreneurs see business like a game of Monopoly—a few lucky rolls, and you’re collecting rent on Boardwalk. The truth is, you’re a rookie stepping into the batter’s box against a major-league pitcher throwing 99-mph fastballs. Success requires countless swings, relentless practice, and many strikeouts. If you think you’ll replace your salary in just two months with a fifty-dollar Facebook ad and a cheap WordPress website, you’re not only wrong; you’re sick. And Big Pharma doesn’t have a pill for that.
+
+Your belief in your ability to succeed directly influences your effort and persistence.
+
+#### Cures for expectosis
+
+##### EXPECTOSIS CURE #1: FIRE A [G]ROUNDING ANALOGY TO ENSURE PREPAREDNESS
+The Grounding Analogy means assigning a new, unfamiliar challenge and connecting it to a familiar, straightforward reality you already understand. It resets preparedness and strengthens resilience, replacing hopeful fantasies with the practical details of the real world.
+
+Ask: "What is this process really like?"
+
+So, whenever you face a new challenge, use a grounding analogy. What will this call to adventure, this hero’s journey, really look like? Ask yourself: Will you be the person who expects fun and relaxation on the beach, only to give up? Or will you be the one who crawled through a river of shit and came out clean on the other side?
+
+##### EXPECTOSIS CURE #2: THE [A]TTRITION DOCTRINE TO BUTTRESS RESILIENCE
+See every defeat not as a final judgment but as a necessary part of the campaign.
+
+Build the expectation of casualties into your battle plan.
+
+###### Find people who have walked the path
+When taking on a Hard path, you need to find the veterans, the survivors, the ones who’ve already made the journey.
+
+Your mission with any Scout is to recount their story, the unfiltered debrief. What was their real experience? How long did it truly take?
+
+##### EXPECTOSIS CURE #3: REDEPLOY THE [S]MG STRATEGY
+sets expectations so low that victory is assured. Write one terrible sentence every day.
+
+### Cognitive prisons
+#### Solution Prison
+A cognitive set of self-imposed limits where solutions are sought only within the prisoner’s padded comfort zone.
+
+A business owner refuses to use social media. Why? “It’s toxic.” Okay. But now you’ve imprisoned your marketing and abdicated Power. You’ve cut off the most scalable customer-acquisition tool available today and shrunk your solution space.
+
+They’re landlocked in a Solution Prison, which prevents decisions by stubbornly asking, “What solution fits inside my comfort zone?” Instead, they should be asking, “What do I absolutely refuse to do because it’s hard, uncomfortable, or admitting I might be wrong?”
+
+##### Escaping solution prisons
+**Drill #1: Presume Unlimited Resources**
+forces you to identify the actual, unvarnished solution when practical constraints are removed. If you had unlimited time and money, what would the solution look like?
+
+##### Drill #2: Apply Do or Die
+If you had to make progress or solve this problem within one month or face death, what would you do in the next hour?
+
+##### Drill #4: Kill the Sacred Cow—Zero-Based Thinking
+"Knowing what I know now, if I were not already involved in this project or relationship, would I start it today?"
+
+If the answer is NO, you are holding a Sunk Cost.
+If the answer is NO, the cow is dead. Stop feeding it.
+
+Own the loss, and regain your freedom.
+
+#### IDENTITY PRISON
+The solution falls outside of my self-imposed label.
+
+“I have ADHD, so blah blah blah…”
+“I’m depressed, so blah blah blah…”
+“I’m not a person who reads books, so blah blah blah…”
+“I’m not a public speaker, so blah blah blah…”
+“I’m not someone who likes exercise, so blah blah blah….”
+“I’m not good at X.” (Of course you’re not. You never tried it for more than five minutes and quit when HARD shows up.)
+
+##### Escaping identity prison
+
+**Step 1: Confront the Wall**
+The next time the warden of your Identity Prison barks an order (“Don’t go to that party, you’re an introvert!”), perform a cognitive demotion. Acknowledge the voice, then ignore the order. Say to yourself, “I hear the introvert complaint department, but my mission requires me to go.” You are not arguing with the feeling; you are simply revoking its authority.
+
+**Step 2: Step Outside the Walls**
+With the warden of the prison demoted, you must take command. Your new commander’s core belief is this:
+
+"I am who I need to be."
+
+Your identity is not a static label, but a dynamic role determined by your mission.
+
+You are not your label; you are who you need to be when the mission demands it.
+
+By repeatedly doing what the mission requires, you don’t just escape the prison; you weaken the identity itself to the point that the identity becomes fraudulent.
+
+#### Talent prison
+The solution falls outside my limited abilities.
+
+A cognitive trap in which one believes that Power isn’t earned but discovered. It promotes the fantasy that talent and ability are events to be found, not processes to be endured.
+
+This prison disrespects the most fundamental law of the universe: Process is Power. Without the grinding, thankless, power-building process, the glorious event never happens.
+
+##### Escaping talent prison
+
+Most people want nothing to do with the process; they want to be part of the outcome, yet the process reveals who is worthy of it.
+
+The **Demosthenes Doctrine** holds that talent isn’t innate but the result of a disciplined display of power through a process.
+
+**DIRECTIVE #1: SHIFT YOUR EXPECTATIONS FROM EVENT TO PROCESS.** 
+Reset your Awareness. Stop fantasizing about the gold medal on the podium and start focusing on the four-hour swim at 5 AM. The process is the power.
+
+**DIRECTIVE #2: DECONSTRUCT THE TARGET.** 
+Break down the skill you want to learn into its basic parts. 
+
+**DIRECTIVE #3: DEPLOY SMGs AND WIN THE SKIRMISH.** 
+Focus on small, daily wins that fuel your feedback loop. Don’t aim to “become the best”; aim to get a little less shitty every single day.
+
+**DIRECTIVE #4: RUN RADAR AND ASSESS PASTUALITY.** 
+After each session, evaluate what worked and what didn’t. Setbacks are not failures; they provide valuable intelligence. Use them to refine your approach for the next attempt.
+
+**DIRECTIVE #5: ATTACK YOUR WEAKNESSES.** 
+Confront your weaknesses instead of only refining what you’re already skilled at.
+
+#### ESCAPING YOUR SELF-IMPOSED PRISONS
+The only thing standing between you and your goal is the story you keep telling yourself about why you can’t achieve it.
+
+### Low ground luck
+Your Life = Your Choices + Your Luck
+
+#### 3 Fallacies of luck
+##### The Fallacy Of Binarism
+Luck is often mistaken for a simple struggle between two forces: Good and Bad. This is the Fallacy of Binarism. Remember life’s existential equation:
+
+Your Life = Your Choices (from Awareness) + Your Luck
+
+Your choices directly affect the quality of the deck you’re drawing from.
+
+##### The Fallacy Of Randomness
+The most common belief is that luck is purely random and unaffected by your actions.
+
+##### The Fallacy Of Outcome
+A misattribution error in which the quality of your choices is judged by the outcome.
+
+The quality of your choices isn’t determined by their outcomes.
+
+#### Six faces of luck
+**Chaotic Luck:** An outlier outcome not influenced by your choice.
+**Nil Luck:** The absence of luck from a choice with a certain and expected outcome.
+**Good Luck:** A good choice with a good outcome.
+**Bad Luck:** A good choice with a bad outcome.
+**Dumb Luck:** A bad choice with a good outcome.
+**Titanic Luck:** A bad choice with a bad outcome.
+
+Good and Bad Luck only happen on the high ground, the battlefield reserved for those who make responsible and calculated Hard choices.
+
+Directional Probability is the craft of tilting the deck in your favor.
+
+### Command promotion
+Discomfort isn’t just inevitable but the crucible where resilience, growth, and success are forged.
+
+#### THE HIERARCHY OF WAR
+
+**LEVEL 1: COMBAT DECISIONS (The Tactical Skirmish)**
+
+**The Scope:** Routine, "heat-of-battle" decisions: what you eat for breakfast, whether you binge Netflix or read a book.
+
+**The Trap:** This is where Treason lives.
+
+**The Reality:** Most people spend 100% of their energy here, fighting a ceaseless war of attrition in Momentality while losing the war for their life.
+
+**LEVEL 2: CAMPAIGN DECISIONS (The Operational Crusade)**
+
+**The Scope:** Committed, long-term operations: the decision to become an Olympian, a millionaire, or a person of longevity.
+
+**The Trap:** This is where drift lives. You can win every daily combat but lose the campaign for lack of a plan.
+
+**The Reality:** This requires sustained strategies and persistence, not just willpower.
+
+
+**LEVEL 3: FRONTIER DECISIONS (The Strategic Conquest)**
+
+**The Scope:** Massive, structural pivots that open new maps—divorcing the deadbeat, moving to a new city, burning the boats to start the business.
+
+**The Trap:** This is where fear lives.
+
+**The Reality:** This is the domain of the General. Most people die within a 50-mile radius of where they were born, governed by the same Easy defaults, because they never issued a Frontier Command. Committed, long-term operations: the decision to become an Olympian, a millionaire, or a person of longevity
+## Command Promotion
+To take command of power, you must elevate from skirmishes. Start launching campaigns and conquering fronteirs. 
+
+#### Campaign decisions
+Decisions that fundementally change your life and often grant you a new identity.
+
+Examples:
+- Mission to chase grandkids at 100
+- Financial freedom by 35
+
+#### Frontier decisions
+Periodic plot twists that give your life new plot twists and story arcs. 
+
+#### Ask the hard choice
+Is this a HARD choice? If I do what I'm doing now for 90 days, what is the eventuality?
+
+Carpe Momentum. Seize your power. Remember, every man dies, not every man lives. Choose Hard, or have it choose you. Your Choice. Your move. Your life.
+
+## SITREP
+## Are you winning or losing?
+
+
 
 ## Books mentioned
 
@@ -411,3 +683,5 @@ Latin to English Made SImple
 Chase Hughes - The Behavior Ops Manual
 Bronnie Ware - The Top Five Regrets of the Dying
 Teresa Amabile - The Progress Principle
+Shonda Rhimes - Year of Yes
+
