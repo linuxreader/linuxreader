@@ -25,27 +25,27 @@
     <meta itemprop="wordCount" content="72">
     <title>Proxmox PfSense HaProxy Setup</title>
     <link href="/tools/proxmox-ha-proxy-setup/index.md" rel="alternate" type="text/markdown" title="Proxmox PfSense HaProxy Setup">
-    <link href="/images/favicon.svg?1790679270" rel="icon" type="image/svg+xml">
-    <link href="/css/auto-complete/auto-complete.min.css?1790679270" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1790679270" defer></script>
-    <script src="/js/search-lunr.min.js?1790679270" defer></script>
-    <script src="/js/search.min.js?1790679270" defer></script>
+    <link href="/images/favicon.svg?1790679423" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1790679423" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1790679423" defer></script>
+    <script src="/js/search-lunr.min.js?1790679423" defer></script>
+    <script src="/js/search.min.js?1790679423" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1790679270";
+      window.relearn.index_js_url="/searchindex.en.js?1790679423";
     </script>
-    <script src="/js/lunr/lunr.min.js?1790679270" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1790679270" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1790679270" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1790679270" defer></script>
+    <script src="/js/lunr/lunr.min.js?1790679423" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1790679423" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1790679423" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1790679423" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/all.min.css?1790679270" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1790679270" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1790679270" rel="stylesheet">
-    <link href="/css/theme.min.css?1790679270" rel="stylesheet">
-    <link href="/css/format-html.min.css?1790679270" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/all.min.css?1790679423" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1790679423" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1790679423" rel="stylesheet">
+    <link href="/css/theme.min.css?1790679423" rel="stylesheet">
+    <link href="/css/format-html.min.css?1790679423" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -190,30 +190,30 @@ code, kbd, pre, samp {
 <p>General HaProxy setup pretty much matches the LS video here: <a href="https://www.youtube.com/watch?v=bU85dgHSb2E" rel="external" target="_blank">https://www.youtube.com/watch?v=bU85dgHSb2E</a></p>
 <h2 id="frontend-configuration">Frontend configuration<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p><strong>External address</strong></p>
-<p><a href="#R-image-c969a5c385d22089b02c05a085b4ca34" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/Pasted%20image%2020260117041515.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-c969a5c385d22089b02c05a085b4ca34"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/Pasted%20image%2020260117041515.png"></a></p>
+<p><a href="#R-image-44f75fd00a7382e10810e3048ce92a3c" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/Pasted%20image%2020260117041515.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-44f75fd00a7382e10810e3048ce92a3c"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/Pasted%20image%2020260117041515.png"></a></p>
 <p><strong>Type</strong>
-<a href="#R-image-4256e7b496881673e24ae6e16a4e9123" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/Pasted%20image%2020260117041615.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-4256e7b496881673e24ae6e16a4e9123"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/Pasted%20image%2020260117041615.png"></a></p>
+<a href="#R-image-3d95b190d834d01a4c81f8e8ba885940" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/Pasted%20image%2020260117041615.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-3d95b190d834d01a4c81f8e8ba885940"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/Pasted%20image%2020260117041615.png"></a></p>
 <p><strong>ACL</strong>
-<a href="#R-image-1ad3770a44c20a9c9c057d798c97fbca" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/Pasted%20image%2020260117041708.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-1ad3770a44c20a9c9c057d798c97fbca"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/Pasted%20image%2020260117041708.png"></a></p>
+<a href="#R-image-39f325ed341451d3f60cb9ddab6cab7c" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/Pasted%20image%2020260117041708.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-39f325ed341451d3f60cb9ddab6cab7c"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/Pasted%20image%2020260117041708.png"></a></p>
 <p><strong>ACL Actions</strong>
-<a href="#R-image-cc9405c352be83e0452880251eb86b34" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/Pasted%20image%2020260117041758.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-cc9405c352be83e0452880251eb86b34"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/Pasted%20image%2020260117041758.png"></a></p>
+<a href="#R-image-77d3010584bba1586d9f33edb01bbade" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/Pasted%20image%2020260117041758.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-77d3010584bba1586d9f33edb01bbade"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/Pasted%20image%2020260117041758.png"></a></p>
 <p><strong>SSL Offloading</strong>
-<a href="#R-image-073188186fc71a7e35acabb67c3c6173" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/Pasted%20image%2020260117041849.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-073188186fc71a7e35acabb67c3c6173"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/Pasted%20image%2020260117041849.png"></a></p>
+<a href="#R-image-51ad356dab6074753400832ed1392bb4" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/Pasted%20image%2020260117041849.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-51ad356dab6074753400832ed1392bb4"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/Pasted%20image%2020260117041849.png"></a></p>
 <h2 id="backend-configuration">Backend configuration<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <p><strong>Backend Server Pool</strong>
-<a href="#R-image-918a1c54479bd4f7104afc093a2a0808" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/Pasted%20image%2020260117042001.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-918a1c54479bd4f7104afc093a2a0808"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/Pasted%20image%2020260117042001.png"></a></p>
+<a href="#R-image-77e94b002a7e0d2d7a7aa5b5cb3f6b2f" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/Pasted%20image%2020260117042001.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-77e94b002a7e0d2d7a7aa5b5cb3f6b2f"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/Pasted%20image%2020260117042001.png"></a></p>
 <p><strong>Health check</strong>
-<a href="#R-image-3072ed67dfdfeb57d9479841c629ced0" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/Pasted%20image%2020260117042031.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-3072ed67dfdfeb57d9479841c629ced0"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/Pasted%20image%2020260117042031.png"></a></p>
+<a href="#R-image-fd798ba87ac5de4b3100658047e90002" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/Pasted%20image%2020260117042031.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-fd798ba87ac5de4b3100658047e90002"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/Pasted%20image%2020260117042031.png"></a></p>
 <h2 id="its-working-finally">It&rsquo;s working finally!<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
-<p><a href="#R-image-4ff5aa0642c8bd656796d13a3b766510" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/proxmox-gui.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-4ff5aa0642c8bd656796d13a3b766510"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/proxmox-gui.png"></a></p>
+<p><a href="#R-image-bcc155f9b915b4d58a211852608c8b9e" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../images/proxmox-gui.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-bcc155f9b915b4d58a211852608c8b9e"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../images/proxmox-gui.png"></a></p>
 
   <footer class="footline">
   </footer>
@@ -403,8 +403,8 @@ code, kbd, pre, samp {
 <div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1790679270" defer></script>
-    <script src="/js/theme.min.js?1790679270" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1790679423" defer></script>
+    <script src="/js/theme.min.js?1790679423" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

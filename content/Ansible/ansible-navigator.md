@@ -5,6 +5,7 @@ date: 2026-02-22
 featured_image: /images/ansible-navigator.png
 draft: false
 ---
+![](/images/ansible-navigator.png)
 
 Here's my basic setup to get started with Ansible Navigator. A great tool for running Ansible Execution environments, checking a hosts variables, running playbooks and more.
 ### ansible-navigator setup
