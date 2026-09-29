@@ -1,7 +1,8 @@
 ---
-title: Ansible Navigator
+title: Ansible Navigator Setup Guide
 description: Basic setup for Ansible Navigator
 date: 2026-02-22
+featured_image: /images/ansible-navigator.png
 draft: false
 ---
 
