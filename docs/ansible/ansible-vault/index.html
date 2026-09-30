@@ -18,30 +18,30 @@
     <meta property="article:section" content="Ansible">
     <meta itemprop="name" content="Ansible Vault">
     <meta itemprop="description" content="Ansible Vault Basics">
-    <meta itemprop="wordCount" content="999">
+    <meta itemprop="wordCount" content="659">
     <title>Ansible Vault</title>
     <link href="/ansible/ansible-vault/index.md" rel="alternate" type="text/markdown" title="Ansible Vault">
-    <link href="/images/favicon.svg?1790679423" rel="icon" type="image/svg+xml">
-    <link href="/css/auto-complete/auto-complete.min.css?1790679423" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1790679423" defer></script>
-    <script src="/js/search-lunr.min.js?1790679423" defer></script>
-    <script src="/js/search.min.js?1790679423" defer></script>
+    <link href="/images/favicon.svg?1790767221" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1790767221" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1790767221" defer></script>
+    <script src="/js/search-lunr.min.js?1790767221" defer></script>
+    <script src="/js/search.min.js?1790767221" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1790679423";
+      window.relearn.index_js_url="/searchindex.en.js?1790767221";
     </script>
-    <script src="/js/lunr/lunr.min.js?1790679423" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1790679423" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1790679423" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1790679423" defer></script>
+    <script src="/js/lunr/lunr.min.js?1790767221" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1790767221" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1790767221" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1790767221" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/all.min.css?1790679423" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1790679423" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1790679423" rel="stylesheet">
-    <link href="/css/theme.min.css?1790679423" rel="stylesheet">
-    <link href="/css/format-html.min.css?1790679423" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/all.min.css?1790767221" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1790767221" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1790767221" rel="stylesheet">
+    <link href="/css/theme.min.css?1790767221" rel="stylesheet">
+    <link href="/css/format-html.min.css?1790767221" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -139,14 +139,12 @@ code, kbd, pre, samp {
                 <div class="topbar-content-wrapper">
 <nav class="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#managing-encrypted-files">Managing Encrypted Files</a>
       <ul>
-        <li><a href="#ansible-vault">Ansible Vault</a></li>
-        <li><a href="#lab--working-with-ansible-vault">Lab:  Working with Ansible Vault</a></li>
-      </ul>
-    </li>
-    <li><a href="#more-ansible-vault-command">More <code>ansible-vault</code> command</a>
-      <ul>
+        <li><a href="#ansible-vault-create-secretyaml"><code>ansible-vault create secret.yaml</code></a></li>
+        <li><a href="#commonly-used-ansible-vault-commands">Commonly used <strong>ansible-vault</strong> commands:</a></li>
+        <li><a href="#using-vault-in-playbooks">Using Vault in Playbooks</a></li>
+        <li><a href="#managing-files-with-sensitive-variables">Managing Files with Sensitive Variables</a></li>
         <li><a href="#vault-options-for-ansible-playbook-command">Vault options for <code>ansible-playbook</code> command</a></li>
         <li><a href="#vault-options-for-ansiblecfg">Vault options for ansible.cfg</a></li>
       </ul>
@@ -190,32 +188,20 @@ code, kbd, pre, samp {
 
 <h1 id="ansible-vault">Ansible Vault</h1>
 
-<h3 id="ansible-vault">Ansible Vault<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<ul>
-<li>For webkeys, passwords, and other types of sensitive data that you really shouldn&rsquo;t store as plain text in a playbook.</li>
-<li>Can use Ansible Vault to encrypt and decrypt sensitive data to make it unreadable, and only while accessing data does it ask for a password so that it is decrypted.</li>
-</ul>
-<p>1. Sensitive data is stored as values in variables in a separate variable file.
-2. The variable file is encrypted, using the <strong>ansible-vault</strong> command.
-3. While accessing the variable file from a playbook, you enter a password to decrypt.</p>
-<h4 id="managing-encrypted-files">Managing Encrypted Files<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
-<p><code>ansible-vault create secret.yaml</code></p>
-<ul>
-<li>Ansible Vault prompts for a password and then opens the file using the default editor.</li>
-<li>The password can be provided in a password file.(must be really well protected (for example, by putting it in the user root home directory))</li>
-<li>If a password file is used, the encrypted variable file can be created using <code>ansible-vault create \--vault-password-file=passfile secret.yaml</code></li>
-</ul>
-<p><code>ansible-vault encrypt</code></p>
-<ul>
-<li>encrypt one or more existing files.</li>
-<li>The encrypted file can next be used from a playbook, where a password needs to be entered to decrypt.</li>
-</ul>
-<p><code>ansible-vault decrypt</code></p>
-<ul>
-<li>used to decrypt the file.</li>
-</ul>
-<p>Commonly used <strong>ansible-vault</strong> commands:
-<code>create</code></p>
+<p><a href="#R-image-72be2690a5f432b3c4da424f8db3543e" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/ansible-vault.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-72be2690a5f432b3c4da424f8db3543e"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/ansible-vault.png"></a>
+Ansible vault has been a great tool for keeping passwords and other sensitive data safe. Without sacrificing usability.</p>
+<p>It stores your passwords as values in variables. All in a password protected and encrypted file. After which, you can use the variables in your ansible scripts.</p>
+<p>You can use the <code>ansible-vault</code> command to manage your vault.</p>
+<h2 id="managing-encrypted-files">Managing Encrypted Files<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<h3 id="ansible-vault-create-secretyaml"><code>ansible-vault create secret.yaml</code><span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Creates an encrypted vault named secret.yaml. When ran, you well be prompted to set a password for the vault. Then, a blank file will be opened in your default editor. (Vim anyone?)</p>
+<p>You can also store your vault password in a separate file. If you go this route, you&rsquo;ll want to make sure the file is in a secure location such as <code>/root</code> with limited permissions.</p>
+<p>For example, here&rsquo;s how you would create a vault and use a file called <code>vault-pass</code> as the vault password file:
+<code>ansible-vault create --vault-password-file=vault-pass secret.yaml</code></p>
+<p>For the above, the file <code>vault-pass</code> must exist and have a single line with the password you want to use for the vault.</p>
+<h3 id="commonly-used-ansible-vault-commands">Commonly used <strong>ansible-vault</strong> commands:<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p><code>create</code></p>
 <ul>
 <li>Creates new encrypted file
 <code>encrypt</code></li>
@@ -231,81 +217,30 @@ code, kbd, pre, samp {
 <code>edit</code></li>
 <li>Edits an existing encrypted file</li>
 </ul>
-<h4 id="using-vault-in-playbooks">Using Vault in Playbooks<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
-<p><code>--vault-id @prompt</code></p>
-<ul>
-<li>When a Vault-encrypted file is accessed from a playbook, a password must be entered.</li>
-<li>Has the <code>ansible-playbook</code> command prompt for a password for each of the Vault-encrypted files that may be used</li>
-<li>Enables a playbook to work with multiple Vault-encrypted files where these files are allowed to have different passwords set.</li>
-</ul>
-<p><code>ansible-playbook --ask-vault-pass</code></p>
-<ul>
-<li>Used if all Vault-encrypted files a playbook refers to have the same password set.</li>
-</ul>
-<p><code>ansible-playbook --vault-password-file=secret</code></p>
-<ul>
-<li>Obtain the Vault password from a password file.</li>
-<li>Password file should contain a string that is stored as a single line in the file.</li>
-<li>Make sure the vault password file is protected through file permissions, such that it is not accessible by unauthorized users!</li>
-</ul>
-<h4 id="managing-files-with-sensitive-variables">Managing Files with Sensitive Variables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
-<ul>
-<li>
-<p>You should separate files containing unencrypted variables from files that contain encrypted variables.</p>
-</li>
-<li>
-<p>Use <strong>group_vars</strong> and <strong>host_vars</strong> variable inclusion for this.</p>
-</li>
-<li>
-<p>You may create a directory (instead of a file) with the name of the host or host group.</p>
-</li>
-<li>
-<p>Within that directory you can create a file with the name <strong>vars</strong>, which contains unencrypted variables, and a file with the name <strong>vault</strong>, which contains Vault-encrypted variables.</p>
-</li>
-<li>
-<p>Vault-encrypted variables can be included from a file using the <code>vars_files</code> parameter.</p>
-</li>
-</ul>
-<h3 id="lab--working-with-ansible-vault">Lab:  Working with Ansible Vault<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<p>1. Create a secret file containing encrypted values for a variable user and a variable password by using <code>ansible-vault create secrets.yaml</code></p>
-<p>Set the password to <strong>password</strong> and enter the following lines:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code class="language-pre1" data-lang="pre1">username: bob
-pwhash: password</code></pre></div>
-<p>When creating users, you cannot provide the password in plain text; it needs to be provided as a hashed value.
-Because this exercise focuses on the use of Vault, the password is not provided as a hashed value, and as a result, a warning is displayed. You may ignore this warning.</p>
-<p>2. Create the file create-users.yaml and provide the following contents:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code class="language-pre1" data-lang="pre1">---
-- name: create a user with vaulted variables
-  hosts: ansible1
-  vars_files:
-    - secrets.yaml
-  tasks:
-  - name: creating user
-    user:
-      name: &#34;{{ username }}&#34;
-      password: &#34;{{ pwhash }}&#34;</code></pre></div>
-<p>3. Run the playbook by using <code>ansible-playbook --ask-vault-pass create-users.yaml</code></p>
-<p>4. Change the current password on <strong>secrets.yaml</strong> by using <code>ansible-vault rekey secrets.yaml</code> and set the new password to
-<strong>secretpassword</strong>.</p>
-<p>5. To automate the process of entering the password, use <code>echo secretpassword &gt; vault-pass</code></p>
-<p>6. Use <code>chmod 400 vault-pass</code> to ensure the file is readable for the ansible user only; this is about as much as you can do to secure the file.</p>
-<p>7. Verify that it&rsquo;s working by using <code>ansible-playbook --vault-password-file=vault-pass create-users.yaml</code>
-JunctionScallopPoise</p>
-<h2 id="more-ansible-vault-command">More <code>ansible-vault</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
-<p>View options and information:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>man ansible-vault</code></pre></div>
-<p>Create a vault using a vault password file:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo <span style="color:#a5d6ff">&#34;lima-bean&#34;</span> &gt; vault-pass2
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>ansible-vault create secrets2.yml --vault-password-file vault-pass2</span></span></code></pre></div>
-<p>Edit the file:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ansible-vault edit secrets2.yml --vault-password-file vault-pass2</code></pre></div>
-<p>If you have the vault listed as a variable file. Either in a playbook or under a variable folder such as: <code>group_vars/all/secrets2.yml</code>. You can list the vault password file to decrypt globally in <strong>ansible.cfg</strong>:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>vault_password_file = ~/vault-pass2</code></pre></div>
-<p>You can also add it as an option when you run <code>ansible-playbook</code> or have it in the playbook itself.</p>
-<p>The man page also shows you how to decrypt a vault, view the contents, encrypt an existing file, and change a vault&rsquo;s password.</p>
+<h3 id="using-vault-in-playbooks">Using Vault in Playbooks<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>You can set your default vault password file under defaults in <code>ansible.cfg</code> like so:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>[defaults]
+vault_password_file = ~/vault-pass</code></pre></div>
+<p>If you don&rsquo;t have it set, you can also choose to have ansible prompt you whenever it attempts to access your vault with the option:<br>
+<code>--vault-id @prompt</code></p>
+<p>This also enables a playbook to work with multiple Vault-encrypted files with different passwords set.</p>
+<p><code>ansible-playbook --ask-vault-pass</code> Can be used if you all your Vaults have the same password. And you want to be prompted for the password once.</p>
+<p><code>ansible-playbook --vault-password-file=secret</code> can also be used at the command line to obtain the password from a file.</p>
+<p>Here&rsquo;s an example where we use an api token in a task, but we want to keep that a secret. The Vault variable here is set as <code>my_api_token</code>:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Check if VM already exists across all clusters</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">ansible.builtin.uri</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">url</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;https://proxmox-datacenter-manager/api2/json/resources/list&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">method</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">GET</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">headers</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">Authorization</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;myAPIToken=admin@pam!ansible:{{ my_api_token }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">validate_certs</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;{{ pve_validate_certs | default(false) }}&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">return_content</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">register</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">all_cluster_vms</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">delegate_to</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">localhost</span></span></span></code></pre></div>
+<h3 id="managing-files-with-sensitive-variables">Managing Files with Sensitive Variables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
+<p>Make sure to keep your encrypted and unencrypted <a href="https://www.linuxreader.com/ansible/variables/" rel="external" target="_blank">variables</a> separate. You can include your Vault in host or group variables or call it in a playbook using the <code>vars_files</code> parameter.</p>
 <h3 id="vault-options-for-ansible-playbook-command">Vault options for <code>ansible-playbook</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<p>Use &ndash;help and <code>grep</code> to quickly see vault options:</p>
+<p>Use <code>--help</code> and <code>grep</code> to quickly see vault options:</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ ansible-playbook --help | grep vault
 </span></span><span style="display:flex;"><span>                        <span style="color:#ff7b72;font-weight:bold">[</span>-e EXTRA_VARS<span style="color:#ff7b72;font-weight:bold">]</span> <span style="color:#ff7b72;font-weight:bold">[</span>--vault-id VAULT_IDS<span style="color:#ff7b72;font-weight:bold">]</span> <span style="color:#ff7b72;font-weight:bold">[</span>-J |
 </span></span><span style="display:flex;"><span>                        --vault-password-file VAULT_PASSWORD_FILES<span style="color:#ff7b72;font-weight:bold">]</span> <span style="color:#ff7b72;font-weight:bold">[</span>-f FORKS<span style="color:#ff7b72;font-weight:bold">]</span>
@@ -531,8 +466,8 @@ JunctionScallopPoise</p>
 <div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1790679423" defer></script>
-    <script src="/js/theme.min.js?1790679423" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1790767221" defer></script>
+    <script src="/js/theme.min.js?1790767221" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

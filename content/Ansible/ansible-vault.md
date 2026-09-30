@@ -2,32 +2,27 @@
 title: 'Ansible Vault'
 description: 'Ansible Vault Basics'
 showDate: false
+featured_image: /images/ansible-vault.png
 ---
+![](/images/ansible-vault.png)
+Ansible vault has been a great tool for keeping passwords and other sensitive data safe. Without sacrificing usability. 
 
-### Ansible Vault
+It stores your passwords as values in variables. All in a password protected and encrypted file. After which, you can use the variables in your ansible scripts.
 
-- For webkeys, passwords, and other types of sensitive data that you really shouldn't store as plain text in a playbook. 
-- Can use Ansible Vault to encrypt and decrypt sensitive data to make it unreadable, and only while accessing data does it ask for a password so that it is decrypted.
+You can use the `ansible-vault` command to manage your vault.
 
-1\. Sensitive data is stored as values in variables in a separate variable file.
-2\. The variable file is encrypted, using the **ansible-vault** command.
-3\. While accessing the variable file from a playbook, you enter a password to decrypt.
+## Managing Encrypted Files
 
-#### Managing Encrypted Files
+### `ansible-vault create secret.yaml`
+Creates an encrypted vault named secret.yaml. When ran, you well be prompted to set a password for the vault. Then, a blank file will be opened in your default editor. (Vim anyone?)
 
-`ansible-vault create secret.yaml`
-- Ansible Vault prompts for a password and then opens the file using the default editor. 
-- The password can be provided in a password file.(must be really well protected (for example, by putting it in the user root home directory))
-- If a password file is used, the encrypted variable file can be created using `ansible-vault create \--vault-password-file=passfile secret.yaml`
+You can also store your vault password in a separate file. If you go this route, you'll want to make sure the file is in a secure location such as `/root` with limited permissions. 
 
-`ansible-vault encrypt` 
-- encrypt one or more existing files. 
-- The encrypted file can next be used from a playbook, where a password needs to be entered to decrypt.
+For example, here's how you would create a vault and use a file called `vault-pass` as the vault password file: 
+ `ansible-vault create --vault-password-file=vault-pass secret.yaml`
 
-`ansible-vault decrypt` 
-- used to decrypt the file. 
-
-Commonly used **ansible-vault** commands:
+For the above, the file `vault-pass` must exist and have a single line with the password you want to use for the vault.
+### Commonly used **ansible-vault** commands:
 `create`
 - Creates new encrypted file
 `encrypt`
@@ -43,100 +38,42 @@ Commonly used **ansible-vault** commands:
 `edit`
 - Edits an existing encrypted file
 
-#### Using Vault in Playbooks 
+### Using Vault in Playbooks 
 
+You can set your default vault password file under defaults in `ansible.cfg` like so:  
+```
+[defaults]
+vault_password_file = ~/vault-pass
+```
+
+If you don't have it set, you can also choose to have ansible prompt you whenever it attempts to access your vault with the option:  
 `--vault-id @prompt` 
-- When a Vault-encrypted file is accessed from a playbook, a password must be entered. 
-- Has the `ansible-playbook` command prompt for a password for each of the Vault-encrypted files that may be used
-- Enables a playbook to work with multiple Vault-encrypted files where these files are allowed to have different passwords set. 
 
-`ansible-playbook --ask-vault-pass`
-- Used if all Vault-encrypted files a playbook refers to have the same password set.
+This also enables a playbook to work with multiple Vault-encrypted files with different passwords set. 
 
-`ansible-playbook --vault-password-file=secret` 
-- Obtain the Vault password from a password file. 
-- Password file should contain a string that is stored as a single line in the file. 
-- Make sure the vault password file is protected through file permissions, such that it is not accessible by unauthorized users!
+`ansible-playbook --ask-vault-pass` Can be used if you all your Vaults have the same password. And you want to be prompted for the password once. 
 
-#### Managing Files with Sensitive Variables
+`ansible-playbook --vault-password-file=secret` can also be used at the command line to obtain the password from a file.
 
-- You should separate files containing unencrypted variables from files that contain encrypted variables. 
-- Use **group_vars** and **host_vars** variable inclusion for this. 
-
-- You may create a directory (instead of a file) with the name of the host or host group. 
-- Within that directory you can create a file with the name **vars**, which contains unencrypted variables, and a file with the name **vault**, which contains Vault-encrypted variables. 
-- Vault-encrypted variables can be included from a file using the `vars_files` parameter. 
-
-### Lab:  Working with Ansible Vault
-
-1\. Create a secret file containing encrypted values for a variable user and a variable password by using `ansible-vault create secrets.yaml`
-
-Set the password to **password** and enter the following lines:
-``` pre1
-username: bob
-pwhash: password
+Here's an example where we use an api token in a task, but we want to keep that a secret. The Vault variable here is set as `my_api_token`:   
+```yaml
+  - name: Check if VM already exists across all clusters
+    ansible.builtin.uri:
+      url: "https://proxmox-datacenter-manager/api2/json/resources/list"
+      method: GET
+      headers:
+        Authorization: "myAPIToken=admin@pam!ansible:{{ my_api_token }}"
+      validate_certs: "{{ pve_validate_certs | default(false) }}"
+      return_content: true
+    register: all_cluster_vms
+    delegate_to: localhost
 ```
+### Managing Files with Sensitive Variables
 
-When creating users, you cannot provide the password in plain text; it needs to be provided as a hashed value. 
-Because this exercise focuses on the use of Vault, the password is not provided as a hashed value, and as a result, a warning is displayed. You may ignore this warning.
-
-2\. Create the file create-users.yaml and provide the following contents:
-
-``` pre1
----
-- name: create a user with vaulted variables
-  hosts: ansible1
-  vars_files:
-    - secrets.yaml
-  tasks:
-  - name: creating user
-    user:
-      name: "{{ username }}"
-      password: "{{ pwhash }}"
-```
-
-3\. Run the playbook by using `ansible-playbook --ask-vault-pass create-users.yaml` 
-
-4\. Change the current password on **secrets.yaml** by using `ansible-vault rekey secrets.yaml` and set the new password to
-**secretpassword**.
-
-5\. To automate the process of entering the password, use `echo secretpassword > vault-pass`
-
-6\. Use `chmod 400 vault-pass` to ensure the file is readable for the ansible user only; this is about as much as you can do to secure the file.
-
-7\. Verify that it's working by using `ansible-playbook --vault-password-file=vault-pass create-users.yaml`
-JunctionScallopPoise
-
-## More `ansible-vault` command
-
-View options and information:  
-```
-man ansible-vault
-```
-
-Create a vault using a vault password file:  
-```bash
-echo "lima-bean" > vault-pass2
-
-ansible-vault create secrets2.yml --vault-password-file vault-pass2
-```
-
-Edit the file:  
-```
-ansible-vault edit secrets2.yml --vault-password-file vault-pass2
-```
-
-If you have the vault listed as a variable file. Either in a playbook or under a variable folder such as: `group_vars/all/secrets2.yml`. You can list the vault password file to decrypt globally in **ansible.cfg**:
-```
-vault_password_file = ~/vault-pass2
-```
-
-You can also add it as an option when you run `ansible-playbook` or have it in the playbook itself.
-
-The man page also shows you how to decrypt a vault, view the contents, encrypt an existing file, and change a vault's password.
+Make sure to keep your encrypted and unencrypted [variables](https://www.linuxreader.com/ansible/variables/) separate. You can include your Vault in host or group variables or call it in a playbook using the `vars_files` parameter.
 
 ### Vault options for `ansible-playbook` command
-Use --help and `grep` to quickly see vault options:
+Use `--help` and `grep` to quickly see vault options:  
 ```bash
 $ ansible-playbook --help | grep vault
                         [-e EXTRA_VARS] [--vault-id VAULT_IDS] [-J |

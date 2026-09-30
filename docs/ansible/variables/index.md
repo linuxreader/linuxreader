@@ -28,6 +28,8 @@ Three types of variables:
 
 
 - Variables can be used to refer to a wide range of dynamic data, such as names of files, services, packages, users, URLs to specific servers, etc.
+- You may create a directory (instead of a file) with the name of the host or host group. 
+- Within that directory you can create a file with the name **vars**
 
 #### Defining Variables
 
