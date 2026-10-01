@@ -15,6 +15,7 @@ P.S. Want an email whenever I post something new? Make sure to subscribe:
 ## Recent Posts
 
 {{< cards >}}
+{{% card href="https://www.linuxreader.com/ansible/ansible-config/" image="/images/ansible-config.png" title="Ansible Configuration" %}}How to use Ansible's configuration file{{% /card %}}
 {{% card href="https://www.linuxreader.com/ansible/ansible-vault/" image="/images/ansible-vault.png" title="Ansible Vault" %}}How to set up and use Ansible Vault{{% /card %}}
 {{% card href="https://www.linuxreader.com/ansible/ansible-navigator/" image="/images/ansible-navigator.png" title="Ansible Navigator Setup Guide" %}}How to set up and use Ansible Navigator{{% /card %}}
 {{% card href="https://www.linuxreader.com/ansible/adhoccommands/" image="/images/adhocansiblecommands.png" title="Ad Hoc Ansible Commands" %}}How to use Ad-Hoc Ansible Commands{{% /card %}}

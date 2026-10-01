@@ -18,30 +18,30 @@
     <meta property="article:section" content="Ansible">
     <meta itemprop="name" content="Ansible Vault">
     <meta itemprop="description" content="Ansible Vault Basics">
-    <meta itemprop="wordCount" content="659">
+    <meta itemprop="wordCount" content="688">
     <title>Ansible Vault</title>
     <link href="/ansible/ansible-vault/index.md" rel="alternate" type="text/markdown" title="Ansible Vault">
-    <link href="/images/favicon.svg?1790767221" rel="icon" type="image/svg+xml">
-    <link href="/css/auto-complete/auto-complete.min.css?1790767221" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1790767221" defer></script>
-    <script src="/js/search-lunr.min.js?1790767221" defer></script>
-    <script src="/js/search.min.js?1790767221" defer></script>
+    <link href="/images/favicon.svg?1790884056" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1790884056" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1790884056" defer></script>
+    <script src="/js/search-lunr.min.js?1790884056" defer></script>
+    <script src="/js/search.min.js?1790884056" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1790767221";
+      window.relearn.index_js_url="/searchindex.en.js?1790884056";
     </script>
-    <script src="/js/lunr/lunr.min.js?1790767221" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1790767221" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1790767221" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1790767221" defer></script>
+    <script src="/js/lunr/lunr.min.js?1790884056" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1790884056" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1790884056" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1790884056" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/all.min.css?1790767221" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1790767221" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1790767221" rel="stylesheet">
-    <link href="/css/theme.min.css?1790767221" rel="stylesheet">
-    <link href="/css/format-html.min.css?1790767221" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/all.min.css?1790884056" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1790884056" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1790884056" rel="stylesheet">
+    <link href="/css/theme.min.css?1790884056" rel="stylesheet">
+    <link href="/css/format-html.min.css?1790884056" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -165,7 +165,7 @@ code, kbd, pre, samp {
 <span class="btn cstyle button link noborder notitle interactive"><a href="/ansible/roles/" title="Ansible Roles (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
             </div>
             <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
-<span class="btn cstyle button link noborder notitle interactive"><a href="/ansible/ansibleconfig/" title="Ansible.cfg (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+<span class="btn cstyle button link noborder notitle interactive"><a href="/ansible/awx-minikube-install/" title="AWX MiniKube Install (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
             </div>
             <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
 <span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
@@ -188,18 +188,18 @@ code, kbd, pre, samp {
 
 <h1 id="ansible-vault">Ansible Vault</h1>
 
-<p><a href="#R-image-72be2690a5f432b3c4da424f8db3543e" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/ansible-vault.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-72be2690a5f432b3c4da424f8db3543e"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/ansible-vault.png"></a>
-Ansible vault has been a great tool for keeping passwords and other sensitive data safe. Without sacrificing usability.</p>
+<p><a href="#R-image-cfc9ed8f8dcb14be6335a28cd7637b1b" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/ansible-vault.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-cfc9ed8f8dcb14be6335a28cd7637b1b"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/ansible-vault.png"></a></p>
+<p>Ansible Vault has been a great tool for keeping passwords and other sensitive data safe. Without sacrificing usability.</p>
 <p>It stores your passwords as values in variables. All in a password protected and encrypted file. After which, you can use the variables in your ansible scripts.</p>
 <p>You can use the <code>ansible-vault</code> command to manage your vault.</p>
 <h2 id="managing-encrypted-files">Managing Encrypted Files<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <h3 id="ansible-vault-create-secretyaml"><code>ansible-vault create secret.yaml</code><span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<p>Creates an encrypted vault named secret.yaml. When ran, you well be prompted to set a password for the vault. Then, a blank file will be opened in your default editor. (Vim anyone?)</p>
+<p>Creates an encrypted Vault named secret.yaml. When ran, you well be prompted to set a password for the Vault. Then, a blank file will be opened in your default editor. (Vim anyone?)</p>
 <p>You can also store your vault password in a separate file. If you go this route, you&rsquo;ll want to make sure the file is in a secure location such as <code>/root</code> with limited permissions.</p>
-<p>For example, here&rsquo;s how you would create a vault and use a file called <code>vault-pass</code> as the vault password file:
+<p>For example, here&rsquo;s how you would create a vault and use a file called <code>vault-pass</code> as the Vault password file:
 <code>ansible-vault create --vault-password-file=vault-pass secret.yaml</code></p>
-<p>For the above, the file <code>vault-pass</code> must exist and have a single line with the password you want to use for the vault.</p>
+<p>For the above, the file <code>vault-pass</code> must exist and have a single line with the password you want to use for the Vault.</p>
 <h3 id="commonly-used-ansible-vault-commands">Commonly used <strong>ansible-vault</strong> commands:<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p><code>create</code></p>
 <ul>
@@ -221,7 +221,7 @@ Ansible vault has been a great tool for keeping passwords and other sensitive da
 <p>You can set your default vault password file under defaults in <code>ansible.cfg</code> like so:</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>[defaults]
 vault_password_file = ~/vault-pass</code></pre></div>
-<p>If you don&rsquo;t have it set, you can also choose to have ansible prompt you whenever it attempts to access your vault with the option:<br>
+<p>If you don&rsquo;t have it set, you can also choose to have ansible prompt you whenever it attempts to access your Vault with the option:<br>
 <code>--vault-id @prompt</code></p>
 <p>This also enables a playbook to work with multiple Vault-encrypted files with different passwords set.</p>
 <p><code>ansible-playbook --ask-vault-pass</code> Can be used if you all your Vaults have the same password. And you want to be prompted for the password once.</p>
@@ -240,7 +240,7 @@ vault_password_file = ~/vault-pass</code></pre></div>
 <h3 id="managing-files-with-sensitive-variables">Managing Files with Sensitive Variables<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <p>Make sure to keep your encrypted and unencrypted <a href="https://www.linuxreader.com/ansible/variables/" rel="external" target="_blank">variables</a> separate. You can include your Vault in host or group variables or call it in a playbook using the <code>vars_files</code> parameter.</p>
 <h3 id="vault-options-for-ansible-playbook-command">Vault options for <code>ansible-playbook</code> command<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<p>Use <code>--help</code> and <code>grep</code> to quickly see vault options:</p>
+<p>Use <code>--help</code> and <code>grep</code> to quickly see Vault options:</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ ansible-playbook --help | grep vault
 </span></span><span style="display:flex;"><span>                        <span style="color:#ff7b72;font-weight:bold">[</span>-e EXTRA_VARS<span style="color:#ff7b72;font-weight:bold">]</span> <span style="color:#ff7b72;font-weight:bold">[</span>--vault-id VAULT_IDS<span style="color:#ff7b72;font-weight:bold">]</span> <span style="color:#ff7b72;font-weight:bold">[</span>-J |
 </span></span><span style="display:flex;"><span>                        --vault-password-file VAULT_PASSWORD_FILES<span style="color:#ff7b72;font-weight:bold">]</span> <span style="color:#ff7b72;font-weight:bold">[</span>-f FORKS<span style="color:#ff7b72;font-weight:bold">]</span>
@@ -250,7 +250,7 @@ vault_password_file = ~/vault-pass</code></pre></div>
 </span></span><span style="display:flex;"><span>  -J, --ask-vault-password, --ask-vault-pass
 </span></span><span style="display:flex;"><span>                        ask <span style="color:#ff7b72">for</span> vault password</span></span></code></pre></div>
 <h3 id="vault-options-for-ansiblecfg">Vault options for ansible.cfg<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<p>Use the same strategy to quickly see vault options to set globally in <strong>ansible.cfg</strong>:</p>
+<p>Use the same strategy to quickly see Vault options to set globally in <strong>ansible.cfg</strong>:</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ ansible-config list | grep vault
 </span></span><span style="display:flex;"><span>  - This controls whether an Ansible playbook should prompt <span style="color:#ff7b72">for</span> a vault password.
 </span></span><span style="display:flex;"><span>  - key: ask_vault_pass
@@ -277,6 +277,8 @@ vault_password_file = ~/vault-pass</code></pre></div>
 </span></span><span style="display:flex;"><span>  description: The salt to use <span style="color:#ff7b72">for</span> the vault encryption. If it is not provided, a
 </span></span><span style="display:flex;"><span>  - key: vault_encrypt_salt
 </span></span><span style="display:flex;"><span>    YAML or JSON or vaulted versions of these.</span></span></code></pre></div>
+<p>That should be enough to get you going. Somehow, I still see people not encrypting their password variables. Scary.</p>
+<p>Feel free to <a href="https://www.linuxreader.com/contact/" rel="external" target="_blank">reach out</a> for any clarifications needed. :)</p>
 
   <footer class="footline">
   </footer>
@@ -338,11 +340,11 @@ vault_password_file = ~/vault-pass</code></pre></div>
             <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">Ansible Navigator Setup Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/install-ansible-using-uv/"><a class="padding" href="/ansible/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-config/"><a class="padding" href="/ansible/ansible-config/">Ansible Configuration File<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/playbooks/"><a class="padding" href="/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="active " data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/awx-minikube-install/"><a class="padding" href="/ansible/awx-minikube-install/">AWX MiniKube Install<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
@@ -466,8 +468,8 @@ vault_password_file = ~/vault-pass</code></pre></div>
 <div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1790767221" defer></script>
-    <script src="/js/theme.min.js?1790767221" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1790884056" defer></script>
+    <script src="/js/theme.min.js?1790884056" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

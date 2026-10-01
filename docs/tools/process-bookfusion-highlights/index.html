@@ -21,27 +21,27 @@
     <meta itemprop="wordCount" content="199">
     <title>How to Process Bookfusion Highlights with Vim</title>
     <link href="/tools/process-bookfusion-highlights/index.md" rel="alternate" type="text/markdown" title="How to Process Bookfusion Highlights with Vim">
-    <link href="/images/favicon.svg?1790767221" rel="icon" type="image/svg+xml">
-    <link href="/css/auto-complete/auto-complete.min.css?1790767221" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1790767221" defer></script>
-    <script src="/js/search-lunr.min.js?1790767221" defer></script>
-    <script src="/js/search.min.js?1790767221" defer></script>
+    <link href="/images/favicon.svg?1790884056" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1790884056" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1790884056" defer></script>
+    <script src="/js/search-lunr.min.js?1790884056" defer></script>
+    <script src="/js/search.min.js?1790884056" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1790767221";
+      window.relearn.index_js_url="/searchindex.en.js?1790884056";
     </script>
-    <script src="/js/lunr/lunr.min.js?1790767221" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1790767221" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1790767221" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1790767221" defer></script>
+    <script src="/js/lunr/lunr.min.js?1790884056" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1790884056" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1790884056" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1790884056" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/all.min.css?1790767221" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1790767221" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1790767221" rel="stylesheet">
-    <link href="/css/theme.min.css?1790767221" rel="stylesheet">
-    <link href="/css/format-html.min.css?1790767221" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/all.min.css?1790884056" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1790884056" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1790884056" rel="stylesheet">
+    <link href="/css/theme.min.css?1790884056" rel="stylesheet">
+    <link href="/css/format-html.min.css?1790884056" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -175,38 +175,38 @@ code, kbd, pre, samp {
 <h1 id="how-to-process-bookfusion-highlights-with-vim">How to Process Bookfusion Highlights with Vim</h1>
 
 <p>Here are my highlights pulled up in Vim:</p>
-<p><a href="#R-image-99782fb087332080e5bf7d12d530aaeb" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240414034031.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-99782fb087332080e5bf7d12d530aaeb"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240414034031.png"></a></p>
+<p><a href="#R-image-0fc3b4ffe38dd1a6d9e12c100523545c" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240414034031.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-0fc3b4ffe38dd1a6d9e12c100523545c"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240414034031.png"></a></p>
 <p>As you can see, Bookfusion gives you a lot of extra information when you export highlights. First, let&rsquo;s get rid of the lines that begin with <code>##</code></p>
 <p>Enter command mode in Vim by pressing <code>esc</code>. Then type <code>:g/^##/d</code> and press enter.</p>
 <p>Much better.</p>
-<p><a href="#R-image-3e26c69f6e35b262821b479ffc4323a8" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240414034407.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-3e26c69f6e35b262821b479ffc4323a8"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240414034407.png"></a></p>
+<p><a href="#R-image-cb2c8c83c2edbfbae2c061b46c32100f" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240414034407.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-cb2c8c83c2edbfbae2c061b46c32100f"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240414034407.png"></a></p>
 <p>Now let&rsquo;s get rid of the color references:`</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>:g/^Color/d</span></span></code></pre></div>
-<p><a href="#R-image-aef5c597d6e6119c3e4110cd6ab296f2" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240414034652.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-aef5c597d6e6119c3e4110cd6ab296f2"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240414034652.png"></a></p>
+<p><a href="#R-image-f107185cb607fb4c811ed09ad0606a93" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240414034652.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-f107185cb607fb4c811ed09ad0606a93"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240414034652.png"></a></p>
 <p>To get rid of the timestamps, we must find a different commonality between the lines. In this case, each line ends with &ldquo;UTC&rdquo;. Let&rsquo;s match that:</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>:g/UTC$/d</span></span></code></pre></div>
 <p>Where <code>$</code> matches the end of the line.</p>
-<p><a href="#R-image-57215771d1e7cd1f8104a305bf7be61b" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240414035013.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-57215771d1e7cd1f8104a305bf7be61b"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240414035013.png"></a></p>
+<p><a href="#R-image-e947ca298f353ac99c551ae708569825" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240414035013.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-e947ca298f353ac99c551ae708569825"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240414035013.png"></a></p>
 <p>Now, I want to get rid of the <code>&gt; </code> on each line:
 <code>%s/&gt; //g</code></p>
-<p><a href="#R-image-ce120a1810b75ee3e64d3274e1519cf8" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240414035218.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-ce120a1810b75ee3e64d3274e1519cf8"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240414035218.png"></a></p>
+<p><a href="#R-image-ae1aa51bbeaffbb916078e462b1e2478" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240414035218.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-ae1aa51bbeaffbb916078e462b1e2478"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240414035218.png"></a></p>
 <p>Almost there, you&rsquo;ll notice there are 6 empty lines in between each highlight. Let&rsquo;s shrink those down into one:</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>:%s/<span style="color:#79c0ff">\(\n\)\{</span>3,<span style="color:#ff7b72;font-weight:bold">}</span>/<span style="color:#79c0ff">\r\r</span>/g</span></span></code></pre></div>
-<p><a href="#R-image-dc6ab13b3fdbd39f05dd4857b089dca2" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240414035716.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-dc6ab13b3fdbd39f05dd4857b089dca2"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240414035716.png"></a></p>
+<p><a href="#R-image-f1f49b6b223a3a7a5c7261fd0723acab" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240414035716.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-f1f49b6b223a3a7a5c7261fd0723acab"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240414035716.png"></a></p>
 <p>The command above matches newline character <code>n</code> 3 or more times and replaces them with two newline characters <code>/r/r</code>.</p>
 <p>As we scroll down, I see a few weird artifacts from the book conversion to markdown.</p>
-<p><a href="#R-image-d8af19f128dd39a8c1214c446bf50b4b" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240414040052.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-d8af19f128dd39a8c1214c446bf50b4b"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240414040052.png"></a></p>
+<p><a href="#R-image-9beaeb010b448c8b412b8e3a9fc80a3c" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240414040052.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-9beaeb010b448c8b412b8e3a9fc80a3c"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240414040052.png"></a></p>
 <p>Now, I want to get rid of any carrot brackets in the file. Let&rsquo;s use the substitute command again here:</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>%s/&lt;//g</span></span></code></pre></div>
-<p><a href="#R-image-e1a176245e48c6f0e2ef9710e8278154" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240414040338.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-e1a176245e48c6f0e2ef9710e8278154"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240414040338.png"></a></p>
+<p><a href="#R-image-e96bc380b614e99bcf808331ad76c7e5" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/Pasted%20image%2020240414040338.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-e96bc380b614e99bcf808331ad76c7e5"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/Pasted%20image%2020240414040338.png"></a></p>
 <p>Depending on your book and formatting. You may have some other stuff to edit.</p>
 
   <footer class="footline">
@@ -269,11 +269,11 @@ code, kbd, pre, samp {
             <li class="" data-nav-id="/ansible/ansible-navigator/"><a class="padding" href="/ansible/ansible-navigator/">Ansible Navigator Setup Guide<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/install-ansible-using-uv/"><a class="padding" href="/ansible/install-ansible-using-uv/">How to Install Ansible Using uv<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/adhoccommands/"><a class="padding" href="/ansible/adhoccommands/">Ad Hoc Ansible Commands<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/ansible/ansible-config/"><a class="padding" href="/ansible/ansible-config/">Ansible Configuration File<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/inventory/"><a class="padding" href="/ansible/inventory/">Ansible Inventory and Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/playbooks/"><a class="padding" href="/ansible/playbooks/">Ansible Playbooks<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/roles/"><a class="padding" href="/ansible/roles/">Ansible Roles<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/ansible-vault/"><a class="padding" href="/ansible/ansible-vault/">Ansible Vault<i class="fa-fw fas fa-check read-icon"></i></a></li>
-            <li class="" data-nav-id="/ansible/ansibleconfig/"><a class="padding" href="/ansible/ansibleconfig/">Ansible.cfg<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/awx-minikube-install/"><a class="padding" href="/ansible/awx-minikube-install/">AWX MiniKube Install<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/boot-process/"><a class="padding" href="/ansible/boot-process/">Boot Process<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/ansible/deploying-files/"><a class="padding" href="/ansible/deploying-files/">Deploying files<i class="fa-fw fas fa-check read-icon"></i></a></li>
@@ -397,8 +397,8 @@ code, kbd, pre, samp {
 <div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1790767221" defer></script>
-    <script src="/js/theme.min.js?1790767221" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1790884056" defer></script>
+    <script src="/js/theme.min.js?1790884056" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>

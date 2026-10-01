@@ -1,7 +1,9 @@
 # Ansible Vault
 
 ![](/images/ansible-vault.png)
-Ansible vault has been a great tool for keeping passwords and other sensitive data safe. Without sacrificing usability. 
+  
+  
+Ansible Vault has been a great tool for keeping passwords and other sensitive data safe. Without sacrificing usability. 
 
 It stores your passwords as values in variables. All in a password protected and encrypted file. After which, you can use the variables in your ansible scripts.
 
@@ -10,14 +12,14 @@ You can use the `ansible-vault` command to manage your vault.
 ## Managing Encrypted Files
 
 ### `ansible-vault create secret.yaml`
-Creates an encrypted vault named secret.yaml. When ran, you well be prompted to set a password for the vault. Then, a blank file will be opened in your default editor. (Vim anyone?)
+Creates an encrypted Vault named secret.yaml. When ran, you well be prompted to set a password for the Vault. Then, a blank file will be opened in your default editor. (Vim anyone?)
 
 You can also store your vault password in a separate file. If you go this route, you'll want to make sure the file is in a secure location such as `/root` with limited permissions. 
 
-For example, here's how you would create a vault and use a file called `vault-pass` as the vault password file: 
+For example, here's how you would create a vault and use a file called `vault-pass` as the Vault password file: 
  `ansible-vault create --vault-password-file=vault-pass secret.yaml`
 
-For the above, the file `vault-pass` must exist and have a single line with the password you want to use for the vault.
+For the above, the file `vault-pass` must exist and have a single line with the password you want to use for the Vault.
 ### Commonly used **ansible-vault** commands:
 `create`
 - Creates new encrypted file
@@ -42,7 +44,7 @@ You can set your default vault password file under defaults in `ansible.cfg` lik
 vault_password_file = ~/vault-pass
 ```
 
-If you don't have it set, you can also choose to have ansible prompt you whenever it attempts to access your vault with the option:  
+If you don't have it set, you can also choose to have ansible prompt you whenever it attempts to access your Vault with the option:  
 `--vault-id @prompt` 
 
 This also enables a playbook to work with multiple Vault-encrypted files with different passwords set. 
@@ -69,7 +71,7 @@ Here's an example where we use an api token in a task, but we want to keep that 
 Make sure to keep your encrypted and unencrypted [variables](https://www.linuxreader.com/ansible/variables/) separate. You can include your Vault in host or group variables or call it in a playbook using the `vars_files` parameter.
 
 ### Vault options for `ansible-playbook` command
-Use `--help` and `grep` to quickly see vault options:  
+Use `--help` and `grep` to quickly see Vault options:  
 ```bash
 $ ansible-playbook --help | grep vault
                         [-e EXTRA_VARS] [--vault-id VAULT_IDS] [-J |
@@ -82,7 +84,7 @@ $ ansible-playbook --help | grep vault
 ```
 
 ### Vault options for ansible.cfg
-Use the same strategy to quickly see vault options to set globally in **ansible.cfg**:
+Use the same strategy to quickly see Vault options to set globally in **ansible.cfg**:
 ```bash
 $ ansible-config list | grep vault
   - This controls whether an Ansible playbook should prompt for a vault password.
@@ -111,3 +113,7 @@ $ ansible-config list | grep vault
   - key: vault_encrypt_salt
     YAML or JSON or vaulted versions of these.
 ```
+
+That should be enough to get you going. Somehow, I still see people not encrypting their password variables. Scary.
+
+Feel free to [reach out](https://www.linuxreader.com/contact/) for any clarifications needed. :)
