@@ -18,30 +18,30 @@
     <meta property="article:section" content="Ansible">
     <meta itemprop="name" content="Boot Process">
     <meta itemprop="description" content="Managing Boot Process with Ansible">
-    <meta itemprop="wordCount" content="1379">
+    <meta itemprop="wordCount" content="694">
     <title>Boot Process</title>
     <link href="/ansible/boot-process/index.md" rel="alternate" type="text/markdown" title="Boot Process">
-    <link href="/images/favicon.svg?1790884056" rel="icon" type="image/svg+xml">
-    <link href="/css/auto-complete/auto-complete.min.css?1790884056" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1790884056" defer></script>
-    <script src="/js/search-lunr.min.js?1790884056" defer></script>
-    <script src="/js/search.min.js?1790884056" defer></script>
+    <link href="/images/favicon.svg?1790958009" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1790958009" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1790958009" defer></script>
+    <script src="/js/search-lunr.min.js?1790958009" defer></script>
+    <script src="/js/search.min.js?1790958009" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1790884056";
+      window.relearn.index_js_url="/searchindex.en.js?1790958009";
     </script>
-    <script src="/js/lunr/lunr.min.js?1790884056" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1790884056" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1790884056" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1790884056" defer></script>
+    <script src="/js/lunr/lunr.min.js?1790958009" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1790958009" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1790958009" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1790958009" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/all.min.css?1790884056" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1790884056" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1790884056" rel="stylesheet">
-    <link href="/css/theme.min.css?1790884056" rel="stylesheet">
-    <link href="/css/format-html.min.css?1790884056" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/all.min.css?1790958009" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1790958009" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1790958009" rel="stylesheet">
+    <link href="/css/theme.min.css?1790958009" rel="stylesheet">
+    <link href="/css/format-html.min.css?1790958009" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -139,20 +139,10 @@ code, kbd, pre, samp {
                 <div class="topbar-content-wrapper">
 <nav class="TableOfContents">
   <ul>
-    <li>
-      <ul>
-        <li><a href="#managing-the-boot-process">Managing the Boot Process</a></li>
-        <li><a href="#lab-managing-the-boot-process-and-services">Lab: Managing the Boot Process and Services</a></li>
-        <li><a href="#lab-cron-job">Lab: cron job</a></li>
-      </ul>
-    </li>
-    <li><a href="#more-boot-process">More Boot Process</a>
-      <ul>
-        <li><a href="#setting-the-default-systemd-target">Setting the default systemd target</a></li>
-        <li><a href="#rebooting">Rebooting</a></li>
-        <li><a href="#cron">Cron</a></li>
-      </ul>
-    </li>
+    <li><a href="#managing-systemd-targets-symlink-method">Managing Systemd Targets (symlink method)</a></li>
+    <li><a href="#managing-systemd-targets-systemctl-method">Managing Systemd Targets (systemctl method)</a></li>
+    <li><a href="#rebooting-managed-hosts">Rebooting Managed Hosts</a></li>
+    <li><a href="#finding-help">Finding help</a></li>
   </ul>
 </nav>
                 </div>
@@ -192,27 +182,15 @@ code, kbd, pre, samp {
 
 <h1 id="boot-process">Boot Process</h1>
 
-<h3 id="managing-the-boot-process">Managing the Boot Process<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<p>No modules for managing boot process.</p>
-<p><strong>file</strong> module</p>
-<ul>
-<li>manage the systemd boot targets</li>
-</ul>
-<p><strong>lineinfile</strong> module</p>
-<ul>
-<li>manage the GRUB configuration.</li>
-</ul>
-<p><strong>reboot</strong> module</p>
-<ul>
-<li>enables you to reboot a host and pick up after the reboot at the exact same location.</li>
-</ul>
-<h4 id="managing-systemd-targets">Managing Systemd Targets<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
-<p>To manage the default systemd target:</p>
-<ul>
-<li>/etc/systemd/system/default.target file must exist as a symbolic link to the desired default target.</li>
-</ul>
+<p><a href="#R-image-84be384b3edbc4aa8daa367ce08d275f" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="/images/boot-process.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-84be384b3edbc4aa8daa367ce08d275f"><img class="lazy lightbox lightbox-image" loading="lazy" src="/images/boot-process.png"></a></p>
+<p>There are no specific modules for managing a linux system&rsquo;s boot process with Ansible. However, you can use your pre-existing knowledge of the boot process to manage related files. You can use the <strong>file</strong> module to manage systemd boot targets. Or <strong>lineinfile</strong> to manage the GRUB configuration.</p>
+<p>The <strong>reboot</strong> module does let you to reboot a host though. And it will pick up after the reboot at the exact same location in a playbook.</p>
+<h2 id="managing-systemd-targets-symlink-method">Managing Systemd Targets (symlink method)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>To manage the default systemd target, the <code>/etc/systemd/system/default.target</code> file must exist as a symbolic link to the desired default target:</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls -l /etc/systemd/system/default.target
 </span></span><span style="display:flex;"><span>    lrwxrwxrwx. <span style="color:#a5d6ff">1</span> root root <span style="color:#a5d6ff">37</span> Mar <span style="color:#a5d6ff">23</span> 05:33 /etc/systemd/system/default.target -&gt; /lib/systemd/system/multi-user.target</span></span></code></pre></div>
+<p>Let&rsquo;s use the <strong>file</strong> module to change the symlink, targeting graphical mode instead:</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">set default boot target</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">ansible2</span><span style="color:#6e7681">
@@ -222,43 +200,55 @@ code, kbd, pre, samp {
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">src</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/usr/lib/systemd/system/graphical.target</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">dest</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/etc/systemd/system/default.target</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">link</span></span></span></code></pre></div>
-<h4 id="rebooting-managed-hosts">Rebooting Managed Hosts<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
-<p><strong>reboot</strong> module.</p>
-<ul>
-<li>Restart managed nodes.</li>
-</ul>
-<p><strong>test_command</strong> argument</p>
-<ul>
-<li>Verify the renewed availability of the managed hosts</li>
-<li>Specifies an arbitrary command that Ansible should run successfully on the managed hosts after the reboot. The success of this command indicates that the rebooted host is available again.</li>
-</ul>
-<p>Equally useful while using the reboot module are the arguments that
-relate to timeouts. The reboot module uses no fewer than four of them:</p>
-<p>• <strong>connect_timeout:</strong> The maximum seconds to wait for a successful
-connection before trying again</p>
-<p>• <strong>post_reboot_delay:</strong> The number of seconds to wait after the
-<strong>reboot</strong> command before trying to validate the managed host is
-available again</p>
-<p>• <strong>pre_reboot_delay:</strong> The number of seconds to wait before actually
-issuing the reboot</p>
-<p>• <strong>reboot_timeout:</strong> The maximum seconds to wait for the rebooted
-machine to respond to the <strong>test</strong> command</p>
-<ul>
-<li>When the rebooted host is back, the current playbook continues its tasks.</li>
-</ul>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>---
-    - name: reboot all hosts
-      hosts: all
-      gather_facts: no
-      tasks:
-      - name: reboot hosts
-        reboot:
-          msg: reboot initiated by Ansible
-          test_command: whoami
-      - name: print message to show host is back
-        debug:
-          msg: successfully rebooted</code></pre></div>
-<p>Change target and reboot:</p>
+<h2 id="managing-systemd-targets-systemctl-method">Managing Systemd Targets (systemctl method)<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>This method isn&rsquo;t great because you have to run around with your head cut off trying to figure out a way to make it indempotent.</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span>- <span style="color:#7ee787">block</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Install GUI package group</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">ansible.builtin.dnf</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;@Server with GUI&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">present</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">get current target</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">ansible.builtin.command</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;systemctl get-default&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">changed_when</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">false</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">register</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">systemdefault</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Set default to graphical target</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">ansible.builtin.command</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;systemctl set-default graphical.target&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">when</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;&#39;graphical&#39; not in systemdefault.stdout&#34;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">changed_when</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">when</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">gui_enabled | bool</span></span></span></code></pre></div>
+<h2 id="rebooting-managed-hosts">Rebooting Managed Hosts<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>As mentioned, the <strong>reboot</strong> module is used to restart managed nodes. And the <strong>test_command</strong> argument verifies that the host is available after the reboot. <strong>test_command</strong> specifies a command that Ansible should run on the managed hosts after the reboot. If the command is successful, then Ansible knows to continue.</p>
+<p>There are also arguments related to timeouts:</p>
+<table>
+	<thead>
+			<tr>
+					<th>Argument</th>
+					<th>Purpose</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>connect_timeout</strong></td>
+					<td>Maximum seconds to wait for a successful connection before trying again.</td>
+			</tr>
+			<tr>
+					<td><strong>post_reboot_delay</strong></td>
+					<td>Seconds to wait after the <strong>reboot</strong> command before trying to check if a host is available.</td>
+			</tr>
+			<tr>
+					<td><strong>pre_reboot_delay</strong></td>
+					<td>Seconds to wait before issuing the reboot.</td>
+			</tr>
+			<tr>
+					<td><strong>reboot_timeout</strong></td>
+					<td>Maximum seconds to wait for the rebooted machine to respond to the <strong>test</strong> command.</td>
+			</tr>
+	</tbody>
+</table>
+<p>Let&rsquo;s change default target and reboot the system:</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Set default target to graphical</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">practice</span><span style="color:#6e7681">
@@ -278,142 +268,19 @@ machine to respond to the <strong>test</strong> command</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">print success message</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">debug</span>:<span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">msg</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Reboot successful                            </span></span></span></code></pre></div>
-<p>Test that the reboot was issued successfully by using</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ansible practice -a &#34;systemctl get-default&#34;</code></pre></div>
-<h3 id="lab-managing-the-boot-process-and-services">Lab: Managing the Boot Process and Services<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<p>Create a playbook that:</p>
-<ul>
-<li>Runs a command before the reboot,</li>
-<li>Schedules a cron job at the next reboot</li>
-<li>Using that cron job, ensures that after rebooting a specific command is used as well.</li>
-<li>To make sure you see what happens when, you work with a temporary file to which lines are added.</li>
-</ul>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#a5d6ff">❯ cat labs/reboot-msg.yaml</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">reboot-msg</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">practice</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">tasks</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">add a line to a file before rebooting</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">lineinfile</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">create</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">present</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">path</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/tmp/rebooted</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">insertafter</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">EOF</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">line</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">rebooted at {{ ansible_facts[&#39;date_time&#39;][&#39;time&#39;] }}:{{ ansible_facts[&#39;date_time&#39;][&#39;second&#39;] }}</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">run a cron job on reboot</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">cron</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;run on reboot&#34;</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">present</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">special_time</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">reboot</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">job</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;echo rebooted at $(date) &gt;&gt; /tmp/rebooted&#34;</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">reboot managed host</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">reboot</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">msg</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">reboot initiated</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">test_command</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">whoami</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">print reboot success message</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">debug</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">msg</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">reboot success</span></span></span></code></pre></div>
-<p>Time, including a second indicator, is written using two Ansible facts. Not one single fact has the time in an hh:mm:ss format.</p>
-<p>Bash shell command substitution is possible in the cron module because commands are executed by a bash shell.</p>
-<p>This is not possible with the lineinfile module because the commands are not processed by a shell.</p>
-<p>See results:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ansible practice -a &#34;cat /tmp/rebooted&#34;</code></pre></div>
-<h3 id="lab-cron-job">Lab: cron job<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<p>Write a playbook according to the following specifications:</p>
-<p>• The cron module must be used to restart your managed servers at 2 a.m.
-each weekday.
-• After rebooting, a message must be written to syslog, with the text
-&ldquo;CRON initiated reboot just completed.&rdquo;
-• The default systemd target must be set to multi-user.target.
-• The last task should use service facts to show the current version of the cron process.</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">cron job</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">ansible1</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">tasks</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">cron job to restart servers at 2am each weekday</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">cron</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">restart servers</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">weekday</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">MON-FRI</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">hour</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">2</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">job</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;reboot&#34;</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">After reboot send log message to syslog</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">cron</span>:<span style="color:#6e7681"> 
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Print reboot message to syslog</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">special_time</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">reboot</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">job</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;logger Sytem rebooted&#34;</span><span style="color:#6e7681">  
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">set the default systemd target to multi-user</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">file</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">src</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/usr/lib/systemd/system/multi-user.target</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">dest</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/etc/systemd/system/default.target</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">link  </span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">populate service facts</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">service_facts</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">show current version of cron process using service facts</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">debug</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">var</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">ansible_facts.services[&#39;crond.service&#39;]</span></span></span></code></pre></div>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>❯ ansible ansible1 -a <span style="color:#a5d6ff">&#34;crontab -l&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff7b72;font-weight:bold">[</span>WARNING<span style="color:#ff7b72;font-weight:bold">]</span>: Host <span style="color:#a5d6ff">&#39;ansible1&#39;</span> is using the discovered Python interpreter at <span style="color:#a5d6ff">&#39;/usr/bin/python3.12&#39;</span>, but future installation of another Python interpreter could cause a different interpreter to be discovered. See https://docs.ansible.com/ansible-core/2.20/reference_appendices/interpreter_discovery.html <span style="color:#ff7b72">for</span> more information.
-</span></span><span style="display:flex;"><span>ansible1 | CHANGED | <span style="color:#79c0ff">rc</span><span style="color:#ff7b72;font-weight:bold">=</span><span style="color:#a5d6ff">0</span> &gt;&gt;
-</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#Ansible: run on reboot</span>
-</span></span><span style="display:flex;"><span>@reboot echo rebooted at <span style="color:#ff7b72">$(</span>date<span style="color:#ff7b72">)</span> &gt;&gt; /tmp/rebooted
-</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#Ansible: restart servers</span>
-</span></span><span style="display:flex;"><span>* <span style="color:#a5d6ff">2</span> * * MON-FRI reboot
-</span></span><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic">#Ansible: Print reboot message to syslog</span>
-</span></span><span style="display:flex;"><span>@reboot logger Sytem rebooted</span></span></code></pre></div>
-<h2 id="more-boot-process">More Boot Process<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
-<p>Managing the boot process will be more challenging because there are no modules that manage this. A solid understanding of the boot process and <strong>systemd</strong> will be needed here.</p>
-<h3 id="setting-the-default-systemd-target">Setting the default systemd target<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<p>Say we want to change the default systemd target from multi-user.target to graphical.target.</p>
+<p>You can test that the reboot was issued successfully by using:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ansible some-host -a &#34;systemctl get-default&#34;</code></pre></div>
+<h2 id="finding-help">Finding help<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
+<p>You may need to search <a href="https://www.linuxreader.com/tools/you-need-to-learn-man-pages/" rel="external" target="_blank">man pages</a> to find more info:</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ man -k systemd</span></span></code></pre></div>
 <p>The relevant man pages here may be:</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemd.target <span style="color:#ff7b72;font-weight:bold">(</span>5<span style="color:#ff7b72;font-weight:bold">)</span>   - Target unit configuration
 </span></span><span style="display:flex;"><span>systemd.unit <span style="color:#ff7b72;font-weight:bold">(</span>5<span style="color:#ff7b72;font-weight:bold">)</span>     - Unit configuration</span></span></code></pre></div>
-<p>I didn&rsquo;t find exact instructions on how to change the default target. But there is information on symlinking in the systemd.unit. And also mentions using the <code>systemctl</code> command to make the symlink.</p>
+<p>I didn&rsquo;t find exact instructions on how to change the default target. But there is information on symlinking in the systemd.unit. And also mentions using the <code>systemctl</code> command to make the symlink:</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> As another example, default.target —
 </span></span><span style="display:flex;"><span>       the default system target started at boot — is commonly aliased
 </span></span><span style="display:flex;"><span>       to either multi-user.target or graphical.target to <span style="color:#ff7b72">select</span> what
 </span></span><span style="display:flex;"><span>       is started by default.</span></span></code></pre></div>
-<p>Let&rsquo;s check options for the systemctl command:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ systemctl --help | grep default
-</span></span><span style="display:flex;"><span>  get-default                         Get the name of the default target
-</span></span><span style="display:flex;"><span>  set-default TARGET                  Set the default target</span></span></code></pre></div>
-<h4 id="using-the-systemctl-method">Using the systemctl method:<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
-<p>This method isn&rsquo;t great because you have to run around with your head cut off trying to figure out a way to make it indempotent.</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span>- <span style="color:#7ee787">block</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Install GUI package group</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">ansible.builtin.dnf</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;@Server with GUI&#34;</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">present</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">get current target</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">ansible.builtin.command</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;systemctl get-default&#34;</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">changed_when</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">false</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">register</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">systemdefault</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Set default to graphical target</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">ansible.builtin.command</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;systemctl set-default graphical.target&#34;</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">when</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#34;&#39;graphical&#39; not in systemdefault.stdout&#34;</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">changed_when</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">true</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">when</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">gui_enabled | bool</span></span></span></code></pre></div>
-<p>If you have a solid understanding of Ansible this is doable. In Sander Van Vugt&rsquo;s cert guide, he mentions just making the symlink with the <code>file</code> module:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">set default boot target</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">ansible2</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">tasks</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">set boot target to graphical</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">file</span>:<span style="color:#6e7681">            
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">src</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/usr/lib/systemd/system/graphical.target</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">dest</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/etc/systemd/system/default.target</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">link</span></span></span></code></pre></div>
-<h4 id="using-the-symlink-method">Using the symlink method<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h4>
 <p>If you can&rsquo;t remember the search path, the paths are listed at the top of the systemd-unit man page:</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ man systemd.unit</span></span></code></pre></div>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  System Unit Search Path
@@ -430,6 +297,10 @@ each weekday.
 </span></span><span style="display:flex;"><span>       /usr/lib/systemd/system/*
 </span></span><span style="display:flex;"><span>       /run/systemd/generator.late/*</span></span></code></pre></div>
 <p>If you can remember that you need to symlink a unit to <strong>/etc/systemd/system/default.target</strong> then I think you&rsquo;ll be good here.</p>
+<p>You can also check options for the <code>systemctl</code> command:</p>
+<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ systemctl --help | grep default
+</span></span><span style="display:flex;"><span>  get-default                         Get the name of the default target
+</span></span><span style="display:flex;"><span>  set-default TARGET                  Set the default target</span></span></code></pre></div>
 <p>You&rsquo;ll also want to remember where systemd keeps all of the default unit files. List is listed at the top of the systemd man page:</p>
 <div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ man systemd | head
 </span></span><span style="display:flex;"><span>SYSTEMD<span style="color:#ff7b72;font-weight:bold">(</span>1<span style="color:#ff7b72;font-weight:bold">)</span>                      systemd                     SYSTEMD<span style="color:#ff7b72;font-weight:bold">(</span>1<span style="color:#ff7b72;font-weight:bold">)</span>
@@ -451,39 +322,7 @@ each weekday.
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">owner</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">foo</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">group</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">foo</span><span style="color:#6e7681">
 </span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">link</span></span></span></code></pre></div>
-<p>Come to think of it, the command module with the <code>systemctl</code> command is looking a lot easier now. It&rsquo;s good to know both methods in case the exam objectives throw you for a loop.</p>
-<h3 id="rebooting">Rebooting<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<p>You may need to use the reboot module for changes to take effect. The module documentation covers everything you need to know with examples:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ansible-doc reboot</code></pre></div>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff7b72">---</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Set default target to graphical</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">hosts</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">practice</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">become</span>:<span style="color:#6e7681"> </span><span style="color:#79c0ff">yes</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">tasks</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Link graphical.target to default.target</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">file</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">src</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/usr/lib/systemd/system/graphical.target</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">dest</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">/etc/systemd/system/default.target</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">state</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">link</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">reboot</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">reboot</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">test_command</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">whoami</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">msg</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">rebooting...</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">print success message</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">debug</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">msg</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Reboot successful</span></span></span></code></pre></div>
-<h3 id="cron">Cron<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<p>I struggled a bit with the lab for this <a href="../../../notes/rhce-notes/bootprocess/">section</a>. I do not remember learning about service facts. Nor did I remember about the <code>logger</code> command. Curse me for procrastination for so long after RHCSA.</p>
-<p>I found some useful documentation though.</p>
-<p>Cron specific documentation:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>man cron</code></pre></div>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ansible-doc cron</code></pre></div>
-<p><strong>service_facts</strong> module:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>ansible-doc service_facts</code></pre></div>
-<p><code>logger</code> command for printing log messages:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0"><code>man logger</code></pre></div>
+<p>Just use similar methods (managing settings file) to change GRUB settings and other boot options. Feel free to <a href="https://www.linuxreader.com/contact/" rel="external" target="_blank">reach out</a> for any clarifications needed. :)</p>
 
   <footer class="footline">
   </footer>
@@ -673,8 +512,8 @@ each weekday.
 <div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1790884056" defer></script>
-    <script src="/js/theme.min.js?1790884056" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1790958009" defer></script>
+    <script src="/js/theme.min.js?1790958009" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>
