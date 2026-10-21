@@ -14,6 +14,7 @@
 [![](/images/tswffgwts.jpg?classes=inline,border&width=100px&lightbox=false)](https://amzn.to/4sGFqVy)
 [![](/images/ttotgp.jpg?classes=inline,border&width=100px&lightbox=false)](https://amzn.to/3Os1DJe)
 [![](/images/tsow.jpg?classes=inline,border&width=100px&lightbox=false)](https://amzn.to/4mASp9Y)
+[![](/images/lfs.jpg?classes=inline,border&width=100px&lightbox=false)](https://link.amazon/B0foFH0Z3)
 [![](/images/1q84.jpg?classes=inline,border&width=100px&lightbox=false)](https://amzn.to/4e2gdl7)
 [![](/images/kots.jpg?classes=inline,border&width=100px&lightbox=false)](https://amzn.to/422sejj)
 [![](/images/nw.jpg?classes=inline,border&width=100px&lightbox=false)](https://amzn.to/4sGFzIA)
@@ -125,6 +126,8 @@
 [![](/images/iwtytbr.jpg?classes=inline,border&width=100px&lightbox=false)](https://amzn.to/4vEKAUW)
 [![](/images/t4hww.jpg?classes=inline,border&width=100px&lightbox=false)](https://amzn.to/3OaeMqg)
 [![](/images/unscripted.jpg?classes=inline,border&width=100px&lightbox=false)](https://amzn.to/48Uiv20)
+
+[![](/images/tgrre.png?classes=inline,border&width=100px&lightbox=false)](https://link.amazon/B0hm7MCKT)
 
 ## Dating & Relationships
 

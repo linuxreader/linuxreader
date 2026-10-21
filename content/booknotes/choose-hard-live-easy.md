@@ -89,7 +89,7 @@ Where you suffer or thrive from decisions. You live in the skin you sew. Where a
 ### 3\. **Pastuality**
 The past moments that influence your current behavior. How we interpret the past can serve or sabotage us.
 
-The sands of the past lie dormant until you revive them to either server or sabotage you.
+The sands of the past lie dormant until you revive them to either serve or sabotage you.
 
 Rear view mirrors are for glances, not gazes.
 
