@@ -130,7 +130,6 @@ showDate: false
 [![](/images/iwtytbr.jpg?classes=inline,border&width=100px&lightbox=false)](https://amzn.to/4vEKAUW)
 [![](/images/t4hww.jpg?classes=inline,border&width=100px&lightbox=false)](https://amzn.to/3OaeMqg)
 [![](/images/unscripted.jpg?classes=inline,border&width=100px&lightbox=false)](https://amzn.to/48Uiv20)
-
 [![](/images/tgrre.png?classes=inline,border&width=100px&lightbox=false)](https://link.amazon/B0hm7MCKT)
 
 ## Dating & Relationships

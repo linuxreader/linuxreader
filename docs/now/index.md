@@ -29,7 +29,7 @@ I am not tracking reps or sets at the moment. Pretty much cycling through each e
 My only workout equipment is gymnastics rings, a couple of 50lb [sandbags](https://link.amazon/B085ACX5v) filled with dirt, a foam roller, a jump rope, and some resistance bands. 
 
 ## What I am reading
-[![](/images/eoe?classes=inline,border&width=100px&lightbox=false)](https://link.amazon/B09XHfHaU)
+[![](/images/eoe.jpg?classes=inline,border&width=100px&lightbox=false)](https://link.amazon/B09XHfHaU)
 
 Updated: 10/21/2026
 
