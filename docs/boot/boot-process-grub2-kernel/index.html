@@ -18,30 +18,30 @@
     <meta property="article:section" content="Boot">
     <meta itemprop="name" content="Boot Process, Grub2, and Kernel">
     <meta itemprop="description" content="Linux kernel, boot process, and password recovery">
-    <meta itemprop="wordCount" content="3693">
+    <meta itemprop="wordCount" content="3407">
     <title>Boot Process, Grub2, and Kernel</title>
     <link href="/boot/boot-process-grub2-kernel/index.md" rel="alternate" type="text/markdown" title="Boot Process, Grub2, and Kernel">
-    <link href="/images/favicon.svg?1792597059" rel="icon" type="image/svg+xml">
-    <link href="/css/auto-complete/auto-complete.min.css?1792597059" rel="stylesheet">
-    <script src="/js/auto-complete/auto-complete.min.js?1792597059" defer></script>
-    <script src="/js/search-lunr.min.js?1792597059" defer></script>
-    <script src="/js/search.min.js?1792597059" defer></script>
+    <link href="/images/favicon.svg?1792840881" rel="icon" type="image/svg+xml">
+    <link href="/css/auto-complete/auto-complete.min.css?1792840881" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1792840881" defer></script>
+    <script src="/js/search-lunr.min.js?1792840881" defer></script>
+    <script src="/js/search.min.js?1792840881" defer></script>
     <script>
       window.relearn = window.relearn || {};
-      window.relearn.index_js_url="/searchindex.en.js?1792597059";
+      window.relearn.index_js_url="/searchindex.en.js?1792840881";
     </script>
-    <script src="/js/lunr/lunr.min.js?1792597059" defer></script>
-    <script src="/js/lunr/lunr.stemmer.support.min.js?1792597059" defer></script>
-    <script src="/js/lunr/lunr.multi.min.js?1792597059" defer></script>
-    <script src="/js/lunr/lunr.en.min.js?1792597059" defer></script>
+    <script src="/js/lunr/lunr.min.js?1792840881" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1792840881" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1792840881" defer></script>
+    <script src="/js/lunr/lunr.en.min.js?1792840881" defer></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.contentLangs=['en'];
     </script>
-    <link href="/fonts/fontawesome/css/all.min.css?1792597059" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1792597059" rel="stylesheet"></noscript>
-    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1792597059" rel="stylesheet">
-    <link href="/css/theme.min.css?1792597059" rel="stylesheet">
-    <link href="/css/format-html.min.css?1792597059" rel="stylesheet" id="R-format-style">
+    <link href="/fonts/fontawesome/css/all.min.css?1792840881" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/all.min.css?1792840881" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1792840881" rel="stylesheet">
+    <link href="/css/theme.min.css?1792840881" rel="stylesheet">
+    <link href="/css/format-html.min.css?1792840881" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       // configuration
@@ -165,12 +165,9 @@ code, kbd, pre, samp {
       </ul>
     </li>
     <li><a href="#booting-into-specific-targets">Booting into Specific Targets</a></li>
-    <li><a href="#reset-the-root-user-password">Reset the root User Password</a></li>
-    <li><a href="#second-method">Second method</a></li>
     <li><a href="#boot-grub2-kernel-labs">Boot Grub2 Kernel Labs</a>
       <ul>
         <li><a href="#lab-enable-verbose-system-boot">Lab: Enable Verbose System Boot</a></li>
-        <li><a href="#lab-reset-root-user-password">Lab: Reset root User Password</a></li>
         <li><a href="#lab-install-new-kernel">Lab: Install New Kernel</a></li>
         <li><a href="#lab-download-and-install-a-new-kernel">Lab: Download and Install a New Kernel</a></li>
       </ul>
@@ -191,7 +188,7 @@ code, kbd, pre, samp {
 <span class="btn cstyle button link noborder notitle interactive"><a href="/boot/" title="Boot (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a></span>
             </div>
             <div class="topbar-button topbar-button-next default-animation" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show">
-<span class="btn cstyle button link noborder notitle interactive"><a href="/boot/sys-init-logging-and-tuning/" title="System Initialization, Message Logging, and System Tuning (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
+<span class="btn cstyle button link noborder notitle interactive"><a href="/boot/recover-root-password/" title="How to recover the root password on RHEL based Linux (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a></span>
             </div>
             <div class="topbar-button topbar-button-more default-animation" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show">
 <span class="btn cstyle button link noborder notitle interactive"><button onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button></span>
@@ -952,8 +949,8 @@ timeout value when GRUB2 menu appears.</p>
 </li>
 </ul>
 <p>Append &ldquo;emergency&rdquo; to the kernel line entry:</p>
-<p><a href="#R-image-85ad9597c421df31d018e40aac1cd83d" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../../images/Pasted%20image%2020240321045343%201.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-85ad9597c421df31d018e40aac1cd83d"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../../images/Pasted%20image%2020240321045343%201.png"></a></p>
+<p><a href="#R-image-1985fe57f48c1b524ea5ccb8b57c9df9" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../../images/Pasted%20image%2020240321045343%201.png" style="height: auto;width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-1985fe57f48c1b524ea5ccb8b57c9df9"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../../images/Pasted%20image%2020240321045343%201.png"></a></p>
 <p>Other options:</p>
 <ul>
 <li>&ldquo;rescue&rdquo;</li>
@@ -961,52 +958,12 @@ timeout value when GRUB2 menu appears.</p>
 <li>&ldquo;s&rdquo;</li>
 <li>&ldquo;single&rdquo;</li>
 </ul>
-<h2 id="reset-the-root-user-password">Reset the root User Password<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
-<ul>
-<li>Terminate the boot process at an early stage to be placed in a special debug shell in order to reset the <em>root</em> password.</li>
-</ul>
-<ol>
-<li>
-<p>Reboot or reset <em>server1</em>, and interact with GRUB2 by pressing a key before the autoboot times out. Highlight the default kernel entry in the GRUB2 menu and press <em>e</em> to enter the edit mode. Scroll down to the line entry that begins with the keyword &ldquo;linux&rdquo; and press the End key to go to the end of that line:</p>
-</li>
-<li>
-<p>Modify this kernel string and append &ldquo;rd.break&rdquo; to the end of the line.
-<a href="#R-image-ea784777ea7e9ea21096963a7ca1ce53" class="lightbox-link"><img class="lazy lightbox figure-image" loading="lazy" src="../../../images/Pasted%20image%2020240321045933%201.png" style="height: auto;width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-ea784777ea7e9ea21096963a7ca1ce53"><img class="lazy lightbox lightbox-image" loading="lazy" src="../../../images/Pasted%20image%2020240321045933%201.png"></a></p>
-</li>
-<li>
-<p>Press Ctrl+x when done to boot to the special shell. The system mounts the root file system read-only on the <em>/sysroot</em> directory. Make <em>/sysroot</em> appear as mounted on <em>/</em> using the <em>chroot</em> command:</p>
-</li>
-</ol>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> chroot sysroot</span></span></code></pre></div>
-<p>3. Remount the root file system in read/write mode for the <em>passwd</em> command to be able to modify the <em>shadow</em> file with a new password:</p>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> mount -o remount,rw /</span></span></code></pre></div>
-<ol start="4">
-<li>Enter a new password for <em>root</em> by invoking the <em>passwd</em> command:</li>
-</ol>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> passwd</span></span></code></pre></div>
-<ol start="5">
-<li>Create a hidden file called <em>.autorelabel</em> to instruct the operating system to run SELinux relabeling on all files, including the <em>shadow</em> file that was updated with the new <em>root</em> password, on the next reboot:</li>
-</ol>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> touch .autorelabel</span></span></code></pre></div>
-<ol start="6">
-<li>Issue the <em>exit</em> command to quit the chroot shell and then the <em>reboot</em> command to restart the system and boot it to the default target.</li>
-</ol>
-<div class="highlight actionbar-wrapper wrap-code" dir="auto"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> exit
-</span></span><span style="display:flex;"><span> reboot</span></span></code></pre></div>
-<h2 id="second-method">Second method<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
-<p>Look into using <code>init=/bin/bash</code> for password recovery as a second method.</p>
 <h2 id="boot-grub2-kernel-labs">Boot Grub2 Kernel Labs<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h2>
 <h3 id="lab-enable-verbose-system-boot">Lab: Enable Verbose System Boot<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <ul>
 <li>Remove &ldquo;quiet&rdquo; from the end of the value of the variable GRUB_CMDLINE_LINUX in the /etc/default/grub file</li>
 <li>Run <em>grub2-mkconfig</em> to apply the update.</li>
 <li>Reboot the system and observe that the system now displays verbose information during the boot process.</li>
-</ul>
-<h3 id="lab-reset-root-user-password">Lab: Reset root User Password<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
-<ul>
-<li>Reset the <em>root</em> user password by booting the system into emergency mode with SELinux disabled.</li>
-<li>Try to log in with root and enter the new password after the reboot.</li>
 </ul>
 <h3 id="lab-install-new-kernel">Lab: Install New Kernel<span class="btn cstyle anchor copyanchor scrollanchor link noborder notitle interactive"><button type="button" title="Copy link to clipboard"><i class="fa-fw fas fa-link fa-lg"></i></button></span></h3>
 <ul>
@@ -1169,6 +1126,7 @@ confirm the loading of the new kernel:
             <li class="" data-nav-id="/bash/shell-scripting/"><a class="padding" href="/bash/shell-scripting/">Shell Scripting<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
             <li class="parent " data-nav-id="/boot/"><input type="checkbox" id="R-section-a53bfb333437907a8d5bdc636d15c75d" aria-controls="R-subsections-a53bfb333437907a8d5bdc636d15c75d" checked><label for="R-section-a53bfb333437907a8d5bdc636d15c75d"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Boot</span></label><a class="padding default-animation" href="/boot/"><i class="fa-solid fa-hourglass-start"></i> Boot<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-a53bfb333437907a8d5bdc636d15c75d" class="collapsible-menu">
             <li class="active " data-nav-id="/boot/boot-process-grub2-kernel/"><a class="padding" href="/boot/boot-process-grub2-kernel/">Boot Process, Grub2, and Kernel<i class="fa-fw fas fa-check read-icon"></i></a></li>
+            <li class="" data-nav-id="/boot/recover-root-password/"><a class="padding" href="/boot/recover-root-password/">How to recover the root password on RHEL based Linux<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/boot/sys-init-logging-and-tuning/"><a class="padding" href="/boot/sys-init-logging-and-tuning/">System Initialization, Message Logging, and System Tuning<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
             <li class="" data-nav-id="/containers/"><input type="checkbox" id="R-section-98e55644e7defe4a283b28e510b18cf5" aria-controls="R-subsections-98e55644e7defe4a283b28e510b18cf5"><label for="R-section-98e55644e7defe4a283b28e510b18cf5"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Containers</span></label><a class="padding default-animation" href="/containers/"><i class="fa-solid fa-cubes"></i> Containers<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-98e55644e7defe4a283b28e510b18cf5" class="collapsible-menu">
             <li class="" data-nav-id="/containers/automating-wordpress-containers/"><a class="padding" href="/containers/automating-wordpress-containers/">Automating Wordpress Containers with Ansible and Podman<i class="fa-fw fas fa-check read-icon"></i></a></li>
@@ -1243,7 +1201,6 @@ confirm the loading of the new kernel:
             <li class="" data-nav-id="/users-and-groups/"><input type="checkbox" id="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4" aria-controls="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4"><label for="R-section-ea23e0c86f0adbd857ee01a4f4dd70e4"><i class="fa-fw fas fa-chevron-right"></i><span class="a11y-only">Submenu Users and Groups</span></label><a class="padding default-animation" href="/users-and-groups/"><i class="fa-solid fa-users"></i> Users and Groups<i class="fa-fw fas fa-check read-icon"></i></a><ul id="R-subsections-ea23e0c86f0adbd857ee01a4f4dd70e4" class="collapsible-menu">
             <li class="" data-nav-id="/users-and-groups/advanced-user-management/"><a class="padding" href="/users-and-groups/advanced-user-management/">Advanced User Management<i class="fa-fw fas fa-check read-icon"></i></a></li>
             <li class="" data-nav-id="/users-and-groups/basic-user-management/"><a class="padding" href="/users-and-groups/basic-user-management/">Basic User Management<i class="fa-fw fas fa-check read-icon"></i></a></li></ul></li>
-            <li class="" data-nav-id="/images/"><a class="padding" href="/images/">Images<i class="fa-fw fas fa-check read-icon"></i></a></li>
           </ul>
         </div>
         <div id="R-footer-margin" class="default-animation"></div>
@@ -1267,8 +1224,8 @@ confirm the loading of the new kernel:
 <div id="R-footer" class="default-animation"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
       </div>
     </aside>
-    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1792597059" defer></script>
-    <script src="/js/theme.min.js?1792597059" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1792840881" defer></script>
+    <script src="/js/theme.min.js?1792840881" defer></script>
     <div id="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
   </body>
 </html>
