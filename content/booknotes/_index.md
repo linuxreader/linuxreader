@@ -8,6 +8,22 @@ build:
 
 These are the summaries and notes of books I have read. I also keep a list of the [Books I've Read](books-ive-read/) And a [Book Graveyard](bookgraveyard/) for books that I did not finish.
 
+<div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
+  <img src="/images/chle.jpg" style="flex: 0 0 15%; max-width:15%; height:auto;" />
+  <div>
+    <h3 class="mb-1">
+    <a href="/booknotes/choose-hard-live-easy" class="hover:underline">
+     Choose Hard Live Easy
+    </a>
+    </h3>
+    <div class="text-lg">
+    ★★★★★
+    </div>
+    <p>
+    Will be adding this to my yearly rotation. Helped me realize that making hard choices and being uncomfortable will lead to great results. Anyone in a funk should read this. Choose to suffer a bit now or be forced to suffer a lot later. Your choice. Your move. Your life.
+    </p>
+  </div>
+</div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
   <img src="/images/willpowerinstinct.png" style="flex: 0 0 15%; max-width:15%; height:auto;" />

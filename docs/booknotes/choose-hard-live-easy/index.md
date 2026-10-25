@@ -1,5 +1,18 @@
-# 
+# Choose Hard Live Easy Summary and Notes
 
+<div style="display:flex; gap:1rem; align-items:flex-start;">
+  <img src="/images/chle.jpg" style="flex: 0 0 19%; max-width:19%; height:auto;" />
+  <div>
+    <h3 class="mb-1">
+    </h3>
+    <div class="text-2xl">
+    ★★★★★
+    </div>
+    <p>
+     Will be adding this to my yearly rotation. Helped me realize that making hard choices and being uncomfortable will lead to great results. Anyone in a funk should read this. Choose to suffer a bit now or be forced to suffer a lot later. Your choice. Your move. Your life.
+    </p>
+  </div>
+</div>
 ## My notes
 
 The more comfortable you get with temporary discomfort, the more comfortable life becomes.
@@ -675,7 +688,121 @@ Carpe Momentum. Seize your power. Remember, every man dies, not every man lives.
 ## SITREP
 ## Are you winning or losing?
 
+Combine how you feel about your life with the cold hard facts about it.
 
+Rank your Health, Freedom, Relationships, Spirituality, Purpose and fulfillment.
+
+If you are headed downward in any of these areas then you need to stop the bleeding. 
+
+### Backcasting
+
+Choose a big goal. Then work backword and set milestones for 1/5/10 years or whatever suits the goal. Devided those into quarterly, monthly, weekly, and daily goals. 
+
+### Kaizen chess
+ 
+Play life chess against your worst self every day.   
+
+King: health  
+Queen: freedom  
+Bishop: spirituality
+Knights: purpose  
+Rooks: relationships  
+Pawns: risk  
+
+Making sure you are making more positive moves than negative moves in each category and you will win each day.
+
+### The Alchemy of Power 
+
+Transmutating life's basic decisions into new visceral realities.
+
+Think of life as a video game. 
+
+### Death is in the details
+
+Life rarely rewards single acts of bravery. It's the millions of micro-actions that make a person. 
+
+Audit your actions and make sure there isn't a small overlooked detail that could lead to a DARE event. 
+
+Understand critical details.
+
+Don't be lazy. 
+
+Ask follow-up questions.
+
+Don't neglect any details.
+
+### Rumsfeld matrix
+
+Known knowns: Things you know you know  
+- Judge
+Known unknowns: Things you know that you don't know
+- Investigate, expose, and judge new info  
+Unkown knowns: Things that others know that you don't know or have forgotten  
+- Investigate, expose, and judge new info  
+Unkown unknowns: Things that you don't know that you don't even know you don't know  
+- Mitigate, plan for the worst
+
+### Canary questions
+
+Use questions like canaries in a coal mine to sniff out hidden rot.
+
+### Genchi Genbutsu
+
+See for yourself
+
+### First principle thinking
+
+Break down any decision or belief to it's most basic truth.  
+
+What is undeniably true when you strip away all the opinions, rules, and assumptions?  
+
+Examine your feelings, values, and core truths. Expose your life and desires to their most basic truths. 
+
+### Own your bullshit
+
+What did I miss?
+
+Hansei: Self-reflection with intent to improve.  
+
+Don't blame yourself for the past. Ask questions and adjust for improvement. 
+
+### Pedantic edgelording
+
+Mentally summoning your most nitpicking, confrontational, troll friend and unleashing him on your assumptions before the world does. Question your dreams, roast your assumptions, and expose your blindspots. 
+
+What's the biggest flaw in my plan?  
+What would Reddit say about this idea or plan?  
+What am I overestimating about myself?  
+What would my biggest hater say?  
+Is there any downside asymmetry lurking?  
+
+### Funk busting
+
+Count your blessings.  
+Other people would kill for your problems.  
+
+Are you sweating over trivial matters?  
+If your were diagnosed with a terminal illness, would this problem matter?  
+
+Changes your from pessimism to optimism. 
+
+If hard is a choice and not a circumstance, you are already living the dream.  
+
+### Thinking razors
+
+When you have to make a quick decision, rely on probability.
+
+Choose the hard choice over the easy one.  
+
+Bold claims are often smoke and mirrors. 
+
+Would this matter if I were dead in a year?  
+
+Imagine your private choices on tomorrow's headline.  
+
+### Future casting
+
+Judge your current decisions on where they will lead you in the future. 
 
 ## Books mentioned
 
@@ -686,4 +813,15 @@ Chase Hughes - The Behavior Ops Manual
 Bronnie Ware - The Top Five Regrets of the Dying
 Teresa Amabile - The Progress Principle
 Shonda Rhimes - Year of Yes
+Aristotle - Metaphysics
+Thomas Hughes - Networks of Power
+Michael Singer - The Surrender Experiment
+Ekhart Tolle - The Power of NOW
+Michael SInger - The Untethered Soul
+Brianna Wiest - The Mountain is You
+Dandapani - The Power of Unwavering Focus
+Jocko Willink - Discipline Equals Freedom
+B. Harowitz - The Hard Thing About Hard Things
+Annie Duke - Thinking in Bets
+
 
