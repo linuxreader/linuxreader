@@ -179,6 +179,23 @@ These are the summaries and notes of books I have read. I also keep a list of th
 </div>
 
 <div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
+  <img src="/images/btm.jpg" style="flex: 0 0 15%; max-width:15%; height:auto;" />
+  <div>
+    <h3 class="mb-1">
+    <a href="/booknotes/built-to-move/" class="hover:underline">
+    Built to Move
+    </a>
+    </h3>
+    <div class="text-yellow-400 text-lg">
+    ★★★★☆
+    </div>
+    <p>
+    Just as good as Starrett's other books. Better if you really want to narrow down your focus to essential movement patterns. Kelly sometimes uses weird analogy's that don't make sense. Like the potato chip thing in his videos. Make sure you are doing these 10 things to keep you moving nicely.
+    </p>
+  </div>
+</div>
+
+<div style="display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.5rem;">
   <img src="/images/psychologyofmoney.png" style="flex: 0 0 15%; max-width:15%; height:auto;" />
   <div>
     <h3 class="mb-1">
