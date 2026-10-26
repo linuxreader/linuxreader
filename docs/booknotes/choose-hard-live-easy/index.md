@@ -13,6 +13,7 @@
     </p>
   </div>
 </div>
+
 ## My notes
 
 The more comfortable you get with temporary discomfort, the more comfortable life becomes.
